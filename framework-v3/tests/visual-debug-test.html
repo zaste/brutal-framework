@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Visual Debug Layer Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ff88, #00aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .controls {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            background: #00ff88;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #00cc70;
+            transform: translateY(-2px);
+        }
+        
+        button.danger {
+            background: #ff0044;
+            color: #fff;
+        }
+        
+        button.danger:hover {
+            background: #cc0033;
+        }
+        
+        button.warning {
+            background: #ff8800;
+            color: #000;
+        }
+        
+        button.warning:hover {
+            background: #cc6600;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .demo-component {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #333;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .demo-component:hover {
+            border-color: #00ff88;
+        }
+        
+        .demo-component h3 {
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+        
+        .state-display {
+            background: #0f0f0f;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .info {
+            background: #0066ff;
+            color: #fff;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+        }
+        
+        .keyboard-shortcuts {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            font-size: 0.9rem;
+            max-width: 300px;
+        }
+        
+        .keyboard-shortcuts h4 {
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+        
+        .keyboard-shortcuts kbd {
+            background: #333;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        /* Custom elements styling */
+        test-component {
+            display: block;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .updating {
+            animation: pulse 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BRUTAL Visual Debug Layer Test</h1>
+        
+        <div class="info">
+            ℹ️ This page demonstrates the GPU-accelerated Visual Debug Layer. Use the controls below to trigger events and see particle effects!
+        </div>
+        
+        <div class="controls">
+            <button id="toggle-debug">Toggle Debug Layer (Ctrl+Shift+D)</button>
+            <button id="trigger-renders">Trigger Renders</button>
+            <button id="trigger-errors" class="danger">Trigger Errors</button>
+            <button id="trigger-state-changes">Trigger State Changes</button>
+            <button id="start-recording">Start Recording (Ctrl+Shift+R)</button>
+            <button id="clear-effects">Clear Effects (Ctrl+Shift+C)</button>
+            <button id="run-benchmark" class="warning">Run Benchmark (Ctrl+Shift+B)</button>
+            <button id="show-controls">Particle Controls (Ctrl+Shift+P)</button>
+        </div>
+        
+        <div class="demo-grid" id="demo-grid">
+            <!-- Demo components will be added here -->
+        </div>
+        
+        <div class="keyboard-shortcuts">
+            <h4>Keyboard Shortcuts:</h4>
+            <div style="margin-top: 0.5rem;">
+                <div><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> - Toggle Debug</div>
+                <div><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> - Recording</div>
+                <div><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> - Clear</div>
+                <div><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> - Benchmark</div>
+                <div><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> - Controls</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Component Definition -->
+    <script>
+        // Define a test component that extends the framework's base Component
+        class TestComponent extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.state = {
+                    count: 0,
+                    lastUpdate: Date.now(),
+                    status: 'idle'
+                };
+                
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        :host {
+                            display: block;
+                        }
+                        .content {
+                            padding: 1rem;
+                        }
+                        button {
+                            margin-top: 1rem;
+                            padding: 0.5rem 1rem;
+                            background: #0066ff;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                        }
+                        button:hover {
+                            background: #0052cc;
+                        }
+                    </style>
+                    <div class="content">
+                        <h3><slot name="title"></slot></h3>
+                        <div class="state">
+                            Count: <span id="count">0</span><br>
+                            Status: <span id="status">idle</span>
+                        </div>
+                        <button id="update">Update State</button>
+                    </div>
+                `;
+                
+                this.shadowRoot.getElementById('update').addEventListener('click', () => {
+                    this.updateState();
+                });
+            }
+            
+            connectedCallback() {
+                // Emit mount event
+                this.dispatchEvent(new CustomEvent('brutal:render', {
+                    bubbles: true,
+                    detail: {
+                        component: this,
+                        metrics: {
+                            renderTime: Math.random() * 10,
+                            componentCount: 1
+                        }
+                    }
+                }));
+            }
+            
+            updateState() {
+                const oldState = { ...this.state };
+                
+                this.state.count++;
+                this.state.lastUpdate = Date.now();
+                this.state.status = this.state.count % 3 === 0 ? 'active' : 'idle';
+                
+                // Update UI
+                this.shadowRoot.getElementById('count').textContent = this.state.count;
+                this.shadowRoot.getElementById('status').textContent = this.state.status;
+                
+                // Add visual feedback
+                this.classList.add('updating');
+                setTimeout(() => this.classList.remove('updating'), 500);
+                
+                // Emit state change event
+                this.dispatchEvent(new CustomEvent('brutal:state-change', {
+                    bubbles: true,
+                    detail: {
+                        component: this,
+                        oldState,
+                        newState: this.state
+                    }
+                }));
+                
+                // Emit render event
+                this.dispatchEvent(new CustomEvent('brutal:render', {
+                    bubbles: true,
+                    detail: {
+                        component: this,
+                        metrics: {
+                            renderTime: Math.random() * 20 + 5,
+                            componentCount: 1
+                        }
+                    }
+                }));
+            }
+            
+            triggerError() {
+                try {
+                    throw new Error(`Component ${this.id} encountered an error!`);
+                } catch (error) {
+                    this.dispatchEvent(new CustomEvent('brutal:error', {
+                        bubbles: true,
+                        detail: {
+                            component: this,
+                            error
+                        }
+                    }));
+                }
+            }
+        }
+        
+        customElements.define('test-component', TestComponent);
+    </script>
+
+    <!-- Load Framework and Initialize -->
+    <script type="module">
+        import { VisualDebugLayerGPU } from '../03-visual/debug/VisualDebugLayerGPU.js';
+        
+        // Set debug mode
+        window.__BRUTAL__ = { debug: true };
+        
+        // Initialize debug layer
+        let debugLayer = null;
+        
+        async function init() {
+            // Create debug layer
+            debugLayer = new VisualDebugLayerGPU({ enabled: true });
+            await debugLayer.init();
+            
+            // Create demo components
+            createDemoComponents();
+            
+            // Setup control buttons
+            setupControls();
+            
+            console.log('✅ Visual Debug Layer test initialized');
+        }
+        
+        function createDemoComponents() {
+            const grid = document.getElementById('demo-grid');
+            
+            for (let i = 0; i < 6; i++) {
+                const component = document.createElement('test-component');
+                component.id = `component-${i}`;
+                component.innerHTML = `
+                    <span slot="title">Component ${i + 1}</span>
+                `;
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'demo-component';
+                wrapper.appendChild(component);
+                
+                // Add state display
+                const stateDisplay = document.createElement('div');
+                stateDisplay.className = 'state-display';
+                stateDisplay.id = `state-${i}`;
+                stateDisplay.textContent = 'State: { count: 0, status: "idle" }';
+                wrapper.appendChild(stateDisplay);
+                
+                grid.appendChild(wrapper);
+                
+                // Update state display on change
+                component.addEventListener('brutal:state-change', (e) => {
+                    stateDisplay.textContent = `State: ${JSON.stringify(e.detail.newState, null, 2)}`;
+                });
+            }
+        }
+        
+        function setupControls() {
+            // Toggle debug layer
+            document.getElementById('toggle-debug').addEventListener('click', () => {
+                debugLayer.toggle();
+            });
+            
+            // Trigger renders
+            document.getElementById('trigger-renders').addEventListener('click', () => {
+                const components = document.querySelectorAll('test-component');
+                let delay = 0;
+                
+                components.forEach(comp => {
+                    setTimeout(() => comp.updateState(), delay);
+                    delay += 100;
+                });
+            });
+            
+            // Trigger errors
+            document.getElementById('trigger-errors').addEventListener('click', () => {
+                const components = document.querySelectorAll('test-component');
+                const randomComp = components[Math.floor(Math.random() * components.length)];
+                randomComp.triggerError();
+            });
+            
+            // Trigger state changes
+            document.getElementById('trigger-state-changes').addEventListener('click', () => {
+                const components = document.querySelectorAll('test-component');
+                
+                // Create a chain of state changes
+                components.forEach((comp, i) => {
+                    setTimeout(() => {
+                        for (let j = 0; j < 3; j++) {
+                            setTimeout(() => comp.updateState(), j * 50);
+                        }
+                    }, i * 200);
+                });
+            });
+            
+            // Recording control
+            document.getElementById('start-recording').addEventListener('click', (e) => {
+                const btn = e.target;
+                if (debugLayer.recording) {
+                    debugLayer.stopRecording();
+                    btn.textContent = 'Start Recording (Ctrl+Shift+R)';
+                    btn.classList.remove('danger');
+                } else {
+                    debugLayer.startRecording();
+                    btn.textContent = 'Stop Recording';
+                    btn.classList.add('danger');
+                }
+            });
+            
+            // Clear effects
+            document.getElementById('clear-effects').addEventListener('click', () => {
+                debugLayer.clear();
+            });
+            
+            // Run benchmark
+            document.getElementById('run-benchmark').addEventListener('click', () => {
+                debugLayer.runBenchmark();
+            });
+            
+            // Show particle controls
+            document.getElementById('show-controls').addEventListener('click', () => {
+                debugLayer.showParticleControls();
+            });
+        }
+        
+        // Automated demo sequence
+        function runDemoSequence() {
+            console.log('🎬 Running demo sequence...');
+            
+            // 1. Trigger some renders
+            setTimeout(() => {
+                console.log('Triggering renders...');
+                document.getElementById('trigger-renders').click();
+            }, 1000);
+            
+            // 2. Trigger state changes
+            setTimeout(() => {
+                console.log('Triggering state changes...');
+                document.getElementById('trigger-state-changes').click();
+            }, 3000);
+            
+            // 3. Trigger an error
+            setTimeout(() => {
+                console.log('Triggering error...');
+                document.getElementById('trigger-errors').click();
+            }, 5000);
+            
+            // 4. More renders
+            setTimeout(() => {
+                console.log('More renders...');
+                document.getElementById('trigger-renders').click();
+            }, 7000);
+        }
+        
+        // Initialize on load
+        window.addEventListener('load', async () => {
+            await init();
+            
+            // Run demo sequence after a short delay
+            setTimeout(runDemoSequence, 2000);
+        });
+        
+        // Continuous background activity
+        setInterval(() => {
+            // Random component updates
+            const components = document.querySelectorAll('test-component');
+            if (components.length > 0 && Math.random() > 0.7) {
+                const randomComp = components[Math.floor(Math.random() * components.length)];
+                randomComp.updateState();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

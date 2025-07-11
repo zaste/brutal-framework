@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Modal Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .demo-card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .demo-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2196f3;
+        }
+        
+        .demo-description {
+            color: #666;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #1976d2;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .modal-demo-content {
+            min-height: 200px;
+        }
+        
+        .form-field {
+            margin-bottom: 16px;
+        }
+        
+        .form-field label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-field input,
+        .form-field textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-field textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .secondary-button {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .secondary-button:hover {
+            background: #d0d0d0;
+        }
+        
+        .event-log {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 200px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            overflow-y: auto;
+        }
+        
+        .event-entry {
+            margin-bottom: 5px;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        /* Background pattern for visual effect */
+        .background-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.05;
+            pointer-events: none;
+            font-size: 100px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-content">
+        BRUTAL V3 MODAL TEST BRUTAL V3 MODAL TEST BRUTAL V3 MODAL TEST
+    </div>
+    
+    <div class="container">
+        <h1>🚀 BRUTAL Modal</h1>
+        <p class="subtitle">GPU-accelerated modals with spring physics and WebGL backdrop effects</p>
+        
+        <div class="demo-grid">
+            <!-- Basic Modal -->
+            <div class="demo-card">
+                <h3 class="demo-title">Basic Modal</h3>
+                <p class="demo-description">Simple modal with default settings</p>
+                <button onclick="openBasicModal()">Open Basic Modal</button>
+            </div>
+            
+            <!-- Animation Types -->
+            <div class="demo-card">
+                <h3 class="demo-title">Animation Types</h3>
+                <p class="demo-description">Different animation styles</p>
+                <div class="button-group">
+                    <button onclick="openModal('scale')">Scale</button>
+                    <button onclick="openModal('slide')">Slide</button>
+                    <button onclick="openModal('flip')">Flip</button>
+                    <button onclick="openModal('rotate')">Rotate</button>
+                    <button onclick="openModal('fade')">Fade</button>
+                </div>
+            </div>
+            
+            <!-- Sizes -->
+            <div class="demo-card">
+                <h3 class="demo-title">Modal Sizes</h3>
+                <p class="demo-description">Different modal dimensions</p>
+                <div class="button-group">
+                    <button onclick="openSizeModal('small')">Small</button>
+                    <button onclick="openSizeModal('medium')">Medium</button>
+                    <button onclick="openSizeModal('large')">Large</button>
+                    <button onclick="openSizeModal('fullscreen')">Fullscreen</button>
+                </div>
+            </div>
+            
+            <!-- Positions -->
+            <div class="demo-card">
+                <h3 class="demo-title">Modal Positions</h3>
+                <p class="demo-description">Different screen positions</p>
+                <div class="button-group">
+                    <button onclick="openPositionModal('center')">Center</button>
+                    <button onclick="openPositionModal('top')">Top</button>
+                    <button onclick="openPositionModal('bottom')">Bottom</button>
+                    <button onclick="openPositionModal('left')">Left</button>
+                    <button onclick="openPositionModal('right')">Right</button>
+                </div>
+            </div>
+            
+            <!-- Backdrop Effects -->
+            <div class="demo-card">
+                <h3 class="demo-title">Backdrop Effects</h3>
+                <p class="demo-description">GPU-accelerated backdrop styles</p>
+                <div class="button-group">
+                    <button onclick="openBackdropModal('blur')">Blur Effect</button>
+                    <button onclick="openBackdropModal('dim')">Dim Effect</button>
+                    <button onclick="openBackdropModal('none')">No Backdrop</button>
+                </div>
+            </div>
+            
+            <!-- Interactive Features -->
+            <div class="demo-card">
+                <h3 class="demo-title">Interactive Features</h3>
+                <p class="demo-description">Advanced modal behaviors</p>
+                <div class="button-group">
+                    <button onclick="openFormModal()">Form Modal</button>
+                    <button onclick="openNestedModal()">Nested Modals</button>
+                    <button onclick="openNoCloseModal()">No Close Button</button>
+                    <button onclick="openPersistentModal()">Persistent Modal</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modals -->
+        <brutal-modal id="basicModal" title="Basic Modal">
+            <div class="modal-demo-content">
+                <p>This is a basic modal with default settings.</p>
+                <p>It includes:</p>
+                <ul>
+                    <li>GPU-accelerated animations</li>
+                    <li>Backdrop blur effect</li>
+                    <li>Spring physics</li>
+                    <li>Keyboard navigation (ESC to close)</li>
+                    <li>Click outside to close</li>
+                </ul>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="animationModal" title="Animation Demo">
+            <div class="modal-demo-content">
+                <p>This modal demonstrates different animation types.</p>
+                <p>The animation is GPU-accelerated for smooth 60fps performance.</p>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="sizeModal" title="Size Demo">
+            <div class="modal-demo-content">
+                <p>This modal demonstrates different size options.</p>
+                <p>Sizes automatically adapt to mobile screens.</p>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="positionModal" title="Position Demo">
+            <div class="modal-demo-content">
+                <p>This modal can be positioned at different locations on the screen.</p>
+                <p>Try swiping on mobile to dismiss bottom/top positioned modals!</p>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="backdropModal" title="Backdrop Effects">
+            <div class="modal-demo-content">
+                <p>This modal demonstrates WebGL-powered backdrop effects.</p>
+                <p>The effects are rendered on the GPU for optimal performance.</p>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="formModal" title="Contact Form">
+            <div class="modal-demo-content">
+                <form onsubmit="handleFormSubmit(event)">
+                    <div class="form-field">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="message">Message</label>
+                        <textarea id="message" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div slot="footer" class="modal-footer">
+                <button class="secondary-button" onclick="closeFormModal()">Cancel</button>
+                <button onclick="submitForm()">Submit</button>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="nestedModal1" title="Parent Modal" size="large">
+            <div class="modal-demo-content">
+                <p>This is the parent modal. You can open another modal on top of this one.</p>
+                <button onclick="openNestedModal2()">Open Nested Modal</button>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="nestedModal2" title="Nested Modal" size="small">
+            <div class="modal-demo-content">
+                <p>This is a nested modal. Notice how it appears above the parent modal.</p>
+                <p>Each modal maintains its own z-index in the stack.</p>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="noCloseModal" title="No Close Button" close-button="false">
+            <div class="modal-demo-content">
+                <p>This modal has no close button in the header.</p>
+                <p>You can still close it by:</p>
+                <ul>
+                    <li>Pressing ESC</li>
+                    <li>Clicking outside</li>
+                    <li>Using the button below</li>
+                </ul>
+                <button onclick="document.getElementById('noCloseModal').close()">Close Modal</button>
+            </div>
+        </brutal-modal>
+        
+        <brutal-modal id="persistentModal" title="Persistent Modal">
+            <div class="modal-demo-content">
+                <p>This modal cannot be closed by clicking outside or pressing ESC.</p>
+                <p>The user must explicitly click the close button.</p>
+            </div>
+        </brutal-modal>
+    </div>
+    
+    <div class="event-log" id="eventLog">
+        <strong>Event Log:</strong>
+    </div>
+
+    <script type="module">
+        import { Modal } from './04-components/ui/Modal.js';
+        
+        // Event logging
+        function logEvent(message) {
+            const log = document.getElementById('eventLog');
+            const entry = document.createElement('div');
+            entry.className = 'event-entry';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(entry);
+            
+            // Keep only last 10 events
+            while (log.children.length > 11) {
+                log.removeChild(log.children[1]);
+            }
+            
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Add event listeners to all modals
+        document.querySelectorAll('brutal-modal').forEach(modal => {
+            modal.addEventListener('open', () => {
+                logEvent(`Modal opened: ${modal.id}`);
+            });
+            
+            modal.addEventListener('close', () => {
+                logEvent(`Modal closed: ${modal.id}`);
+            });
+        });
+        
+        // Modal functions
+        window.openBasicModal = () => {
+            document.getElementById('basicModal').open();
+        };
+        
+        window.openModal = (animation) => {
+            const modal = document.getElementById('animationModal');
+            modal.setAttribute('animation', animation);
+            modal.open();
+        };
+        
+        window.openSizeModal = (size) => {
+            const modal = document.getElementById('sizeModal');
+            modal.setAttribute('size', size);
+            modal.open();
+        };
+        
+        window.openPositionModal = (position) => {
+            const modal = document.getElementById('positionModal');
+            modal.setAttribute('position', position);
+            modal.open();
+        };
+        
+        window.openBackdropModal = (backdrop) => {
+            const modal = document.getElementById('backdropModal');
+            modal.setAttribute('backdrop', backdrop);
+            modal.open();
+        };
+        
+        window.openFormModal = () => {
+            document.getElementById('formModal').open();
+        };
+        
+        window.closeFormModal = () => {
+            document.getElementById('formModal').close();
+        };
+        
+        window.handleFormSubmit = (event) => {
+            event.preventDefault();
+            logEvent('Form submitted!');
+            document.getElementById('formModal').close();
+        };
+        
+        window.submitForm = () => {
+            const form = document.querySelector('#formModal form');
+            if (form.checkValidity()) {
+                handleFormSubmit(new Event('submit'));
+            } else {
+                form.reportValidity();
+            }
+        };
+        
+        window.openNestedModal = () => {
+            document.getElementById('nestedModal1').open();
+        };
+        
+        window.openNestedModal2 = () => {
+            document.getElementById('nestedModal2').open();
+        };
+        
+        window.openNoCloseModal = () => {
+            document.getElementById('noCloseModal').open();
+        };
+        
+        window.openPersistentModal = () => {
+            const modal = document.getElementById('persistentModal');
+            modal.setConfig('closeOnOverlay', false);
+            modal.setConfig('closeOnEscape', false);
+            modal.open();
+        };
+        
+        // Keyboard shortcut demo
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'm' && e.metaKey) {
+                e.preventDefault();
+                openBasicModal();
+                logEvent('Opened modal with Cmd+M shortcut');
+            }
+        });
+        
+        logEvent('Modal demo loaded');
+    </script>
+</body>
+</html>

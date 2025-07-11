@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple NavigationBar Test</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui;
+            min-height: 200vh;
+        }
+        
+        .content {
+            padding: 100px 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NavigationBar Component -->
+    <brutal-navbar 
+        brand="Test Brand"
+        sticky="true">
+    </brutal-navbar>
+    
+    <div class="content">
+        <h1>NavigationBar Test</h1>
+        <p>This is a simple test to verify the NavigationBar component loads correctly.</p>
+        
+        <div id="status"></div>
+    </div>
+    
+    <script type="module">
+        const status = document.getElementById('status');
+        
+        // Import the framework
+        try {
+            status.innerHTML += '<p>Importing framework...</p>';
+            await import('./index.js');
+            status.innerHTML += '<p>✅ Framework imported</p>';
+        } catch (error) {
+            status.innerHTML += `<p>❌ Import error: ${error.message}</p>`;
+            console.error('Import error:', error);
+        }
+        
+        // Wait for component to register
+        setTimeout(() => {
+            const navbar = document.querySelector('brutal-navbar');
+            
+            if (navbar) {
+                status.innerHTML += '<p>✅ Component found in DOM</p>';
+                
+                // Check if it's a custom element
+                if (navbar.constructor !== HTMLElement) {
+                    status.innerHTML += '<p>✅ Component is a custom element</p>';
+                } else {
+                    status.innerHTML += '<p>❌ Component is not registered as custom element</p>';
+                }
+                
+                // Check shadow DOM
+                if (navbar.shadowRoot) {
+                    status.innerHTML += '<p>✅ Shadow DOM created</p>';
+                    
+                    // Check shadow content
+                    const nav = navbar.shadowRoot.querySelector('nav');
+                    if (nav) {
+                        status.innerHTML += '<p>✅ Navigation rendered in shadow DOM</p>';
+                    }
+                } else {
+                    status.innerHTML += '<p>❌ No shadow DOM</p>';
+                }
+                
+                // Log component info
+                console.log('Component:', navbar);
+                console.log('Constructor:', navbar.constructor.name);
+                console.log('Shadow Root:', navbar.shadowRoot);
+                
+                // Check if NavigationBar is defined
+                customElements.whenDefined('brutal-navbar').then(() => {
+                    status.innerHTML += '<p>✅ Custom element defined</p>';
+                }).catch(error => {
+                    status.innerHTML += `<p>❌ Custom element not defined: ${error}</p>`;
+                });
+                
+            } else {
+                status.innerHTML += '<p>❌ Component not found in DOM</p>';
+            }
+            
+            // Check global BRUTAL
+            if (window.__BRUTAL__) {
+                status.innerHTML += '<p>✅ BRUTAL global found</p>';
+                console.log('BRUTAL:', window.__BRUTAL__);
+            }
+            
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>BRUTAL Framework V3 - Mobile Optimization Test</title>
+    <style>
+        :root {
+            --safe-area-inset-top: env(safe-area-inset-top);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom);
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding-top: var(--safe-area-inset-top);
+            padding-bottom: var(--safe-area-inset-bottom);
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        .header {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #333;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, var(--accent), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            padding: 1rem;
+            max-width: 100%;
+        }
+
+        .test-card {
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #333;
+        }
+
+        .test-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+
+        .status-badge.success { background: var(--success); color: #000; }
+        .status-badge.warning { background: var(--warning); color: #000; }
+        .status-badge.error { background: var(--error); color: #fff; }
+        .status-badge.running { background: var(--accent); color: #fff; }
+
+        .test-content {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #ccc;
+        }
+
+        .touch-area {
+            background: var(--bg-primary);
+            border: 2px dashed #444;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .touch-area.active {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .gesture-indicator {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+            transform: scale(0);
+            pointer-events: none;
+        }
+
+        .gesture-indicator.show {
+            animation: ripple 0.6s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                opacity: 0.8;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(3);
+            }
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .metric-item {
+            background: var(--bg-primary);
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.25rem;
+        }
+
+        .button {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 1rem;
+            cursor: pointer;
+            touch-action: manipulation;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button:active {
+            transform: scale(0.98);
+        }
+
+        .scroll-test {
+            height: 300px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: var(--bg-primary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .scroll-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: 0.25rem;
+        }
+
+        .performance-graph {
+            height: 150px;
+            background: var(--bg-primary);
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fps-line {
+            position: absolute;
+            bottom: 0;
+            width: 2px;
+            background: var(--success);
+            transition: none;
+        }
+
+        .orientation-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            /* Already dark by default */
+        }
+
+        @media (orientation: landscape) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .metric-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* iOS specific */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                -webkit-user-select: none;
+            }
+        }
+
+        /* Android specific */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            input, textarea {
+                font-size: 16px; /* Prevent zoom on focus */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>BRUTAL Mobile Test</h1>
+        <p style="font-size: 0.875rem; color: #888; margin-top: 0.25rem;">Performance & Touch Optimization</p>
+    </div>
+
+    <div class="container">
+        <!-- Device Info Test -->
+        <div class="test-card">
+            <div class="test-title">
+                <span>Device Information</span>
+                <span class="status-badge success" id="deviceStatus">Detected</span>
+            </div>
+            <div class="test-content">
+                <div class="metric-grid">
+                    <div class="metric-item">
+                        <div class="metric-value" id="screenSize">-</div>
+                        <div class="metric-label">Screen Size</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="pixelRatio">-</div>
+                        <div class="metric-label">Pixel Ratio</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="touchPoints">-</div>
+                        <div class="metric-label">Touch Points</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="connection">-</div>
+                        <div class="metric-label">Connection</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Touch Gestures Test -->
+        <div class="test-card">
+            <div class="test-title">
+                <span>Touch Gestures</span>
+                <span class="status-badge running" id="touchStatus">Test Me</span>
+            </div>
+            <div class="test-content">
+                <div class="touch-area" id="touchArea">
+                    <div>👆 Tap, swipe, or pinch here</div>
+                    <div id="gestureInfo" style="font-size: 0.75rem; color: #888;">Waiting for gesture...</div>
+                    <div class="gesture-indicator"></div>
+                </div>
+                <div class="metric-grid">
+                    <div class="metric-item">
+                        <div class="metric-value" id="tapCount">0</div>
+                        <div class="metric-label">Taps</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="swipeCount">0</div>
+                        <div class="metric-label">Swipes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Test -->
+        <div class="test-card">
+            <div class="test-title">
+                <span>Rendering Performance</span>
+                <span class="status-badge" id="perfStatus">Ready</span>
+            </div>
+            <div class="test-content">
+                <button class="button" onclick="runPerformanceTest()">Run Performance Test</button>
+                <div class="performance-graph" id="perfGraph"></div>
+                <div class="metric-grid">
+                    <div class="metric-item">
+                        <div class="metric-value" id="currentFPS">60</div>
+                        <div class="metric-label">Current FPS</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="avgFPS">60</div>
+                        <div class="metric-label">Average FPS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Performance Test -->
+        <div class="test-card">
+            <div class="test-title">
+                <span>Scroll Performance</span>
+                <span class="status-badge" id="scrollStatus">Ready</span>
+            </div>
+            <div class="test-content">
+                <p style="margin-bottom: 0.5rem;">Scroll to test momentum & smoothness:</p>
+                <div class="scroll-test" id="scrollTest">
+                    <!-- Items will be added dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Orientation Test -->
+        <div class="test-card">
+            <div class="test-title">
+                <span>Device Orientation</span>
+                <span class="status-badge" id="orientStatus">Active</span>
+            </div>
+            <div class="test-content">
+                <div class="orientation-info">
+                    <div class="metric-item">
+                        <div class="metric-value" id="alpha">0°</div>
+                        <div class="metric-label">Alpha</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="beta">0°</div>
+                        <div class="metric-label">Beta</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="gamma">0°</div>
+                        <div class="metric-label">Gamma</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Battery Test -->
+        <div class="test-card">
+            <div class="test-title">
+                <span>Battery Status</span>
+                <span class="status-badge" id="batteryStatus">Checking</span>
+            </div>
+            <div class="test-content">
+                <div class="metric-grid">
+                    <div class="metric-item">
+                        <div class="metric-value" id="batteryLevel">-</div>
+                        <div class="metric-label">Battery Level</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="batteryCharging">-</div>
+                        <div class="metric-label">Charging</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import './mobile-optimization-test.js';
+    </script>
+</body>
+</html>

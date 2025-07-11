@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React vs BRUTAL - Performance Comparison</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --brutal-color: #3b82f6;
+            --react-color: #61dafb;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Monaco', 'Menlo', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .brutal { color: var(--brutal-color); }
+        .react { color: var(--react-color); }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .framework-section {
+            background: var(--bg-secondary);
+            border: 1px solid #333;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .framework-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .framework-section.brutal::before {
+            background: var(--brutal-color);
+        }
+
+        .framework-section.react::before {
+            background: var(--react-color);
+        }
+
+        .benchmark-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: var(--text-primary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #3a3a3a;
+            transform: translateY(-2px);
+        }
+
+        .btn.running {
+            background: #444;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .results-section {
+            margin-top: 2rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        .metric-value.good {
+            color: var(--accent-green);
+        }
+
+        .metric-value.bad {
+            color: var(--accent-red);
+        }
+
+        .speedup-indicator {
+            background: var(--accent-green);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .test-canvas {
+            background: var(--bg-primary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+        }
+
+        .winner-section {
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-green);
+            border-radius: 0.5rem;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .winner-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+        .benchmark-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2rem;
+            height: 300px;
+            margin: 2rem 0;
+        }
+
+        .bar {
+            width: 100px;
+            background: #333;
+            border-radius: 0.25rem 0.25rem 0 0;
+            position: relative;
+            transition: height 0.5s ease-out;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .bar.brutal {
+            background: var(--brutal-color);
+        }
+
+        .bar.react {
+            background: var(--react-color);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .running-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            margin-left: 0.5rem;
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span class="brutal">BRUTAL</span> vs <span class="react">React</span>
+            </h1>
+            <p>Real-world Performance Comparison</p>
+        </div>
+
+        <div class="comparison-grid">
+            <!-- BRUTAL Section -->
+            <div class="framework-section brutal">
+                <h2>BRUTAL Framework V3</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Zero dependencies • True parallelism • GPU acceleration
+                </p>
+                
+                <div class="benchmark-controls">
+                    <button class="btn" id="brutalMount10k">Mount 10,000 Components</button>
+                    <button class="btn" id="brutalUpdate10k">Update 10,000 Components</button>
+                    <button class="btn" id="brutalScroll100k">Scroll 100,000 Rows</button>
+                    <button class="btn" id="brutalParticles">1M Particles Animation</button>
+                </div>
+
+                <div class="results-section">
+                    <h3>Results:</h3>
+                    <div class="metric-row">
+                        <span class="metric-label">Mount Time:</span>
+                        <span class="metric-value" id="brutalMountTime">-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Update Time:</span>
+                        <span class="metric-value" id="brutalUpdateTime">-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Scroll Performance:</span>
+                        <span class="metric-value" id="brutalScrollTime">-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">GPU Performance:</span>
+                        <span class="metric-value" id="brutalGPUTime">-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Memory Usage:</span>
+                        <span class="metric-value" id="brutalMemory">-</span>
+                    </div>
+                </div>
+
+                <div class="test-canvas" id="brutalCanvas"></div>
+            </div>
+
+            <!-- React Section -->
+            <div class="framework-section react">
+                <h2>React 18</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Industry standard • Virtual DOM • Single-threaded
+                </p>
+                
+                <div class="benchmark-controls">
+                    <button class="btn" id="reactMount10k">Mount 10,000 Components</button>
+                    <button class="btn" id="reactUpdate10k">Update 10,000 Components</button>
+                    <button class="btn" id="reactScroll100k">Scroll 100,000 Rows</button>
+                    <button class="btn" id="reactParticles">1M Particles Animation</button>
+                </div>
+
+                <div class="results-section">
+                    <h3>Results:</h3>
+                    <div class="metric-row">
+                        <span class="metric-label">Mount Time:</span>
+                        <span class="metric-value" id="reactMountTime">-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Update Time:</span>
+                        <span class="metric-value" id="reactUpdateTime">-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Scroll Performance:</span>
+                        <span class="metric-value" id="reactScrollTime">-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">GPU Performance:</span>
+                        <span class="metric-value" id="reactGPUTime">-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Memory Usage:</span>
+                        <span class="metric-value" id="reactMemory">-</span>
+                    </div>
+                </div>
+
+                <div class="test-canvas" id="reactCanvas"></div>
+            </div>
+        </div>
+
+        <!-- Comparison Chart -->
+        <div class="winner-section" id="winnerSection" style="display: none;">
+            <h2>Performance Comparison</h2>
+            <div class="benchmark-chart" id="benchmarkChart"></div>
+            <div class="speedup-indicator" id="speedupIndicator"></div>
+        </div>
+    </div>
+
+    <!-- Load React for comparison -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <script type="module">
+        import './react-comparison.js';
+    </script>
+</body>
+</html>

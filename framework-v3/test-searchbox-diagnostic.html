@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchBox Diagnostic Test - BRUTAL V3</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+        }
+        h1 { text-shadow: 0 0 10px #0f0; }
+        .diagnostic { 
+            background: #111; 
+            padding: 20px; 
+            border: 1px solid #0f0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .warning { color: #ff0; }
+        .info { color: #0ff; }
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0f0;
+            color: #000;
+        }
+        .test-search {
+            max-width: 600px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>SearchBox Component Diagnostic</h1>
+    
+    <button onclick="runDiagnostic()">Run Full Diagnostic</button>
+    <button onclick="testMinimal()">Test Minimal Search</button>
+    <button onclick="testFuzzyAlgorithm()">Test Fuzzy Algorithm</button>
+    <button onclick="testPerformance()">Test Performance</button>
+    <button onclick="checkConsoleErrors()">Check Console</button>
+    
+    <div id="log" class="diagnostic"></div>
+    
+    <brutal-searchbox id="search1" class="test-search" placeholder="Test search..."></brutal-searchbox>
+
+    <script type="module">
+        import { SearchBox } from './04-components/ui/SearchBox.js';
+        
+        const log = (msg, type = 'info') => {
+            const logEl = document.getElementById('log');
+            logEl.innerHTML += `<div class="${type}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        };
+        
+        // Override console to catch errors
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        let consoleErrors = [];
+        let consoleWarnings = [];
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            consoleErrors.push(args.join(' '));
+            log('Console Error: ' + args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            consoleWarnings.push(args.join(' '));
+            log('Console Warning: ' + args.join(' '), 'warning');
+        };
+        
+        window.runDiagnostic = async function() {
+            log('=== STARTING SEARCHBOX DIAGNOSTIC ===', 'warning');
+            const search = document.getElementById('search1');
+            
+            // 1. Check basic initialization
+            log('\\n1. INITIALIZATION CHECK', 'info');
+            try {
+                log(`SearchBox element exists: ${!!search}`, search ? 'success' : 'error');
+                log(`Is SearchBox instance: ${search instanceof SearchBox}`, search instanceof SearchBox ? 'success' : 'error');
+                log(`Has shadowRoot: ${!!search.shadowRoot}`, search.shadowRoot ? 'success' : 'error');
+                
+                // Check template
+                if (typeof search.template === 'function') {
+                    const templateResult = search.template();
+                    log(`template() returns: ${typeof templateResult}`, typeof templateResult === 'string' ? 'success' : 'error');
+                    
+                    if (templateResult && typeof templateResult === 'string') {
+                        log(`Template length: ${templateResult.length} chars`, 'info');
+                        
+                        // Check for common issues
+                        if (templateResult.includes('[object Object]')) {
+                            log('ERROR: Template contains [object Object]', 'error');
+                        }
+                        if (templateResult.includes('${')) {
+                            log('ERROR: Template contains unprocessed literals', 'error');
+                        }
+                        if (!templateResult.includes('search-container')) {
+                            log('ERROR: Template missing container element', 'error');
+                        }
+                    }
+                }
+                
+            } catch (e) {
+                log(`Initialization error: ${e.message}`, 'error');
+                console.error(e);
+            }
+            
+            // 2. Check internal state
+            log('\\n2. INTERNAL STATE CHECK', 'info');
+            try {
+                log(`_query: "${search._query}"`, 'info');
+                log(`_results: ${Array.isArray(search._results)} (${search._results?.length || 0} items)`, 'info');
+                log(`_filteredResults: ${Array.isArray(search._filteredResults)} (${search._filteredResults?.length || 0} items)`, 'info');
+                log(`_data: ${Array.isArray(search._data)} (${search._data?.length || 0} items)`, 'info');
+                log(`_selectedIndex: ${search._selectedIndex}`, 'info');
+                log(`_isOpen: ${search._isOpen}`, 'info');
+                log(`_isSearching: ${search._isSearching}`, 'info');
+                
+                // Check config
+                log(`_config:`, 'info');
+                log(`  - placeholder: "${search._config?.placeholder}"`, 'info');
+                log(`  - minChars: ${search._config?.minChars}`, 'info');
+                log(`  - maxResults: ${search._config?.maxResults}`, 'info');
+                log(`  - fuzzyThreshold: ${search._config?.fuzzyThreshold}`, 'info');
+                log(`  - theme: ${search._config?.theme}`, 'info');
+                
+                // Check cache
+                log(`_cache size: ${search._cache?.size || 0}`, 'info');
+                log(`_searchWorker: ${!!search._searchWorker}`, 'info');
+                
+            } catch (e) {
+                log(`State check error: ${e.message}`, 'error');
+            }
+            
+            // 3. Check DOM structure
+            log('\\n3. DOM STRUCTURE CHECK', 'info');
+            try {
+                const container = search.shadowRoot?.querySelector('.search-container');
+                const inputWrapper = search.shadowRoot?.querySelector('.search-input-wrapper');
+                const input = search.shadowRoot?.querySelector('.search-input');
+                const icons = search.shadowRoot?.querySelector('.search-icons');
+                
+                log(`Container: ${!!container}`, container ? 'success' : 'error');
+                log(`Input wrapper: ${!!inputWrapper}`, inputWrapper ? 'success' : 'error');
+                log(`Input element: ${!!input}`, input ? 'success' : 'error');
+                log(`Icons container: ${!!icons}`, icons ? 'success' : 'error');
+                
+                if (input) {
+                    log(`Input placeholder: "${input.placeholder}"`, 'info');
+                    log(`Input value: "${input.value}"`, 'info');
+                    log(`Input has event listeners: ${!!input.oninput || !!input._handleInput}`, 'info');
+                }
+                
+            } catch (e) {
+                log(`DOM check error: ${e.message}`, 'error');
+            }
+            
+            // 4. Test data setting
+            log('\\n4. DATA SETTING TEST', 'info');
+            try {
+                const testData = [
+                    { title: 'Test Item 1', description: 'First test item', category: 'Test' },
+                    { title: 'Test Item 2', description: 'Second test item', category: 'Test' },
+                    { title: 'JavaScript Tutorial', description: 'Learn JS', category: 'Tutorial' }
+                ];
+                
+                search.setData(testData);
+                log(`Data set successfully`, 'success');
+                log(`Data length after setData: ${search._data.length}`, 'info');
+                
+            } catch (e) {
+                log(`Data setting error: ${e.message}`, 'error');
+            }
+            
+            // 5. Test search functionality
+            log('\\n5. SEARCH FUNCTIONALITY TEST', 'info');
+            try {
+                // Test search
+                search.search('test');
+                await new Promise(r => setTimeout(r, 300));
+                
+                log(`Search query: "test"`, 'info');
+                log(`Filtered results: ${search._filteredResults.length}`, search._filteredResults.length > 0 ? 'success' : 'error');
+                log(`Search dropdown open: ${search._isOpen}`, search._isOpen ? 'success' : 'warning');
+                
+                // Check if results rendered
+                const results = search.shadowRoot?.querySelector('.search-results');
+                log(`Results container exists: ${!!results}`, results ? 'success' : 'error');
+                
+                if (results) {
+                    const resultItems = results.querySelectorAll('.search-result');
+                    log(`Rendered result items: ${resultItems.length}`, 'info');
+                }
+                
+            } catch (e) {
+                log(`Search test error: ${e.message}`, 'error');
+            }
+            
+            // 6. Test fuzzy matching
+            log('\\n6. FUZZY MATCHING TEST', 'info');
+            try {
+                search.search('jvscpt');
+                await new Promise(r => setTimeout(r, 300));
+                
+                log(`Fuzzy search "jvscpt" results: ${search._filteredResults.length}`, 'info');
+                if (search._filteredResults.length > 0) {
+                    log(`Found match: ${search._filteredResults[0].title}`, 'success');
+                }
+                
+                // Test scoring
+                if (search._scores.size > 0) {
+                    log(`Scores calculated: ${search._scores.size} items`, 'info');
+                    for (const [item, score] of search._scores) {
+                        log(`  - ${item.title}: ${score.toFixed(3)}`, 'info');
+                    }
+                }
+                
+            } catch (e) {
+                log(`Fuzzy test error: ${e.message}`, 'error');
+            }
+            
+            // 7. Test highlighting
+            log('\\n7. HIGHLIGHTING TEST', 'info');
+            try {
+                search.search('Test');
+                await new Promise(r => setTimeout(r, 300));
+                
+                const resultTitle = search.shadowRoot?.querySelector('.search-result-title');
+                if (resultTitle) {
+                    const hasHighlight = resultTitle.innerHTML.includes('search-highlight');
+                    log(`Highlighting applied: ${hasHighlight}`, hasHighlight ? 'success' : 'error');
+                    log(`Result HTML: ${resultTitle.innerHTML}`, 'info');
+                }
+                
+            } catch (e) {
+                log(`Highlighting test error: ${e.message}`, 'error');
+            }
+            
+            // 8. Test keyboard navigation
+            log('\\n8. KEYBOARD NAVIGATION TEST', 'info');
+            try {
+                const input = search.shadowRoot?.querySelector('.search-input');
+                if (input) {
+                    // Simulate ArrowDown
+                    const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+                    input.dispatchEvent(event);
+                    
+                    log(`Selected index after ArrowDown: ${search._selectedIndex}`, 'info');
+                    
+                    // Check if selection rendered
+                    const selected = search.shadowRoot?.querySelector('.search-result.selected');
+                    log(`Selected element exists: ${!!selected}`, selected ? 'success' : 'warning');
+                }
+                
+            } catch (e) {
+                log(`Keyboard test error: ${e.message}`, 'error');
+            }
+            
+            // 9. Test events
+            log('\\n9. EVENT SYSTEM TEST', 'info');
+            try {
+                let selectFired = false;
+                let submitFired = false;
+                
+                search.addEventListener('select', () => { selectFired = true; });
+                search.addEventListener('submit', () => { submitFired = true; });
+                
+                log(`Event listeners attached`, 'info');
+                log(`Ready to fire select event: ${search._filteredResults.length > 0}`, 'info');
+                
+            } catch (e) {
+                log(`Event test error: ${e.message}`, 'error');
+            }
+            
+            // 10. Performance check
+            log('\\n10. PERFORMANCE CHECK', 'info');
+            const startTime = performance.now();
+            search.search('item');
+            await new Promise(r => setTimeout(r, 100));
+            const searchTime = performance.now() - startTime;
+            
+            log(`Search completed in: ${searchTime.toFixed(2)}ms`, searchTime < 100 ? 'success' : 'warning');
+            
+            // Summary
+            log('\\n=== DIAGNOSTIC COMPLETE ===', 'warning');
+            log(`Console errors: ${consoleErrors.length}`, consoleErrors.length === 0 ? 'success' : 'error');
+            log(`Console warnings: ${consoleWarnings.length}`, consoleWarnings.length === 0 ? 'success' : 'warning');
+        };
+        
+        window.testMinimal = function() {
+            log('Creating minimal searchbox...', 'info');
+            
+            const minimal = document.createElement('brutal-searchbox');
+            minimal.style.maxWidth = '400px';
+            minimal.style.margin = '20px 0';
+            
+            document.body.appendChild(minimal);
+            
+            setTimeout(() => {
+                log(`Minimal searchbox created`, 'success');
+                log(`Has shadowRoot: ${!!minimal.shadowRoot}`, minimal.shadowRoot ? 'success' : 'error');
+                
+                // Set simple data
+                minimal.setData([
+                    { title: 'Apple', description: 'Fruit' },
+                    { title: 'Banana', description: 'Yellow fruit' },
+                    { title: 'Cherry', description: 'Red fruit' }
+                ]);
+                
+                log(`Data set successfully`, 'success');
+                
+                // Test search
+                minimal.search('fruit');
+                setTimeout(() => {
+                    log(`Results: ${minimal.results.length}`, minimal.results.length > 0 ? 'success' : 'error');
+                }, 200);
+            }, 100);
+        };
+        
+        window.testFuzzyAlgorithm = function() {
+            log('Testing fuzzy matching algorithm...', 'info');
+            
+            const search = document.getElementById('search1');
+            
+            // Test cases
+            const testCases = [
+                { query: 'test', text: 'test', expected: true },
+                { query: 'tst', text: 'test', expected: true },
+                { query: 'tes', text: 'test', expected: true },
+                { query: 'et', text: 'test', expected: true },
+                { query: 'xyz', text: 'test', expected: false },
+                { query: 'jvscpt', text: 'javascript', expected: true },
+                { query: 'js', text: 'JavaScript', expected: true }
+            ];
+            
+            testCases.forEach(({ query, text, expected }) => {
+                const score = search._fuzzyMatch(text.toLowerCase(), query.toLowerCase());
+                const passed = (score > 0) === expected;
+                log(`Fuzzy match "${query}" in "${text}": score=${score.toFixed(3)} ${passed ? '✓' : '✗'}`, 
+                    passed ? 'success' : 'error');
+            });
+        };
+        
+        window.testPerformance = async function() {
+            log('Testing performance with large dataset...', 'warning');
+            
+            const search = document.getElementById('search1');
+            const sizes = [100, 1000, 5000];
+            
+            for (const size of sizes) {
+                const data = Array(size).fill(0).map((_, i) => ({
+                    title: `Item ${i}`,
+                    description: `Description for item ${i} with some keywords`,
+                    category: `Category ${i % 10}`
+                }));
+                
+                search.setData(data);
+                
+                const startTime = performance.now();
+                search.search('item 999');
+                await new Promise(r => setTimeout(r, 200));
+                const searchTime = performance.now() - startTime;
+                
+                log(`${size} items: ${searchTime.toFixed(2)}ms (${search.results.length} results)`, 
+                    searchTime < 200 ? 'success' : 'warning');
+            }
+        };
+        
+        window.checkConsoleErrors = function() {
+            log(`\\nConsole Errors (${consoleErrors.length}):`, 'warning');
+            consoleErrors.forEach(err => log(err, 'error'));
+            
+            log(`\\nConsole Warnings (${consoleWarnings.length}):`, 'warning');
+            consoleWarnings.forEach(warn => log(warn, 'warning'));
+        };
+        
+        // Initial check
+        setTimeout(() => {
+            log('SearchBox diagnostic ready', 'success');
+            
+            const search = document.getElementById('search1');
+            if (!search) {
+                log('ERROR: SearchBox element not found!', 'error');
+            } else if (!search.shadowRoot) {
+                log('WARNING: Shadow DOM not initialized', 'warning');
+            } else {
+                log('SearchBox element initialized', 'success');
+            }
+        }, 500);
+    </script>
+</body>
+</html>

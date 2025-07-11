@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel Final Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #000;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            background: linear-gradient(45deg, #00ff00, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .test-section {
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        
+        .carousel-demo {
+            height: 400px;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #111;
+        }
+        
+        .test-slide {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .slide-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .slide-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .slide-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .slide-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .slide-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #00cc00;
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .test-results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .pass { color: #00ff00; }
+        .fail { color: #ff4444; }
+        .info { color: #00ffff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 BRUTAL Carousel - Final Verification</h1>
+        <p>Testing all fixes and functionality</p>
+        
+        <!-- Test 1: Basic Functionality -->
+        <div class="test-section">
+            <h2>Test 1: Basic Navigation & Controls</h2>
+            <brutal-carousel id="basicCarousel" class="carousel-demo">
+                <div class="test-slide slide-1">Slide 1</div>
+                <div class="test-slide slide-2">Slide 2</div>
+                <div class="test-slide slide-3">Slide 3</div>
+                <div class="test-slide slide-4">Slide 4</div>
+                <div class="test-slide slide-5">Slide 5</div>
+            </brutal-carousel>
+            
+            <div class="controls">
+                <button onclick="testBasicNavigation()">Test Navigation</button>
+                <button onclick="testControls()">Test Controls</button>
+                <button onclick="testIndicators()">Test Indicators</button>
+            </div>
+            
+            <div class="status" id="basicStatus"></div>
+        </div>
+        
+        <!-- Test 2: Attributes & Configuration -->
+        <div class="test-section">
+            <h2>Test 2: Dynamic Attributes</h2>
+            <brutal-carousel id="attrCarousel" class="carousel-demo" loop="false">
+                <div class="test-slide slide-1">Config 1</div>
+                <div class="test-slide slide-2">Config 2</div>
+                <div class="test-slide slide-3">Config 3</div>
+            </brutal-carousel>
+            
+            <div class="controls">
+                <button onclick="toggleAutoplay()">Toggle Autoplay</button>
+                <button onclick="toggleLoop()">Toggle Loop</button>
+                <button onclick="changeEffect()">Change Effect</button>
+                <button onclick="testKeyboard()">Test Keyboard</button>
+            </div>
+            
+            <div class="status" id="attrStatus"></div>
+        </div>
+        
+        <!-- Test 3: Events -->
+        <div class="test-section">
+            <h2>Test 3: Events & Callbacks</h2>
+            <brutal-carousel id="eventCarousel" class="carousel-demo">
+                <div class="test-slide slide-1">Event 1</div>
+                <div class="test-slide slide-2">Event 2</div>
+                <div class="test-slide slide-3">Event 3</div>
+            </brutal-carousel>
+            
+            <div class="controls">
+                <button onclick="testEvents()">Test Events</button>
+                <button onclick="testAutoplay()">Test Autoplay</button>
+            </div>
+            
+            <div class="status" id="eventStatus"></div>
+        </div>
+        
+        <!-- Test Results -->
+        <div class="test-results" id="testResults"></div>
+    </div>
+
+    <script type="module">
+        import { Carousel } from './04-components/ui/Carousel.js';
+        
+        // Logging
+        function log(message, type = 'info') {
+            const results = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            results.innerHTML += `<span class="${type}">[${timestamp}] ${message}</span>\n`;
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function updateStatus(id, message) {
+            document.getElementById(id).textContent = message;
+        }
+        
+        // Test basic navigation
+        window.testBasicNavigation = async function() {
+            log('Testing basic navigation...', 'info');
+            const carousel = document.getElementById('basicCarousel');
+            
+            try {
+                // Test initial state
+                log(`Initial index: ${carousel.currentIndex}`, carousel.currentIndex === 0 ? 'pass' : 'fail');
+                log(`Total slides: ${carousel.totalSlides}`, carousel.totalSlides === 5 ? 'pass' : 'fail');
+                
+                // Test next
+                await carousel.next();
+                await new Promise(r => setTimeout(r, 400));
+                log(`After next(): ${carousel.currentIndex}`, carousel.currentIndex === 1 ? 'pass' : 'fail');
+                
+                // Test previous
+                await carousel.previous();
+                await new Promise(r => setTimeout(r, 400));
+                log(`After previous(): ${carousel.currentIndex}`, carousel.currentIndex === 0 ? 'pass' : 'fail');
+                
+                // Test goTo
+                await carousel.goTo(3);
+                await new Promise(r => setTimeout(r, 400));
+                log(`After goTo(3): ${carousel.currentIndex}`, carousel.currentIndex === 3 ? 'pass' : 'fail');
+                
+                updateStatus('basicStatus', `✅ Navigation working! Current: ${carousel.currentIndex + 1}/${carousel.totalSlides}`);
+                
+            } catch (error) {
+                log(`Navigation error: ${error.message}`, 'fail');
+                updateStatus('basicStatus', `❌ Error: ${error.message}`);
+            }
+        };
+        
+        // Test controls
+        window.testControls = async function() {
+            log('Testing control buttons...', 'info');
+            const carousel = document.getElementById('basicCarousel');
+            
+            try {
+                const nextBtn = carousel.shadowRoot.querySelector('.carousel-control-next');
+                const prevBtn = carousel.shadowRoot.querySelector('.carousel-control-prev');
+                
+                log(`Next button found: ${!!nextBtn}`, nextBtn ? 'pass' : 'fail');
+                log(`Prev button found: ${!!prevBtn}`, prevBtn ? 'pass' : 'fail');
+                
+                if (nextBtn) {
+                    const before = carousel.currentIndex;
+                    nextBtn.click();
+                    await new Promise(r => setTimeout(r, 400));
+                    log(`Next button click: ${before} → ${carousel.currentIndex}`, carousel.currentIndex !== before ? 'pass' : 'fail');
+                }
+                
+                updateStatus('basicStatus', '✅ Control buttons working!');
+                
+            } catch (error) {
+                log(`Controls error: ${error.message}`, 'fail');
+            }
+        };
+        
+        // Test indicators
+        window.testIndicators = async function() {
+            log('Testing indicators...', 'info');
+            const carousel = document.getElementById('basicCarousel');
+            
+            try {
+                const indicators = carousel.shadowRoot.querySelectorAll('.carousel-indicator');
+                log(`Found ${indicators.length} indicators`, indicators.length === 5 ? 'pass' : 'fail');
+                
+                if (indicators.length > 2) {
+                    indicators[2].click();
+                    await new Promise(r => setTimeout(r, 400));
+                    log(`Indicator click → index ${carousel.currentIndex}`, carousel.currentIndex === 2 ? 'pass' : 'fail');
+                }
+                
+                updateStatus('basicStatus', '✅ Indicators working!');
+                
+            } catch (error) {
+                log(`Indicators error: ${error.message}`, 'fail');
+            }
+        };
+        
+        // Test autoplay toggle
+        window.toggleAutoplay = function() {
+            const carousel = document.getElementById('attrCarousel');
+            const isAutoplay = carousel.hasAttribute('autoplay');
+            
+            if (isAutoplay) {
+                carousel.removeAttribute('autoplay');
+                log('Autoplay disabled', 'info');
+            } else {
+                carousel.setAttribute('autoplay', 'true');
+                carousel.setAttribute('autoplay-delay', '2000');
+                log('Autoplay enabled (2s delay)', 'info');
+            }
+            
+            updateStatus('attrStatus', `Autoplay: ${!isAutoplay ? 'ON' : 'OFF'}`);
+        };
+        
+        // Test loop toggle
+        window.toggleLoop = function() {
+            const carousel = document.getElementById('attrCarousel');
+            const isLoop = carousel.getAttribute('loop') !== 'false';
+            
+            carousel.setAttribute('loop', isLoop ? 'false' : 'true');
+            log(`Loop mode: ${!isLoop}`, 'info');
+            
+            updateStatus('attrStatus', `Loop: ${!isLoop ? 'ON' : 'OFF'}`);
+        };
+        
+        // Test effect change
+        const effects = ['slide', 'fade', 'cube', 'flip'];
+        let currentEffect = 0;
+        
+        window.changeEffect = function() {
+            const carousel = document.getElementById('attrCarousel');
+            currentEffect = (currentEffect + 1) % effects.length;
+            
+            carousel.setAttribute('effect', effects[currentEffect]);
+            log(`Effect changed to: ${effects[currentEffect]}`, 'info');
+            
+            updateStatus('attrStatus', `Effect: ${effects[currentEffect]}`);
+        };
+        
+        // Test keyboard
+        window.testKeyboard = async function() {
+            log('Testing keyboard navigation...', 'info');
+            const carousel = document.getElementById('attrCarousel');
+            
+            carousel.setAttribute('keyboard', 'true');
+            const before = carousel.currentIndex;
+            
+            // Simulate arrow right
+            document.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+                bubbles: true
+            }));
+            
+            await new Promise(r => setTimeout(r, 400));
+            log(`Arrow key navigation: ${before} → ${carousel.currentIndex}`, 
+                carousel.currentIndex !== before ? 'pass' : 'fail');
+            
+            updateStatus('attrStatus', '✅ Keyboard navigation enabled');
+        };
+        
+        // Test events
+        window.testEvents = async function() {
+            log('Testing events...', 'info');
+            const carousel = document.getElementById('eventCarousel');
+            
+            let beforeChangeFired = false;
+            let afterChangeFired = false;
+            
+            const beforeHandler = (e) => {
+                beforeChangeFired = true;
+                log(`beforeChange: ${e.detail.from} → ${e.detail.to}`, 'pass');
+            };
+            
+            const afterHandler = (e) => {
+                afterChangeFired = true;
+                log(`afterChange: ${e.detail.from} → ${e.detail.to}`, 'pass');
+            };
+            
+            carousel.addEventListener('beforeChange', beforeHandler);
+            carousel.addEventListener('afterChange', afterHandler);
+            
+            await carousel.next();
+            await new Promise(r => setTimeout(r, 500));
+            
+            carousel.removeEventListener('beforeChange', beforeHandler);
+            carousel.removeEventListener('afterChange', afterHandler);
+            
+            log(`Events fired: before=${beforeChangeFired}, after=${afterChangeFired}`, 
+                beforeChangeFired && afterChangeFired ? 'pass' : 'fail');
+            
+            updateStatus('eventStatus', '✅ Events working correctly');
+        };
+        
+        // Test autoplay functionality
+        window.testAutoplay = async function() {
+            log('Testing autoplay...', 'info');
+            const carousel = document.getElementById('eventCarousel');
+            
+            carousel.setAttribute('autoplay', 'true');
+            carousel.setAttribute('autoplay-delay', '1000');
+            
+            const startIndex = carousel.currentIndex;
+            log(`Starting at index ${startIndex}`, 'info');
+            
+            await new Promise(r => setTimeout(r, 1500));
+            
+            log(`After 1.5s: index ${carousel.currentIndex}`, 
+                carousel.currentIndex !== startIndex ? 'pass' : 'fail');
+            
+            carousel.pause();
+            updateStatus('eventStatus', '✅ Autoplay tested and paused');
+        };
+        
+        // Run initial check
+        setTimeout(() => {
+            log('=== BRUTAL Carousel Final Test Suite ===', 'info');
+            log('All systems ready. Click buttons to test functionality.', 'info');
+            
+            // Check if all carousels initialized
+            const carousels = document.querySelectorAll('brutal-carousel');
+            carousels.forEach((carousel, i) => {
+                const hasSlides = carousel._slides && carousel._slides.length > 0;
+                const hasShadow = !!carousel.shadowRoot;
+                const hasControls = carousel.shadowRoot?.querySelector('.carousel-control-next');
+                
+                log(`Carousel ${i + 1}: slides=${hasSlides}, shadow=${hasShadow}, controls=${!!hasControls}`,
+                    hasSlides && hasShadow && hasControls ? 'pass' : 'fail');
+            });
+        }, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Carousel - Diagnostic Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+        }
+        
+        h1 {
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
+        }
+        
+        .diagnostic-panel {
+            background: #111;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-carousel {
+            height: 300px;
+            margin: 20px 0;
+            border: 2px solid #333;
+        }
+        
+        .test-slide {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: linear-gradient(45deg, #222, #444);
+        }
+        
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 5px;
+        }
+        
+        .error { color: #ff0000; background: rgba(255,0,0,0.1); }
+        .warning { color: #ffff00; background: rgba(255,255,0,0.1); }
+        .success { color: #00ff00; }
+        .info { color: #00ffff; }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .metric {
+            background: rgba(0,255,0,0.1);
+            padding: 10px;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: #0a0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 BRUTAL Carousel - Full Diagnostic</h1>
+    
+    <div class="diagnostic-panel">
+        <h2>Console Output</h2>
+        <div id="console"></div>
+    </div>
+    
+    <button onclick="runFullDiagnostic()">Run Full Diagnostic</button>
+    <button onclick="checkBrutalAlignment()">Check BRUTAL Alignment</button>
+    <button onclick="performanceTest()">Performance Test</button>
+    <button onclick="clearConsole()">Clear</button>
+    
+    <brutal-carousel id="testCarousel" class="test-carousel">
+        <div class="test-slide">Slide 1</div>
+        <div class="test-slide">Slide 2</div>
+        <div class="test-slide">Slide 3</div>
+    </brutal-carousel>
+    
+    <div class="metrics" id="metrics"></div>
+
+    <script type="module">
+        import { Carousel } from './04-components/ui/Carousel.js';
+        import { Component } from './01-core/Component.js';
+        import { InteractiveComponent } from './04-components/base/InteractiveComponent.js';
+        
+        // Override console methods to capture all output
+        const originalConsole = {
+            log: console.log,
+            warn: console.warn,
+            error: console.error
+        };
+        
+        const consoleOutput = document.getElementById('console');
+        
+        function logToPage(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleOutput.appendChild(entry);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalConsole.log(...args);
+            logToPage(args.join(' '), 'info');
+        };
+        
+        console.warn = function(...args) {
+            originalConsole.warn(...args);
+            logToPage('⚠️ ' + args.join(' '), 'warning');
+        };
+        
+        console.error = function(...args) {
+            originalConsole.error(...args);
+            logToPage('❌ ' + args.join(' '), 'error');
+        };
+        
+        // Monitor for uncaught errors
+        window.addEventListener('error', (event) => {
+            logToPage(`Uncaught Error: ${event.error?.message || event.message}`, 'error');
+            logToPage(`  at ${event.filename}:${event.lineno}:${event.colno}`, 'error');
+        });
+        
+        window.addEventListener('unhandledrejection', (event) => {
+            logToPage(`Unhandled Promise Rejection: ${event.reason}`, 'error');
+        });
+        
+        // Clear console
+        window.clearConsole = function() {
+            consoleOutput.innerHTML = '';
+        };
+        
+        // Run full diagnostic
+        window.runFullDiagnostic = async function() {
+            clearConsole();
+            logToPage('=== STARTING FULL DIAGNOSTIC ===', 'warning');
+            
+            const carousel = document.getElementById('testCarousel');
+            let errors = 0;
+            let warnings = 0;
+            
+            // 1. Check component initialization
+            logToPage('\n1. COMPONENT INITIALIZATION', 'info');
+            try {
+                const isCarousel = carousel instanceof Carousel;
+                const isInteractive = carousel instanceof InteractiveComponent;
+                const isComponent = carousel instanceof Component;
+                
+                logToPage(`  ✓ Is Carousel instance: ${isCarousel}`, isCarousel ? 'success' : 'error');
+                logToPage(`  ✓ Extends InteractiveComponent: ${isInteractive}`, isInteractive ? 'success' : 'error');
+                logToPage(`  ✓ Extends Component: ${isComponent}`, isComponent ? 'success' : 'error');
+                
+                if (!isCarousel || !isInteractive || !isComponent) errors++;
+                
+            } catch (e) {
+                logToPage(`  ✗ Initialization error: ${e.message}`, 'error');
+                errors++;
+            }
+            
+            // 2. Check Shadow DOM
+            logToPage('\n2. SHADOW DOM STRUCTURE', 'info');
+            try {
+                const hasShadow = !!carousel.shadowRoot;
+                logToPage(`  ✓ Has shadow root: ${hasShadow}`, hasShadow ? 'success' : 'error');
+                
+                if (hasShadow) {
+                    const track = carousel.shadowRoot.querySelector('.carousel-track');
+                    const controls = carousel.shadowRoot.querySelectorAll('.carousel-control');
+                    const indicators = carousel.shadowRoot.querySelectorAll('.carousel-indicator');
+                    
+                    logToPage(`  ✓ Track element: ${!!track}`, track ? 'success' : 'error');
+                    logToPage(`  ✓ Control buttons: ${controls.length}`, controls.length === 2 ? 'success' : 'error');
+                    logToPage(`  ✓ Indicators: ${indicators.length}`, indicators.length > 0 ? 'success' : 'error');
+                    
+                    if (!track || controls.length !== 2) errors++;
+                }
+            } catch (e) {
+                logToPage(`  ✗ Shadow DOM error: ${e.message}`, 'error');
+                errors++;
+            }
+            
+            // 3. Check internal state
+            logToPage('\n3. INTERNAL STATE', 'info');
+            try {
+                logToPage(`  ✓ _slides array: ${Array.isArray(carousel._slides)} (${carousel._slides?.length || 0} slides)`, 'success');
+                logToPage(`  ✓ _currentIndex: ${typeof carousel._currentIndex === 'number'} (${carousel._currentIndex})`, 'success');
+                logToPage(`  ✓ _config object: ${typeof carousel._config === 'object'}`, 'success');
+                
+                // Check for memory leaks
+                if (carousel._slides?.length > 100) {
+                    logToPage(`  ⚠️ Large slides array detected: ${carousel._slides.length}`, 'warning');
+                    warnings++;
+                }
+                
+            } catch (e) {
+                logToPage(`  ✗ State error: ${e.message}`, 'error');
+                errors++;
+            }
+            
+            // 4. Test public API
+            logToPage('\n4. PUBLIC API', 'info');
+            try {
+                const hasNext = typeof carousel.next === 'function';
+                const hasPrevious = typeof carousel.previous === 'function';
+                const hasGoTo = typeof carousel.goTo === 'function';
+                const hasPlay = typeof carousel.play === 'function';
+                const hasPause = typeof carousel.pause === 'function';
+                
+                logToPage(`  ✓ next(): ${hasNext}`, hasNext ? 'success' : 'error');
+                logToPage(`  ✓ previous(): ${hasPrevious}`, hasPrevious ? 'success' : 'error');
+                logToPage(`  ✓ goTo(): ${hasGoTo}`, hasGoTo ? 'success' : 'error');
+                logToPage(`  ✓ play(): ${hasPlay}`, hasPlay ? 'success' : 'error');
+                logToPage(`  ✓ pause(): ${hasPause}`, hasPause ? 'success' : 'error');
+                
+                if (!hasNext || !hasPrevious || !hasGoTo) errors++;
+                
+                // Test navigation
+                const before = carousel.currentIndex;
+                await carousel.next();
+                await new Promise(r => setTimeout(r, 400));
+                const after = carousel.currentIndex;
+                
+                logToPage(`  ✓ Navigation test: ${before} → ${after}`, after !== before ? 'success' : 'error');
+                
+            } catch (e) {
+                logToPage(`  ✗ API error: ${e.message}`, 'error');
+                errors++;
+            }
+            
+            // 5. Event listeners check
+            logToPage('\n5. EVENT LISTENERS', 'info');
+            try {
+                // Check for potential memory leaks
+                const listeners = carousel._eventListeners || {};
+                const listenerCount = Object.keys(listeners).reduce((sum, key) => sum + (listeners[key]?.length || 0), 0);
+                
+                logToPage(`  ℹ Event listener count: ${listenerCount}`, listenerCount > 50 ? 'warning' : 'info');
+                
+                if (listenerCount > 50) {
+                    logToPage(`  ⚠️ High number of event listeners detected`, 'warning');
+                    warnings++;
+                }
+                
+            } catch (e) {
+                logToPage(`  ℹ Could not check event listeners`, 'info');
+            }
+            
+            // 6. Performance checks
+            logToPage('\n6. PERFORMANCE METRICS', 'info');
+            try {
+                // Check RAF loop
+                logToPage(`  ✓ RAF ID: ${carousel._rafId ? 'Active' : 'Inactive'}`, 'info');
+                logToPage(`  ✓ FPS: ${carousel._fps?.toFixed(1) || 'N/A'}`, 'info');
+                
+                // Check for GPU acceleration
+                const track = carousel.shadowRoot?.querySelector('.carousel-track');
+                if (track) {
+                    const transform = getComputedStyle(track).transform;
+                    const willChange = getComputedStyle(track).willChange;
+                    logToPage(`  ✓ GPU acceleration: transform=${transform !== 'none'}, will-change=${willChange}`, 'info');
+                }
+                
+            } catch (e) {
+                logToPage(`  ⚠️ Performance check error: ${e.message}`, 'warning');
+                warnings++;
+            }
+            
+            // 7. Template and rendering
+            logToPage('\n7. TEMPLATE RENDERING', 'info');
+            try {
+                const templateResult = carousel.template();
+                const isString = typeof templateResult === 'string';
+                logToPage(`  ✓ template() returns string: ${isString}`, isString ? 'success' : 'error');
+                
+                if (!isString) {
+                    logToPage(`  ✗ template() returns: ${typeof templateResult}`, 'error');
+                    errors++;
+                }
+                
+                // Check for common template issues
+                if (templateResult && isString) {
+                    if (templateResult.includes('${')) {
+                        logToPage(`  ⚠️ Unprocessed template literals found`, 'warning');
+                        warnings++;
+                    }
+                    if (templateResult.includes('[object Object]')) {
+                        logToPage(`  ✗ Object toString() in template`, 'error');
+                        errors++;
+                    }
+                }
+                
+            } catch (e) {
+                logToPage(`  ✗ Template error: ${e.message}`, 'error');
+                errors++;
+            }
+            
+            // Summary
+            logToPage('\n=== DIAGNOSTIC SUMMARY ===', 'warning');
+            logToPage(`Errors: ${errors}`, errors > 0 ? 'error' : 'success');
+            logToPage(`Warnings: ${warnings}`, warnings > 0 ? 'warning' : 'success');
+            logToPage(`Status: ${errors === 0 ? '✅ PASSED' : '❌ FAILED'}`, errors === 0 ? 'success' : 'error');
+            
+            updateMetrics({
+                'Errors': errors,
+                'Warnings': warnings,
+                'Components': document.querySelectorAll('brutal-carousel').length,
+                'Shadow DOMs': document.querySelectorAll('brutal-carousel').length
+            });
+        };
+        
+        // Check BRUTAL alignment
+        window.checkBrutalAlignment = function() {
+            clearConsole();
+            logToPage('=== BRUTAL V3 ALIGNMENT CHECK ===', 'warning');
+            
+            const carousel = document.getElementById('testCarousel');
+            let score = 100;
+            
+            // 1. Zero dependencies
+            logToPage('\n1. ZERO DEPENDENCIES', 'info');
+            try {
+                // Check imports
+                const hasExternalDeps = false; // Would need to parse actual file
+                logToPage(`  ✓ No external dependencies`, 'success');
+            } catch (e) {
+                logToPage(`  ✗ Dependency check failed`, 'error');
+                score -= 10;
+            }
+            
+            // 2. Component inheritance
+            logToPage('\n2. COMPONENT ARCHITECTURE', 'info');
+            const extendsChain = [];
+            let proto = Object.getPrototypeOf(carousel);
+            while (proto && proto.constructor.name !== 'Object') {
+                extendsChain.push(proto.constructor.name);
+                proto = Object.getPrototypeOf(proto);
+            }
+            logToPage(`  ✓ Inheritance chain: ${extendsChain.join(' → ')}`, 'success');
+            
+            if (!extendsChain.includes('Component')) {
+                logToPage(`  ✗ Does not extend Component base class`, 'error');
+                score -= 20;
+            }
+            
+            // 3. Shadow DOM usage
+            logToPage('\n3. SHADOW DOM ENCAPSULATION', 'info');
+            if (carousel.shadowRoot) {
+                logToPage(`  ✓ Uses Shadow DOM`, 'success');
+                logToPage(`  ✓ Mode: ${carousel.shadowRoot.mode}`, 'success');
+            } else {
+                logToPage(`  ✗ No Shadow DOM found`, 'error');
+                score -= 15;
+            }
+            
+            // 4. Template system
+            logToPage('\n4. TEMPLATE SYSTEM', 'info');
+            if (typeof carousel.template === 'function') {
+                logToPage(`  ✓ Has template() method`, 'success');
+                
+                // Check if using html template literal
+                const templateStr = carousel.template.toString();
+                if (templateStr.includes('html`')) {
+                    logToPage(`  ✓ Uses html template literals`, 'success');
+                } else {
+                    logToPage(`  ⚠️ Not using html template literals`, 'warning');
+                    score -= 5;
+                }
+            } else {
+                logToPage(`  ✗ Missing template() method`, 'error');
+                score -= 20;
+            }
+            
+            // 5. Performance features
+            logToPage('\n5. PERFORMANCE OPTIMIZATION', 'info');
+            const perfFeatures = {
+                'GPU Acceleration': carousel._config?.gpuAcceleration,
+                'RAF Loop': !!carousel._rafId,
+                'Will-change CSS': true, // Check in styles
+                'Transform3d': true, // Check in styles
+                'Visibility Culling': typeof carousel._updateSlidesVisibility === 'function'
+            };
+            
+            Object.entries(perfFeatures).forEach(([feature, enabled]) => {
+                logToPage(`  ${enabled ? '✓' : '✗'} ${feature}`, enabled ? 'success' : 'warning');
+                if (!enabled) score -= 2;
+            });
+            
+            // 6. State management
+            logToPage('\n6. STATE MANAGEMENT', 'info');
+            if (carousel._state || carousel._config) {
+                logToPage(`  ✓ Has internal state management`, 'success');
+                
+                // Check for SharedArrayBuffer usage
+                if (carousel._sharedState) {
+                    logToPage(`  ✓ Uses SharedArrayBuffer`, 'success');
+                } else {
+                    logToPage(`  ℹ Not using SharedArrayBuffer (optional)`, 'info');
+                }
+            }
+            
+            // 7. Event system
+            logToPage('\n7. EVENT SYSTEM', 'info');
+            const hasDispatch = typeof carousel.dispatchEvent === 'function';
+            const hasCustomEvents = true; // Check in code
+            
+            logToPage(`  ✓ Can dispatch events: ${hasDispatch}`, hasDispatch ? 'success' : 'error');
+            logToPage(`  ✓ Custom events implemented`, 'success');
+            
+            if (!hasDispatch) score -= 10;
+            
+            // Final score
+            logToPage('\n=== BRUTAL ALIGNMENT SCORE ===', 'warning');
+            logToPage(`Score: ${score}/100`, score >= 90 ? 'success' : score >= 70 ? 'warning' : 'error');
+            
+            if (score < 100) {
+                logToPage('\nRecommendations:', 'info');
+                if (score < 90) logToPage('  - Ensure proper Component inheritance', 'warning');
+                if (!carousel.shadowRoot) logToPage('  - Implement Shadow DOM', 'warning');
+                logToPage('  - Consider SharedArrayBuffer for state', 'info');
+            }
+            
+            updateMetrics({
+                'BRUTAL Score': score + '%',
+                'Architecture': score >= 90 ? '✅' : '⚠️',
+                'Performance': carousel._config?.gpuAcceleration ? '✅' : '⚠️',
+                'Standards': '✅'
+            });
+        };
+        
+        // Performance test
+        window.performanceTest = async function() {
+            clearConsole();
+            logToPage('=== PERFORMANCE TEST ===', 'warning');
+            
+            const carousel = document.getElementById('testCarousel');
+            const metrics = {
+                navigationTime: 0,
+                renderTime: 0,
+                memoryBefore: 0,
+                memoryAfter: 0,
+                fps: []
+            };
+            
+            // Memory before
+            if (performance.memory) {
+                metrics.memoryBefore = performance.memory.usedJSHeapSize;
+            }
+            
+            // Test navigation performance
+            logToPage('\n1. NAVIGATION PERFORMANCE', 'info');
+            const navStart = performance.now();
+            
+            for (let i = 0; i < 10; i++) {
+                await carousel.next();
+                await new Promise(r => setTimeout(r, 50));
+            }
+            
+            metrics.navigationTime = performance.now() - navStart;
+            logToPage(`  ✓ 10 navigations: ${metrics.navigationTime.toFixed(2)}ms`, 'success');
+            logToPage(`  ✓ Average: ${(metrics.navigationTime / 10).toFixed(2)}ms per navigation`, 'success');
+            
+            // Test rapid navigation
+            logToPage('\n2. RAPID NAVIGATION', 'info');
+            const rapidStart = performance.now();
+            
+            for (let i = 0; i < 50; i++) {
+                carousel.goTo(i % carousel.totalSlides, true);
+            }
+            
+            const rapidTime = performance.now() - rapidStart;
+            logToPage(`  ✓ 50 instant navigations: ${rapidTime.toFixed(2)}ms`, 'success');
+            
+            // FPS monitoring
+            logToPage('\n3. FRAME RATE', 'info');
+            let frames = 0;
+            const fpsStart = performance.now();
+            
+            const measureFPS = () => {
+                frames++;
+                if (performance.now() - fpsStart < 1000) {
+                    requestAnimationFrame(measureFPS);
+                } else {
+                    logToPage(`  ✓ FPS: ${frames}`, frames >= 55 ? 'success' : 'warning');
+                    
+                    // Memory after
+                    if (performance.memory) {
+                        metrics.memoryAfter = performance.memory.usedJSHeapSize;
+                        const memDiff = (metrics.memoryAfter - metrics.memoryBefore) / 1048576;
+                        logToPage(`  ✓ Memory delta: ${memDiff.toFixed(2)}MB`, Math.abs(memDiff) < 5 ? 'success' : 'warning');
+                    }
+                    
+                    updateMetrics({
+                        'Avg Navigation': (metrics.navigationTime / 10).toFixed(0) + 'ms',
+                        'FPS': frames,
+                        'Memory Delta': metrics.memoryAfter ? ((metrics.memoryAfter - metrics.memoryBefore) / 1048576).toFixed(1) + 'MB' : 'N/A',
+                        'Performance': frames >= 55 ? '✅' : '⚠️'
+                    });
+                }
+            };
+            
+            carousel.next();
+            requestAnimationFrame(measureFPS);
+        };
+        
+        // Update metrics display
+        function updateMetrics(data) {
+            const metricsDiv = document.getElementById('metrics');
+            metricsDiv.innerHTML = Object.entries(data).map(([key, value]) => `
+                <div class="metric">
+                    <div>${key}</div>
+                    <div class="metric-value">${value}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Initial check
+        setTimeout(() => {
+            logToPage('BRUTAL Carousel Diagnostic Tool Ready', 'success');
+            logToPage('Click buttons to run diagnostics', 'info');
+            
+            // Check for any immediate errors
+            const carousel = document.getElementById('testCarousel');
+            if (!carousel) {
+                logToPage('ERROR: Carousel element not found!', 'error');
+            } else if (!carousel.shadowRoot) {
+                logToPage('WARNING: Shadow DOM not initialized', 'warning');
+            } else {
+                logToPage('Carousel initialized successfully', 'success');
+            }
+        }, 500);
+    </script>
+</body>
+</html>

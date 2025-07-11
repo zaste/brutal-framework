@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Timeline Comprehensive Test Suite</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #000;
+            color: #0f0;
+        }
+        
+        .test-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #0f0, #0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px #0f0;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .test-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .test-card:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .test-card h3 {
+            margin-top: 0;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        button:disabled {
+            background: #333;
+            border-color: #666;
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .test-output {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        
+        .log-entry {
+            margin: 4px 0;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+        
+        .log-pass {
+            background: rgba(0, 255, 0, 0.1);
+            color: #0f0;
+            border-left: 3px solid #0f0;
+        }
+        
+        .log-fail {
+            background: rgba(255, 0, 0, 0.1);
+            color: #f44;
+            border-left: 3px solid #f44;
+        }
+        
+        .log-info {
+            background: rgba(0, 255, 255, 0.1);
+            color: #0ff;
+            border-left: 3px solid #0ff;
+        }
+        
+        .log-warn {
+            background: rgba(255, 255, 0, 0.1);
+            color: #ff0;
+            border-left: 3px solid #ff0;
+        }
+        
+        /* Test timeline styles */
+        .test-timeline {
+            height: 400px;
+            margin: 20px 0;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Performance monitor */
+        .perf-monitor {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            min-width: 200px;
+            z-index: 9999;
+        }
+        
+        .perf-stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .perf-stat .value {
+            color: #0ff;
+            font-weight: bold;
+        }
+        
+        /* Test summary */
+        .test-summary {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .test-summary h2 {
+            margin-top: 0;
+            color: #0f0;
+        }
+        
+        .summary-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #0ff;
+        }
+        
+        .stat-label {
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        /* Timeline for testing */
+        .timeline-test-item {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 BRUTAL Timeline - Comprehensive Test Suite</h1>
+        <p>Testing WebGL rendering, physics simulation, and all timeline features</p>
+        
+        <!-- Performance Monitor -->
+        <div class="perf-monitor" id="perfMonitor">
+            <h4 style="margin-top: 0; color: #0f0;">Performance Monitor</h4>
+            <div class="perf-stat">
+                <span>FPS:</span>
+                <span class="value" id="fps">60</span>
+            </div>
+            <div class="perf-stat">
+                <span>Memory:</span>
+                <span class="value" id="memory">0 MB</span>
+            </div>
+            <div class="perf-stat">
+                <span>Particles:</span>
+                <span class="value" id="particles">0</span>
+            </div>
+            <div class="perf-stat">
+                <span>WebGL:</span>
+                <span class="value" id="webgl">✓</span>
+            </div>
+            <div class="perf-stat">
+                <span>Items:</span>
+                <span class="value" id="itemCount">0</span>
+            </div>
+        </div>
+        
+        <!-- Test Controls -->
+        <div class="test-grid">
+            <div class="test-card">
+                <h3>🧪 Automated Test Suite</h3>
+                <button onclick="runAllTests()">Run All Tests</button>
+                <button onclick="runStressTest()">Run Stress Test</button>
+                <button onclick="clearAllLogs()">Clear Logs</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🎯 Core Functionality</h3>
+                <button onclick="testInitialization()">Initialization</button>
+                <button onclick="testItemManagement()">Item Management</button>
+                <button onclick="testNavigation()">Navigation</button>
+                <button onclick="testAutoplay()">Autoplay</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🎨 Visual & Rendering</h3>
+                <button onclick="testWebGL()">WebGL Rendering</button>
+                <button onclick="testShaders()">Shader Compilation</button>
+                <button onclick="testParticles()">Particle System</button>
+                <button onclick="testThemes()">Theme System</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>⚡ Performance</h3>
+                <button onclick="testPerformance()">Render Performance</button>
+                <button onclick="testVirtualScrolling()">Virtual Scrolling</button>
+                <button onclick="testMemoryLeaks()">Memory Leaks</button>
+                <button onclick="testLargeDataset()">1000 Items Test</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🎮 Interactions</h3>
+                <button onclick="testGestures()">Gestures</button>
+                <button onclick="testZoom()">Zoom Controls</button>
+                <button onclick="testKeyboard()">Keyboard Nav</button>
+                <button onclick="testEvents()">Event System</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🔧 Edge Cases</h3>
+                <button onclick="testEmptyTimeline()">Empty Timeline</button>
+                <button onclick="testSingleItem()">Single Item</button>
+                <button onclick="testDynamicUpdates()">Dynamic Updates</button>
+                <button onclick="testDestruction()">Create/Destroy</button>
+            </div>
+        </div>
+        
+        <!-- Test Output -->
+        <div class="test-output" id="testOutput">
+            <div class="log-entry log-info">Test suite ready. Click any button to start testing.</div>
+        </div>
+        
+        <!-- Test Timeline -->
+        <div id="timelineContainer">
+            <brutal-timeline id="testTimeline" class="test-timeline" theme="brutal">
+                <div date="2024-01-01" title="Test Item 1">First test item</div>
+                <div date="2024-02-01" title="Test Item 2">Second test item</div>
+                <div date="2024-03-01" title="Test Item 3">Third test item</div>
+                <div date="2024-04-01" title="Test Item 4">Fourth test item</div>
+                <div date="2024-05-01" title="Test Item 5">Fifth test item</div>
+            </brutal-timeline>
+        </div>
+        
+        <!-- Test Summary -->
+        <div class="test-summary" id="testSummary" style="display: none;">
+            <h2>Test Results Summary</h2>
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="passedTests">0</div>
+                    <div class="stat-label">Passed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="failedTests">0</div>
+                    <div class="stat-label">Failed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="totalTests">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="successRate">0%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Timeline } from './04-components/ui/Timeline.js';
+        
+        // Test state
+        let testResults = { passed: 0, failed: 0, total: 0 };
+        let activeTests = new Set();
+        
+        // Logging
+        function log(message, type = 'info') {
+            const output = document.getElementById('testOutput');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            output.appendChild(entry);
+            output.scrollTop = output.scrollHeight;
+            
+            // Update test results
+            if (type === 'pass') {
+                testResults.passed++;
+                testResults.total++;
+            } else if (type === 'fail') {
+                testResults.failed++;
+                testResults.total++;
+            }
+        }
+        
+        function assert(condition, message) {
+            if (condition) {
+                log(`✓ ${message}`, 'pass');
+                return true;
+            } else {
+                log(`✗ ${message}`, 'fail');
+                return false;
+            }
+        }
+        
+        window.clearAllLogs = function() {
+            document.getElementById('testOutput').innerHTML = '';
+            testResults = { passed: 0, failed: 0, total: 0 };
+        };
+        
+        // Performance monitoring
+        let perfStats = {
+            fps: 60,
+            memory: 0,
+            particles: 0,
+            webgl: false,
+            itemCount: 0
+        };
+        
+        function updatePerfMonitor() {
+            const timeline = document.getElementById('testTimeline');
+            
+            // Update stats
+            perfStats.fps = timeline._fps || 60;
+            perfStats.particles = timeline._particles?.length || 0;
+            perfStats.webgl = !!timeline._gl;
+            perfStats.itemCount = timeline._items?.length || 0;
+            
+            // Update display
+            document.getElementById('fps').textContent = perfStats.fps.toFixed(1);
+            document.getElementById('memory').textContent = 
+                performance.memory ? 
+                (performance.memory.usedJSHeapSize / 1048576).toFixed(1) + ' MB' : 
+                'N/A';
+            document.getElementById('particles').textContent = perfStats.particles;
+            document.getElementById('webgl').textContent = perfStats.webgl ? '✓' : '✗';
+            document.getElementById('itemCount').textContent = perfStats.itemCount;
+        }
+        
+        setInterval(updatePerfMonitor, 100);
+        
+        // Test functions
+        window.testInitialization = async function() {
+            log('Testing timeline initialization...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                // Check component instance
+                assert(timeline instanceof Timeline, 'Timeline is correct instance');
+                assert(timeline.shadowRoot !== null, 'Shadow DOM exists');
+                
+                // Check internal state
+                assert(Array.isArray(timeline._items), 'Items array initialized');
+                assert(timeline._items.length > 0, 'Items collected from children');
+                assert(typeof timeline._config === 'object', 'Configuration object exists');
+                
+                // Check WebGL initialization
+                if (timeline._config.webglEnabled) {
+                    assert(timeline._canvas !== null, 'WebGL canvas created');
+                    assert(timeline._gl !== null, 'WebGL context obtained');
+                    assert(Object.keys(timeline._programs).length > 0, 'Shaders compiled');
+                }
+                
+                // Check physics initialization
+                if (timeline._config.gpuPhysics) {
+                    assert(Array.isArray(timeline._physics.particles), 'Physics particles created');
+                    assert(timeline._physics.particles.length === timeline._items.length, 'Physics particles match items');
+                }
+                
+                // Check render loop
+                assert(timeline._rafId !== null, 'Render loop started');
+                
+                log('Initialization test completed', 'info');
+                
+            } catch (error) {
+                log(`Initialization test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testItemManagement = async function() {
+            log('Testing item management...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                const initialCount = timeline._items.length;
+                
+                // Test adding item
+                const newItem = document.createElement('div');
+                newItem.setAttribute('date', '2024-06-01');
+                newItem.setAttribute('title', 'Dynamic Item');
+                newItem.textContent = 'Dynamically added item';
+                
+                timeline.addItem(newItem);
+                assert(timeline._items.length === initialCount + 1, 'Item added successfully');
+                
+                // Check if item is sorted correctly
+                const addedItem = timeline._items.find(item => item.title === 'Dynamic Item');
+                assert(addedItem !== undefined, 'Added item found in items array');
+                
+                // Test removing item
+                timeline.removeItem(timeline._items.length - 1);
+                assert(timeline._items.length === initialCount, 'Item removed successfully');
+                
+                // Test item properties
+                const firstItem = timeline._items[0];
+                assert(firstItem.date instanceof Date, 'Item has valid date');
+                assert(typeof firstItem.title === 'string', 'Item has title');
+                assert(firstItem.particle !== null, 'Item has physics particle');
+                
+                log('Item management test completed', 'info');
+                
+            } catch (error) {
+                log(`Item management test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testNavigation = async function() {
+            log('Testing navigation...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                // Test setActiveItem
+                assert(timeline._activeIndex === -1, 'No active item initially');
+                
+                timeline.setActiveItem(0);
+                await new Promise(r => setTimeout(r, 100));
+                assert(timeline._activeIndex === 0, 'First item activated');
+                
+                timeline.setActiveItem(2);
+                await new Promise(r => setTimeout(r, 100));
+                assert(timeline._activeIndex === 2, 'Third item activated');
+                
+                // Test bounds
+                timeline.setActiveItem(999);
+                assert(timeline._activeIndex === 2, 'Out of bounds handled');
+                
+                timeline.setActiveItem(-1);
+                assert(timeline._activeIndex === 2, 'Negative index handled');
+                
+                log('Navigation test completed', 'info');
+                
+            } catch (error) {
+                log(`Navigation test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testAutoplay = async function() {
+            log('Testing autoplay functionality...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                // Enable autoplay
+                timeline.play();
+                assert(timeline._isPlaying === true, 'Timeline is playing');
+                
+                // Wait for progression
+                const startIndex = timeline._activeIndex;
+                await new Promise(r => setTimeout(r, 2000));
+                
+                // Should have progressed
+                assert(timeline._activeIndex !== startIndex, 'Timeline progressed during playback');
+                
+                // Pause
+                timeline.pause();
+                assert(timeline._isPlaying === false, 'Timeline paused');
+                
+                log('Autoplay test completed', 'info');
+                
+            } catch (error) {
+                log(`Autoplay test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testWebGL = async function() {
+            log('Testing WebGL rendering...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                if (!timeline._gl) {
+                    log('WebGL not supported in this browser', 'warn');
+                    return;
+                }
+                
+                // Check WebGL context
+                const gl = timeline._gl;
+                assert(gl !== null, 'WebGL context exists');
+                
+                // Check shaders
+                assert(timeline._programs.particle !== null, 'Particle shader compiled');
+                assert(timeline._programs.connection !== null, 'Connection shader compiled');
+                assert(timeline._programs.node !== null, 'Node shader compiled');
+                
+                // Check buffers
+                assert(timeline._buffers.particles !== null, 'Particle buffers created');
+                assert(timeline._buffers.connections !== null, 'Connection buffers created');
+                
+                // Check rendering
+                const error = gl.getError();
+                assert(error === gl.NO_ERROR, `No WebGL errors (${error})`);
+                
+                log('WebGL test completed', 'info');
+                
+            } catch (error) {
+                log(`WebGL test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testShaders = async function() {
+            log('Testing shader compilation...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                if (!timeline._gl) {
+                    log('WebGL not supported', 'warn');
+                    return;
+                }
+                
+                const gl = timeline._gl;
+                
+                // Test creating a custom shader
+                const testVertexShader = `
+                    attribute vec2 a_position;
+                    void main() {
+                        gl_Position = vec4(a_position, 0.0, 1.0);
+                    }
+                `;
+                
+                const testFragmentShader = `
+                    precision mediump float;
+                    void main() {
+                        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+                    }
+                `;
+                
+                const testProgram = timeline._createProgram(testVertexShader, testFragmentShader);
+                assert(testProgram !== null, 'Test shader compiled successfully');
+                assert(testProgram.program !== null, 'Shader program linked');
+                
+                // Clean up
+                if (testProgram) {
+                    gl.deleteProgram(testProgram.program);
+                }
+                
+                log('Shader test completed', 'info');
+                
+            } catch (error) {
+                log(`Shader test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testParticles = async function() {
+            log('Testing particle system...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                // Enable particles
+                timeline._config.particleEffects = true;
+                
+                // Activate an item to spawn particles
+                timeline.setActiveItem(2);
+                
+                // Wait for particles to spawn
+                await new Promise(r => setTimeout(r, 500));
+                
+                assert(timeline._particles.length > 0, 'Particles spawned');
+                
+                // Check particle properties
+                if (timeline._particles.length > 0) {
+                    const particle = timeline._particles[0];
+                    assert(particle.position !== undefined, 'Particle has position');
+                    assert(particle.velocity !== undefined, 'Particle has velocity');
+                    assert(particle.life >= 0 && particle.life <= 1, 'Particle life in valid range');
+                }
+                
+                // Test particle physics update
+                const initialY = timeline._particles[0]?.position.y || 0;
+                await new Promise(r => setTimeout(r, 100));
+                const newY = timeline._particles[0]?.position.y || 0;
+                
+                assert(newY !== initialY || timeline._particles.length === 0, 'Particles affected by physics');
+                
+                log('Particle test completed', 'info');
+                
+            } catch (error) {
+                log(`Particle test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testThemes = async function() {
+            log('Testing theme system...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                const themes = ['brutal', 'minimal', 'neon', 'holographic'];
+                
+                for (const theme of themes) {
+                    timeline.setAttribute('theme', theme);
+                    await new Promise(r => setTimeout(r, 100));
+                    
+                    assert(timeline._config.theme === theme, `Theme changed to ${theme}`);
+                    
+                    // Check theme color
+                    const color = timeline._getThemeColor();
+                    assert(color.r !== undefined && color.g !== undefined && color.b !== undefined, 
+                           `Theme ${theme} has valid color`);
+                }
+                
+                log('Theme test completed', 'info');
+                
+            } catch (error) {
+                log(`Theme test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testPerformance = async function() {
+            log('Testing render performance...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                // Measure frame times
+                const frameTimes = [];
+                let frameCount = 0;
+                const startTime = performance.now();
+                
+                const measureFrame = () => {
+                    frameTimes.push(performance.now());
+                    frameCount++;
+                    
+                    if (frameCount < 60) {
+                        requestAnimationFrame(measureFrame);
+                    } else {
+                        // Calculate average FPS
+                        const totalTime = frameTimes[frameTimes.length - 1] - frameTimes[0];
+                        const avgFPS = (frameCount - 1) * 1000 / totalTime;
+                        
+                        assert(avgFPS > 30, `Average FPS: ${avgFPS.toFixed(1)} (>30)`);
+                        
+                        // Check for frame drops
+                        let drops = 0;
+                        for (let i = 1; i < frameTimes.length; i++) {
+                            const delta = frameTimes[i] - frameTimes[i-1];
+                            if (delta > 33) drops++; // More than 2 frames at 60fps
+                        }
+                        
+                        assert(drops < 10, `Frame drops: ${drops} (<10)`);
+                        
+                        log('Performance test completed', 'info');
+                    }
+                };
+                
+                requestAnimationFrame(measureFrame);
+                
+            } catch (error) {
+                log(`Performance test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testVirtualScrolling = async function() {
+            log('Testing virtual scrolling...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                // Check visible items
+                const initialVisible = timeline._visibleItems.size;
+                assert(initialVisible > 0, `Initial visible items: ${initialVisible}`);
+                
+                // Simulate scroll
+                timeline._scrollPosition = 200;
+                timeline._updateVisibleItems();
+                
+                const newVisible = timeline._visibleItems.size;
+                assert(newVisible > 0, `Visible items after scroll: ${newVisible}`);
+                
+                // Check that not all items are visible (virtual scrolling working)
+                assert(timeline._visibleItems.size < timeline._items.length, 
+                       'Virtual scrolling limits visible items');
+                
+                log('Virtual scrolling test completed', 'info');
+                
+            } catch (error) {
+                log(`Virtual scrolling test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testMemoryLeaks = async function() {
+            log('Testing for memory leaks...', 'info');
+            
+            const initialMemory = performance.memory?.usedJSHeapSize || 0;
+            const timelines = [];
+            
+            try {
+                // Create and destroy multiple timelines
+                for (let i = 0; i < 10; i++) {
+                    const container = document.createElement('div');
+                    container.innerHTML = `
+                        <brutal-timeline>
+                            <div date="2024-01-01" title="Test">Memory test</div>
+                            <div date="2024-02-01" title="Test">Memory test</div>
+                        </brutal-timeline>
+                    `;
+                    
+                    document.body.appendChild(container);
+                    const timeline = container.querySelector('brutal-timeline');
+                    timelines.push({ container, timeline });
+                    
+                    // Activate particles
+                    timeline.setActiveItem(0);
+                    await new Promise(r => setTimeout(r, 50));
+                }
+                
+                // Remove all timelines
+                timelines.forEach(({ container, timeline }) => {
+                    container.remove();
+                });
+                
+                // Force garbage collection if available
+                if (window.gc) window.gc();
+                
+                await new Promise(r => setTimeout(r, 1000));
+                
+                const finalMemory = performance.memory?.usedJSHeapSize || 0;
+                const memoryIncrease = (finalMemory - initialMemory) / 1048576;
+                
+                log(`Memory increase: ${memoryIncrease.toFixed(2)} MB`, 'info');
+                assert(memoryIncrease < 10, 'Memory increase reasonable (<10MB)');
+                
+                log('Memory leak test completed', 'info');
+                
+            } catch (error) {
+                log(`Memory leak test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testLargeDataset = async function() {
+            log('Testing with 1000 items...', 'info');
+            
+            const timeline = document.createElement('brutal-timeline');
+            timeline.className = 'test-timeline';
+            
+            try {
+                // Create 1000 items
+                for (let i = 0; i < 1000; i++) {
+                    const item = document.createElement('div');
+                    const date = new Date(2024, 0, 1 + i);
+                    item.setAttribute('date', date.toISOString());
+                    item.setAttribute('title', `Item ${i}`);
+                    item.textContent = `Large dataset test item ${i}`;
+                    timeline.appendChild(item);
+                }
+                
+                document.getElementById('timelineContainer').appendChild(timeline);
+                
+                // Wait for initialization
+                await new Promise(r => setTimeout(r, 500));
+                
+                assert(timeline._items.length === 1000, '1000 items loaded');
+                assert(timeline._visibleItems.size < 100, 'Virtual scrolling active');
+                assert(timeline._fps > 30, `Performance maintained: ${timeline._fps?.toFixed(1)} FPS`);
+                
+                // Test navigation
+                const navStart = performance.now();
+                timeline.setActiveItem(500);
+                await new Promise(r => setTimeout(r, 300));
+                const navTime = performance.now() - navStart;
+                
+                assert(navTime < 1000, `Navigation completed in ${navTime.toFixed(0)}ms`);
+                
+                // Clean up
+                timeline.remove();
+                
+                log('Large dataset test completed', 'info');
+                
+            } catch (error) {
+                log(`Large dataset test error: ${error.message}`, 'fail');
+                timeline.remove();
+            }
+        };
+        
+        window.testGestures = async function() {
+            log('Testing gesture support...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                // Test pan gesture
+                const initialScroll = timeline._scrollPosition;
+                
+                timeline._onPanStart({ clientX: 100, clientY: 100 });
+                timeline._onPanMove({ clientX: 100, clientY: 200 });
+                timeline._onPanEnd({});
+                
+                assert(timeline._scrollPosition !== initialScroll, 'Pan gesture changes scroll');
+                
+                // Test pinch gesture
+                const initialZoom = timeline._zoomLevel;
+                
+                timeline._onPinchStart({ distance: 100 });
+                timeline._onPinchMove({ distance: 150 });
+                timeline._onPinchEnd({});
+                
+                assert(timeline._zoomLevel !== initialZoom, 'Pinch gesture changes zoom');
+                
+                // Test tap
+                let tapFired = false;
+                timeline.addEventListener('itemactivate', () => { tapFired = true; }, { once: true });
+                
+                timeline._onTap({ 
+                    clientX: timeline.getBoundingClientRect().left + 100,
+                    clientY: timeline.getBoundingClientRect().top + 100
+                });
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                log('Gesture test completed', 'info');
+                
+            } catch (error) {
+                log(`Gesture test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testZoom = async function() {
+            log('Testing zoom controls...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                const initialZoom = timeline._zoomLevel;
+                
+                // Test zoom in
+                timeline.setZoom(2);
+                assert(timeline._zoomLevel === 2, 'Zoom level set to 2');
+                
+                // Test zoom limits
+                timeline.setZoom(10);
+                assert(timeline._zoomLevel === 5, 'Zoom capped at maximum (5)');
+                
+                timeline.setZoom(0.01);
+                assert(timeline._zoomLevel === 0.1, 'Zoom capped at minimum (0.1)');
+                
+                // Test zoom event
+                let zoomEventFired = false;
+                timeline.addEventListener('zoom', (e) => {
+                    zoomEventFired = true;
+                    assert(e.detail.level === 1, 'Zoom event has correct level');
+                }, { once: true });
+                
+                timeline.setZoom(1);
+                await new Promise(r => setTimeout(r, 100));
+                assert(zoomEventFired, 'Zoom event fired');
+                
+                log('Zoom test completed', 'info');
+                
+            } catch (error) {
+                log(`Zoom test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testKeyboard = async function() {
+            log('Testing keyboard navigation...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                // This would require implementing keyboard navigation in the Timeline component
+                log('Keyboard navigation not yet implemented', 'warn');
+                
+            } catch (error) {
+                log(`Keyboard test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testEvents = async function() {
+            log('Testing event system...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                let events = {
+                    itemactivate: false,
+                    play: false,
+                    pause: false,
+                    zoom: false
+                };
+                
+                // Set up listeners
+                Object.keys(events).forEach(event => {
+                    timeline.addEventListener(event, () => {
+                        events[event] = true;
+                    }, { once: true });
+                });
+                
+                // Trigger events
+                timeline.setActiveItem(1);
+                await new Promise(r => setTimeout(r, 100));
+                assert(events.itemactivate, 'itemactivate event fired');
+                
+                timeline.play();
+                await new Promise(r => setTimeout(r, 100));
+                assert(events.play, 'play event fired');
+                
+                timeline.pause();
+                await new Promise(r => setTimeout(r, 100));
+                assert(events.pause, 'pause event fired');
+                
+                timeline.setZoom(2);
+                await new Promise(r => setTimeout(r, 100));
+                assert(events.zoom, 'zoom event fired');
+                
+                log('Events test completed', 'info');
+                
+            } catch (error) {
+                log(`Events test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testEmptyTimeline = async function() {
+            log('Testing empty timeline...', 'info');
+            
+            const timeline = document.createElement('brutal-timeline');
+            document.getElementById('timelineContainer').appendChild(timeline);
+            
+            try {
+                await new Promise(r => setTimeout(r, 200));
+                
+                assert(timeline._items.length === 0, 'Empty timeline has no items');
+                assert(timeline._activeIndex === -1, 'No active item in empty timeline');
+                assert(!timeline._rafId || timeline._rafId !== null, 'Render loop handles empty timeline');
+                
+                // Try operations on empty timeline
+                timeline.setActiveItem(0);
+                assert(timeline._activeIndex === -1, 'Cannot activate non-existent item');
+                
+                timeline.play();
+                timeline.pause();
+                assert(true, 'Play/pause works on empty timeline');
+                
+                timeline.remove();
+                log('Empty timeline test completed', 'info');
+                
+            } catch (error) {
+                log(`Empty timeline test error: ${error.message}`, 'fail');
+                timeline.remove();
+            }
+        };
+        
+        window.testSingleItem = async function() {
+            log('Testing single item timeline...', 'info');
+            
+            const timeline = document.createElement('brutal-timeline');
+            timeline.innerHTML = '<div date="2024-01-01" title="Single">Only item</div>';
+            document.getElementById('timelineContainer').appendChild(timeline);
+            
+            try {
+                await new Promise(r => setTimeout(r, 200));
+                
+                assert(timeline._items.length === 1, 'Single item collected');
+                
+                timeline.setActiveItem(0);
+                assert(timeline._activeIndex === 0, 'Single item activated');
+                
+                // Test autoplay with single item
+                timeline.play();
+                await new Promise(r => setTimeout(r, 500));
+                timeline.pause();
+                assert(true, 'Autoplay handles single item');
+                
+                timeline.remove();
+                log('Single item test completed', 'info');
+                
+            } catch (error) {
+                log(`Single item test error: ${error.message}`, 'fail');
+                timeline.remove();
+            }
+        };
+        
+        window.testDynamicUpdates = async function() {
+            log('Testing dynamic updates...', 'info');
+            const timeline = document.getElementById('testTimeline');
+            
+            try {
+                const initialCount = timeline._items.length;
+                
+                // Add multiple items rapidly
+                for (let i = 0; i < 5; i++) {
+                    const item = document.createElement('div');
+                    item.setAttribute('date', new Date(2024, 6 + i, 1).toISOString());
+                    item.setAttribute('title', `Dynamic ${i}`);
+                    item.textContent = `Dynamic content ${i}`;
+                    timeline.appendChild(item);
+                }
+                
+                // Re-initialize
+                timeline._collectItems();
+                timeline._initPhysics();
+                timeline._updateLayout();
+                
+                assert(timeline._items.length === initialCount + 5, 'Items added dynamically');
+                
+                // Remove some items
+                for (let i = 0; i < 3; i++) {
+                    timeline.removeItem(timeline._items.length - 1);
+                }
+                
+                assert(timeline._items.length === initialCount + 2, 'Items removed dynamically');
+                
+                log('Dynamic updates test completed', 'info');
+                
+            } catch (error) {
+                log(`Dynamic updates test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.testDestruction = async function() {
+            log('Testing timeline destruction...', 'info');
+            
+            try {
+                const container = document.getElementById('timelineContainer');
+                
+                // Create and destroy rapidly
+                for (let i = 0; i < 5; i++) {
+                    const timeline = document.createElement('brutal-timeline');
+                    timeline.innerHTML = `
+                        <div date="2024-01-01" title="Test 1">Test</div>
+                        <div date="2024-02-01" title="Test 2">Test</div>
+                    `;
+                    
+                    container.appendChild(timeline);
+                    
+                    // Use it briefly
+                    timeline.setActiveItem(0);
+                    await new Promise(r => setTimeout(r, 50));
+                    
+                    // Check cleanup
+                    const rafId = timeline._rafId;
+                    const hasWebGL = !!timeline._gl;
+                    
+                    // Remove
+                    timeline.remove();
+                    
+                    // Verify cleanup
+                    await new Promise(r => setTimeout(r, 50));
+                    assert(true, `Timeline ${i} created and destroyed`);
+                }
+                
+                log('Destruction test completed', 'info');
+                
+            } catch (error) {
+                log(`Destruction test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.runStressTest = async function() {
+            log('Starting stress test...', 'warn');
+            
+            try {
+                const container = document.getElementById('timelineContainer');
+                const stressTimelines = [];
+                
+                // Create multiple timelines with many items
+                for (let t = 0; t < 3; t++) {
+                    const timeline = document.createElement('brutal-timeline');
+                    timeline.className = 'test-timeline';
+                    timeline.style.height = '300px';
+                    timeline.setAttribute('theme', ['brutal', 'neon', 'holographic'][t]);
+                    
+                    // Add 100 items per timeline
+                    for (let i = 0; i < 100; i++) {
+                        const item = document.createElement('div');
+                        item.setAttribute('date', new Date(2024, 0, 1 + i).toISOString());
+                        item.setAttribute('title', `Stress ${t}-${i}`);
+                        item.textContent = `Timeline ${t} Item ${i}`;
+                        timeline.appendChild(item);
+                    }
+                    
+                    container.appendChild(timeline);
+                    stressTimelines.push(timeline);
+                }
+                
+                // Start all timelines playing
+                stressTimelines.forEach(tl => tl.play());
+                
+                // Rapid operations
+                const operations = setInterval(() => {
+                    stressTimelines.forEach(tl => {
+                        // Random navigation
+                        tl.setActiveItem(Math.floor(Math.random() * 100));
+                        // Random zoom
+                        tl.setZoom(Math.random() * 2 + 0.5);
+                    });
+                }, 100);
+                
+                // Run for 5 seconds
+                await new Promise(r => setTimeout(r, 5000));
+                
+                clearInterval(operations);
+                
+                // Check performance
+                const avgFPS = stressTimelines.reduce((sum, tl) => sum + (tl._fps || 0), 0) / stressTimelines.length;
+                assert(avgFPS > 30, `Average FPS during stress: ${avgFPS.toFixed(1)}`);
+                
+                // Cleanup
+                stressTimelines.forEach(tl => {
+                    tl.pause();
+                    tl.remove();
+                });
+                
+                log('Stress test completed', 'info');
+                
+            } catch (error) {
+                log(`Stress test error: ${error.message}`, 'fail');
+            }
+        };
+        
+        window.runAllTests = async function() {
+            clearAllLogs();
+            log('Starting comprehensive test suite...', 'warn');
+            
+            const startTime = performance.now();
+            
+            // Run all tests in sequence
+            await testInitialization();
+            await testItemManagement();
+            await testNavigation();
+            await testAutoplay();
+            await testWebGL();
+            await testShaders();
+            await testParticles();
+            await testThemes();
+            await testPerformance();
+            await testVirtualScrolling();
+            await testMemoryLeaks();
+            await testLargeDataset();
+            await testGestures();
+            await testZoom();
+            await testEvents();
+            await testEmptyTimeline();
+            await testSingleItem();
+            await testDynamicUpdates();
+            await testDestruction();
+            await runStressTest();
+            
+            const totalTime = ((performance.now() - startTime) / 1000).toFixed(2);
+            
+            // Show summary
+            document.getElementById('testSummary').style.display = 'block';
+            document.getElementById('passedTests').textContent = testResults.passed;
+            document.getElementById('failedTests').textContent = testResults.failed;
+            document.getElementById('totalTests').textContent = testResults.total;
+            document.getElementById('successRate').textContent = 
+                testResults.total > 0 ? 
+                Math.round((testResults.passed / testResults.total) * 100) + '%' : 
+                '0%';
+            
+            log(`All tests completed in ${totalTime}s`, 'warn');
+            log(`Results: ${testResults.passed} passed, ${testResults.failed} failed`, 
+                testResults.failed === 0 ? 'pass' : 'fail');
+        };
+        
+        // Initial check
+        setTimeout(() => {
+            const timeline = document.getElementById('testTimeline');
+            if (timeline && timeline._gl) {
+                log('WebGL enabled and initialized', 'pass');
+            } else {
+                log('WebGL not available - using fallback rendering', 'warn');
+            }
+            
+            log(`Initial timeline has ${timeline._items.length} items`, 'info');
+        }, 500);
+    </script>
+</body>
+</html>

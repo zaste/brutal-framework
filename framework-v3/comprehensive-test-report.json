@@ -1,0 +1,77 @@
+{
+  "timestamp": "2025-07-10T14:31:14.475Z",
+  "pages": {
+    "automated-browser-test.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "benchmark-v2-vs-v3.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "complete-test-all.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "component-showcase.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "debug-navbar.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "final-test-all.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "hero-section-demo.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "index.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "quick-navbar-test.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "run-automated-test.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "test-float64-atomics.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "test-navbar-simple.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "test-performance-gems.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "test-runner.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "test-shared-array-buffer.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "test.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "verify-browser.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "verify-fixes.html": {
+      "error": "page.waitForTimeout is not a function"
+    },
+    "visual-debug-demo.html": {
+      "error": "page.waitForTimeout is not a function"
+    }
+  },
+  "resources": {},
+  "components": {},
+  "coverage": {
+    "totalJS": 0,
+    "usedJS": 0,
+    "totalCSS": 0,
+    "usedCSS": 0
+  },
+  "insights": {
+    "patterns": [],
+    "improvements": [
+      "Remove unused code"
+    ],
+    "missing": []
+  }
+}

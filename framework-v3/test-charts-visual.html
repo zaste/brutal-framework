@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Charts Visual Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #000;
+            color: #0f0;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px #0f0;
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px #0f0; }
+            50% { text-shadow: 0 0 30px #0f0, 0 0 40px #0ff; }
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .chart-container {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #0f0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .chart-container:hover {
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.4);
+            transform: translateY(-5px);
+        }
+        
+        .chart-container h2 {
+            margin: 0 0 20px 0;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+        }
+        
+        .chart {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        
+        .status-ok { color: #0f0; }
+        .status-error { color: #f00; }
+        
+        .controls {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 15px 30px;
+            margin: 0 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 BRUTAL V3 - Charts Visual Test</h1>
+    
+    <div class="controls">
+        <button onclick="startAnimations()">Start Animations</button>
+        <button onclick="testRealtime()">Test Realtime</button>
+        <button onclick="testTransitions()">Test Transitions</button>
+        <button onclick="testPerformance()">Test Performance</button>
+    </div>
+    
+    <div class="charts-grid">
+        <!-- Line Chart with Multiple Datasets -->
+        <div class="chart-container">
+            <h2>Line Chart - Multi Dataset</h2>
+            <brutal-charts class="chart" id="lineChart" type="line" theme="brutal"></brutal-charts>
+            <div class="status" id="lineStatus">Loading...</div>
+        </div>
+        
+        <!-- Bar Chart with Animation -->
+        <div class="chart-container">
+            <h2>Bar Chart - Animated</h2>
+            <brutal-charts class="chart" id="barChart" type="bar" theme="neon"></brutal-charts>
+            <div class="status" id="barStatus">Loading...</div>
+        </div>
+        
+        <!-- Area Chart with Gradient -->
+        <div class="chart-container">
+            <h2>Area Chart - Gradient Fill</h2>
+            <brutal-charts class="chart" id="areaChart" type="area" theme="holographic"></brutal-charts>
+            <div class="status" id="areaStatus">Loading...</div>
+        </div>
+        
+        <!-- Scatter Plot with Hover -->
+        <div class="chart-container">
+            <h2>Scatter Plot - Interactive</h2>
+            <brutal-charts class="chart" id="scatterChart" type="scatter" theme="minimal"></brutal-charts>
+            <div class="status" id="scatterStatus">Loading...</div>
+        </div>
+        
+        <!-- Pie Chart -->
+        <div class="chart-container">
+            <h2>Pie Chart - Market Share</h2>
+            <brutal-charts class="chart" id="pieChart" type="pie" theme="brutal"></brutal-charts>
+            <div class="status" id="pieStatus">Loading...</div>
+        </div>
+        
+        <!-- Donut Chart -->
+        <div class="chart-container">
+            <h2>Donut Chart - Progress</h2>
+            <brutal-charts class="chart" id="donutChart" type="donut" theme="neon"></brutal-charts>
+            <div class="status" id="donutStatus">Loading...</div>
+        </div>
+        
+        <!-- Radar Chart -->
+        <div class="chart-container">
+            <h2>Radar Chart - Skills</h2>
+            <brutal-charts class="chart" id="radarChart" type="radar" theme="holographic"></brutal-charts>
+            <div class="status" id="radarStatus">Loading...</div>
+        </div>
+        
+        <!-- Heatmap -->
+        <div class="chart-container">
+            <h2>Heatmap - Activity</h2>
+            <brutal-charts class="chart" id="heatmapChart" type="heatmap" theme="minimal"></brutal-charts>
+            <div class="status" id="heatmapStatus">Loading...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Charts } from './04-components/ui/Charts.js';
+        
+        // Status tracking
+        const charts = {};
+        const statuses = {};
+        
+        // Initialize all charts
+        async function initCharts() {
+            const chartConfigs = {
+                lineChart: {
+                    data: [
+                        {
+                            label: 'Revenue',
+                            color: '#00ff00',
+                            data: Array(30).fill(0).map((_, i) => ({
+                                x: i,
+                                y: Math.sin(i * 0.2) * 30 + 50 + Math.random() * 10
+                            }))
+                        },
+                        {
+                            label: 'Costs',
+                            color: '#ff0000',
+                            data: Array(30).fill(0).map((_, i) => ({
+                                x: i,
+                                y: Math.cos(i * 0.2) * 20 + 30 + Math.random() * 5
+                            }))
+                        },
+                        {
+                            label: 'Profit',
+                            color: '#00ffff',
+                            data: Array(30).fill(0).map((_, i) => ({
+                                x: i,
+                                y: (Math.sin(i * 0.2) * 30 + 50) - (Math.cos(i * 0.2) * 20 + 30)
+                            }))
+                        }
+                    ]
+                },
+                
+                barChart: {
+                    data: [
+                        {
+                            label: '2023',
+                            color: '#00ffff',
+                            data: ['Q1', 'Q2', 'Q3', 'Q4'].map((q, i) => ({
+                                x: i,
+                                y: Math.random() * 50 + 50
+                            }))
+                        },
+                        {
+                            label: '2024',
+                            color: '#ff00ff',
+                            data: ['Q1', 'Q2', 'Q3', 'Q4'].map((q, i) => ({
+                                x: i,
+                                y: Math.random() * 50 + 60
+                            }))
+                        }
+                    ]
+                },
+                
+                areaChart: {
+                    data: [
+                        {
+                            label: 'Users',
+                            color: '#3a86ff',
+                            data: Array(20).fill(0).map((_, i) => ({
+                                x: i,
+                                y: Math.exp(i * 0.15) + Math.random() * 10
+                            }))
+                        }
+                    ]
+                },
+                
+                scatterChart: {
+                    data: [
+                        {
+                            label: 'Cluster A',
+                            color: '#ff006e',
+                            data: Array(30).fill(0).map(() => ({
+                                x: Math.random() * 50 + 25,
+                                y: Math.random() * 50 + 25,
+                                size: Math.random() * 10 + 5
+                            }))
+                        },
+                        {
+                            label: 'Cluster B',
+                            color: '#3a86ff',
+                            data: Array(30).fill(0).map(() => ({
+                                x: Math.random() * 50,
+                                y: Math.random() * 50 + 50,
+                                size: Math.random() * 10 + 5
+                            }))
+                        }
+                    ]
+                },
+                
+                pieChart: {
+                    data: [{
+                        data: [
+                            { label: 'Chrome', value: 65, color: '#00ff00' },
+                            { label: 'Firefox', value: 20, color: '#00ffff' },
+                            { label: 'Safari', value: 10, color: '#ff00ff' },
+                            { label: 'Other', value: 5, color: '#ffff00' }
+                        ]
+                    }]
+                },
+                
+                donutChart: {
+                    data: [{
+                        data: [
+                            { label: 'Complete', value: 75, color: '#00ff00' },
+                            { label: 'Remaining', value: 25, color: '#333333' }
+                        ]
+                    }]
+                },
+                
+                radarChart: {
+                    data: [
+                        {
+                            label: 'Player 1',
+                            color: '#00ff00',
+                            data: [
+                                { label: 'Speed', value: 85 },
+                                { label: 'Power', value: 70 },
+                                { label: 'Defense', value: 90 },
+                                { label: 'Magic', value: 60 },
+                                { label: 'Stamina', value: 75 },
+                                { label: 'Agility', value: 95 }
+                            ]
+                        },
+                        {
+                            label: 'Player 2',
+                            color: '#ff00ff',
+                            data: [
+                                { label: 'Speed', value: 75 },
+                                { label: 'Power', value: 90 },
+                                { label: 'Defense', value: 65 },
+                                { label: 'Magic', value: 85 },
+                                { label: 'Stamina', value: 80 },
+                                { label: 'Agility', value: 70 }
+                            ]
+                        }
+                    ]
+                },
+                
+                heatmapChart: {
+                    data: [{
+                        data: Array(10).fill(0).map(() => 
+                            Array(24).fill(0).map(() => Math.random() * 100)
+                        )
+                    }]
+                }
+            };
+            
+            // Initialize each chart
+            for (const [id, config] of Object.entries(chartConfigs)) {
+                const chart = document.getElementById(id);
+                const statusEl = document.getElementById(id.replace('Chart', 'Status'));
+                
+                charts[id] = chart;
+                statuses[id] = statusEl;
+                
+                try {
+                    await new Promise(r => setTimeout(r, 100));
+                    chart.setData(config.data);
+                    
+                    // Verify chart is working
+                    const state = chart.state;
+                    statusEl.innerHTML = `
+                        <span class="status-ok">✓ Active</span> | 
+                        Type: ${state.type} | 
+                        Datasets: ${state.datasets} | 
+                        FPS: <span id="${id}FPS">${state.fps?.toFixed(0) || 'N/A'}</span>
+                    `;
+                    statusEl.className = 'status status-ok';
+                    
+                } catch (error) {
+                    statusEl.innerHTML = `<span class="status-error">✗ Error: ${error.message}</span>`;
+                    statusEl.className = 'status status-error';
+                    console.error(`Error initializing ${id}:`, error);
+                }
+            }
+            
+            // Update FPS counters
+            setInterval(() => {
+                for (const id of Object.keys(charts)) {
+                    const fpsEl = document.getElementById(`${id}FPS`);
+                    if (fpsEl && charts[id]._fps) {
+                        fpsEl.textContent = charts[id]._fps.toFixed(0);
+                    }
+                }
+            }, 500);
+        }
+        
+        // Animation tests
+        window.startAnimations = async function() {
+            // Animate line chart with new data
+            const lineData = charts.lineChart._datasets;
+            lineData.forEach(dataset => {
+                dataset.data.forEach(point => {
+                    point.y += (Math.random() - 0.5) * 10;
+                });
+            });
+            charts.lineChart.setData(lineData);
+            
+            // Rotate through bar chart data
+            const barData = charts.barChart._datasets;
+            barData.forEach(dataset => {
+                dataset.data.forEach(point => {
+                    point.y = Math.random() * 100;
+                });
+            });
+            charts.barChart.setData(barData);
+            
+            // Update pie chart
+            const pieData = charts.pieChart._datasets[0].data;
+            const total = 100;
+            const values = [
+                Math.random() * 50 + 30,
+                Math.random() * 20 + 10,
+                Math.random() * 15 + 5,
+                0
+            ];
+            values[3] = total - values[0] - values[1] - values[2];
+            
+            pieData.forEach((slice, i) => {
+                slice.value = values[i];
+            });
+            charts.pieChart.setData([{ data: pieData }]);
+        };
+        
+        // Realtime test
+        window.testRealtime = function() {
+            charts.lineChart.setAttribute('realtime', 'true');
+            statuses.lineChart.innerHTML += ' | <span class="status-ok">REALTIME ACTIVE</span>';
+            
+            setTimeout(() => {
+                charts.lineChart.setAttribute('realtime', 'false');
+                statuses.lineChart.innerHTML = statuses.lineChart.innerHTML.replace(' | <span class="status-ok">REALTIME ACTIVE</span>', '');
+            }, 10000);
+        };
+        
+        // Transition test
+        window.testTransitions = async function() {
+            const types = ['line', 'bar', 'area', 'scatter'];
+            const chart = charts.lineChart;
+            
+            for (const type of types) {
+                chart.setType(type);
+                await new Promise(r => setTimeout(r, 1500));
+            }
+        };
+        
+        // Performance test
+        window.testPerformance = function() {
+            const bigData = [{
+                label: 'Performance Test',
+                color: '#00ff00',
+                data: Array(1000).fill(0).map((_, i) => ({
+                    x: i,
+                    y: Math.sin(i * 0.05) * 50 + 50 + Math.random() * 10
+                }))
+            }];
+            
+            charts.areaChart.setData(bigData);
+            statuses.areaChart.innerHTML += ' | <span class="status-ok">1000 POINTS</span>';
+        };
+        
+        // Initialize on load
+        setTimeout(initCharts, 500);
+        
+        // Log WebGL support
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        console.log('WebGL Support:', !!gl);
+        if (gl) {
+            console.log('WebGL Version:', gl.getParameter(gl.VERSION));
+            console.log('WebGL Vendor:', gl.getParameter(gl.VENDOR));
+            console.log('WebGL Renderer:', gl.getParameter(gl.RENDERER));
+        }
+    </script>
+</body>
+</html>

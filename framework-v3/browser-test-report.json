@@ -1,0 +1,956 @@
+{
+  "timestamp": "2025-07-10T13:10:17.258Z",
+  "summary": {
+    "totalPages": 14,
+    "successfulPages": 10,
+    "totalErrors": 37
+  },
+  "details": {
+    "automated-browser-test.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "location": {
+            "url": "http://localhost:8000/favicon.ico"
+          }
+        }
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "benchmark-v2-vs-v3.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "404: Route not found: /benchmark-v2-vs-v3.html",
+          "location": {
+            "url": "http://localhost:8000/01-core/Router.js",
+            "lineNumber": 555,
+            "columnNumber": 14
+          }
+        }
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "complete-test-all.html": {
+      "success": false,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "404: Route not found: /complete-test-all.html",
+          "location": {
+            "url": "http://localhost:8000/01-core/Router.js",
+            "lineNumber": 555,
+            "columnNumber": 14
+          }
+        }
+      ],
+      "pageErrors": [
+        {
+          "message": "particleEffects is not defined",
+          "stack": "ReferenceError: particleEffects is not defined\n    at <anonymous> (http://localhost:8000/03-visual/index.js:103:5)"
+        },
+        {
+          "message": "runAllTests is not defined",
+          "stack": "ReferenceError: runAllTests is not defined\n    at onclick (http://localhost:8000/complete-test-all.html:109:41)"
+        },
+        {
+          "message": "exportResults is not defined",
+          "stack": "ReferenceError: exportResults is not defined\n    at onclick (http://localhost:8000/complete-test-all.html:110:43)"
+        }
+      ],
+      "networkErrors": [],
+      "clickErrors": [
+        {
+          "button": "Run All Tests",
+          "error": {
+            "message": "runAllTests is not defined",
+            "stack": "ReferenceError: runAllTests is not defined\n    at onclick (http://localhost:8000/complete-test-all.html:109:41)"
+          }
+        },
+        {
+          "button": "Export Results",
+          "error": {
+            "message": "exportResults is not defined",
+            "stack": "ReferenceError: exportResults is not defined\n    at onclick (http://localhost:8000/complete-test-all.html:110:43)"
+          }
+        }
+      ],
+      "screenshotTaken": true
+    },
+    "component-showcase.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "final-test-all.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "404: Route not found: /final-test-all.html",
+          "location": {
+            "url": "http://localhost:8000/01-core/Router.js",
+            "lineNumber": 555,
+            "columnNumber": 14
+          }
+        }
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "hero-section-demo.html": {
+      "success": false,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "404: Route not found: /hero-section-demo.html",
+          "location": {
+            "url": "http://localhost:8000/01-core/Router.js",
+            "lineNumber": 555,
+            "columnNumber": 14
+          }
+        }
+      ],
+      "pageErrors": [
+        {
+          "message": "particleEffects is not defined",
+          "stack": "ReferenceError: particleEffects is not defined\n    at <anonymous> (http://localhost:8000/03-visual/index.js:103:5)"
+        },
+        {
+          "message": "updateHero is not defined",
+          "stack": "ReferenceError: updateHero is not defined\n    at onclick (http://localhost:8000/hero-section-demo.html:148:44)"
+        },
+        {
+          "message": "toggleDebug is not defined",
+          "stack": "ReferenceError: toggleDebug is not defined\n    at onclick (http://localhost:8000/hero-section-demo.html:152:45)"
+        },
+        {
+          "message": "benchmark is not defined",
+          "stack": "ReferenceError: benchmark is not defined\n    at onclick (http://localhost:8000/hero-section-demo.html:156:43)"
+        }
+      ],
+      "networkErrors": [],
+      "clickErrors": [
+        {
+          "button": "Update Content",
+          "error": {
+            "message": "updateHero is not defined",
+            "stack": "ReferenceError: updateHero is not defined\n    at onclick (http://localhost:8000/hero-section-demo.html:148:44)"
+          }
+        },
+        {
+          "button": "Toggle Debug",
+          "error": {
+            "message": "toggleDebug is not defined",
+            "stack": "ReferenceError: toggleDebug is not defined\n    at onclick (http://localhost:8000/hero-section-demo.html:152:45)"
+          }
+        },
+        {
+          "button": "Run Benchmark",
+          "error": {
+            "message": "benchmark is not defined",
+            "stack": "ReferenceError: benchmark is not defined\n    at onclick (http://localhost:8000/hero-section-demo.html:156:43)"
+          }
+        }
+      ],
+      "screenshotTaken": true
+    },
+    "index.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "run-automated-test.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "test-performance-gems.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "test-runner.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "404: Route not found: /test-runner.html",
+          "location": {
+            "url": "http://localhost:8000/01-core/Router.js",
+            "lineNumber": 555,
+            "columnNumber": 14
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ Component should track performance metrics",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   assertGreaterThan is not defined",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ State should support time travel",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Cannot read properties of undefined (reading 'set')",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ State should support deep watching",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Deep watcher should detect nested changes",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "Failed to load persisted state: JSHandle@error",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ State should persist and restore",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Persisted counter should be restored",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ SharedArrayBuffer should handle different data types",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Integer should be stored",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ State should handle concurrent access patterns",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   All writes should complete atomically",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /test-runner.html",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /test-runner.html",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /test-runner.html",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ Router should handle navigation correctly",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Should navigate to about",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /about",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ Router middleware should execute in order",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Second middleware should run",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ Router should cache route results",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Should render once",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /cached",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "Navigation error: JSHandle@error",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /nonexistent",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /search?q=test&page=2&filter=active",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /route98",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /route98",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ Router should handle concurrent navigation requests",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Only one navigation should complete",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /fast",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /component",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "404: Route not found: /internal",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ DOMScheduler should use real requestIdleCallback",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   performance.performance.now is not a function",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ TemplateCache should use real Web Crypto API",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Should hit cache for same template",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ LayoutOptimizer should apply real CSS containment",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Should apply will-change for animations",
+          "location": {
+            "url": "http://localhost:8000/test-runner.html",
+            "lineNumber": 179,
+            "columnNumber": 16
+          }
+        }
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "test-shared-array-buffer.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "test.html": {
+      "success": true,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "404: Route not found: /test.html",
+          "location": {
+            "url": "http://localhost:8000/01-core/Router.js",
+            "lineNumber": 555,
+            "columnNumber": 14
+          }
+        }
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "verify-browser.html": {
+      "success": false,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "404: Route not found: /verify-browser.html",
+          "location": {
+            "url": "http://localhost:8000/01-core/Router.js",
+            "lineNumber": 555,
+            "columnNumber": 14
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ Component should track performance metrics",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 47,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   assertGreaterThan is not defined",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 48,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ State should support time travel",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 47,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Cannot read properties of undefined (reading 'set')",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 48,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ State should support deep watching",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 47,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Deep watcher should detect nested changes",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 48,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "Failed to load persisted state: JSHandle@error",
+          "location": {
+            "url": "http://localhost:8000/01-core/State.js",
+            "lineNumber": 491,
+            "columnNumber": 14
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ State should persist and restore",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 47,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Persisted counter should be restored",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 48,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "❌ SharedArrayBuffer should handle different data types",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 47,
+            "columnNumber": 16
+          }
+        },
+        {
+          "type": "error",
+          "text": "   Integer should be stored",
+          "location": {
+            "url": "http://localhost:8000/test-suite.js",
+            "lineNumber": 48,
+            "columnNumber": 16
+          }
+        }
+      ],
+      "pageErrors": [],
+      "networkErrors": [
+        {
+          "url": "http://localhost:8000/test-runner.html",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "clickErrors": [],
+      "screenshotTaken": true
+    },
+    "visual-debug-demo.html": {
+      "success": false,
+      "environment": {
+        "crossOriginIsolated": true,
+        "sharedArrayBuffer": true,
+        "brutal": false,
+        "brutalDebug": false
+      },
+      "consoleLogs": [
+        {
+          "type": "error",
+          "text": "404: Route not found: /visual-debug-demo.html",
+          "location": {
+            "url": "http://localhost:8000/01-core/Router.js",
+            "lineNumber": 555,
+            "columnNumber": 14
+          }
+        }
+      ],
+      "pageErrors": [
+        {
+          "message": "particleEffects is not defined",
+          "stack": "ReferenceError: particleEffects is not defined\n    at <anonymous> (http://localhost:8000/03-visual/index.js:103:5)"
+        },
+        {
+          "message": "toggleDebugLayer is not defined",
+          "stack": "ReferenceError: toggleDebugLayer is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:178:50)"
+        },
+        {
+          "message": "toggleRecording is not defined",
+          "stack": "ReferenceError: toggleRecording is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:179:49)"
+        },
+        {
+          "message": "clearEffects is not defined",
+          "stack": "ReferenceError: clearEffects is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:180:46)"
+        },
+        {
+          "message": "exportLogs is not defined",
+          "stack": "ReferenceError: exportLogs is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:181:44)"
+        },
+        {
+          "message": "simulateMount is not defined",
+          "stack": "ReferenceError: simulateMount is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:186:47)"
+        },
+        {
+          "message": "simulateUpdate is not defined",
+          "stack": "ReferenceError: simulateUpdate is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:187:48)"
+        },
+        {
+          "message": "simulateUnmount is not defined",
+          "stack": "ReferenceError: simulateUnmount is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:188:49)"
+        },
+        {
+          "message": "simulateError is not defined",
+          "stack": "ReferenceError: simulateError is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:189:47)"
+        }
+      ],
+      "networkErrors": [],
+      "clickErrors": [
+        {
+          "button": "Toggle Debug Layer",
+          "error": {
+            "message": "toggleDebugLayer is not defined",
+            "stack": "ReferenceError: toggleDebugLayer is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:178:50)"
+          }
+        },
+        {
+          "button": "Toggle Recording",
+          "error": {
+            "message": "toggleRecording is not defined",
+            "stack": "ReferenceError: toggleRecording is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:179:49)"
+          }
+        },
+        {
+          "button": "Clear All Effects",
+          "error": {
+            "message": "clearEffects is not defined",
+            "stack": "ReferenceError: clearEffects is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:180:46)"
+          }
+        },
+        {
+          "button": "Export Logs",
+          "error": {
+            "message": "exportLogs is not defined",
+            "stack": "ReferenceError: exportLogs is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:181:44)"
+          }
+        },
+        {
+          "button": "Simulate Mount",
+          "error": {
+            "message": "simulateMount is not defined",
+            "stack": "ReferenceError: simulateMount is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:186:47)"
+          }
+        },
+        {
+          "button": "Simulate Update",
+          "error": {
+            "message": "simulateUpdate is not defined",
+            "stack": "ReferenceError: simulateUpdate is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:187:48)"
+          }
+        },
+        {
+          "button": "Simulate Unmount",
+          "error": {
+            "message": "simulateUnmount is not defined",
+            "stack": "ReferenceError: simulateUnmount is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:188:49)"
+          }
+        },
+        {
+          "button": "Simulate Error",
+          "error": {
+            "message": "simulateError is not defined",
+            "stack": "ReferenceError: simulateError is not defined\n    at onclick (http://localhost:8000/visual-debug-demo.html:189:47)"
+          }
+        },
+        {
+          "button": "Button 8",
+          "error": "Node is either not clickable or not an Element"
+        },
+        {
+          "button": "Button 9",
+          "error": "Node is either not clickable or not an Element"
+        },
+        {
+          "button": "Button 10",
+          "error": "Node is either not clickable or not an Element"
+        },
+        {
+          "button": "Button 11",
+          "error": "Node is either not clickable or not an Element"
+        },
+        {
+          "button": "Button 12",
+          "error": "Node is either not clickable or not an Element"
+        },
+        {
+          "button": "Button 13",
+          "error": "Node is either not clickable or not an Element"
+        },
+        {
+          "button": "Button 14",
+          "error": "Node is either not clickable or not an Element"
+        }
+      ],
+      "screenshotTaken": true
+    }
+  }
+}

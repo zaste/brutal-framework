@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Modal Performance Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #f5f5f5;
+        }
+        
+        .performance-dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2196f3;
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .test-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        button:hover {
+            background: #1976d2;
+        }
+        
+        .stop-button {
+            background: #f44336;
+        }
+        
+        .stop-button:hover {
+            background: #d32f2f;
+        }
+        
+        #performanceChart {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            width: 2px;
+            background: #2196f3;
+            transition: none;
+        }
+        
+        .status {
+            padding: 16px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+        
+        .status.running {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status.complete {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="performance-dashboard">
+        <h1>⚡ BRUTAL Modal - Performance Testing</h1>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="fps">--</div>
+                <div class="metric-label">Current FPS</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="avgFps">--</div>
+                <div class="metric-label">Average FPS</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="openTime">--</div>
+                <div class="metric-label">Open Time (ms)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="closeTime">--</div>
+                <div class="metric-label">Close Time (ms)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="memory">--</div>
+                <div class="metric-label">Memory (MB)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="modalCount">0</div>
+                <div class="metric-label">Active Modals</div>
+            </div>
+        </div>
+        
+        <div class="test-controls">
+            <button onclick="runSingleModalTest()">Single Modal Test</button>
+            <button onclick="runAnimationTest()">Animation Performance</button>
+            <button onclick="runStressTest()">Stress Test (100 ops)</button>
+            <button onclick="runMemoryTest()">Memory Leak Test</button>
+            <button onclick="runWebGLTest()">WebGL Performance</button>
+            <button onclick="runConcurrentTest()">Concurrent Modals</button>
+            <button class="stop-button" onclick="stopAllTests()">Stop All Tests</button>
+        </div>
+        
+        <div id="performanceChart"></div>
+        
+        <div class="status" id="status">Ready to start testing...</div>
+    </div>
+    
+    <!-- Test Modals -->
+    <brutal-modal id="perfModal" title="Performance Test Modal">
+        <div style="padding: 20px;">
+            <p>This modal is being used for performance testing.</p>
+            <p>FPS: <span id="modalFps">--</span></p>
+        </div>
+    </brutal-modal>
+
+    <script type="module">
+        import { Modal } from './04-components/ui/Modal.js';
+        
+        // Performance monitoring
+        let isRunning = false;
+        let fpsHistory = [];
+        let currentFps = 0;
+        let frameCount = 0;
+        let lastTime = performance.now();
+        
+        // Metrics storage
+        const metrics = {
+            openTimes: [],
+            closeTimes: [],
+            fpsValues: [],
+            memoryValues: []
+        };
+        
+        // FPS monitoring
+        function measureFPS() {
+            frameCount++;
+            const now = performance.now();
+            
+            if (now >= lastTime + 1000) {
+                currentFps = Math.round((frameCount * 1000) / (now - lastTime));
+                document.getElementById('fps').textContent = currentFps;
+                
+                fpsHistory.push(currentFps);
+                if (fpsHistory.length > 60) fpsHistory.shift();
+                
+                const avgFps = Math.round(fpsHistory.reduce((a, b) => a + b, 0) / fpsHistory.length);
+                document.getElementById('avgFps').textContent = avgFps;
+                
+                // Update chart
+                updateChart(currentFps);
+                
+                frameCount = 0;
+                lastTime = now;
+            }
+            
+            if (isRunning) {
+                requestAnimationFrame(measureFPS);
+            }
+        }
+        
+        // Start monitoring
+        isRunning = true;
+        measureFPS();
+        
+        // Memory monitoring
+        setInterval(() => {
+            if (performance.memory) {
+                const mb = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(1);
+                document.getElementById('memory').textContent = mb;
+                metrics.memoryValues.push(parseFloat(mb));
+            }
+        }, 1000);
+        
+        // Chart visualization
+        let chartData = [];
+        function updateChart(fps) {
+            chartData.push(fps);
+            if (chartData.length > 100) chartData.shift();
+            
+            const chart = document.getElementById('performanceChart');
+            chart.innerHTML = '';
+            
+            const maxFps = Math.max(...chartData, 60);
+            const width = chart.offsetWidth;
+            const height = chart.offsetHeight;
+            
+            chartData.forEach((fps, i) => {
+                const line = document.createElement('div');
+                line.className = 'chart-line';
+                line.style.left = `${(i / 100) * width}px`;
+                line.style.height = `${(fps / maxFps) * height}px`;
+                chart.appendChild(line);
+            });
+        }
+        
+        // Test functions
+        window.runSingleModalTest = async () => {
+            updateStatus('Running single modal test...', 'running');
+            
+            const modal = document.getElementById('perfModal');
+            const results = [];
+            
+            for (let i = 0; i < 10; i++) {
+                const openStart = performance.now();
+                await modal.open();
+                const openTime = performance.now() - openStart;
+                
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const closeStart = performance.now();
+                await modal.close();
+                const closeTime = performance.now() - closeStart;
+                
+                results.push({ openTime, closeTime });
+                
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+            
+            const avgOpen = results.reduce((a, b) => a + b.openTime, 0) / results.length;
+            const avgClose = results.reduce((a, b) => a + b.closeTime, 0) / results.length;
+            
+            document.getElementById('openTime').textContent = avgOpen.toFixed(1);
+            document.getElementById('closeTime').textContent = avgClose.toFixed(1);
+            
+            updateStatus(`Test complete. Avg open: ${avgOpen.toFixed(1)}ms, close: ${avgClose.toFixed(1)}ms`, 'complete');
+        };
+        
+        window.runAnimationTest = async () => {
+            updateStatus('Testing all animation types...', 'running');
+            
+            const modal = document.getElementById('perfModal');
+            const animations = ['scale', 'slide', 'flip', 'rotate', 'fade'];
+            const results = {};
+            
+            for (const anim of animations) {
+                modal.setAttribute('animation', anim);
+                
+                const fpsBefore = [...fpsHistory];
+                
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                await modal.close();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const fpsAfter = fpsHistory.slice(-10);
+                const avgFps = fpsAfter.reduce((a, b) => a + b, 0) / fpsAfter.length;
+                results[anim] = avgFps;
+            }
+            
+            const report = Object.entries(results)
+                .map(([anim, fps]) => `${anim}: ${fps.toFixed(0)} FPS`)
+                .join(', ');
+            
+            updateStatus(`Animation test complete. ${report}`, 'complete');
+        };
+        
+        window.runStressTest = async () => {
+            updateStatus('Running stress test (100 operations)...', 'running');
+            
+            const modal = document.getElementById('perfModal');
+            const startMemory = performance.memory ? 
+                performance.memory.usedJSHeapSize / 1024 / 1024 : 0;
+            
+            for (let i = 0; i < 100; i++) {
+                if (!isRunning) break;
+                
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 50));
+                await modal.close();
+                await new Promise(resolve => setTimeout(resolve, 50));
+                
+                if (i % 10 === 0) {
+                    updateStatus(`Stress test progress: ${i}/100`, 'running');
+                }
+            }
+            
+            const endMemory = performance.memory ? 
+                performance.memory.usedJSHeapSize / 1024 / 1024 : 0;
+            const memoryDelta = endMemory - startMemory;
+            
+            updateStatus(`Stress test complete. Memory delta: ${memoryDelta.toFixed(2)}MB`, 'complete');
+        };
+        
+        window.runMemoryTest = async () => {
+            updateStatus('Running memory leak test...', 'running');
+            
+            const initialMemory = performance.memory ? 
+                performance.memory.usedJSHeapSize / 1024 / 1024 : 0;
+            
+            // Create and destroy many modals
+            for (let i = 0; i < 50; i++) {
+                if (!isRunning) break;
+                
+                const modal = document.createElement('brutal-modal');
+                modal.setAttribute('title', `Memory Test ${i}`);
+                modal.innerHTML = '<p>Testing for memory leaks...</p>';
+                document.body.appendChild(modal);
+                
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 100));
+                await modal.close();
+                
+                modal.remove();
+                
+                if (i % 10 === 0) {
+                    updateStatus(`Memory test progress: ${i}/50`, 'running');
+                }
+            }
+            
+            // Force garbage collection if available
+            if (window.gc) window.gc();
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const finalMemory = performance.memory ? 
+                performance.memory.usedJSHeapSize / 1024 / 1024 : 0;
+            const leak = finalMemory - initialMemory;
+            
+            const status = leak > 5 ? 'error' : 'complete';
+            const message = leak > 5 ? 
+                `⚠️ Possible memory leak detected: ${leak.toFixed(2)}MB increase` :
+                `✓ No memory leaks. Delta: ${leak.toFixed(2)}MB`;
+            
+            updateStatus(message, status);
+        };
+        
+        window.runWebGLTest = async () => {
+            updateStatus('Testing WebGL performance...', 'running');
+            
+            const modal = document.getElementById('perfModal');
+            modal.setAttribute('backdrop', 'blur');
+            
+            // Measure WebGL rendering performance
+            const fpsBefore = [...fpsHistory];
+            
+            await modal.open();
+            
+            // Keep modal open for measurement
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            const fpsWebGL = fpsHistory.slice(-30);
+            const avgWebGL = fpsWebGL.reduce((a, b) => a + b, 0) / fpsWebGL.length;
+            
+            await modal.close();
+            
+            // Test without WebGL
+            modal.setConfig('gpuEffects', false);
+            await modal.open();
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            const fpsNoWebGL = fpsHistory.slice(-30);
+            const avgNoWebGL = fpsNoWebGL.reduce((a, b) => a + b, 0) / fpsNoWebGL.length;
+            
+            await modal.close();
+            modal.setConfig('gpuEffects', true);
+            
+            updateStatus(
+                `WebGL: ${avgWebGL.toFixed(0)} FPS, No WebGL: ${avgNoWebGL.toFixed(0)} FPS. ` +
+                `Improvement: ${((avgWebGL / avgNoWebGL - 1) * 100).toFixed(0)}%`,
+                'complete'
+            );
+        };
+        
+        window.runConcurrentTest = async () => {
+            updateStatus('Testing concurrent modals...', 'running');
+            
+            const modals = [];
+            
+            // Create 5 modals
+            for (let i = 0; i < 5; i++) {
+                const modal = document.createElement('brutal-modal');
+                modal.setAttribute('title', `Concurrent Modal ${i + 1}`);
+                modal.setAttribute('size', ['small', 'medium', 'large'][i % 3]);
+                modal.innerHTML = `<p>Modal ${i + 1} of 5</p>`;
+                document.body.appendChild(modal);
+                modals.push(modal);
+            }
+            
+            // Open all concurrently
+            const openPromises = modals.map(m => m.open());
+            const openStart = performance.now();
+            await Promise.all(openPromises);
+            const openTime = performance.now() - openStart;
+            
+            document.getElementById('modalCount').textContent = modals.length;
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Close all concurrently
+            const closePromises = modals.map(m => m.close());
+            const closeStart = performance.now();
+            await Promise.all(closePromises);
+            const closeTime = performance.now() - closeStart;
+            
+            document.getElementById('modalCount').textContent = '0';
+            
+            // Cleanup
+            modals.forEach(m => m.remove());
+            
+            updateStatus(
+                `Concurrent test complete. 5 modals opened in ${openTime.toFixed(0)}ms, ` +
+                `closed in ${closeTime.toFixed(0)}ms`,
+                'complete'
+            );
+        };
+        
+        window.stopAllTests = () => {
+            isRunning = false;
+            updateStatus('Tests stopped', 'complete');
+        };
+        
+        function updateStatus(message, type = 'running') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            console.log(`[${new Date().toLocaleTimeString()}] ${message}`);
+        }
+        
+        // Auto-update modal FPS
+        setInterval(() => {
+            const modalFps = document.getElementById('modalFps');
+            if (modalFps) {
+                modalFps.textContent = currentFps;
+            }
+        }, 100);
+        
+        updateStatus('Performance testing ready', 'complete');
+    </script>
+</body>
+</html>

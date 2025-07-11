@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SharedArrayBuffer Test</title>
+    <style>
+        body {
+            font-family: system-ui;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        .test {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #111;
+        }
+        .success { border-color: #0f0; color: #0f0; }
+        .fail { border-color: #f00; color: #f00; }
+        .info { color: #0af; }
+        pre {
+            background: #000;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔬 SharedArrayBuffer & Workers Test Suite</h1>
+    
+    <div id="results"></div>
+
+    <script type="module">
+        const results = document.getElementById('results');
+        
+        function addTest(title, status, details = '') {
+            const div = document.createElement('div');
+            div.className = `test ${status}`;
+            div.innerHTML = `
+                <h3>${status === 'success' ? '✅' : '❌'} ${title}</h3>
+                ${details ? `<pre>${details}</pre>` : ''}
+            `;
+            results.appendChild(div);
+        }
+
+        // Test 1: crossOriginIsolated
+        if (window.crossOriginIsolated) {
+            addTest('crossOriginIsolated', 'success', 'window.crossOriginIsolated === true');
+        } else {
+            addTest('crossOriginIsolated', 'fail', 
+                'window.crossOriginIsolated === false\n' +
+                'Headers may not be configured correctly');
+        }
+
+        // Test 2: SharedArrayBuffer availability
+        if (typeof SharedArrayBuffer !== 'undefined') {
+            addTest('SharedArrayBuffer Available', 'success', 
+                'typeof SharedArrayBuffer === "function"');
+        } else {
+            addTest('SharedArrayBuffer Available', 'fail', 
+                'SharedArrayBuffer is not defined');
+        }
+
+        // Test 3: Create SharedArrayBuffer
+        try {
+            const sab = new SharedArrayBuffer(1024);
+            const view = new Int32Array(sab);
+            view[0] = 42;
+            addTest('SharedArrayBuffer Creation', 'success', 
+                `Created ${sab.byteLength} byte buffer\nTest value: ${view[0]}`);
+        } catch (e) {
+            addTest('SharedArrayBuffer Creation', 'fail', e.message);
+        }
+
+        // Test 4: Atomics API
+        if (typeof Atomics !== 'undefined') {
+            try {
+                const sab = new SharedArrayBuffer(8);
+                const view = new Int32Array(sab);
+                Atomics.store(view, 0, 100);
+                const value = Atomics.load(view, 0);
+                addTest('Atomics API', 'success', 
+                    `Atomics.store/load working\nStored and loaded: ${value}`);
+            } catch (e) {
+                addTest('Atomics API', 'fail', e.message);
+            }
+        } else {
+            addTest('Atomics API', 'fail', 'Atomics is not defined');
+        }
+
+        // Test 5: Worker creation
+        try {
+            const workerCode = `
+                self.onmessage = function(e) {
+                    self.postMessage({
+                        received: e.data,
+                        threadId: self.name || 'unnamed',
+                        timestamp: Date.now()
+                    });
+                };
+            `;
+            const blob = new Blob([workerCode], { type: 'application/javascript' });
+            const worker = new Worker(URL.createObjectURL(blob));
+            
+            worker.onmessage = function(e) {
+                addTest('Worker Communication', 'success', 
+                    `Worker responded: ${JSON.stringify(e.data, null, 2)}`);
+                worker.terminate();
+            };
+            
+            worker.postMessage('Hello Worker');
+        } catch (e) {
+            addTest('Worker Communication', 'fail', e.message);
+        }
+
+        // Test 6: SharedArrayBuffer in Worker
+        try {
+            const workerCode = `
+                self.onmessage = function(e) {
+                    if (e.data.sab) {
+                        const view = new Int32Array(e.data.sab);
+                        // Atomic increment
+                        const oldValue = Atomics.add(view, 0, 1);
+                        self.postMessage({
+                            success: true,
+                            oldValue: oldValue,
+                            newValue: Atomics.load(view, 0)
+                        });
+                    }
+                };
+            `;
+            const blob = new Blob([workerCode], { type: 'application/javascript' });
+            const worker = new Worker(URL.createObjectURL(blob));
+            const sab = new SharedArrayBuffer(4);
+            const view = new Int32Array(sab);
+            view[0] = 10;
+            
+            worker.onmessage = function(e) {
+                addTest('SharedArrayBuffer in Worker', 'success', 
+                    `Worker atomic operation:\n` +
+                    `Old value: ${e.data.oldValue}\n` +
+                    `New value: ${e.data.newValue}`);
+                worker.terminate();
+            };
+            
+            worker.postMessage({ sab });
+        } catch (e) {
+            addTest('SharedArrayBuffer in Worker', 'fail', e.message);
+        }
+
+        // Test 7: Hardware concurrency
+        addTest('Hardware Concurrency', 'success', 
+            `navigator.hardwareConcurrency: ${navigator.hardwareConcurrency} cores`);
+
+        // Test 8: Performance baseline
+        const iterations = 1000000;
+        const start = performance.now();
+        let sum = 0;
+        for (let i = 0; i < iterations; i++) {
+            sum += i;
+        }
+        const duration = performance.now() - start;
+        addTest('Performance Baseline', 'success', 
+            `${iterations.toLocaleString()} iterations in ${duration.toFixed(2)}ms\n` +
+            `${(iterations / duration * 1000).toFixed(0)} ops/sec`);
+
+        // Summary
+        setTimeout(() => {
+            const successCount = document.querySelectorAll('.success').length;
+            const failCount = document.querySelectorAll('.fail').length;
+            const summary = document.createElement('div');
+            summary.className = 'test info';
+            summary.innerHTML = `
+                <h2>📊 Summary</h2>
+                <p>✅ Passed: ${successCount}</p>
+                <p>❌ Failed: ${failCount}</p>
+                <p>${failCount === 0 ? '🎉 All tests passed! Ready for Worker implementation.' : '⚠️ Fix failed tests before proceeding.'}</p>
+            `;
+            results.appendChild(summary);
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Workers Integration Test Suite</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --accent: #00ff88;
+            --error: #ff0044;
+            --warning: #ffaa00;
+            --success: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--accent), #00aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .test-section {
+            background: var(--bg-secondary);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .test-title {
+            font-size: 1.3rem;
+            color: var(--accent);
+        }
+
+        .test-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-idle { background: #444; color: #aaa; }
+        .status-running { background: var(--warning); color: #000; }
+        .status-passed { background: var(--success); color: #000; }
+        .status-failed { background: var(--error); color: #fff; }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .test-item {
+            background: #111;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #333;
+        }
+
+        .test-item h4 {
+            color: #0af;
+            margin-bottom: 10px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .metric-label { color: #888; }
+        .metric-value { color: var(--accent); font-weight: bold; }
+
+        button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        button:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .log {
+            background: #000;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .error-message {
+            background: rgba(255, 0, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .chart-container {
+            height: 200px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 BRUTAL Workers Test Suite</h1>
+        <p class="subtitle">Complete integration testing for Worker Pool, SharedMemory, and MessageBroker</p>
+
+        <!-- Control Panel -->
+        <div class="test-section">
+            <div class="test-header">
+                <h3 class="test-title">Test Control Panel</h3>
+                <div>
+                    <button id="runAllTests">Run All Tests</button>
+                    <button id="stopTests">Stop Tests</button>
+                    <button id="clearResults">Clear Results</button>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div class="test-grid">
+                <div class="test-item">
+                    <h4>Test Progress</h4>
+                    <div class="metric">
+                        <span class="metric-label">Total Tests:</span>
+                        <span class="metric-value" id="totalTests">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Passed:</span>
+                        <span class="metric-value" id="passedTests">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Failed:</span>
+                        <span class="metric-value" id="failedTests">0</span>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <h4>Performance</h4>
+                    <div class="metric">
+                        <span class="metric-label">Avg Test Time:</span>
+                        <span class="metric-value" id="avgTestTime">0ms</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Time:</span>
+                        <span class="metric-value" id="totalTime">0ms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Worker Pool Tests -->
+        <div class="test-section">
+            <div class="test-header">
+                <h3 class="test-title">Worker Pool Tests</h3>
+                <span class="test-status status-idle" id="workerPoolStatus">Idle</span>
+            </div>
+            <div class="test-grid">
+                <div class="test-item">
+                    <h4>Pool Statistics</h4>
+                    <div class="metric">
+                        <span class="metric-label">Active Workers:</span>
+                        <span class="metric-value" id="activeWorkers">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Tasks Completed:</span>
+                        <span class="metric-value" id="tasksCompleted">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Avg Task Time:</span>
+                        <span class="metric-value" id="avgTaskTime">0ms</span>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <h4>Test Results</h4>
+                    <div id="workerPoolResults"></div>
+                </div>
+            </div>
+            <div class="log" id="workerPoolLog"></div>
+        </div>
+
+        <!-- SharedMemory Tests -->
+        <div class="test-section">
+            <div class="test-header">
+                <h3 class="test-title">SharedMemory Tests</h3>
+                <span class="test-status status-idle" id="sharedMemoryStatus">Idle</span>
+            </div>
+            <div class="test-grid">
+                <div class="test-item">
+                    <h4>Memory Statistics</h4>
+                    <div class="metric">
+                        <span class="metric-label">Total Size:</span>
+                        <span class="metric-value" id="memorySize">0MB</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Used:</span>
+                        <span class="metric-value" id="memoryUsed">0MB</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Fragmentation:</span>
+                        <span class="metric-value" id="fragmentation">0%</span>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <h4>Test Results</h4>
+                    <div id="sharedMemoryResults"></div>
+                </div>
+            </div>
+            <div class="log" id="sharedMemoryLog"></div>
+        </div>
+
+        <!-- MessageBroker Tests -->
+        <div class="test-section">
+            <div class="test-header">
+                <h3 class="test-title">MessageBroker Tests</h3>
+                <span class="test-status status-idle" id="messageBrokerStatus">Idle</span>
+            </div>
+            <div class="test-grid">
+                <div class="test-item">
+                    <h4>Message Statistics</h4>
+                    <div class="metric">
+                        <span class="metric-label">Messages Sent:</span>
+                        <span class="metric-value" id="messagesSent">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Delivered:</span>
+                        <span class="metric-value" id="messagesDelivered">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Avg Delivery:</span>
+                        <span class="metric-value" id="avgDelivery">0ms</span>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <h4>Test Results</h4>
+                    <div id="messageBrokerResults"></div>
+                </div>
+            </div>
+            <div class="log" id="messageBrokerLog"></div>
+        </div>
+
+        <!-- Integration Tests -->
+        <div class="test-section">
+            <div class="test-header">
+                <h3 class="test-title">Integration Tests</h3>
+                <span class="test-status status-idle" id="integrationStatus">Idle</span>
+            </div>
+            <div class="test-grid">
+                <div class="test-item">
+                    <h4>Render Worker Tests</h4>
+                    <div id="renderWorkerResults"></div>
+                </div>
+                <div class="test-item">
+                    <h4>Compute Worker Tests</h4>
+                    <div id="computeWorkerResults"></div>
+                </div>
+                <div class="test-item">
+                    <h4>Data Worker Tests</h4>
+                    <div id="dataWorkerResults"></div>
+                </div>
+            </div>
+            <div class="log" id="integrationLog"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import core modules
+        import { WorkerPool } from './core/WorkerPool.js';
+        import { SharedMemory } from './core/SharedMemory.js';
+        import { MessageBroker } from './core/MessageBroker.js';
+
+        // Test state
+        const testState = {
+            running: false,
+            results: [],
+            workerPool: null,
+            sharedMemory: null,
+            messageBroker: null
+        };
+
+        // Test Suite
+        class TestSuite {
+            constructor() {
+                this.tests = [];
+                this.results = [];
+                this.currentTest = 0;
+            }
+
+            addTest(name, category, fn) {
+                this.tests.push({ name, category, fn });
+            }
+
+            async run() {
+                this.results = [];
+                this.currentTest = 0;
+                
+                updateUI('totalTests', this.tests.length);
+                updateUI('passedTests', 0);
+                updateUI('failedTests', 0);
+
+                const startTime = performance.now();
+
+                for (const test of this.tests) {
+                    if (!testState.running) break;
+
+                    this.currentTest++;
+                    updateProgress(this.currentTest / this.tests.length * 100);
+                    
+                    const result = await this.runTest(test);
+                    this.results.push(result);
+                    
+                    updateTestResults(result);
+                }
+
+                const totalTime = performance.now() - startTime;
+                updateUI('totalTime', totalTime.toFixed(2) + 'ms');
+                updateUI('avgTestTime', (totalTime / this.tests.length).toFixed(2) + 'ms');
+            }
+
+            async runTest(test) {
+                const startTime = performance.now();
+                let passed = false;
+                let error = null;
+
+                try {
+                    log(test.category, `Running: ${test.name}`);
+                    await test.fn();
+                    passed = true;
+                    log(test.category, `✅ ${test.name} passed`);
+                } catch (e) {
+                    error = e.message;
+                    log(test.category, `❌ ${test.name} failed: ${e.message}`);
+                }
+
+                const duration = performance.now() - startTime;
+
+                return {
+                    name: test.name,
+                    category: test.category,
+                    passed,
+                    error,
+                    duration
+                };
+            }
+        }
+
+        // Create test suite
+        const suite = new TestSuite();
+
+        // Worker Pool Tests
+        suite.addTest('Worker Pool Initialization', 'workerPool', async () => {
+            testState.workerPool = new WorkerPool({
+                minWorkers: 2,
+                maxWorkers: 4
+            });
+            await testState.workerPool.init();
+            
+            const stats = testState.workerPool.getStats();
+            if (stats.workers.total < 2) {
+                throw new Error('Worker pool not initialized properly');
+            }
+            
+            updateUI('activeWorkers', stats.workers.total);
+        });
+
+        suite.addTest('Basic Task Execution', 'workerPool', async () => {
+            const result = await testState.workerPool.execute({
+                operation: 'COMPUTE',
+                params: { iterations: 1000000 }
+            });
+            
+            if (!result) {
+                throw new Error('Task execution failed');
+            }
+        });
+
+        suite.addTest('Parallel Task Execution', 'workerPool', async () => {
+            const tasks = [];
+            for (let i = 0; i < 10; i++) {
+                tasks.push(testState.workerPool.execute({
+                    operation: 'COMPUTE',
+                    params: { iterations: 100000 }
+                }));
+            }
+            
+            const results = await Promise.all(tasks);
+            if (results.length !== 10) {
+                throw new Error('Not all tasks completed');
+            }
+            
+            const stats = testState.workerPool.getStats();
+            updateUI('tasksCompleted', stats.tasks.completed);
+            updateUI('avgTaskTime', stats.tasks.averageTime);
+        });
+
+        suite.addTest('Worker Auto-scaling', 'workerPool', async () => {
+            const initialStats = testState.workerPool.getStats();
+            const initialWorkers = initialStats.workers.total;
+            
+            // Create heavy load
+            const tasks = [];
+            for (let i = 0; i < 20; i++) {
+                tasks.push(testState.workerPool.execute({
+                    operation: 'COMPUTE',
+                    params: { iterations: 1000000 }
+                }));
+            }
+            
+            // Wait a bit for scaling
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            const loadStats = testState.workerPool.getStats();
+            if (loadStats.workers.total <= initialWorkers) {
+                throw new Error('Workers did not scale up under load');
+            }
+            
+            await Promise.all(tasks);
+            updateUI('activeWorkers', loadStats.workers.total);
+        });
+
+        // SharedMemory Tests
+        suite.addTest('SharedMemory Initialization', 'sharedMemory', async () => {
+            testState.sharedMemory = new SharedMemory({
+                size: 1024 * 1024 * 4 // 4MB
+            });
+            await testState.sharedMemory.init();
+            
+            const stats = testState.sharedMemory.getStats();
+            updateUI('memorySize', (stats.totalSize / 1024 / 1024).toFixed(2) + 'MB');
+            updateUI('memoryUsed', '0MB');
+            updateUI('fragmentation', '0%');
+        });
+
+        suite.addTest('Memory Allocation', 'sharedMemory', async () => {
+            const allocation = testState.sharedMemory.allocate(1024);
+            if (!allocation || !allocation.view) {
+                throw new Error('Memory allocation failed');
+            }
+            
+            // Write test data
+            const view = allocation.view;
+            for (let i = 0; i < view.length; i++) {
+                view[i] = i % 256;
+            }
+            
+            // Verify data
+            for (let i = 0; i < view.length; i++) {
+                if (view[i] !== i % 256) {
+                    throw new Error('Memory corruption detected');
+                }
+            }
+        });
+
+        suite.addTest('Memory Fragmentation Control', 'sharedMemory', async () => {
+            const allocations = [];
+            
+            // Allocate and free in pattern to create fragmentation
+            for (let i = 0; i < 10; i++) {
+                allocations.push(testState.sharedMemory.allocate(1024));
+            }
+            
+            // Free every other allocation
+            for (let i = 0; i < allocations.length; i += 2) {
+                testState.sharedMemory.free(allocations[i].id);
+            }
+            
+            const stats = testState.sharedMemory.getStats();
+            updateUI('fragmentation', (stats.fragmentation * 100).toFixed(2) + '%');
+            
+            if (stats.fragmentation > 0.5) {
+                throw new Error('Fragmentation too high');
+            }
+        });
+
+        // MessageBroker Tests
+        suite.addTest('MessageBroker Initialization', 'messageBroker', async () => {
+            testState.messageBroker = new MessageBroker();
+            testState.messageBroker.init();
+            
+            const stats = testState.messageBroker.getStats();
+            if (!stats) {
+                throw new Error('MessageBroker initialization failed');
+            }
+        });
+
+        suite.addTest('Message Send and Subscribe', 'messageBroker', async () => {
+            let received = false;
+            
+            testState.messageBroker.subscribe('test', (message) => {
+                received = true;
+            });
+            
+            testState.messageBroker.send({
+                type: 'test',
+                data: 'Hello World'
+            });
+            
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            if (!received) {
+                throw new Error('Message not received');
+            }
+            
+            const stats = testState.messageBroker.getStats();
+            updateUI('messagesSent', stats.messages.sent);
+            updateUI('messagesDelivered', stats.messages.delivered);
+        });
+
+        suite.addTest('Priority Queue System', 'messageBroker', async () => {
+            const received = [];
+            
+            testState.messageBroker.subscribe('priority-test', (message) => {
+                received.push(message.priority);
+            });
+            
+            // Send messages with different priorities
+            testState.messageBroker.send({ type: 'priority-test', priority: 3 }, { priority: 3 });
+            testState.messageBroker.send({ type: 'priority-test', priority: 0 }, { priority: 0 });
+            testState.messageBroker.send({ type: 'priority-test', priority: 1 }, { priority: 1 });
+            
+            await new Promise(resolve => setTimeout(resolve, 200));
+            
+            // Should receive in priority order: 0, 1, 3
+            if (received[0] !== 0 || received[1] !== 1 || received[2] !== 3) {
+                throw new Error('Priority queue not working correctly');
+            }
+        });
+
+        // Integration Tests
+        suite.addTest('Render Worker Integration', 'integration', async () => {
+            const pool = testState.workerPool;
+            
+            const result = await pool.execute({
+                operation: 'RENDER',
+                params: {
+                    operation: 'DIFF_VDOM',
+                    params: {
+                        oldVDOM: { type: 'div', props: { id: 'old' }, children: [] },
+                        newVDOM: { type: 'div', props: { id: 'new' }, children: [] },
+                        componentId: 'test-component'
+                    }
+                }
+            }, { 
+                workerScript: './render-worker.js' 
+            });
+            
+            if (!result || !result.patches) {
+                throw new Error('Render worker failed');
+            }
+        });
+
+        suite.addTest('Compute Worker Integration', 'integration', async () => {
+            const pool = testState.workerPool;
+            
+            const result = await pool.execute({
+                operation: 'COMPUTE',
+                params: {
+                    operation: 'CALCULATE_PRIMES',
+                    params: { limit: 10000 }
+                }
+            }, {
+                workerScript: './compute-worker.js'
+            });
+            
+            if (!result || !result.count) {
+                throw new Error('Compute worker failed');
+            }
+        });
+
+        suite.addTest('Data Worker Integration', 'integration', async () => {
+            const pool = testState.workerPool;
+            
+            const setResult = await pool.execute({
+                operation: 'DATA',
+                params: {
+                    operation: 'SET',
+                    params: {
+                        key: 'test-key',
+                        value: { name: 'Test', value: 42 }
+                    }
+                }
+            }, {
+                workerScript: './data-worker.js'
+            });
+            
+            const getResult = await pool.execute({
+                operation: 'DATA',
+                params: {
+                    operation: 'GET',
+                    params: { key: 'test-key' }
+                }
+            }, {
+                workerScript: './data-worker.js'
+            });
+            
+            if (!getResult || !getResult.data) {
+                throw new Error('Data worker failed');
+            }
+        });
+
+        // UI Update Functions
+        function updateUI(id, value) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        function updateTestResults(result) {
+            const passed = document.getElementById('passedTests');
+            const failed = document.getElementById('failedTests');
+            
+            if (result.passed) {
+                passed.textContent = parseInt(passed.textContent) + 1;
+            } else {
+                failed.textContent = parseInt(failed.textContent) + 1;
+            }
+            
+            // Update category results
+            const categoryResults = document.getElementById(result.category + 'Results');
+            if (categoryResults) {
+                const div = document.createElement('div');
+                div.className = 'metric';
+                div.innerHTML = `
+                    <span class="metric-label">${result.name}:</span>
+                    <span class="metric-value" style="color: ${result.passed ? 'var(--success)' : 'var(--error)'}">
+                        ${result.passed ? 'PASS' : 'FAIL'}
+                    </span>
+                `;
+                categoryResults.appendChild(div);
+            }
+        }
+
+        function log(category, message) {
+            const logElement = document.getElementById(category + 'Log');
+            if (logElement) {
+                logElement.textContent += message + '\n';
+                logElement.scrollTop = logElement.scrollHeight;
+            }
+        }
+
+        function setStatus(category, status) {
+            const element = document.getElementById(category + 'Status');
+            if (element) {
+                element.className = 'test-status status-' + status;
+                element.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+
+        // Event Handlers
+        document.getElementById('runAllTests').addEventListener('click', async () => {
+            if (testState.running) return;
+            
+            testState.running = true;
+            document.getElementById('runAllTests').disabled = true;
+            
+            // Reset UI
+            document.querySelectorAll('.log').forEach(el => el.textContent = '');
+            document.querySelectorAll('[id$="Results"]').forEach(el => el.innerHTML = '');
+            
+            // Set all to running
+            ['workerPool', 'sharedMemory', 'messageBroker', 'integration'].forEach(cat => {
+                setStatus(cat, 'running');
+            });
+            
+            try {
+                await suite.run();
+            } catch (error) {
+                console.error('Test suite error:', error);
+            }
+            
+            // Set all to passed/failed based on results
+            ['workerPool', 'sharedMemory', 'messageBroker', 'integration'].forEach(cat => {
+                const categoryResults = suite.results.filter(r => r.category === cat);
+                const allPassed = categoryResults.every(r => r.passed);
+                setStatus(cat, allPassed ? 'passed' : 'failed');
+            });
+            
+            testState.running = false;
+            document.getElementById('runAllTests').disabled = false;
+        });
+
+        document.getElementById('stopTests').addEventListener('click', () => {
+            testState.running = false;
+            
+            // Cleanup
+            if (testState.workerPool) {
+                testState.workerPool.destroy();
+                testState.workerPool = null;
+            }
+            if (testState.sharedMemory) {
+                testState.sharedMemory.destroy();
+                testState.sharedMemory = null;
+            }
+            if (testState.messageBroker) {
+                testState.messageBroker.destroy();
+                testState.messageBroker = null;
+            }
+        });
+
+        document.getElementById('clearResults').addEventListener('click', () => {
+            document.querySelectorAll('.log').forEach(el => el.textContent = '');
+            document.querySelectorAll('[id$="Results"]').forEach(el => el.innerHTML = '');
+            updateUI('totalTests', '0');
+            updateUI('passedTests', '0');
+            updateUI('failedTests', '0');
+            updateUI('avgTestTime', '0ms');
+            updateUI('totalTime', '0ms');
+            updateProgress(0);
+            
+            ['workerPool', 'sharedMemory', 'messageBroker', 'integration'].forEach(cat => {
+                setStatus(cat, 'idle');
+            });
+        });
+
+        // Initial state
+        console.log('BRUTAL Workers Test Suite loaded and ready');
+    </script>
+</body>
+</html>

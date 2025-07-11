@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - HeroSection Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+        }
+        
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #0ff;
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .controls h3 {
+            margin: 0 0 15px 0;
+            color: #0ff;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #0ff;
+            font-size: 0.9em;
+        }
+        
+        .control-group select,
+        .control-group input {
+            width: 100%;
+            padding: 8px;
+            background: #111;
+            border: 1px solid #0ff;
+            color: #fff;
+            border-radius: 5px;
+        }
+        
+        .control-group button {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        .control-group button:hover {
+            background: #00ffff;
+            transform: translateY(-1px);
+        }
+        
+        .demo-section {
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #0ff;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9em;
+            max-width: 400px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .metric-value {
+            color: #0ff;
+            font-weight: bold;
+        }
+        
+        /* Custom theme variables */
+        :root {
+            --hero-bg: #0a0a0a;
+            --hero-title-color: #fff;
+            --hero-subtitle-color: #999;
+            --hero-primary-color: #0ff;
+            --hero-secondary-color: #f0f;
+            --gradient-start: #0ff;
+            --gradient-end: #f0f;
+            --shape-1-color: #0ff;
+            --shape-2-color: #f0f;
+            --shape-3-color: #ff0;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h3>HeroSection Controls</h3>
+        
+        <div class="control-group">
+            <label>Variant</label>
+            <select id="variantSelect">
+                <option value="default">Default</option>
+                <option value="split">Split</option>
+                <option value="fullscreen">Fullscreen</option>
+                <option value="video">Video</option>
+                <option value="gradient">Gradient</option>
+                <option value="minimal">Minimal</option>
+                <option value="particles">Particles</option>
+                <option value="parallax">Parallax</option>
+                <option value="animated">Animated</option>
+                <option value="cta">CTA</option>
+                <option value="webgl">WebGL</option>
+                <option value="matrix">Matrix</option>
+                <option value="galaxy">Galaxy</option>
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label>Title</label>
+            <input type="text" id="titleInput" value="Welcome to BRUTAL V3">
+        </div>
+        
+        <div class="control-group">
+            <label>Subtitle</label>
+            <input type="text" id="subtitleInput" value="10-100x Faster Than React">
+        </div>
+        
+        <div class="control-group">
+            <button onclick="updateHero()">Update Content</button>
+        </div>
+        
+        <div class="control-group">
+            <button onclick="toggleDebug()">Toggle Debug</button>
+        </div>
+        
+        <div class="control-group">
+            <button onclick="benchmark()">Run Benchmark</button>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <hero-section id="hero"></hero-section>
+    </div>
+    
+    <div class="info" id="info">
+        <div class="metric">
+            <span>Variant:</span>
+            <span class="metric-value" id="currentVariant">default</span>
+        </div>
+        <div class="metric">
+            <span>Render Time:</span>
+            <span class="metric-value" id="renderTime">0ms</span>
+        </div>
+        <div class="metric">
+            <span>FPS:</span>
+            <span class="metric-value" id="fps">60</span>
+        </div>
+        <div class="metric">
+            <span>Memory:</span>
+            <span class="metric-value" id="memory">0MB</span>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { HeroSection } from './04-components/core/HeroSection.js';
+        import { initPerformanceGems } from './02-performance/index.js';
+        import { initVisualDebug } from './03-visual/index.js';
+        
+        // Initialize systems
+        initPerformanceGems();
+        
+        // Initialize visual debug if requested
+        let debugEnabled = false;
+        
+        const hero = document.getElementById('hero');
+        const variantSelect = document.getElementById('variantSelect');
+        const titleInput = document.getElementById('titleInput');
+        const subtitleInput = document.getElementById('subtitleInput');
+        
+        // Update hero content
+        window.updateHero = function() {
+            const variant = variantSelect.value;
+            hero.state.set('variant', variant);
+            hero.state.set('title', titleInput.value);
+            hero.state.set('subtitle', subtitleInput.value);
+            
+            // Update variant-specific content
+            switch(variant) {
+                case 'video':
+                    hero.state.set('video', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
+                    break;
+                case 'fullscreen':
+                    hero.state.set('background', 'https://images.unsplash.com/photo-1557683316-973673baf926');
+                    break;
+                case 'split':
+                    hero.state.set('image', 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d');
+                    break;
+            }
+            
+            document.getElementById('currentVariant').textContent = variant;
+        };
+        
+        // Toggle debug mode
+        window.toggleDebug = async function() {
+            debugEnabled = !debugEnabled;
+            
+            if (debugEnabled && !window.__BRUTAL_DEBUG__) {
+                await initVisualDebug({ enabled: true });
+            }
+            
+            hero.config.debug = debugEnabled;
+            hero.config.useParticles = debugEnabled;
+            hero.render();
+        };
+        
+        // Run benchmark
+        window.benchmark = async function() {
+            const results = [];
+            const iterations = 100;
+            
+            console.log('Starting benchmark...');
+            
+            for (let i = 0; i < iterations; i++) {
+                const start = performance.now();
+                hero.render();
+                const time = performance.now() - start;
+                results.push(time);
+            }
+            
+            const avg = results.reduce((a, b) => a + b) / results.length;
+            const min = Math.min(...results);
+            const max = Math.max(...results);
+            
+            console.log(`Benchmark Results (${iterations} renders):`);
+            console.log(`Average: ${avg.toFixed(2)}ms`);
+            console.log(`Min: ${min.toFixed(2)}ms`);
+            console.log(`Max: ${max.toFixed(2)}ms`);
+            console.log(`FPS: ${(1000 / avg).toFixed(1)}`);
+            
+            alert(`Benchmark Complete!\nAvg: ${avg.toFixed(2)}ms\nFPS: ${(1000 / avg).toFixed(1)}`);
+        };
+        
+        // Monitor performance
+        setInterval(() => {
+            if (hero.metrics) {
+                document.getElementById('renderTime').textContent = 
+                    hero.metrics.avgRenderTime.toFixed(2) + 'ms';
+                document.getElementById('fps').textContent = 
+                    Math.round(1000 / hero.metrics.avgRenderTime);
+                
+                if (performance.memory) {
+                    document.getElementById('memory').textContent = 
+                        (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(1) + 'MB';
+                }
+            }
+        }, 1000);
+        
+        // Handle variant changes
+        variantSelect.addEventListener('change', updateHero);
+        
+        // Set initial variant
+        setTimeout(() => {
+            variantSelect.value = 'particles';
+            updateHero();
+        }, 100);
+    </script>
+</body>
+</html>

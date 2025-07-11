@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications Diagnostic - BRUTAL V3</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+        }
+        
+        h1 { 
+            text-shadow: 0 0 10px #0f0; 
+            text-align: center;
+        }
+        
+        .diagnostic { 
+            background: #111; 
+            padding: 20px; 
+            border: 1px solid #0f0;
+            margin: 20px 0;
+            border-radius: 4px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .warning { color: #ff0; }
+        .info { color: #0ff; }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .state-box {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        
+        .state-box h3 {
+            margin-top: 0;
+            color: #0ff;
+        }
+        
+        .notification-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            padding: 10px;
+            margin-top: 10px;
+            background: #000;
+        }
+        
+        .notification-item {
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #0f0;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Notifications Component Diagnostic</h1>
+    
+    <div style="text-align: center;">
+        <button onclick="runDiagnostic()">Run Full Diagnostic</button>
+        <button onclick="testInitialization()">Test Initialization</button>
+        <button onclick="testNotificationCreation()">Test Creation</button>
+        <button onclick="testParticles()">Test Particles</button>
+        <button onclick="testQueue()">Test Queue System</button>
+        <button onclick="testMemoryLeaks()">Test Memory</button>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+    
+    <div class="state-grid">
+        <div class="state-box">
+            <h3>Component State</h3>
+            <div id="componentState">Not initialized</div>
+        </div>
+        
+        <div class="state-box">
+            <h3>Active Notifications</h3>
+            <div id="activeNotifications" class="notification-list">None</div>
+        </div>
+        
+        <div class="state-box">
+            <h3>Queue Status</h3>
+            <div id="queueStatus">Empty</div>
+        </div>
+        
+        <div class="state-box">
+            <h3>Performance Metrics</h3>
+            <div id="performanceMetrics">N/A</div>
+        </div>
+    </div>
+    
+    <div id="log" class="diagnostic"></div>
+
+    <script type="module">
+        import { Notifications } from './04-components/ui/Notifications.js';
+        
+        let notifications;
+        let logBuffer = [];
+        
+        const log = (msg, type = 'info') => {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = { timestamp, msg, type };
+            logBuffer.push(entry);
+            
+            const logEl = document.getElementById('log');
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${timestamp}] ${msg}`;
+            logEl.appendChild(div);
+            logEl.scrollTop = logEl.scrollHeight;
+        };
+        
+        // Override console methods
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            log('Console Error: ' + args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            log('Console Warning: ' + args.join(' '), 'warning');
+        };
+        
+        // Update state displays
+        function updateStateDisplay() {
+            if (!notifications) return;
+            
+            // Component state
+            const stateEl = document.getElementById('componentState');
+            stateEl.innerHTML = `
+                <div>Instance: ${notifications instanceof Notifications ? 'Valid' : 'Invalid'}</div>
+                <div>Connected: ${notifications.isConnected ? 'Yes' : 'No'}</div>
+                <div>Shadow DOM: ${notifications.shadowRoot ? 'Yes' : 'No'}</div>
+                <div>Config: ${JSON.stringify(notifications._config, null, 2)}</div>
+            `;
+            
+            // Active notifications
+            const activeEl = document.getElementById('activeNotifications');
+            const activeNotifs = notifications.getNotifications();
+            if (activeNotifs.length === 0) {
+                activeEl.innerHTML = 'None';
+            } else {
+                activeEl.innerHTML = activeNotifs.map(n => `
+                    <div class="notification-item">
+                        ID: ${n.id} | Type: ${n.type}<br>
+                        Message: ${n.message.substring(0, 50)}...<br>
+                        Timer: ${n.timer ? 'Active' : 'None'}
+                    </div>
+                `).join('');
+            }
+            
+            // Queue status
+            const queueEl = document.getElementById('queueStatus');
+            const queueSize = notifications.getQueueSize();
+            queueEl.innerHTML = `
+                <div>Queue Size: ${queueSize}</div>
+                <div>Max Stack: ${notifications._config.maxStack}</div>
+                <div>Active: ${activeNotifs.length}</div>
+            `;
+        }
+        
+        // Diagnostic functions
+        window.runDiagnostic = async function() {
+            log('=== STARTING FULL DIAGNOSTIC ===', 'warning');
+            
+            await testInitialization();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await testNotificationCreation();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await testParticles();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await testQueue();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await testMemoryLeaks();
+            
+            log('=== DIAGNOSTIC COMPLETE ===', 'warning');
+        };
+        
+        window.testInitialization = async function() {
+            log('\\n--- Testing Initialization ---', 'info');
+            
+            try {
+                // Create instance
+                notifications = new Notifications();
+                log('Notifications instance created', 'success');
+                
+                // Check properties
+                log(`Has _config: ${!!notifications._config}`, notifications._config ? 'success' : 'error');
+                log(`Has _notifications array: ${Array.isArray(notifications._notifications)}`, 'info');
+                log(`Has _queue array: ${Array.isArray(notifications._queue)}`, 'info');
+                log(`Has _particles array: ${Array.isArray(notifications._particles)}`, 'info');
+                
+                // Add to DOM
+                document.body.appendChild(notifications);
+                log('Added to DOM', 'success');
+                
+                // Wait for connection
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Check shadow DOM
+                log(`Shadow DOM created: ${!!notifications.shadowRoot}`, notifications.shadowRoot ? 'success' : 'error');
+                
+                if (notifications.shadowRoot) {
+                    const container = notifications.shadowRoot.querySelector('.notifications-container');
+                    log(`Container found: ${!!container}`, container ? 'success' : 'error');
+                    
+                    const canvas = notifications.shadowRoot.querySelector('.particle-canvas');
+                    log(`Particle canvas found: ${!!canvas}`, canvas ? 'success' : 'error');
+                    
+                    if (canvas) {
+                        log(`Canvas context: ${!!notifications._particleCtx}`, notifications._particleCtx ? 'success' : 'error');
+                    }
+                }
+                
+                // Check template
+                const template = notifications.template();
+                log(`Template returns string: ${typeof template === 'string'}`, typeof template === 'string' ? 'success' : 'error');
+                log(`Template length: ${template.length} chars`, 'info');
+                
+                updateStateDisplay();
+                
+            } catch (error) {
+                log(`Initialization error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        };
+        
+        window.testNotificationCreation = async function() {
+            log('\\n--- Testing Notification Creation ---', 'info');
+            
+            if (!notifications) {
+                log('Notifications not initialized', 'error');
+                return;
+            }
+            
+            try {
+                // Test basic notification
+                const id1 = notifications.show('Test notification 1', { type: 'success' });
+                log(`Created notification ID: ${id1}`, 'success');
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Check if rendered
+                const notif1 = notifications.shadowRoot.querySelector(`[data-id="${id1}"]`);
+                log(`Notification rendered: ${!!notif1}`, notif1 ? 'success' : 'error');
+                
+                if (notif1) {
+                    log(`Has correct classes: ${notif1.classList.contains('notification')}`, 'info');
+                    log(`Has type class: ${notif1.classList.contains('success')}`, 'info');
+                }
+                
+                // Test with all options
+                const id2 = notifications.show('Test with all options', {
+                    title: 'Test Title',
+                    type: 'info',
+                    duration: 10000,
+                    actions: [
+                        { label: 'Action 1', handler: () => log('Action 1 clicked', 'info') },
+                        { label: 'Action 2', handler: () => log('Action 2 clicked', 'info') }
+                    ]
+                });
+                log(`Created complex notification ID: ${id2}`, 'success');
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                const notif2 = notifications.shadowRoot.querySelector(`[data-id="${id2}"]`);
+                if (notif2) {
+                    const title = notif2.querySelector('.notification-title');
+                    log(`Has title: ${!!title}`, title ? 'success' : 'error');
+                    
+                    const actions = notif2.querySelectorAll('.notification-action');
+                    log(`Has ${actions.length} actions`, actions.length === 2 ? 'success' : 'error');
+                    
+                    const progress = notif2.querySelector('.notification-progress');
+                    log(`Has progress bar: ${!!progress}`, 'info');
+                }
+                
+                // Test static methods
+                Notifications.success('Static success test');
+                Notifications.error('Static error test');
+                await new Promise(r => setTimeout(r, 200));
+                
+                log(`Total notifications: ${notifications.getNotifications().length}`, 'info');
+                
+                updateStateDisplay();
+                
+            } catch (error) {
+                log(`Creation error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        };
+        
+        window.testParticles = async function() {
+            log('\\n--- Testing Particle System ---', 'info');
+            
+            if (!notifications) {
+                log('Notifications not initialized', 'error');
+                return;
+            }
+            
+            try {
+                // Check particle system
+                log(`Particle effects enabled: ${notifications._config.particleEffects}`, 'info');
+                log(`Particle canvas exists: ${!!notifications._particleCanvas}`, 'info');
+                log(`Particle context exists: ${!!notifications._particleCtx}`, 'info');
+                
+                // Create notification to trigger particles
+                const id = notifications.show('Particle test', { type: 'success' });
+                await new Promise(r => setTimeout(r, 100));
+                
+                log(`Particles created: ${notifications._particles.length}`, 'info');
+                
+                // Monitor particles
+                let particleCount = notifications._particles.length;
+                setTimeout(() => {
+                    log(`Particles after 500ms: ${notifications._particles.length}`, 'info');
+                    log(`Particles decayed: ${particleCount - notifications._particles.length}`, 'info');
+                }, 500);
+                
+                // Test dismiss particles
+                setTimeout(() => {
+                    notifications.dismiss(id);
+                    log('Dismissed notification to create explode particles', 'info');
+                    setTimeout(() => {
+                        log(`Explode particles: ${notifications._particles.length}`, 'info');
+                    }, 100);
+                }, 1000);
+                
+            } catch (error) {
+                log(`Particle error: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testQueue = async function() {
+            log('\\n--- Testing Queue System ---', 'info');
+            
+            if (!notifications) {
+                log('Notifications not initialized', 'error');
+                return;
+            }
+            
+            try {
+                // Set max stack to 3
+                notifications.setConfig({ maxStack: 3 });
+                log('Set maxStack to 3', 'info');
+                
+                // Clear existing
+                notifications.clear();
+                await new Promise(r => setTimeout(r, 500));
+                
+                // Add 5 notifications
+                for (let i = 1; i <= 5; i++) {
+                    notifications.show(`Queue test ${i}`, { type: 'info' });
+                    log(`Added notification ${i}`, 'info');
+                    await new Promise(r => setTimeout(r, 100));
+                }
+                
+                log(`Active: ${notifications.getNotifications().length}`, 'info');
+                log(`Queue: ${notifications.getQueueSize()}`, 'info');
+                
+                // Dismiss one
+                const active = notifications.getNotifications();
+                if (active.length > 0) {
+                    notifications.dismiss(active[0].id);
+                    log('Dismissed first notification', 'info');
+                    
+                    await new Promise(r => setTimeout(r, 500));
+                    
+                    log(`Active after dismiss: ${notifications.getNotifications().length}`, 'info');
+                    log(`Queue after dismiss: ${notifications.getQueueSize()}`, 'info');
+                }
+                
+                updateStateDisplay();
+                
+            } catch (error) {
+                log(`Queue error: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testMemoryLeaks = async function() {
+            log('\\n--- Testing Memory Leaks ---', 'info');
+            
+            if (!notifications) {
+                log('Notifications not initialized', 'error');
+                return;
+            }
+            
+            try {
+                const startMetrics = {
+                    notifications: notifications.getNotifications().length,
+                    particles: notifications._particles.length,
+                    timers: notifications._notifications.filter(n => n.timer).length
+                };
+                
+                log('Starting rapid creation/deletion test...', 'warning');
+                
+                // Rapid create/delete
+                for (let i = 0; i < 20; i++) {
+                    const id = notifications.show(`Memory test ${i}`, { 
+                        type: 'info',
+                        duration: 1000
+                    });
+                    
+                    if (i % 5 === 0) {
+                        await new Promise(r => setTimeout(r, 50));
+                        notifications.dismiss(id);
+                    }
+                }
+                
+                // Wait for animations
+                await new Promise(r => setTimeout(r, 2000));
+                
+                const endMetrics = {
+                    notifications: notifications.getNotifications().length,
+                    particles: notifications._particles.length,
+                    timers: notifications._notifications.filter(n => n.timer).length
+                };
+                
+                log('Memory test results:', 'info');
+                log(`Notifications: ${startMetrics.notifications} -> ${endMetrics.notifications}`, 
+                    endMetrics.notifications <= startMetrics.notifications + 3 ? 'success' : 'error');
+                log(`Particles: ${endMetrics.particles} (should decay)`, 'info');
+                log(`Active timers: ${endMetrics.timers}`, 'info');
+                
+                // Test disconnect
+                const tempNotif = new Notifications();
+                document.body.appendChild(tempNotif);
+                tempNotif.show('Temp notification');
+                await new Promise(r => setTimeout(r, 100));
+                tempNotif.remove();
+                log('Temporary instance removed successfully', 'success');
+                
+            } catch (error) {
+                log(`Memory test error: ${error.message}`, 'error');
+            }
+        };
+        
+        window.clearLog = function() {
+            document.getElementById('log').innerHTML = '';
+            logBuffer = [];
+            log('Log cleared', 'info');
+        };
+        
+        // Auto-update state
+        setInterval(updateStateDisplay, 1000);
+        
+        // Initial message
+        log('Notifications diagnostic ready', 'success');
+        log('Click "Run Full Diagnostic" to start', 'info');
+    </script>
+</body>
+</html>

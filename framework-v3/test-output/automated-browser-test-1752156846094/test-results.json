@@ -1,0 +1,356 @@
+{
+  "file": "automated-browser-test.html",
+  "timestamp": "2025-07-10T14:14:06.306Z",
+  "console": [],
+  "errors": [],
+  "network": [
+    {
+      "requestId": "A1175FAA320E8E474A440F0D5553AEFC",
+      "url": "http://localhost:8080/automated-browser-test.html",
+      "method": "GET",
+      "timestamp": 21573.47474,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "3884",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:14:06 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 10:37:06 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21573.480226
+      },
+      "finished": {
+        "timestamp": 21573.478709,
+        "encodedDataLength": 4071
+      }
+    },
+    {
+      "requestId": "239730.2",
+      "url": "http://localhost:8080/01-core/Component.js",
+      "method": "GET",
+      "timestamp": 21573.517995,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "stack": {
+          "callFrames": [
+            {
+              "functionName": "runAutomatedTest",
+              "scriptId": "7",
+              "url": "http://localhost:8080/automated-browser-test.html",
+              "lineNumber": 49,
+              "columnNumber": 38
+            },
+            {
+              "functionName": "",
+              "scriptId": "7",
+              "url": "http://localhost:8080/automated-browser-test.html",
+              "lineNumber": 96,
+              "columnNumber": 8
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11730",
+          "Date": "Thu, 10 Jul 2025 14:14:06 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:38 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21573.546362
+      },
+      "finished": {
+        "timestamp": 21573.525408,
+        "encodedDataLength": 11924
+      }
+    },
+    {
+      "requestId": "239730.3",
+      "url": "http://localhost:8080/01-core/events.js",
+      "method": "GET",
+      "timestamp": 21573.546974,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/Component.js",
+        "lineNumber": 6,
+        "columnNumber": 47
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "1399",
+          "Date": "Thu, 10 Jul 2025 14:14:06 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:10 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21573.556066
+      },
+      "finished": {
+        "timestamp": 21573.55553,
+        "encodedDataLength": 1592
+      }
+    },
+    {
+      "requestId": "239730.4",
+      "url": "http://localhost:8080/favicon.ico",
+      "method": "GET",
+      "timestamp": 21573.547201,
+      "type": "Other",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "File not found",
+        "headers": {
+          "Content-Length": "335",
+          "Date": "Thu, 10 Jul 2025 14:14:06 GMT",
+          "Content-Type": "text/html;charset=utf-8",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1",
+          "Connection": "close"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21573.55526
+      },
+      "finished": {
+        "timestamp": 21573.555675,
+        "encodedDataLength": 520
+      }
+    },
+    {
+      "requestId": "239730.5",
+      "url": "http://localhost:8080/01-core/State.js",
+      "method": "GET",
+      "timestamp": 21573.557159,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "stack": {
+          "callFrames": [
+            {
+              "functionName": "runAutomatedTest",
+              "scriptId": "7",
+              "url": "http://localhost:8080/automated-browser-test.html",
+              "lineNumber": 52,
+              "columnNumber": 34
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "17122",
+          "Date": "Thu, 10 Jul 2025 14:14:06 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21573.56593
+      },
+      "finished": {
+        "timestamp": 21573.560688,
+        "encodedDataLength": 17316
+      }
+    }
+  ],
+  "performance": {
+    "metrics": {
+      "Timestamp": 21577.52358,
+      "Documents": 3,
+      "Frames": 1,
+      "JSEventListeners": 0,
+      "Nodes": 2052,
+      "LayoutCount": 5,
+      "RecalcStyleCount": 5,
+      "LayoutDuration": 0.026315,
+      "RecalcStyleDuration": 0.000475,
+      "ScriptDuration": 0.004145,
+      "TaskDuration": 0.079173,
+      "JSHeapUsedSize": 1389000,
+      "JSHeapTotalSize": 2621440
+    },
+    "timing": {
+      "connectStart": 1752156846316,
+      "secureConnectionStart": 0,
+      "unloadEventEnd": 0,
+      "domainLookupStart": 1752156846316,
+      "domainLookupEnd": 1752156846316,
+      "responseStart": 1752156846319,
+      "connectEnd": 1752156846316,
+      "responseEnd": 1752156846320,
+      "requestStart": 1752156846319,
+      "domLoading": 1752156846331,
+      "redirectStart": 0,
+      "loadEventEnd": 1752156846362,
+      "domComplete": 1752156846362,
+      "navigationStart": 1752156846312,
+      "loadEventStart": 1752156846362,
+      "domContentLoadedEventEnd": 1752156846362,
+      "unloadEventStart": 0,
+      "redirectEnd": 0,
+      "domInteractive": 1752156846357,
+      "fetchStart": 1752156846316,
+      "domContentLoadedEventStart": 1752156846361
+    },
+    "entries": [
+      {
+        "name": "http://localhost:8080/automated-browser-test.html",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 50.30000000074506
+      },
+      {
+        "name": "visible",
+        "entryType": "visibility-state",
+        "startTime": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://localhost:8080/01-core/Component.js",
+        "entryType": "resource",
+        "startTime": 47.30000000074506,
+        "duration": 7.199999999254942
+      },
+      {
+        "name": "first-paint",
+        "entryType": "paint",
+        "startTime": 68,
+        "duration": 0
+      },
+      {
+        "name": "first-contentful-paint",
+        "entryType": "paint",
+        "startTime": 68,
+        "duration": 0
+      },
+      {
+        "name": "http://localhost:8080/01-core/events.js",
+        "entryType": "resource",
+        "startTime": 76.10000000149012,
+        "duration": 8.5
+      },
+      {
+        "name": "http://localhost:8080/favicon.ico",
+        "entryType": "resource",
+        "startTime": 76.40000000223517,
+        "duration": 8.399999998509884
+      },
+      {
+        "name": "http://localhost:8080/01-core/State.js",
+        "entryType": "resource",
+        "startTime": 86.40000000223517,
+        "duration": 3.399999998509884
+      }
+    ],
+    "calculated": {
+      "domContentLoaded": 50,
+      "load": 50,
+      "firstPaint": 68,
+      "firstContentfulPaint": 68
+    }
+  },
+  "memory": {
+    "initial": {
+      "usedJSHeapSize": 1478324,
+      "totalJSHeapSize": 2672768,
+      "jsHeapSizeLimit": 2248146944
+    },
+    "final": {
+      "usedJSHeapSize": 1692673,
+      "totalJSHeapSize": 2673077,
+      "jsHeapSizeLimit": 2248146944
+    },
+    "delta": {
+      "usedJSHeapSize": 214349,
+      "totalJSHeapSize": 309
+    }
+  },
+  "coverage": {
+    "js": {
+      "totalBytes": 0,
+      "usedBytes": 0,
+      "percentage": 0
+    },
+    "css": {
+      "totalBytes": 0,
+      "usedBytes": 0,
+      "percentage": 0
+    }
+  },
+  "domMutations": [],
+  "eventListeners": [],
+  "userInteractions": [],
+  "gpuInfo": null,
+  "screenshots": [
+    "screenshot-initial.png",
+    "screenshot-final.png"
+  ],
+  "video": "9 frames captured",
+  "trace": "trace.json",
+  "heapSnapshot": "heap-snapshot.json",
+  "environment": {
+    "url": "http://localhost:8080/automated-browser-test.html",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 800,
+      "height": 600,
+      "devicePixelRatio": 1
+    },
+    "features": {
+      "crossOriginIsolated": false,
+      "sharedArrayBuffer": true,
+      "webgl": false,
+      "webgl2": false,
+      "gpu": true,
+      "workers": true,
+      "serviceWorker": true
+    },
+    "brutal": {
+      "loaded": false,
+      "debug": false,
+      "config": null
+    }
+  },
+  "brutalFramework": null,
+  "summary": {
+    "success": true,
+    "errorCount": 0,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "networkRequests": 5,
+    "networkFailures": 0,
+    "domMutations": 0,
+    "coverage": {
+      "js": "0%",
+      "css": "0%"
+    },
+    "performance": {
+      "domContentLoaded": "50ms",
+      "load": "50ms",
+      "firstPaint": "68ms",
+      "firstContentfulPaint": "68ms"
+    },
+    "memory": {
+      "heapGrowth": "0.20MB"
+    }
+  }
+}

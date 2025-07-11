@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Component Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0ff 0%, #f0f 100%);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.1) 10px,
+                rgba(255, 255, 255, 0.1) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+        
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            margin: 4rem 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #0ff 0%, #f0f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #999;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .component-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .component-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0ff 0%, #f0f 100%);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+        
+        .component-card:hover {
+            border-color: #0ff;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+        }
+        
+        .component-card:hover::before {
+            transform: translateX(0);
+        }
+        
+        .component-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #0ff;
+        }
+        
+        .component-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .status-ready {
+            background: #10b981;
+            color: #fff;
+        }
+        
+        .status-progress {
+            background: #f59e0b;
+            color: #fff;
+        }
+        
+        .status-planned {
+            background: #6366f1;
+            color: #fff;
+        }
+        
+        .component-description {
+            color: #999;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .component-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .component-features li {
+            padding: 0.25rem 0;
+            color: #666;
+            font-size: 0.875rem;
+        }
+        
+        .component-features li::before {
+            content: '✓ ';
+            color: #0ff;
+            font-weight: bold;
+        }
+        
+        .component-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        .btn-primary {
+            background: #0ff;
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            background: #00cccc;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #0ff;
+            border: 1px solid #0ff;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(0, 255, 255, 0.1);
+        }
+        
+        .roadmap {
+            background: #111;
+            border-radius: 12px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #0ff 0%, #f0f 100%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: #0ff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px #0a0a0a, 0 0 0 6px #0ff;
+        }
+        
+        .timeline-phase {
+            font-size: 0.875rem;
+            color: #0ff;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-description {
+            color: #999;
+        }
+        
+        .footer {
+            background: #111;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 6rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: #0ff;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: #fff;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>BRUTAL V3 Components</h1>
+        <p>Zero Dependencies. GPU Accelerated. 10-100x Faster Than React.</p>
+        
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-value">20</span>
+                <span class="stat-label">Components</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">0KB</span>
+                <span class="stat-label">Dependencies</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">60fps</span>
+                <span class="stat-label">Guaranteed</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">100x</span>
+                <span class="stat-label">Faster</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Core Components -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Core Components</h2>
+                <p class="section-subtitle">Essential building blocks for any BRUTAL application</p>
+            </div>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3 class="component-name">HeroSection</h3>
+                    <span class="component-status status-ready">Ready</span>
+                    <p class="component-description">
+                        Full-featured hero component with 13 variants including particles, WebGL, and Matrix effects.
+                    </p>
+                    <ul class="component-features">
+                        <li>GPU-accelerated animations</li>
+                        <li>Lazy loading & intersection observer</li>
+                        <li>13 stunning variants</li>
+                        <li>Particle system integration</li>
+                    </ul>
+                    <div class="component-actions">
+                        <a href="hero-section-demo.html" class="btn btn-primary">View Demo</a>
+                        <button class="btn btn-secondary">View Code</button>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <h3 class="component-name">NavigationBar</h3>
+                    <span class="component-status status-progress">In Progress</span>
+                    <p class="component-description">
+                        Sticky navigation with GPU-accelerated scrolling and mobile gestures.
+                    </p>
+                    <ul class="component-features">
+                        <li>Smart hide/show on scroll</li>
+                        <li>Mobile-first responsive</li>
+                        <li>Particle hover effects</li>
+                        <li>Mega menu support</li>
+                    </ul>
+                    <div class="component-actions">
+                        <button class="btn btn-primary" disabled>Coming Soon</button>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <h3 class="component-name">Modal</h3>
+                    <span class="component-status status-planned">Planned</span>
+                    <p class="component-description">
+                        GPU-accelerated modals with backdrop blur and smooth animations.
+                    </p>
+                    <ul class="component-features">
+                        <li>WebGL backdrop effects</li>
+                        <li>Focus trap & a11y</li>
+                        <li>Stacking context management</li>
+                        <li>Custom transitions</li>
+                    </ul>
+                    <div class="component-actions">
+                        <button class="btn btn-primary" disabled>Coming Soon</button>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <h3 class="component-name">Notifications</h3>
+                    <span class="component-status status-planned">Planned</span>
+                    <p class="component-description">
+                        Toast notifications with particle effects and auto-dismiss.
+                    </p>
+                    <ul class="component-features">
+                        <li>Particle explosion effects</li>
+                        <li>Stack management</li>
+                        <li>Progress indicators</li>
+                        <li>Custom positioning</li>
+                    </ul>
+                    <div class="component-actions">
+                        <button class="btn btn-primary" disabled>Coming Soon</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Data Components -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Data Components</h2>
+                <p class="section-subtitle">High-performance data visualization and manipulation</p>
+            </div>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3 class="component-name">DataGrid</h3>
+                    <span class="component-status status-planned">Planned</span>
+                    <p class="component-description">
+                        Virtual scrolling data grid supporting 100K+ rows at 60fps.
+                    </p>
+                    <ul class="component-features">
+                        <li>Virtual scrolling</li>
+                        <li>SharedArrayBuffer data</li>
+                        <li>GPU-accelerated sorting</li>
+                        <li>Real-time updates</li>
+                    </ul>
+                    <div class="component-actions">
+                        <button class="btn btn-primary" disabled>Coming Soon</button>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <h3 class="component-name">FormBuilder</h3>
+                    <span class="component-status status-planned">Planned</span>
+                    <p class="component-description">
+                        Dynamic form generation with real-time validation and visual feedback.
+                    </p>
+                    <ul class="component-features">
+                        <li>Schema-driven forms</li>
+                        <li>Real-time validation</li>
+                        <li>Particle success states</li>
+                        <li>Undo/redo support</li>
+                    </ul>
+                    <div class="component-actions">
+                        <button class="btn btn-primary" disabled>Coming Soon</button>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <h3 class="component-name">Charts</h3>
+                    <span class="component-status status-planned">Planned</span>
+                    <p class="component-description">
+                        Canvas/WebGL hybrid charts with real-time data streaming.
+                    </p>
+                    <ul class="component-features">
+                        <li>WebGL rendering</li>
+                        <li>60fps animations</li>
+                        <li>Real-time updates</li>
+                        <li>GPU tooltips</li>
+                    </ul>
+                    <div class="component-actions">
+                        <button class="btn btn-primary" disabled>Coming Soon</button>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <h3 class="component-name">SearchBox</h3>
+                    <span class="component-status status-planned">Planned</span>
+                    <p class="component-description">
+                        Fuzzy search with WebAssembly and GPU-accelerated results.
+                    </p>
+                    <ul class="component-features">
+                        <li>WASM fuzzy search</li>
+                        <li>GPU dropdown render</li>
+                        <li>Real-time suggestions</li>
+                        <li>Particle effects</li>
+                    </ul>
+                    <div class="component-actions">
+                        <button class="btn btn-primary" disabled>Coming Soon</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Roadmap -->
+        <div class="roadmap">
+            <div class="section-header">
+                <h2 class="section-title">Development Roadmap</h2>
+                <p class="section-subtitle">Our journey to 20 groundbreaking components</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 4.1</div>
+                    <div class="timeline-title">Foundation Components</div>
+                    <div class="timeline-description">
+                        HeroSection migration complete. NavigationBar in progress.
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 4.2</div>
+                    <div class="timeline-title">Core UI Components</div>
+                    <div class="timeline-description">
+                        Modal, DataGrid, FormBuilder, Notifications, SearchBox
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 4.3</div>
+                    <div class="timeline-title">Interactive Components</div>
+                    <div class="timeline-description">
+                        TabPanel, Accordion, Carousel, Tooltip, ProgressBar, LoadingSpinner
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 4.4</div>
+                    <div class="timeline-title">Advanced Components</div>
+                    <div class="timeline-description">
+                        Charts, Timeline, ImageGallery, VideoPlayer, CodeEditor, DragDropZone
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 4.5</div>
+                    <div class="timeline-title">Integration & Polish</div>
+                    <div class="timeline-description">
+                        ShowcaseDemo, performance benchmarks, documentation, migration guide
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="https://github.com/yourusername/brutal-v3">GitHub</a>
+            <a href="#docs">Documentation</a>
+            <a href="#api">API Reference</a>
+        </div>
+        <p style="color: #666;">
+            Built with BRUTAL V3 - The future of web components
+        </p>
+    </footer>
+    
+    <script type="module">
+        // Add some interactive effects
+        document.querySelectorAll('.component-card').forEach(card => {
+            card.addEventListener('mouseenter', (e) => {
+                // Add particle effect on hover if visual debug is enabled
+                if (window.__BRUTAL_DEBUG__?.particleEngine) {
+                    const rect = e.target.getBoundingClientRect();
+                    window.__BRUTAL_DEBUG__.particleEngine.emit({
+                        x: rect.left + rect.width / 2,
+                        y: rect.top,
+                        count: 10,
+                        color: '#0ff',
+                        speed: 1,
+                        life: 500,
+                        size: 2
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

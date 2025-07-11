@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SharedArrayBuffer Test - BRUTAL V3</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        
+        h1 {
+            color: #0ff;
+        }
+        
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        
+        .success {
+            background: #0f3a0f;
+            border: 2px solid #0f0;
+            color: #0f0;
+        }
+        
+        .error {
+            background: #3a0f0f;
+            border: 2px solid #f00;
+            color: #f00;
+        }
+        
+        .warning {
+            background: #3a3a0f;
+            border: 2px solid #ff0;
+            color: #ff0;
+        }
+        
+        .test-section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-section h2 {
+            color: #0ff;
+            margin: 0 0 15px 0;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 5px;
+        }
+        
+        button {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        #output {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 20px 0;
+        }
+        
+        .worker-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        
+        .worker-active {
+            background: #0f3a0f;
+            color: #0f0;
+        }
+        
+        .worker-inactive {
+            background: #333;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 SharedArrayBuffer Test Suite</h1>
+    
+    <div id="environment-status"></div>
+    
+    <div class="test-section">
+        <h2>Environment Check</h2>
+        <div id="env-details"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>SharedArrayBuffer Tests</h2>
+        <button onclick="runBasicTest()">Run Basic Test</button>
+        <button onclick="runConcurrentTest()">Run Concurrent Test</button>
+        <button onclick="runStateTest()">Test State.js</button>
+        <button onclick="runPerformanceTest()">Run Performance Test</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Worker Status</h2>
+        <div id="worker-status">
+            <span class="worker-status worker-inactive">Worker 1</span>
+            <span class="worker-status worker-inactive">Worker 2</span>
+            <span class="worker-status worker-inactive">Worker 3</span>
+            <span class="worker-status worker-inactive">Worker 4</span>
+        </div>
+    </div>
+    
+    <div id="output"></div>
+    
+    <script type="module">
+        // Check environment
+        function checkEnvironment() {
+            const statusDiv = document.getElementById('environment-status');
+            const detailsDiv = document.getElementById('env-details');
+            
+            const checks = {
+                'crossOriginIsolated': typeof crossOriginIsolated !== 'undefined' ? crossOriginIsolated : false,
+                'SharedArrayBuffer': typeof SharedArrayBuffer !== 'undefined',
+                'Atomics': typeof Atomics !== 'undefined',
+                'Worker': typeof Worker !== 'undefined',
+                'navigator.hardwareConcurrency': navigator.hardwareConcurrency || 'N/A'
+            };
+            
+            const allGood = checks.crossOriginIsolated && checks.SharedArrayBuffer && checks.Atomics;
+            
+            if (allGood) {
+                statusDiv.innerHTML = '<div class="status success">✅ SharedArrayBuffer is FULLY SUPPORTED! All tests will work.</div>';
+            } else if (checks.SharedArrayBuffer && !checks.crossOriginIsolated) {
+                statusDiv.innerHTML = '<div class="status warning">⚠️ SharedArrayBuffer exists but crossOriginIsolated is false. Need proper headers!</div>';
+            } else {
+                statusDiv.innerHTML = '<div class="status error">❌ SharedArrayBuffer is NOT available in this environment.</div>';
+            }
+            
+            // Show details
+            let details = '';
+            for (const [key, value] of Object.entries(checks)) {
+                const icon = value === true || (key === 'navigator.hardwareConcurrency' && value !== 'N/A') ? '✅' : '❌';
+                details += `<div class="metric">
+                    <span>${key}:</span>
+                    <span>${icon} ${value}</span>
+                </div>`;
+            }
+            
+            detailsDiv.innerHTML = details;
+            
+            return allGood;
+        }
+        
+        // Logging helper
+        function log(message, type = '') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : '📋';
+            output.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // Basic SharedArrayBuffer test
+        window.runBasicTest = function() {
+            log('Running basic SharedArrayBuffer test...');
+            
+            if (!checkEnvironment()) {
+                log('Environment not suitable for SharedArrayBuffer', 'error');
+                return;
+            }
+            
+            try {
+                // Create SharedArrayBuffer
+                const sab = new SharedArrayBuffer(1024);
+                const int32 = new Int32Array(sab);
+                
+                // Write some values
+                int32[0] = 42;
+                Atomics.store(int32, 1, 100);
+                
+                // Read values
+                const val0 = Atomics.load(int32, 0);
+                const val1 = Atomics.load(int32, 1);
+                
+                log(`Created SharedArrayBuffer: ${sab.byteLength} bytes`, 'success');
+                log(`Written and read values: [0]=${val0}, [1]=${val1}`, 'success');
+                
+                // Test atomic operations
+                const oldVal = Atomics.add(int32, 0, 10);
+                const newVal = Atomics.load(int32, 0);
+                
+                log(`Atomic add: ${oldVal} + 10 = ${newVal}`, 'success');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        };
+        
+        // Worker code as string
+        const workerCode = `
+            let sharedBuffer;
+            let sharedArray;
+            let workerId;
+            
+            self.onmessage = function(e) {
+                const { type, buffer, id, iterations } = e.data;
+                
+                switch(type) {
+                    case 'init':
+                        sharedBuffer = buffer;
+                        sharedArray = new Int32Array(sharedBuffer);
+                        workerId = id;
+                        self.postMessage({ type: 'ready', id: workerId });
+                        break;
+                        
+                    case 'increment':
+                        for (let i = 0; i < iterations; i++) {
+                            Atomics.add(sharedArray, 0, 1);
+                        }
+                        self.postMessage({ 
+                            type: 'done', 
+                            id: workerId,
+                            value: Atomics.load(sharedArray, 0)
+                        });
+                        break;
+                        
+                    case 'stress':
+                        const start = performance.now();
+                        let operations = 0;
+                        
+                        for (let i = 0; i < iterations; i++) {
+                            // Random operations
+                            const index = Math.floor(Math.random() * 100);
+                            const op = Math.random();
+                            
+                            if (op < 0.33) {
+                                Atomics.add(sharedArray, index, 1);
+                            } else if (op < 0.66) {
+                                Atomics.store(sharedArray, index, i);
+                            } else {
+                                Atomics.load(sharedArray, index);
+                            }
+                            operations++;
+                        }
+                        
+                        const time = performance.now() - start;
+                        self.postMessage({
+                            type: 'stress-done',
+                            id: workerId,
+                            operations,
+                            time,
+                            opsPerSec: Math.round(operations / time * 1000)
+                        });
+                        break;
+                }
+            };
+        `;
+        
+        // Concurrent test with workers
+        window.runConcurrentTest = async function() {
+            log('Running concurrent SharedArrayBuffer test with workers...');
+            
+            if (!checkEnvironment()) {
+                log('Environment not suitable for SharedArrayBuffer', 'error');
+                return;
+            }
+            
+            try {
+                // Create shared buffer
+                const sab = new SharedArrayBuffer(1024);
+                const int32 = new Int32Array(sab);
+                int32[0] = 0; // Initialize counter
+                
+                // Create workers
+                const workerCount = 4;
+                const workers = [];
+                const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
+                const workerUrl = URL.createObjectURL(workerBlob);
+                
+                // Update UI
+                const statusElements = document.querySelectorAll('.worker-status');
+                
+                for (let i = 0; i < workerCount; i++) {
+                    const worker = new Worker(workerUrl);
+                    workers.push(worker);
+                    
+                    worker.onmessage = (e) => {
+                        if (e.data.type === 'ready') {
+                            statusElements[i].classList.add('worker-active');
+                            statusElements[i].classList.remove('worker-inactive');
+                            log(`Worker ${e.data.id} ready`);
+                        } else if (e.data.type === 'done') {
+                            log(`Worker ${e.data.id} done, counter = ${e.data.value}`);
+                        }
+                    };
+                    
+                    // Initialize worker
+                    worker.postMessage({ type: 'init', buffer: sab, id: i + 1 });
+                }
+                
+                // Wait for workers to be ready
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Run concurrent increments
+                const incrementsPerWorker = 10000;
+                const startTime = performance.now();
+                
+                // Start all workers
+                const promises = workers.map((worker, i) => {
+                    return new Promise(resolve => {
+                        worker.onmessage = (e) => {
+                            if (e.data.type === 'done') {
+                                resolve(e.data);
+                            }
+                        };
+                        worker.postMessage({ 
+                            type: 'increment', 
+                            iterations: incrementsPerWorker 
+                        });
+                    });
+                });
+                
+                // Wait for all to complete
+                const results = await Promise.all(promises);
+                const endTime = performance.now();
+                
+                // Check final value
+                const finalValue = Atomics.load(int32, 0);
+                const expected = workerCount * incrementsPerWorker;
+                
+                log(`\nConcurrent increment test completed in ${(endTime - startTime).toFixed(2)}ms`, 'success');
+                log(`Expected: ${expected}, Got: ${finalValue}`, finalValue === expected ? 'success' : 'error');
+                log(`Operations per second: ${Math.round(expected / (endTime - startTime) * 1000)}`);
+                
+                // Cleanup
+                workers.forEach((worker, i) => {
+                    worker.terminate();
+                    statusElements[i].classList.remove('worker-active');
+                    statusElements[i].classList.add('worker-inactive');
+                });
+                
+                URL.revokeObjectURL(workerUrl);
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        };
+        
+        // Test State.js with SharedArrayBuffer
+        window.runStateTest = async function() {
+            log('Testing State.js with SharedArrayBuffer...');
+            
+            try {
+                const { State } = await import('./01-core/State.js');
+                
+                // Create shared state
+                const state = new State({ counter: 0 }, { shared: true });
+                
+                log(`State created with SharedArrayBuffer: ${state.useSharedMemory}`, 
+                    state.useSharedMemory ? 'success' : 'warning');
+                
+                if (state.useSharedMemory) {
+                    // Test basic operations
+                    state.state.counter = 42;
+                    log(`Set counter to 42`);
+                    
+                    const value = state.state.counter;
+                    log(`Read counter: ${value}`, value === 42 ? 'success' : 'error');
+                    
+                    // Test different types
+                    state.state.float = 3.14159;
+                    state.state.bool = true;
+                    state.state.complex = { nested: { value: 'test' } };
+                    
+                    log(`Float: ${state.state.float}`);
+                    log(`Boolean: ${state.state.bool}`);
+                    log(`Complex: ${JSON.stringify(state.state.complex)}`);
+                    
+                    // Show buffer info
+                    log(`\nBuffer size: ${state.buffer.byteLength} bytes`);
+                    log(`Key map size: ${state.keyMap.size} entries`);
+                    
+                } else {
+                    log('SharedArrayBuffer not available, using regular state', 'warning');
+                }
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        };
+        
+        // Performance stress test
+        window.runPerformanceTest = async function() {
+            log('Running SharedArrayBuffer performance stress test...');
+            
+            if (!checkEnvironment()) {
+                log('Environment not suitable for SharedArrayBuffer', 'error');
+                return;
+            }
+            
+            try {
+                const sab = new SharedArrayBuffer(4096); // 1024 int32 values
+                const int32 = new Int32Array(sab);
+                
+                // Create workers
+                const workerCount = navigator.hardwareConcurrency || 4;
+                log(`Creating ${workerCount} workers for stress test...`);
+                
+                const workers = [];
+                const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
+                const workerUrl = URL.createObjectURL(workerBlob);
+                
+                for (let i = 0; i < workerCount; i++) {
+                    const worker = new Worker(workerUrl);
+                    workers.push(worker);
+                    
+                    // Initialize
+                    worker.postMessage({ type: 'init', buffer: sab, id: i + 1 });
+                }
+                
+                // Wait for ready
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Run stress test
+                const operationsPerWorker = 100000;
+                log(`Running ${operationsPerWorker} operations per worker...`);
+                
+                const promises = workers.map(worker => {
+                    return new Promise(resolve => {
+                        worker.onmessage = (e) => {
+                            if (e.data.type === 'stress-done') {
+                                resolve(e.data);
+                            }
+                        };
+                        worker.postMessage({
+                            type: 'stress',
+                            iterations: operationsPerWorker
+                        });
+                    });
+                });
+                
+                const results = await Promise.all(promises);
+                
+                // Calculate totals
+                let totalOps = 0;
+                let totalTime = 0;
+                let totalOpsPerSec = 0;
+                
+                results.forEach(result => {
+                    totalOps += result.operations;
+                    totalTime += result.time;
+                    totalOpsPerSec += result.opsPerSec;
+                    log(`Worker ${result.id}: ${result.opsPerSec} ops/sec`);
+                });
+                
+                log(`\nTotal operations: ${totalOps}`, 'success');
+                log(`Average ops/sec per worker: ${Math.round(totalOpsPerSec / workerCount)}`, 'success');
+                log(`Total throughput: ${Math.round(totalOps / (totalTime / workerCount) * 1000)} ops/sec`, 'success');
+                
+                // Cleanup
+                workers.forEach(worker => worker.terminate());
+                URL.revokeObjectURL(workerUrl);
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        };
+        
+        // Check environment on load
+        checkEnvironment();
+        
+        // Add instructions
+        log('SharedArrayBuffer Test Suite Ready');
+        log('Click the buttons above to run different tests');
+        log('Make sure you\'re running with npm start for proper headers');
+    </script>
+</body>
+</html>

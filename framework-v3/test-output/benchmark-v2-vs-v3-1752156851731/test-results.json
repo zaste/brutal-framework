@@ -1,0 +1,758 @@
+{
+  "file": "benchmark-v2-vs-v3.html",
+  "timestamp": "2025-07-10T14:14:12.107Z",
+  "console": [
+    {
+      "level": "error",
+      "text": "404: Route not found: /benchmark-v2-vs-v3.html",
+      "timestamp": "2025-07-10T14:14:12.282Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/01-core/Router.js",
+      "line": 567,
+      "column": 15
+    }
+  ],
+  "errors": [],
+  "network": [
+    {
+      "requestId": "40BAA3E99760F1ECC41A466DE5A8B278",
+      "url": "http://localhost:8080/benchmark-v2-vs-v3.html",
+      "method": "GET",
+      "timestamp": 21579.271103,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "16997",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 11:42:20 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21579.283165
+      },
+      "finished": {
+        "timestamp": 21579.27893,
+        "encodedDataLength": 17185
+      }
+    },
+    {
+      "requestId": "239841.2",
+      "url": "http://localhost:8080/01-core/Component.js",
+      "method": "GET",
+      "timestamp": 21579.348987,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/benchmark-v2-vs-v3.html",
+        "lineNumber": 173,
+        "columnNumber": 49
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11730",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:38 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.360419
+      },
+      "finished": {
+        "timestamp": 21579.357101,
+        "encodedDataLength": 11924
+      }
+    },
+    {
+      "requestId": "239841.5",
+      "url": "http://localhost:8080/02-performance/index.js",
+      "method": "GET",
+      "timestamp": 21579.35159,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/benchmark-v2-vs-v3.html",
+        "lineNumber": 176,
+        "columnNumber": 41
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "3308",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:48:52 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.365394
+      },
+      "finished": {
+        "timestamp": 21579.36191,
+        "encodedDataLength": 3501
+      }
+    },
+    {
+      "requestId": "239841.6",
+      "url": "http://localhost:8080/01-core/events.js",
+      "method": "GET",
+      "timestamp": 21579.360893,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/Component.js",
+        "lineNumber": 6,
+        "columnNumber": 47
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "1399",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:10 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.366819
+      },
+      "finished": {
+        "timestamp": 21579.364512,
+        "encodedDataLength": 1592
+      }
+    },
+    {
+      "requestId": "239841.4",
+      "url": "http://localhost:8080/01-core/Router.js",
+      "method": "GET",
+      "timestamp": 21579.351466,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/benchmark-v2-vs-v3.html",
+        "lineNumber": 175,
+        "columnNumber": 43
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "15688",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:30 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.370032
+      },
+      "finished": {
+        "timestamp": 21579.362316,
+        "encodedDataLength": 15882
+      }
+    },
+    {
+      "requestId": "239841.3",
+      "url": "http://localhost:8080/01-core/State.js",
+      "method": "GET",
+      "timestamp": 21579.351356,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/benchmark-v2-vs-v3.html",
+        "lineNumber": 174,
+        "columnNumber": 41
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "17122",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.370369
+      },
+      "finished": {
+        "timestamp": 21579.362221,
+        "encodedDataLength": 17316
+      }
+    },
+    {
+      "requestId": "239841.7",
+      "url": "http://localhost:8080/02-performance/01-StyleManager.js",
+      "method": "GET",
+      "timestamp": 21579.367221,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 13,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8965",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:42:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.405841
+      },
+      "finished": {
+        "timestamp": 21579.403053,
+        "encodedDataLength": 9158
+      }
+    },
+    {
+      "requestId": "239841.8",
+      "url": "http://localhost:8080/02-performance/02-FragmentPool.js",
+      "method": "GET",
+      "timestamp": 21579.367392,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 22,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8534",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:27:12 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.406216
+      },
+      "finished": {
+        "timestamp": 21579.403937,
+        "encodedDataLength": 8727
+      }
+    },
+    {
+      "requestId": "239841.10",
+      "url": "http://localhost:8080/02-performance/04-TemplateCache.js",
+      "method": "GET",
+      "timestamp": 21579.367654,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 44,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8994",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:45:18 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.412112
+      },
+      "finished": {
+        "timestamp": 21579.403619,
+        "encodedDataLength": 9187
+      }
+    },
+    {
+      "requestId": "239841.9",
+      "url": "http://localhost:8080/02-performance/03-DOMScheduler.js",
+      "method": "GET",
+      "timestamp": 21579.367513,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 35,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "9205",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:44:28 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.412436
+      },
+      "finished": {
+        "timestamp": 21579.407133,
+        "encodedDataLength": 9398
+      }
+    },
+    {
+      "requestId": "239841.11",
+      "url": "http://localhost:8080/02-performance/05-EventManager.js",
+      "method": "GET",
+      "timestamp": 21579.368112,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 54,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "10247",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:46:11 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.41609
+      },
+      "finished": {
+        "timestamp": 21579.408155,
+        "encodedDataLength": 10441
+      }
+    },
+    {
+      "requestId": "239841.12",
+      "url": "http://localhost:8080/02-performance/06-ThemeEngine.js",
+      "method": "GET",
+      "timestamp": 21579.368757,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 64,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11999",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:47:17 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.41729
+      },
+      "finished": {
+        "timestamp": 21579.410165,
+        "encodedDataLength": 12193
+      }
+    },
+    {
+      "requestId": "239841.13",
+      "url": "http://localhost:8080/02-performance/07-LayoutOptimizer.js",
+      "method": "GET",
+      "timestamp": 21579.369695,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 73,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "13406",
+          "Date": "Thu, 10 Jul 2025 14:14:12 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:48:33 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21579.420201
+      },
+      "finished": {
+        "timestamp": 21579.41586,
+        "encodedDataLength": 13600
+      }
+    }
+  ],
+  "performance": {
+    "metrics": {
+      "Timestamp": 21583.447614,
+      "Documents": 3,
+      "Frames": 1,
+      "JSEventListeners": 6,
+      "Nodes": 159,
+      "LayoutCount": 2,
+      "RecalcStyleCount": 3,
+      "LayoutDuration": 0.009165,
+      "RecalcStyleDuration": 0.000674,
+      "ScriptDuration": 0.024957,
+      "TaskDuration": 0.096515,
+      "JSHeapUsedSize": 1383376,
+      "JSHeapTotalSize": 2883584
+    },
+    "timing": {
+      "connectStart": 1752156852112,
+      "secureConnectionStart": 0,
+      "unloadEventEnd": 0,
+      "domainLookupStart": 1752156852112,
+      "domainLookupEnd": 1752156852112,
+      "responseStart": 1752156852117,
+      "connectEnd": 1752156852112,
+      "responseEnd": 1752156852120,
+      "requestStart": 1752156852114,
+      "domLoading": 1752156852151,
+      "redirectStart": 0,
+      "loadEventEnd": 1752156852289,
+      "domComplete": 1752156852289,
+      "navigationStart": 1752156852111,
+      "loadEventStart": 1752156852289,
+      "domContentLoadedEventEnd": 1752156852286,
+      "unloadEventStart": 0,
+      "redirectEnd": 0,
+      "domInteractive": 1752156852193,
+      "fetchStart": 1752156852112,
+      "domContentLoadedEventStart": 1752156852286
+    },
+    "entries": [
+      {
+        "name": "http://localhost:8080/benchmark-v2-vs-v3.html",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 177.90000000223517
+      },
+      {
+        "name": "visible",
+        "entryType": "visibility-state",
+        "startTime": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://localhost:8080/01-core/Component.js",
+        "entryType": "resource",
+        "startTime": 81.40000000223517,
+        "duration": 6
+      },
+      {
+        "name": "http://localhost:8080/01-core/State.js",
+        "entryType": "resource",
+        "startTime": 81.69999999925494,
+        "duration": 10.900000002235174
+      },
+      {
+        "name": "http://localhost:8080/01-core/Router.js",
+        "entryType": "resource",
+        "startTime": 81.90000000223517,
+        "duration": 10.699999999254942
+      },
+      {
+        "name": "http://localhost:8080/02-performance/index.js",
+        "entryType": "resource",
+        "startTime": 82,
+        "duration": 10.199999999254942
+      },
+      {
+        "name": "http://localhost:8080/01-core/events.js",
+        "entryType": "resource",
+        "startTime": 91.30000000074506,
+        "duration": 3.5
+      },
+      {
+        "name": "http://localhost:8080/02-performance/01-StyleManager.js",
+        "entryType": "resource",
+        "startTime": 97.60000000149012,
+        "duration": 35.80000000074506
+      },
+      {
+        "name": "http://localhost:8080/02-performance/02-FragmentPool.js",
+        "entryType": "resource",
+        "startTime": 97.69999999925494,
+        "duration": 36.600000001490116
+      },
+      {
+        "name": "http://localhost:8080/02-performance/03-DOMScheduler.js",
+        "entryType": "resource",
+        "startTime": 97.90000000223517,
+        "duration": 39.5
+      },
+      {
+        "name": "http://localhost:8080/02-performance/04-TemplateCache.js",
+        "entryType": "resource",
+        "startTime": 98.40000000223517,
+        "duration": 35.599999997764826
+      },
+      {
+        "name": "http://localhost:8080/02-performance/05-EventManager.js",
+        "entryType": "resource",
+        "startTime": 99,
+        "duration": 39.400000002235174
+      },
+      {
+        "name": "http://localhost:8080/02-performance/06-ThemeEngine.js",
+        "entryType": "resource",
+        "startTime": 99.90000000223517,
+        "duration": 40.599999997764826
+      },
+      {
+        "name": "http://localhost:8080/02-performance/07-LayoutOptimizer.js",
+        "entryType": "resource",
+        "startTime": 100,
+        "duration": 46.100000001490116
+      },
+      {
+        "name": "first-paint",
+        "entryType": "paint",
+        "startTime": 120,
+        "duration": 0
+      },
+      {
+        "name": "first-contentful-paint",
+        "entryType": "paint",
+        "startTime": 120,
+        "duration": 0
+      }
+    ],
+    "calculated": {
+      "domContentLoaded": 175,
+      "load": 178,
+      "firstPaint": 120,
+      "firstContentfulPaint": 120
+    }
+  },
+  "memory": {
+    "initial": {
+      "usedJSHeapSize": 1591431,
+      "totalJSHeapSize": 3044607,
+      "jsHeapSizeLimit": 2248146944
+    },
+    "final": {
+      "usedJSHeapSize": 2809357,
+      "totalJSHeapSize": 7499657,
+      "jsHeapSizeLimit": 2248146944
+    },
+    "delta": {
+      "usedJSHeapSize": 1217926,
+      "totalJSHeapSize": 4455050
+    }
+  },
+  "coverage": {
+    "js": {
+      "totalBytes": 84033,
+      "usedBytes": 22506,
+      "percentage": "26.78"
+    },
+    "css": {
+      "totalBytes": 3348,
+      "usedBytes": 1537,
+      "percentage": "45.91"
+    }
+  },
+  "domMutations": [
+    {
+      "type": "attributes",
+      "target": "BUTTON",
+      "timestamp": 1752156856407
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156856407
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156856407
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156856579
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156856579
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156856579
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156856579
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857070
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857070
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857070
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857070
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857115
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857115
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857115
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857115
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857134
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857134
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857134
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857134
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156857733
+    }
+  ],
+  "eventListeners": [],
+  "userInteractions": [
+    {
+      "type": "click",
+      "target": {
+        "text": "Run Complete Benchmark",
+        "id": "runBenchmark",
+        "className": ""
+      },
+      "timestamp": "2025-07-10T14:14:17.706Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Clear Results",
+        "id": "clearResults",
+        "className": ""
+      },
+      "timestamp": "2025-07-10T14:14:18.285Z",
+      "success": true
+    }
+  ],
+  "gpuInfo": null,
+  "screenshots": [
+    "screenshot-initial.png",
+    "screenshot-after-button-0.png",
+    "screenshot-after-button-1.png",
+    "screenshot-final.png"
+  ],
+  "video": "14 frames captured",
+  "trace": "trace.json",
+  "heapSnapshot": "heap-snapshot.json",
+  "environment": {
+    "url": "http://localhost:8080/benchmark-v2-vs-v3.html",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 800,
+      "height": 600,
+      "devicePixelRatio": 1
+    },
+    "features": {
+      "crossOriginIsolated": false,
+      "sharedArrayBuffer": true,
+      "webgl": false,
+      "webgl2": false,
+      "gpu": true,
+      "workers": true,
+      "serviceWorker": true
+    },
+    "brutal": {
+      "loaded": false,
+      "debug": false,
+      "config": null
+    }
+  },
+  "brutalFramework": null,
+  "summary": {
+    "success": true,
+    "errorCount": 0,
+    "consoleErrors": 1,
+    "consoleWarnings": 0,
+    "networkRequests": 13,
+    "networkFailures": 0,
+    "domMutations": 20,
+    "coverage": {
+      "js": "26.78%",
+      "css": "45.91%"
+    },
+    "performance": {
+      "domContentLoaded": "175ms",
+      "load": "178ms",
+      "firstPaint": "120ms",
+      "firstContentfulPaint": "120ms"
+    },
+    "memory": {
+      "heapGrowth": "1.16MB"
+    }
+  }
+}

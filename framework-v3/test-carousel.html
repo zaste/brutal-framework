@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Carousel Component Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #111;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00ff00, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .demo-section {
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .demo-section h2 {
+            margin-top: 0;
+            color: #00ff00;
+        }
+        
+        /* Carousel demos */
+        .carousel-demo {
+            height: 400px;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .carousel-demo.small {
+            height: 200px;
+        }
+        
+        .carousel-demo.large {
+            height: 600px;
+        }
+        
+        /* Slide styles */
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        
+        .slide-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .slide-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .slide-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .slide-4 {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .slide-5 {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        /* Image slides */
+        .image-slide {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-slide .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+        
+        /* Parallax elements */
+        .parallax-content {
+            position: relative;
+            height: 100%;
+        }
+        
+        .parallax-bg {
+            position: absolute;
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23222" width="100" height="100"/><circle cx="50" cy="50" r="30" fill="%23444"/></svg>') center/cover;
+            will-change: transform;
+        }
+        
+        .parallax-text {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .controls button {
+            padding: 10px 20px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .controls button:hover {
+            background: #00cc00;
+            transform: translateY(-2px);
+        }
+        
+        .controls button:active {
+            transform: translateY(0);
+        }
+        
+        /* Stats */
+        .stats {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .carousel-demo {
+                height: 300px;
+            }
+            
+            .carousel-demo.large {
+                height: 400px;
+            }
+            
+            .slide {
+                font-size: 1.5rem;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 BRUTAL Carousel Component</h1>
+        <p>GPU-accelerated carousel with gesture support and physics-based animations</p>
+        
+        <!-- Basic Carousel -->
+        <div class="demo-section">
+            <h2>Basic Carousel</h2>
+            <brutal-carousel class="carousel-demo" autoplay autoplay-delay="3000" loop>
+                <div class="slide slide-1">Slide 1</div>
+                <div class="slide slide-2">Slide 2</div>
+                <div class="slide slide-3">Slide 3</div>
+                <div class="slide slide-4">Slide 4</div>
+                <div class="slide slide-5">Slide 5</div>
+            </brutal-carousel>
+            <div class="stats" id="stats-basic"></div>
+        </div>
+        
+        <!-- Fade Effect -->
+        <div class="demo-section">
+            <h2>Fade Effect</h2>
+            <brutal-carousel class="carousel-demo" effect="fade" speed="600">
+                <div class="slide slide-1">
+                    <div>
+                        <h3>Fade Transition</h3>
+                        <p>Smooth fade between slides</p>
+                    </div>
+                </div>
+                <div class="slide slide-2">
+                    <div>
+                        <h3>GPU Accelerated</h3>
+                        <p>60fps performance</p>
+                    </div>
+                </div>
+                <div class="slide slide-3">
+                    <div>
+                        <h3>Zero Dependencies</h3>
+                        <p>Pure BRUTAL power</p>
+                    </div>
+                </div>
+            </brutal-carousel>
+        </div>
+        
+        <!-- Cube Effect -->
+        <div class="demo-section">
+            <h2>Cube Effect (WebGL)</h2>
+            <brutal-carousel class="carousel-demo" effect="cube" speed="800">
+                <div class="slide slide-1">3D Cube Effect</div>
+                <div class="slide slide-2">WebGL Powered</div>
+                <div class="slide slide-3">Hardware Accelerated</div>
+            </brutal-carousel>
+        </div>
+        
+        <!-- Multiple Slides -->
+        <div class="demo-section">
+            <h2>Multiple Slides Per View</h2>
+            <brutal-carousel class="carousel-demo small" slides-per-view="3" space-between="20">
+                <div class="slide slide-1">1</div>
+                <div class="slide slide-2">2</div>
+                <div class="slide slide-3">3</div>
+                <div class="slide slide-4">4</div>
+                <div class="slide slide-5">5</div>
+                <div class="slide slide-1">6</div>
+                <div class="slide slide-2">7</div>
+            </brutal-carousel>
+        </div>
+        
+        <!-- Parallax Effect -->
+        <div class="demo-section">
+            <h2>Parallax Effect</h2>
+            <brutal-carousel class="carousel-demo" parallax="true">
+                <div class="slide slide-1">
+                    <div class="parallax-content">
+                        <div class="parallax-bg" data-parallax="0.5"></div>
+                        <div class="parallax-text">
+                            <h3>Parallax Slide 1</h3>
+                            <p data-parallax="-0.3">Background moves slower</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide slide-2">
+                    <div class="parallax-content">
+                        <div class="parallax-bg" data-parallax="0.5"></div>
+                        <div class="parallax-text">
+                            <h3>Parallax Slide 2</h3>
+                            <p data-parallax="-0.3">Creates depth effect</p>
+                        </div>
+                    </div>
+                </div>
+            </brutal-carousel>
+        </div>
+        
+        <!-- Interactive Controls -->
+        <div class="demo-section">
+            <h2>Interactive Demo</h2>
+            <brutal-carousel id="interactive-carousel" class="carousel-demo">
+                <div class="slide slide-1">Slide 1</div>
+                <div class="slide slide-2">Slide 2</div>
+                <div class="slide slide-3">Slide 3</div>
+                <div class="slide slide-4">Slide 4</div>
+                <div class="slide slide-5">Slide 5</div>
+            </brutal-carousel>
+            
+            <div class="controls">
+                <button onclick="interactiveCarousel.previous()">Previous</button>
+                <button onclick="interactiveCarousel.next()">Next</button>
+                <button onclick="interactiveCarousel.goTo(0)">First</button>
+                <button onclick="interactiveCarousel.goTo(4)">Last</button>
+                <button onclick="toggleAutoplay()">Toggle Autoplay</button>
+                <button onclick="changeEffect()">Change Effect</button>
+            </div>
+            
+            <div class="stats" id="stats-interactive"></div>
+        </div>
+        
+        <!-- Performance Test -->
+        <div class="demo-section">
+            <h2>Performance Test (100 Slides)</h2>
+            <brutal-carousel id="performance-carousel" class="carousel-demo small" free-mode="true">
+                <!-- Slides will be generated by JavaScript -->
+            </brutal-carousel>
+            <div class="stats" id="stats-performance"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Carousel } from './04-components/ui/Carousel.js';
+        
+        // Get carousel references
+        const interactiveCarousel = document.getElementById('interactive-carousel');
+        const performanceCarousel = document.getElementById('performance-carousel');
+        
+        // Generate performance test slides
+        for (let i = 0; i < 100; i++) {
+            const slide = document.createElement('div');
+            slide.className = `slide slide-${(i % 5) + 1}`;
+            slide.textContent = `Slide ${i + 1}`;
+            performanceCarousel.appendChild(slide);
+        }
+        
+        // Update stats
+        function updateStats(carouselId, statsId) {
+            const carousel = document.getElementById(carouselId);
+            const stats = document.getElementById(statsId);
+            
+            if (carousel && stats) {
+                stats.innerHTML = `
+                    Current: ${carousel.currentIndex + 1} / ${carousel.totalSlides}<br>
+                    FPS: ${carousel._fps?.toFixed(1) || 'N/A'}<br>
+                    Touch: ${carousel._config?.touch ? 'Enabled' : 'Disabled'}<br>
+                    GPU: ${carousel._config?.gpuAcceleration ? 'Enabled' : 'Disabled'}
+                `;
+            }
+        }
+        
+        // Toggle autoplay
+        window.toggleAutoplay = function() {
+            if (interactiveCarousel._config.autoplay) {
+                interactiveCarousel.pause();
+            } else {
+                interactiveCarousel.play();
+            }
+        };
+        
+        // Change effect
+        const effects = ['slide', 'fade', 'cube', 'flip'];
+        let currentEffectIndex = 0;
+        
+        window.changeEffect = function() {
+            currentEffectIndex = (currentEffectIndex + 1) % effects.length;
+            interactiveCarousel.setAttribute('effect', effects[currentEffectIndex]);
+            alert(`Effect changed to: ${effects[currentEffectIndex]}`);
+        };
+        
+        // Listen to carousel events
+        interactiveCarousel.addEventListener('beforeChange', (e) => {
+            console.log('Before change:', e.detail);
+        });
+        
+        interactiveCarousel.addEventListener('afterChange', (e) => {
+            console.log('After change:', e.detail);
+            updateStats('interactive-carousel', 'stats-interactive');
+        });
+        
+        // Update stats periodically
+        setInterval(() => {
+            updateStats('interactive-carousel', 'stats-interactive');
+            updateStats('performance-carousel', 'stats-performance');
+        }, 100);
+        
+        // Initial stats update
+        setTimeout(() => {
+            updateStats('interactive-carousel', 'stats-interactive');
+            updateStats('performance-carousel', 'stats-performance');
+        }, 1000);
+        
+        // Test gesture support
+        console.log('Carousel test loaded. Try swiping on mobile or dragging with mouse!');
+    </script>
+</body>
+</html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Worker System Demo</title>
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #1a1a1a;
+            --text: #ffffff;
+            --accent: #00ff88;
+            --error: #ff0044;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--accent), #00aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .demo-card {
+            background: #111;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .demo-card h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        button:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            background: #000;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            background: #222;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .canvas-container {
+            margin-top: 15px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 BRUTAL Worker System Demo</h1>
+        <p style="color: #888; margin-bottom: 30px;">
+            Demonstrating WorkerPool, SharedMemory, and MessageBroker in action
+        </p>
+
+        <!-- System Status -->
+        <div class="section">
+            <h2>System Status</h2>
+            <div class="stats" id="systemStats">
+                <div class="stat">
+                    <div class="stat-value" id="activeWorkers">0</div>
+                    <div class="stat-label">Active Workers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="tasksCompleted">0</div>
+                    <div class="stat-label">Tasks Completed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="avgTaskTime">0ms</div>
+                    <div class="stat-label">Avg Task Time</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="memoryUsed">0MB</div>
+                    <div class="stat-label">Memory Used</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Render Worker Demos -->
+        <div class="section">
+            <h2>Render Worker Demos</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>VDOM Diffing</h3>
+                    <button id="vdomDiffBtn">Run VDOM Diff</button>
+                    <button id="vdomBatchBtn">Batch Render (100 components)</button>
+                    <div class="progress">
+                        <div class="progress-bar" id="vdomProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="result" id="vdomResult"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compute Worker Demos -->
+        <div class="section">
+            <h2>Compute Worker Demos</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>Prime Calculation</h3>
+                    <button id="primeBtn">Calculate Primes to 1M</button>
+                    <button id="sortBtn">Sort 100K Numbers</button>
+                    <div class="progress">
+                        <div class="progress-bar" id="computeProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="result" id="computeResult"></div>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Matrix Operations</h3>
+                    <button id="matrixBtn">Multiply 100x100 Matrices</button>
+                    <button id="physicsBtn">Physics Simulation</button>
+                    <div class="result" id="matrixResult"></div>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Image Processing</h3>
+                    <button id="imageBtn">Process Image</button>
+                    <select id="imageFilter">
+                        <option value="grayscale">Grayscale</option>
+                        <option value="blur">Blur</option>
+                        <option value="sharpen">Sharpen</option>
+                    </select>
+                    <div class="canvas-container">
+                        <canvas id="imageCanvas" width="300" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Worker Demos -->
+        <div class="section">
+            <h2>Data Worker Demos</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>State Management</h3>
+                    <button id="dataSetBtn">Store 1000 Records</button>
+                    <button id="dataQueryBtn">Query Data</button>
+                    <button id="dataTransactionBtn">Run Transaction</button>
+                    <div class="result" id="dataResult"></div>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Real-time Sync</h3>
+                    <button id="dataSyncBtn">Start Data Sync</button>
+                    <button id="dataStreamBtn">Stream Changes</button>
+                    <div class="result" id="syncResult"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stress Test -->
+        <div class="section">
+            <h2>Stress Test</h2>
+            <div class="demo-card">
+                <h3>Parallel Execution</h3>
+                <button id="stressTestBtn">Run 1000 Parallel Tasks</button>
+                <button id="stopTestBtn" disabled>Stop Test</button>
+                <div class="progress">
+                    <div class="progress-bar" id="stressProgress" style="width: 0%"></div>
+                </div>
+                <div class="result" id="stressResult"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the enhanced WebWorkerComponent
+        import { WebWorkerComponent } from '../04-components/base/WebWorkerComponent-Enhanced.js';
+        
+        // Create worker component instance
+        class DemoWorkerComponent extends WebWorkerComponent {
+            constructor() {
+                super();
+            }
+        }
+        
+        // Define custom element
+        customElements.define('demo-worker', DemoWorkerComponent);
+        
+        // Create instance
+        const workerComponent = new DemoWorkerComponent();
+        document.body.appendChild(workerComponent);
+        
+        // Initialize worker system
+        await workerComponent.initialize({
+            minWorkers: 2,
+            maxWorkers: 8,
+            sharedMemorySize: 1024 * 1024 * 32 // 32MB
+        });
+        
+        // Update stats periodically
+        setInterval(() => {
+            const stats = workerComponent.getStats();
+            
+            if (stats.workerPool) {
+                updateUI('activeWorkers', stats.workerPool.workers.total);
+                updateUI('tasksCompleted', stats.workerPool.tasks.completed);
+                updateUI('avgTaskTime', stats.workerPool.tasks.averageTime);
+            }
+            
+            if (stats.sharedMemory) {
+                const usedMB = (stats.sharedMemory.usedSize / 1024 / 1024).toFixed(2);
+                updateUI('memoryUsed', usedMB + 'MB');
+            }
+        }, 1000);
+        
+        // Helper functions
+        function updateUI(id, value) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        }
+        
+        function log(resultId, message) {
+            const element = document.getElementById(resultId);
+            if (element) {
+                element.textContent = typeof message === 'object' ? 
+                    JSON.stringify(message, null, 2) : message;
+            }
+        }
+        
+        function setProgress(progressId, percent) {
+            document.getElementById(progressId).style.width = percent + '%';
+        }
+        
+        // VDOM Demos
+        document.getElementById('vdomDiffBtn').addEventListener('click', async () => {
+            log('vdomResult', 'Running VDOM diff...');
+            
+            const oldVDOM = {
+                type: 'div',
+                props: { className: 'container' },
+                children: [
+                    { type: 'h1', props: { id: 'title' }, children: ['Hello'] },
+                    { type: 'p', props: {}, children: ['World'] }
+                ]
+            };
+            
+            const newVDOM = {
+                type: 'div',
+                props: { className: 'container updated' },
+                children: [
+                    { type: 'h1', props: { id: 'title' }, children: ['Hello BRUTAL'] },
+                    { type: 'p', props: {}, children: ['Framework'] },
+                    { type: 'span', props: {}, children: ['New!'] }
+                ]
+            };
+            
+            try {
+                const result = await workerComponent.diffVDOM(oldVDOM, newVDOM, 'demo-component');
+                log('vdomResult', `Diff completed!\nPatches: ${result.patches.length}\n` +
+                    `Time: ${result.stats.diffTime.toFixed(2)}ms\n\n` +
+                    JSON.stringify(result.patches, null, 2));
+            } catch (error) {
+                log('vdomResult', `Error: ${error.message}`);
+            }
+        });
+        
+        document.getElementById('vdomBatchBtn').addEventListener('click', async () => {
+            log('vdomResult', 'Batch rendering 100 components...');
+            setProgress('vdomProgress', 0);
+            
+            const components = [];
+            for (let i = 0; i < 100; i++) {
+                components.push({
+                    type: `Component${i}`,
+                    props: { value: Math.random() },
+                    state: { counter: i }
+                });
+            }
+            
+            // Listen for progress
+            const progressHandler = (e) => {
+                setProgress('vdomProgress', e.detail.progress * 100);
+            };
+            workerComponent.addEventListener('workerprogress', progressHandler);
+            
+            try {
+                const result = await workerComponent.batchRender(components, true);
+                log('vdomResult', `Batch render completed!\n` +
+                    `Components: ${result.results.length}\n` +
+                    `Total time: ${result.stats.batchTime.toFixed(2)}ms\n` +
+                    `Avg per component: ${result.stats.avgRenderTime.toFixed(2)}ms`);
+            } catch (error) {
+                log('vdomResult', `Error: ${error.message}`);
+            } finally {
+                workerComponent.removeEventListener('workerprogress', progressHandler);
+                setProgress('vdomProgress', 100);
+            }
+        });
+        
+        // Compute Demos
+        document.getElementById('primeBtn').addEventListener('click', async () => {
+            log('computeResult', 'Calculating primes to 1,000,000...');
+            
+            try {
+                const result = await workerComponent.calculatePrimes(1000000);
+                log('computeResult', `Prime calculation completed!\n` +
+                    `Count: ${result.count.toLocaleString()} primes\n` +
+                    `Time: ${result.stats.computeTime.toFixed(2)}ms\n` +
+                    `Density: ${(result.stats.density * 100).toFixed(2)}%`);
+            } catch (error) {
+                log('computeResult', `Error: ${error.message}`);
+            }
+        });
+        
+        document.getElementById('sortBtn').addEventListener('click', async () => {
+            log('computeResult', 'Sorting 100,000 random numbers...');
+            
+            // Generate random array
+            const array = new Array(100000).fill(0).map(() => Math.random() * 1000000);
+            
+            try {
+                const result = await workerComponent.sortArray(array, 'quicksort');
+                log('computeResult', `Sort completed!\n` +
+                    `Algorithm: ${result.stats.algorithm}\n` +
+                    `Size: ${result.stats.size.toLocaleString()}\n` +
+                    `Time: ${result.stats.computeTime.toFixed(2)}ms\n` +
+                    `First 10: [${result.sorted.slice(0, 10).map(n => n.toFixed(2)).join(', ')}]`);
+            } catch (error) {
+                log('computeResult', `Error: ${error.message}`);
+            }
+        });
+        
+        document.getElementById('matrixBtn').addEventListener('click', async () => {
+            log('matrixResult', 'Multiplying 100x100 matrices...');
+            
+            // Generate random matrices
+            const size = 100;
+            const matrixA = Array(size).fill(0).map(() => 
+                Array(size).fill(0).map(() => Math.random())
+            );
+            const matrixB = Array(size).fill(0).map(() => 
+                Array(size).fill(0).map(() => Math.random())
+            );
+            
+            try {
+                const result = await workerComponent.matrixMultiply(matrixA, matrixB);
+                log('matrixResult', `Matrix multiplication completed!\n` +
+                    `Size: ${size}x${size}\n` +
+                    `Operations: ${result.stats.operations.toLocaleString()}\n` +
+                    `Time: ${result.stats.computeTime.toFixed(2)}ms\n` +
+                    `GFLOPS: ${(result.stats.flops / 1e9).toFixed(2)}`);
+            } catch (error) {
+                log('matrixResult', `Error: ${error.message}`);
+            }
+        });
+        
+        document.getElementById('physicsBtn').addEventListener('click', async () => {
+            log('matrixResult', 'Running physics simulation...');
+            
+            // Create particles
+            const particles = Array(100).fill(0).map((_, i) => ({
+                x: Math.random() * 100,
+                y: Math.random() * 100,
+                z: Math.random() * 100,
+                vx: (Math.random() - 0.5) * 10,
+                vy: (Math.random() - 0.5) * 10,
+                vz: (Math.random() - 0.5) * 10,
+                mass: 1 + Math.random() * 9,
+                radius: 1
+            }));
+            
+            const forces = [
+                { type: 'gravity', g: -9.81 },
+                { type: 'drag', coefficient: 0.1 }
+            ];
+            
+            try {
+                const result = await workerComponent.compute('PHYSICS_SIMULATION', {
+                    particles,
+                    forces,
+                    timestep: 0.016,
+                    iterations: 1000
+                });
+                
+                log('matrixResult', `Physics simulation completed!\n` +
+                    `Particles: ${result.finalState.length}\n` +
+                    `Iterations: ${result.stats.iterations}\n` +
+                    `Simulated time: ${result.stats.simulatedTime.toFixed(2)}s\n` +
+                    `Compute time: ${result.stats.computeTime.toFixed(2)}ms`);
+            } catch (error) {
+                log('matrixResult', `Error: ${error.message}`);
+            }
+        });
+        
+        // Image Processing Demo
+        const canvas = document.getElementById('imageCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Create test image
+        function createTestImage() {
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#00ff88');
+            gradient.addColorStop(0.5, '#0088ff');
+            gradient.addColorStop(1, '#ff0088');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 30px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('BRUTAL', canvas.width / 2, canvas.height / 2);
+        }
+        
+        createTestImage();
+        
+        document.getElementById('imageBtn').addEventListener('click', async () => {
+            const filter = document.getElementById('imageFilter').value;
+            
+            // Get image data
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            const operations = [];
+            switch (filter) {
+                case 'grayscale':
+                    operations.push({ type: 'grayscale' });
+                    break;
+                case 'blur':
+                    operations.push({ type: 'blur', radius: 3 });
+                    break;
+                case 'sharpen':
+                    operations.push({ type: 'sharpen', amount: 0.5 });
+                    break;
+            }
+            
+            try {
+                const result = await workerComponent.processImage(imageData, operations);
+                
+                // Draw result
+                ctx.putImageData(result.imageData, 0, 0);
+                
+                log('computeResult', `Image processing completed!\n` +
+                    `Filter: ${filter}\n` +
+                    `Pixels: ${result.stats.pixels.toLocaleString()}\n` +
+                    `Time: ${result.stats.computeTime.toFixed(2)}ms`);
+            } catch (error) {
+                log('computeResult', `Error: ${error.message}`);
+            }
+        });
+        
+        // Data Worker Demos
+        document.getElementById('dataSetBtn').addEventListener('click', async () => {
+            log('dataResult', 'Storing 1000 records...');
+            
+            const startTime = performance.now();
+            const promises = [];
+            
+            for (let i = 0; i < 1000; i++) {
+                promises.push(workerComponent.setData(`record-${i}`, {
+                    id: i,
+                    name: `Record ${i}`,
+                    value: Math.random() * 1000,
+                    timestamp: Date.now(),
+                    tags: ['demo', 'test', `batch-${Math.floor(i / 100)}`]
+                }));
+            }
+            
+            try {
+                await Promise.all(promises);
+                const duration = performance.now() - startTime;
+                
+                log('dataResult', `Stored 1000 records!\n` +
+                    `Total time: ${duration.toFixed(2)}ms\n` +
+                    `Avg per record: ${(duration / 1000).toFixed(2)}ms`);
+            } catch (error) {
+                log('dataResult', `Error: ${error.message}`);
+            }
+        });
+        
+        document.getElementById('dataQueryBtn').addEventListener('click', async () => {
+            log('dataResult', 'Querying data...');
+            
+            try {
+                const result = await workerComponent.queryData({
+                    value: { $gt: 500 }
+                }, {
+                    sort: { value: 'desc' },
+                    limit: 10,
+                    projection: ['id', 'name', 'value']
+                });
+                
+                log('dataResult', `Query completed!\n` +
+                    `Total matches: ${result.metadata.total}\n` +
+                    `Returned: ${result.metadata.returned}\n` +
+                    `Time: ${result.stats.operationTime.toFixed(2)}ms\n\n` +
+                    `Results:\n${JSON.stringify(result.results, null, 2)}`);
+            } catch (error) {
+                log('dataResult', `Error: ${error.message}`);
+            }
+        });
+        
+        document.getElementById('dataTransactionBtn').addEventListener('click', async () => {
+            log('dataResult', 'Running transaction...');
+            
+            const operations = [
+                {
+                    type: 'SET',
+                    params: {
+                        key: 'tx-test-1',
+                        value: { status: 'processing' }
+                    }
+                },
+                {
+                    type: 'UPDATE',
+                    params: {
+                        key: 'record-0',
+                        updates: { processed: true }
+                    }
+                },
+                {
+                    type: 'SET',
+                    params: {
+                        key: 'tx-test-2',
+                        value: { status: 'complete' }
+                    }
+                }
+            ];
+            
+            try {
+                const result = await workerComponent.transaction(operations);
+                
+                log('dataResult', `Transaction completed!\n` +
+                    `Transaction ID: ${result.transactionId}\n` +
+                    `Operations: ${result.results.length}\n` +
+                    `Time: ${result.stats.operationTime.toFixed(2)}ms`);
+            } catch (error) {
+                log('dataResult', `Error: ${error.message}`);
+            }
+        });
+        
+        // Stress Test
+        let stressTestRunning = false;
+        
+        document.getElementById('stressTestBtn').addEventListener('click', async () => {
+            stressTestRunning = true;
+            document.getElementById('stressTestBtn').disabled = true;
+            document.getElementById('stopTestBtn').disabled = false;
+            
+            log('stressResult', 'Starting stress test...');
+            setProgress('stressProgress', 0);
+            
+            const tasks = [];
+            const startTime = performance.now();
+            let completed = 0;
+            
+            for (let i = 0; i < 1000 && stressTestRunning; i++) {
+                // Mix of different task types
+                const taskType = i % 3;
+                let task;
+                
+                switch (taskType) {
+                    case 0:
+                        task = workerComponent.calculatePrimes(10000);
+                        break;
+                    case 1:
+                        task = workerComponent.sortArray(
+                            Array(1000).fill(0).map(() => Math.random())
+                        );
+                        break;
+                    case 2:
+                        task = workerComponent.setData(`stress-${i}`, {
+                            value: Math.random()
+                        });
+                        break;
+                }
+                
+                task.then(() => {
+                    completed++;
+                    setProgress('stressProgress', (completed / 1000) * 100);
+                });
+                
+                tasks.push(task);
+                
+                // Small delay to avoid overwhelming
+                if (i % 50 === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }
+            }
+            
+            try {
+                await Promise.all(tasks);
+                const duration = performance.now() - startTime;
+                
+                log('stressResult', `Stress test completed!\n` +
+                    `Tasks: ${completed}\n` +
+                    `Total time: ${duration.toFixed(2)}ms\n` +
+                    `Throughput: ${(completed / (duration / 1000)).toFixed(2)} tasks/sec\n` +
+                    `Avg per task: ${(duration / completed).toFixed(2)}ms`);
+            } catch (error) {
+                log('stressResult', `Error: ${error.message}`);
+            } finally {
+                stressTestRunning = false;
+                document.getElementById('stressTestBtn').disabled = false;
+                document.getElementById('stopTestBtn').disabled = true;
+            }
+        });
+        
+        document.getElementById('stopTestBtn').addEventListener('click', () => {
+            stressTestRunning = false;
+        });
+        
+        console.log('BRUTAL Worker System Demo ready!');
+    </script>
+</body>
+</html>

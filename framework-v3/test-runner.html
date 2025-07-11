@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Test Runner</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        
+        h1 {
+            color: #0ff;
+            margin: 0 0 20px 0;
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #output {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .pass { color: #0f0; }
+        .fail { color: #f00; }
+        .warn { color: #ff0; }
+        .info { color: #0ff; }
+        
+        .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 200px;
+        }
+        
+        .status h3 {
+            margin: 0 0 10px 0;
+            color: #0ff;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+        }
+        
+        .api-status {
+            margin: 20px 0;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+        
+        .api-status h3 {
+            margin: 0 0 10px 0;
+            color: #0ff;
+        }
+        
+        .api-item {
+            margin: 5px 0;
+        }
+        
+        .api-available {
+            color: #0f0;
+        }
+        
+        .api-unavailable {
+            color: #f00;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 BRUTAL Framework V3 - Test Runner</h1>
+    
+    <div class="api-status">
+        <h3>API Availability</h3>
+        <div id="api-checks"></div>
+    </div>
+    
+    <div class="controls">
+        <button id="runAll" onclick="runAllTests()">Run All Tests</button>
+        <button id="runComponent" onclick="runSingleTest('component')">Test Component</button>
+        <button id="runState" onclick="runSingleTest('state')">Test State</button>
+        <button id="runRouter" onclick="runSingleTest('router')">Test Router</button>
+        <button id="runGems" onclick="runSingleTest('gems')">Test Performance Gems</button>
+        <button id="clear" onclick="clearOutput()">Clear Output</button>
+    </div>
+    
+    <div id="output">Ready to run tests...</div>
+    
+    <div class="status">
+        <h3>Test Status</h3>
+        <div class="metric">
+            <span>Total:</span>
+            <span class="metric-value" id="totalTests">0</span>
+        </div>
+        <div class="metric">
+            <span>Passed:</span>
+            <span class="metric-value pass" id="passedTests">0</span>
+        </div>
+        <div class="metric">
+            <span>Failed:</span>
+            <span class="metric-value fail" id="failedTests">0</span>
+        </div>
+        <div class="metric">
+            <span>Time:</span>
+            <span class="metric-value" id="testTime">0ms</span>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { runAllTests } from './run-all-tests.js';
+        import runComponentTests from './tests/01-test-component.js';
+        import runStateTests from './tests/02-test-state.js';
+        import runRouterTests from './tests/03-test-router.js';
+        import runPerformanceGemsTests from './tests/04-test-performance-gems.js';
+        
+        // Make functions global
+        window.runAllTests = async function() {
+            disableButtons(true);
+            clearOutput();
+            
+            const originalLog = console.log;
+            const originalError = console.error;
+            
+            // Capture console output
+            console.log = (...args) => {
+                appendOutput(args.join(' '));
+                originalLog(...args);
+            };
+            
+            console.error = (...args) => {
+                appendOutput(args.join(' '), 'fail');
+                originalError(...args);
+            };
+            
+            try {
+                const results = await runAllTests();
+                updateStatus(results.summary);
+            } catch (error) {
+                appendOutput(`\n❌ Test suite failed: ${error.message}`, 'fail');
+            } finally {
+                console.log = originalLog;
+                console.error = originalError;
+                disableButtons(false);
+            }
+        };
+        
+        window.runSingleTest = async function(testType) {
+            disableButtons(true);
+            clearOutput();
+            
+            const originalLog = console.log;
+            const originalError = console.error;
+            
+            console.log = (...args) => {
+                appendOutput(args.join(' '));
+                originalLog(...args);
+            };
+            
+            console.error = (...args) => {
+                appendOutput(args.join(' '), 'fail');
+                originalError(...args);
+            };
+            
+            try {
+                let results;
+                switch(testType) {
+                    case 'component':
+                        results = await runComponentTests();
+                        break;
+                    case 'state':
+                        results = await runStateTests();
+                        break;
+                    case 'router':
+                        results = await runRouterTests();
+                        break;
+                    case 'gems':
+                        results = await runPerformanceGemsTests();
+                        break;
+                }
+                
+                updateStatus({
+                    totalTests: results.total,
+                    totalPassed: results.passed,
+                    totalFailed: results.failed,
+                    totalTime: 0
+                });
+            } catch (error) {
+                appendOutput(`\n❌ Test failed: ${error.message}`, 'fail');
+            } finally {
+                console.log = originalLog;
+                console.error = originalError;
+                disableButtons(false);
+            }
+        };
+        
+        function appendOutput(text, className = '') {
+            const output = document.getElementById('output');
+            
+            // Apply color classes
+            if (text.includes('✅')) className = 'pass';
+            else if (text.includes('❌')) className = 'fail';
+            else if (text.includes('⚠️')) className = 'warn';
+            else if (text.includes('📋') || text.includes('📊')) className = 'info';
+            
+            if (className) {
+                const span = document.createElement('span');
+                span.className = className;
+                span.textContent = text + '\n';
+                output.appendChild(span);
+            } else {
+                output.textContent += text + '\n';
+            }
+            
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        window.clearOutput = function() {
+            document.getElementById('output').textContent = '';
+            updateStatus({
+                totalTests: 0,
+                totalPassed: 0,
+                totalFailed: 0,
+                totalTime: 0
+            });
+        };
+        
+        function updateStatus(summary) {
+            document.getElementById('totalTests').textContent = summary.totalTests;
+            document.getElementById('passedTests').textContent = summary.totalPassed;
+            document.getElementById('failedTests').textContent = summary.totalFailed;
+            document.getElementById('testTime').textContent = 
+                summary.totalTime ? `${summary.totalTime.toFixed(0)}ms` : '0ms';
+        }
+        
+        function disableButtons(disabled) {
+            document.querySelectorAll('button').forEach(btn => {
+                if (btn.id !== 'clear') {
+                    btn.disabled = disabled;
+                }
+            });
+        }
+        
+        // Check API availability on load
+        function checkAPIs() {
+            const checks = [
+                {
+                    name: 'SharedArrayBuffer',
+                    available: typeof SharedArrayBuffer !== 'undefined'
+                },
+                {
+                    name: 'crossOriginIsolated',
+                    available: typeof crossOriginIsolated !== 'undefined' ? crossOriginIsolated : false
+                },
+                {
+                    name: 'Navigation API',
+                    available: 'navigation' in window
+                },
+                {
+                    name: 'Constructable Stylesheets',
+                    available: typeof CSSStyleSheet !== 'undefined' && document.adoptedStyleSheets !== undefined
+                },
+                {
+                    name: 'requestIdleCallback',
+                    available: 'requestIdleCallback' in window
+                },
+                {
+                    name: 'Web Crypto API',
+                    available: typeof crypto !== 'undefined' && crypto.subtle !== undefined
+                },
+                {
+                    name: 'IntersectionObserver',
+                    available: 'IntersectionObserver' in window
+                },
+                {
+                    name: 'ResizeObserver',
+                    available: 'ResizeObserver' in window
+                },
+                {
+                    name: 'WeakMap',
+                    available: typeof WeakMap !== 'undefined'
+                },
+                {
+                    name: 'Atomics',
+                    available: typeof Atomics !== 'undefined'
+                }
+            ];
+            
+            const container = document.getElementById('api-checks');
+            container.innerHTML = checks.map(check => `
+                <div class="api-item">
+                    <span class="${check.available ? 'api-available' : 'api-unavailable'}">
+                        ${check.available ? '✅' : '❌'} ${check.name}
+                    </span>
+                </div>
+            `).join('');
+        }
+        
+        // Check APIs on load
+        checkAPIs();
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'Enter':
+                        runAllTests();
+                        break;
+                    case 'l':
+                        clearOutput();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

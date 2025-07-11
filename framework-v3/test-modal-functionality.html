@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Modal Functionality Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        
+        .test-case {
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .test-status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .status-pass {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-fail {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .status-pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 4px;
+        }
+        
+        button:hover {
+            background: #1976d2;
+        }
+        
+        #console {
+            background: #263238;
+            color: #aed581;
+            padding: 16px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .error {
+            color: #ff5252;
+        }
+        
+        .success {
+            color: #69f0ae;
+        }
+        
+        .warning {
+            color: #ffd740;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Modal Functionality Test</h1>
+        
+        <div class="test-section">
+            <h2>Basic Functionality Tests</h2>
+            <div class="test-grid">
+                <div class="test-case">
+                    <h3>1. Open/Close Test</h3>
+                    <button onclick="testOpenClose()">Run Test</button>
+                    <div class="test-status status-pending" id="status-1">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <h3>2. Animation Rendering</h3>
+                    <button onclick="testAnimations()">Run Test</button>
+                    <div class="test-status status-pending" id="status-2">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <h3>3. Event System</h3>
+                    <button onclick="testEvents()">Run Test</button>
+                    <div class="test-status status-pending" id="status-3">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <h3>4. Keyboard Controls</h3>
+                    <button onclick="testKeyboard()">Run Test</button>
+                    <div class="test-status status-pending" id="status-4">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <h3>5. Focus Management</h3>
+                    <button onclick="testFocus()">Run Test</button>
+                    <div class="test-status status-pending" id="status-5">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <h3>6. WebGL Effects</h3>
+                    <button onclick="testWebGL()">Run Test</button>
+                    <div class="test-status status-pending" id="status-6">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <h3>7. Multiple Modals</h3>
+                    <button onclick="testMultiple()">Run Test</button>
+                    <div class="test-status status-pending" id="status-7">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <h3>8. Configuration</h3>
+                    <button onclick="testConfig()">Run Test</button>
+                    <div class="test-status status-pending" id="status-8">Pending...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Console Output</h2>
+            <div id="console"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Manual Tests</h2>
+            <button onclick="openTestModal()">Open Test Modal</button>
+            <button onclick="openAllAnimations()">Test All Animations</button>
+            <button onclick="openNested()">Test Nested Modals</button>
+            <button onclick="runAllTests()">Run All Tests</button>
+        </div>
+    </div>
+    
+    <!-- Test Modals -->
+    <brutal-modal id="testModal" title="Test Modal">
+        <div style="padding: 20px;">
+            <p>This is a test modal.</p>
+            <input type="text" id="testInput" placeholder="Test focus">
+            <button id="testButton">Test Button</button>
+        </div>
+    </brutal-modal>
+    
+    <brutal-modal id="animModal" title="Animation Test">
+        <p>Testing animation: <span id="animType"></span></p>
+    </brutal-modal>
+    
+    <brutal-modal id="nested1" title="Parent Modal">
+        <p>This is the parent modal.</p>
+        <button onclick="document.getElementById('nested2').open()">Open Child</button>
+    </brutal-modal>
+    
+    <brutal-modal id="nested2" title="Child Modal">
+        <p>This is the child modal.</p>
+    </brutal-modal>
+
+    <script type="module">
+        import { Modal } from './04-components/ui/Modal.js';
+        
+        let testResults = {};
+        
+        // Console logging
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : '';
+            console.innerHTML += `<span class="${className}">[${timestamp}] ${message}\n</span>`;
+            console.scrollTop = console.scrollHeight;
+        }
+        
+        function updateStatus(testId, passed, message) {
+            const status = document.getElementById(`status-${testId}`);
+            status.className = `test-status ${passed ? 'status-pass' : 'status-fail'}`;
+            status.textContent = message;
+            testResults[testId] = passed;
+        }
+        
+        // Test 1: Open/Close
+        window.testOpenClose = async () => {
+            log('Test 1: Testing open/close functionality...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                // Test opening
+                log('Opening modal...');
+                await modal.open();
+                
+                // Check if modal is rendered
+                const modalContainer = modal.shadowRoot.querySelector('.modal-container');
+                if (!modalContainer) {
+                    throw new Error('Modal container not found in shadow DOM');
+                }
+                
+                // Check if modal is visible
+                if (!modal.isOpen) {
+                    throw new Error('Modal isOpen property is false');
+                }
+                
+                log('Modal opened successfully', 'success');
+                
+                // Wait a bit
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Test closing
+                log('Closing modal...');
+                await modal.close();
+                
+                // Check if modal is closed
+                if (modal.isOpen) {
+                    throw new Error('Modal isOpen property is still true');
+                }
+                
+                // Check if modal container is removed
+                const closedContainer = modal.shadowRoot.querySelector('.modal-container');
+                if (closedContainer) {
+                    throw new Error('Modal container still exists after close');
+                }
+                
+                log('Modal closed successfully', 'success');
+                updateStatus(1, true, '✓ Open/Close working');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+                updateStatus(1, false, `✗ ${error.message}`);
+            }
+        };
+        
+        // Test 2: Animations
+        window.testAnimations = async () => {
+            log('Test 2: Testing animations...');
+            const modal = document.getElementById('animModal');
+            const animations = ['scale', 'slide', 'flip', 'rotate', 'fade'];
+            
+            try {
+                for (const anim of animations) {
+                    log(`Testing ${anim} animation...`);
+                    modal.setAttribute('animation', anim);
+                    document.getElementById('animType').textContent = anim;
+                    
+                    await modal.open();
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                    await modal.close();
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+                
+                log('All animations completed successfully', 'success');
+                updateStatus(2, true, '✓ All animations working');
+                
+            } catch (error) {
+                log(`Animation error: ${error.message}`, 'error');
+                updateStatus(2, false, `✗ ${error.message}`);
+            }
+        };
+        
+        // Test 3: Events
+        window.testEvents = async () => {
+            log('Test 3: Testing event system...');
+            const modal = document.getElementById('testModal');
+            let openFired = false;
+            let closeFired = false;
+            
+            const openHandler = () => {
+                openFired = true;
+                log('Open event fired', 'success');
+            };
+            
+            const closeHandler = () => {
+                closeFired = true;
+                log('Close event fired', 'success');
+            };
+            
+            modal.addEventListener('open', openHandler);
+            modal.addEventListener('close', closeHandler);
+            
+            try {
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await modal.close();
+                
+                if (!openFired) throw new Error('Open event not fired');
+                if (!closeFired) throw new Error('Close event not fired');
+                
+                updateStatus(3, true, '✓ Events working');
+                
+            } catch (error) {
+                log(`Event error: ${error.message}`, 'error');
+                updateStatus(3, false, `✗ ${error.message}`);
+            } finally {
+                modal.removeEventListener('open', openHandler);
+                modal.removeEventListener('close', closeHandler);
+            }
+        };
+        
+        // Test 4: Keyboard
+        window.testKeyboard = async () => {
+            log('Test 4: Testing keyboard controls...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                // Simulate ESC key
+                const escEvent = new KeyboardEvent('keydown', { 
+                    key: 'Escape',
+                    bubbles: true
+                });
+                document.dispatchEvent(escEvent);
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                if (modal.isOpen) {
+                    throw new Error('ESC key did not close modal');
+                }
+                
+                log('ESC key working', 'success');
+                updateStatus(4, true, '✓ Keyboard controls working');
+                
+            } catch (error) {
+                log(`Keyboard error: ${error.message}`, 'error');
+                updateStatus(4, false, `✗ ${error.message}`);
+            }
+        };
+        
+        // Test 5: Focus Management
+        window.testFocus = async () => {
+            log('Test 5: Testing focus management...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                const previousFocus = document.activeElement;
+                await modal.open();
+                
+                // Check if focus moved into modal
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                const activeElement = document.activeElement;
+                const shadowActive = modal.shadowRoot.activeElement;
+                
+                log(`Active element: ${activeElement?.tagName || 'none'}`);
+                log(`Shadow active: ${shadowActive?.tagName || 'none'}`);
+                
+                // Try to focus the input
+                const input = document.getElementById('testInput');
+                if (input) {
+                    input.focus();
+                    log('Focused test input', 'success');
+                }
+                
+                await modal.close();
+                
+                // Check focus restoration
+                if (document.activeElement !== previousFocus) {
+                    log('Warning: Focus not restored to previous element', 'warning');
+                }
+                
+                updateStatus(5, true, '✓ Focus management working');
+                
+            } catch (error) {
+                log(`Focus error: ${error.message}`, 'error');
+                updateStatus(5, false, `✗ ${error.message}`);
+            }
+        };
+        
+        // Test 6: WebGL
+        window.testWebGL = async () => {
+            log('Test 6: Testing WebGL effects...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                modal.setAttribute('backdrop', 'blur');
+                
+                const hasWebGL = modal.config.gpuEffects;
+                log(`WebGL support: ${hasWebGL}`);
+                
+                await modal.open();
+                
+                // Check for backdrop canvas
+                const canvas = modal.shadowRoot.querySelector('.modal-backdrop-canvas');
+                if (hasWebGL && !canvas) {
+                    log('Warning: WebGL enabled but no canvas found', 'warning');
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                await modal.close();
+                
+                updateStatus(6, true, `✓ WebGL ${hasWebGL ? 'active' : 'fallback'}`);
+                
+            } catch (error) {
+                log(`WebGL error: ${error.message}`, 'error');
+                updateStatus(6, false, `✗ ${error.message}`);
+            }
+        };
+        
+        // Test 7: Multiple Modals
+        window.testMultiple = async () => {
+            log('Test 7: Testing multiple modals...');
+            
+            try {
+                const modal1 = document.getElementById('nested1');
+                const modal2 = document.getElementById('nested2');
+                
+                await modal1.open();
+                log('Parent modal opened');
+                
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                await modal2.open();
+                log('Child modal opened');
+                
+                // Check z-index stacking
+                const container1 = modal1.shadowRoot.querySelector('.modal-container');
+                const container2 = modal2.shadowRoot.querySelector('.modal-container');
+                
+                const z1 = parseInt(window.getComputedStyle(container1).zIndex);
+                const z2 = parseInt(window.getComputedStyle(container2).zIndex);
+                
+                log(`Parent z-index: ${z1}, Child z-index: ${z2}`);
+                
+                if (z2 <= z1) {
+                    throw new Error('Child modal z-index not higher than parent');
+                }
+                
+                await modal2.close();
+                await modal1.close();
+                
+                updateStatus(7, true, '✓ Multiple modals working');
+                
+            } catch (error) {
+                log(`Multiple modal error: ${error.message}`, 'error');
+                updateStatus(7, false, `✗ ${error.message}`);
+            }
+        };
+        
+        // Test 8: Configuration
+        window.testConfig = async () => {
+            log('Test 8: Testing configuration...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                // Test config getter
+                const config = modal.config;
+                log(`Initial config: ${JSON.stringify(config)}`);
+                
+                // Test config setter
+                modal.setConfig('closeOnOverlay', false);
+                modal.setConfig('closeOnEscape', false);
+                
+                await modal.open();
+                
+                // Try to close with ESC
+                const escEvent = new KeyboardEvent('keydown', { 
+                    key: 'Escape',
+                    bubbles: true
+                });
+                document.dispatchEvent(escEvent);
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                if (!modal.isOpen) {
+                    throw new Error('Modal closed with ESC when disabled');
+                }
+                
+                // Reset config
+                modal.setConfig('closeOnOverlay', true);
+                modal.setConfig('closeOnEscape', true);
+                
+                await modal.close();
+                
+                updateStatus(8, true, '✓ Configuration working');
+                
+            } catch (error) {
+                log(`Config error: ${error.message}`, 'error');
+                updateStatus(8, false, `✗ ${error.message}`);
+            }
+        };
+        
+        // Manual test functions
+        window.openTestModal = () => {
+            document.getElementById('testModal').open();
+        };
+        
+        window.openAllAnimations = async () => {
+            const animations = ['scale', 'slide', 'flip', 'rotate', 'fade'];
+            const modal = document.getElementById('animModal');
+            
+            for (const anim of animations) {
+                modal.setAttribute('animation', anim);
+                document.getElementById('animType').textContent = anim;
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                await modal.close();
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        };
+        
+        window.openNested = () => {
+            document.getElementById('nested1').open();
+        };
+        
+        window.runAllTests = async () => {
+            log('Running all tests...', 'success');
+            
+            await testOpenClose();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testAnimations();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testEvents();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testKeyboard();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testFocus();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testWebGL();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testMultiple();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testConfig();
+            
+            // Summary
+            const passed = Object.values(testResults).filter(r => r).length;
+            const total = Object.keys(testResults).length;
+            
+            log(`\nTest Summary: ${passed}/${total} tests passed`, 
+                passed === total ? 'success' : 'error');
+        };
+        
+        log('Modal functionality test suite loaded', 'success');
+    </script>
+</body>
+</html>

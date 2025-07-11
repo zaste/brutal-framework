@@ -1,0 +1,21 @@
+{
+  "role": "RootWebArea",
+  "name": "BRUTAL V2 vs V3 Benchmark",
+  "children": [
+    {
+      "role": "heading",
+      "name": "⚡ BRUTAL V2 vs V3 Performance Benchmark",
+      "level": 1
+    },
+    {
+      "role": "button",
+      "name": "Run Complete Benchmark",
+      "disabled": true
+    },
+    {
+      "role": "button",
+      "name": "Clear Results",
+      "focused": true
+    }
+  ]
+}

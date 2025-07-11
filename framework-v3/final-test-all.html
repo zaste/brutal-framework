@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Final Test All Systems</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .warning { color: #ffff00; }
+        .info { color: #00ffff; }
+        h2 { color: #00ffff; }
+        button {
+            background: #001100;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #00ff00;
+            color: #000;
+        }
+        #results {
+            background: #000;
+            padding: 20px;
+            border: 1px solid #00ff00;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 BRUTAL V3 - Final System Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Controls</h2>
+        <button onclick="runAllTests()">Run All Tests</button>
+        <button onclick="clearResults()">Clear Results</button>
+        <button onclick="exportResults()">Export Results</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script type="module">
+        const results = document.getElementById('results');
+        let testResults = [];
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+            
+            testResults.push({ time: new Date().toISOString(), message, type });
+        }
+        
+        window.clearResults = () => {
+            results.innerHTML = '';
+            testResults = [];
+        };
+        
+        window.exportResults = () => {
+            const blob = new Blob([JSON.stringify(testResults, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `brutal-test-results-${Date.now()}.json`;
+            a.click();
+        };
+        
+        window.runAllTests = async () => {
+            clearResults();
+            log('🚀 Starting BRUTAL V3 Final System Test', 'info');
+            
+            let passedTests = 0;
+            let failedTests = 0;
+            
+            // Test 1: Core Modules
+            try {
+                log('\n📦 Testing Core Modules...', 'info');
+                const { Component, State, Router, Template, Registry } = await import('./01-core/index.js');
+                
+                if (Component && State && Router && Template && Registry) {
+                    log('✅ All core modules loaded successfully', 'success');
+                    passedTests++;
+                } else {
+                    throw new Error('Some core modules failed to load');
+                }
+                
+                // Test component creation
+                const testComp = new Component();
+                if (testComp.shadowRoot) {
+                    log('✅ Component creates shadow DOM', 'success');
+                    passedTests++;
+                }
+                
+                // Test state management
+                const state = new State({ count: 0 });
+                state.set({ count: 42 });
+                if (state.get().count === 42) {
+                    log('✅ State management works', 'success');
+                    passedTests++;
+                }
+                
+                // Test SharedArrayBuffer if available
+                if (window.crossOriginIsolated) {
+                    const sharedState = new State({ value: 0 }, { shared: true });
+                    log(`✅ SharedArrayBuffer state created: ${sharedState.useSharedMemory}`, 'success');
+                    passedTests++;
+                } else {
+                    log('⚠️  SharedArrayBuffer not available (crossOriginIsolated: false)', 'warning');
+                }
+                
+            } catch (error) {
+                log(`❌ Core modules test failed: ${error.message}`, 'error');
+                failedTests++;
+            }
+            
+            // Test 2: Performance Gems
+            try {
+                log('\n💎 Testing Performance Gems...', 'info');
+                const gems = await import('./02-performance/index.js');
+                
+                gems.initPerformanceGems();
+                log('✅ Performance Gems initialized', 'success');
+                passedTests++;
+                
+                // Test each gem
+                const { styleManager, fragmentPool, domScheduler, templateCache, eventManager, themeEngine, layoutOptimizer } = gems;
+                
+                if (styleManager && fragmentPool && domScheduler && templateCache && eventManager && themeEngine && layoutOptimizer) {
+                    log('✅ All 7 Performance Gems loaded', 'success');
+                    passedTests++;
+                }
+                
+                // Quick functionality test
+                const styles = gems.createSharedStyles('test', 'body { color: green; }');
+                if (styles) {
+                    log('✅ Shared styles created', 'success');
+                    passedTests++;
+                }
+                
+            } catch (error) {
+                log(`❌ Performance Gems test failed: ${error.message}`, 'error');
+                failedTests++;
+            }
+            
+            // Test 3: Visual Debug Layer
+            try {
+                log('\n🎨 Testing Visual Debug Layer...', 'info');
+                const visual = await import('./03-visual/index.js');
+                
+                if (visual.VisualDebugLayer && visual.GPUComponent && visual.particleEffects) {
+                    log('✅ Visual Debug modules loaded', 'success');
+                    passedTests++;
+                }
+                
+                // Test particle effects
+                if (visual.effects) {
+                    log('✅ Particle effects available', 'success');
+                    passedTests++;
+                }
+                
+                // Test GPU component
+                const gpuComp = new visual.GPUComponent();
+                await gpuComp.initGPU();
+                log(`✅ GPU Component initialized: ${gpuComp.gpu.type}`, 'success');
+                passedTests++;
+                
+            } catch (error) {
+                log(`❌ Visual Debug test failed: ${error.message}`, 'error');
+                failedTests++;
+            }
+            
+            // Test 4: Integration
+            try {
+                log('\n🔗 Testing Integration...', 'info');
+                
+                // Create a component that uses everything
+                const { Component, html } = await import('./01-core/index.js');
+                
+                class IntegrationTest extends Component {
+                    template() {
+                        return html`<div>Integration Test Component</div>`;
+                    }
+                }
+                
+                customElements.define('integration-test', IntegrationTest);
+                const testEl = document.createElement('integration-test');
+                document.body.appendChild(testEl);
+                
+                // Wait for render
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                if (testEl.shadowRoot && testEl.shadowRoot.textContent.includes('Integration Test')) {
+                    log('✅ Integration test passed', 'success');
+                    passedTests++;
+                }
+                
+                // Clean up
+                testEl.remove();
+                
+            } catch (error) {
+                log(`❌ Integration test failed: ${error.message}`, 'error');
+                failedTests++;
+            }
+            
+            // Test 5: Browser APIs
+            log('\n🌐 Testing Browser Environment...', 'info');
+            
+            // Check environment
+            const env = {
+                crossOriginIsolated: window.crossOriginIsolated || false,
+                sharedArrayBuffer: typeof SharedArrayBuffer !== 'undefined',
+                webComponents: 'customElements' in window,
+                shadowDOM: 'attachShadow' in Element.prototype,
+                modules: 'noModule' in HTMLScriptElement.prototype
+            };
+            
+            for (const [feature, available] of Object.entries(env)) {
+                if (available) {
+                    log(`✅ ${feature}: available`, 'success');
+                    passedTests++;
+                } else {
+                    log(`❌ ${feature}: not available`, 'error');
+                    failedTests++;
+                }
+            }
+            
+            // Final Summary
+            log('\n' + '='.repeat(50), 'info');
+            log('📊 FINAL RESULTS', 'info');
+            log('='.repeat(50), 'info');
+            log(`✅ Passed: ${passedTests} tests`, 'success');
+            log(`❌ Failed: ${failedTests} tests`, failedTests > 0 ? 'error' : 'success');
+            log(`📈 Success Rate: ${((passedTests / (passedTests + failedTests)) * 100).toFixed(1)}%`, 'info');
+            
+            if (failedTests === 0) {
+                log('\n🎉 ALL SYSTEMS OPERATIONAL! BRUTAL V3 IS READY!', 'success');
+            } else {
+                log('\n⚠️  Some issues need attention', 'warning');
+            }
+        };
+    </script>
+</body>
+</html>

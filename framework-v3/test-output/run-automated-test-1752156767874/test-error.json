@@ -1,0 +1,122 @@
+{
+  "file": "run-automated-test.html",
+  "timestamp": "2025-07-10T14:12:47.994Z",
+  "console": [
+    {
+      "level": "log",
+      "text": "🤖 Automated Visual Tester initializing...",
+      "timestamp": "2025-07-10T14:12:48.048Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/03-visual/debug/AutomatedVisualTester.js",
+      "line": 70,
+      "column": 17
+    }
+  ],
+  "errors": [
+    {
+      "type": "test-failure",
+      "message": "page.waitForTimeout is not a function",
+      "stack": "TypeError: page.waitForTimeout is not a function\n    at runUltimateTest (file:///workspaces/web/framework-v3/ultimate-test-system.js:205:20)\n    at async runAllTests (file:///workspaces/web/framework-v3/ultimate-test-system.js:613:28)"
+    }
+  ],
+  "network": [
+    {
+      "requestId": "5589D3068F2C3C871B0722439A61D992",
+      "url": "http://localhost:8080/run-automated-test.html",
+      "method": "GET",
+      "timestamp": 21495.155707,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "4034",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:12:47 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 11:34:24 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21495.160774
+      },
+      "finished": {
+        "timestamp": 21495.159968,
+        "encodedDataLength": 4221
+      }
+    },
+    {
+      "requestId": "238243.2",
+      "url": "http://localhost:8080/03-visual/debug/AutomatedVisualTester.js",
+      "method": "GET",
+      "timestamp": 21495.184089,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/run-automated-test.html",
+        "lineNumber": 29,
+        "columnNumber": 46
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "21966",
+          "Date": "Thu, 10 Jul 2025 14:12:48 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:58:44 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21495.199172
+      },
+      "finished": {
+        "timestamp": 21495.192687,
+        "encodedDataLength": 22160
+      }
+    },
+    {
+      "requestId": "238243.3",
+      "url": "http://localhost:8080/03-visual/debug/ComponentMonitor.js",
+      "method": "GET",
+      "timestamp": 21495.199666,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/debug/AutomatedVisualTester.js",
+        "lineNumber": 6,
+        "columnNumber": 33
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "13582",
+          "Date": "Thu, 10 Jul 2025 14:12:48 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:54:23 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21495.203809
+      },
+      "finished": {
+        "timestamp": 21495.202595,
+        "encodedDataLength": 13776
+      }
+    }
+  ],
+  "performance": {},
+  "memory": {},
+  "coverage": {},
+  "domMutations": [],
+  "eventListeners": [],
+  "userInteractions": [],
+  "gpuInfo": {},
+  "screenshots": [],
+  "video": null,
+  "trace": null,
+  "heapSnapshot": null
+}

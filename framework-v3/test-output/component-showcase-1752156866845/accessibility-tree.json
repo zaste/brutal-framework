@@ -1,0 +1,557 @@
+{
+  "role": "RootWebArea",
+  "name": "BRUTAL V3 - Component Showcase",
+  "children": [
+    {
+      "role": "heading",
+      "name": "BRUTAL V3 Components",
+      "level": 1
+    },
+    {
+      "role": "StaticText",
+      "name": "Zero Dependencies. GPU Accelerated. 10-100x Faster Than React."
+    },
+    {
+      "role": "StaticText",
+      "name": "20"
+    },
+    {
+      "role": "StaticText",
+      "name": "Components"
+    },
+    {
+      "role": "StaticText",
+      "name": "0KB"
+    },
+    {
+      "role": "StaticText",
+      "name": "Dependencies"
+    },
+    {
+      "role": "StaticText",
+      "name": "60fps"
+    },
+    {
+      "role": "StaticText",
+      "name": "Guaranteed"
+    },
+    {
+      "role": "StaticText",
+      "name": "100x"
+    },
+    {
+      "role": "StaticText",
+      "name": "Faster"
+    },
+    {
+      "role": "heading",
+      "name": "Core Components",
+      "level": 2
+    },
+    {
+      "role": "StaticText",
+      "name": "Essential building blocks for any BRUTAL application"
+    },
+    {
+      "role": "heading",
+      "name": "HeroSection",
+      "level": 3
+    },
+    {
+      "role": "StaticText",
+      "name": "Ready"
+    },
+    {
+      "role": "StaticText",
+      "name": "Full-featured hero component with 13 variants including particles, WebGL, and Matrix effects."
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "GPU-accelerated animations"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Lazy loading & intersection observer"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "13 stunning variants"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Particle system integration"
+    },
+    {
+      "role": "link",
+      "name": "View Demo"
+    },
+    {
+      "role": "button",
+      "name": "View Code"
+    },
+    {
+      "role": "heading",
+      "name": "NavigationBar",
+      "level": 3
+    },
+    {
+      "role": "StaticText",
+      "name": "In Progress"
+    },
+    {
+      "role": "StaticText",
+      "name": "Sticky navigation with GPU-accelerated scrolling and mobile gestures."
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Smart hide/show on scroll"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Mobile-first responsive"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Particle hover effects"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Mega menu support"
+    },
+    {
+      "role": "button",
+      "name": "Coming Soon",
+      "disabled": true
+    },
+    {
+      "role": "heading",
+      "name": "Modal",
+      "level": 3
+    },
+    {
+      "role": "StaticText",
+      "name": "Planned"
+    },
+    {
+      "role": "StaticText",
+      "name": "GPU-accelerated modals with backdrop blur and smooth animations."
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "WebGL backdrop effects"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Focus trap & a11y"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Stacking context management"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Custom transitions"
+    },
+    {
+      "role": "button",
+      "name": "Coming Soon",
+      "disabled": true
+    },
+    {
+      "role": "heading",
+      "name": "Notifications",
+      "level": 3
+    },
+    {
+      "role": "StaticText",
+      "name": "Planned"
+    },
+    {
+      "role": "StaticText",
+      "name": "Toast notifications with particle effects and auto-dismiss."
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Particle explosion effects"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Stack management"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Progress indicators"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Custom positioning"
+    },
+    {
+      "role": "button",
+      "name": "Coming Soon",
+      "disabled": true
+    },
+    {
+      "role": "heading",
+      "name": "Data Components",
+      "level": 2
+    },
+    {
+      "role": "StaticText",
+      "name": "High-performance data visualization and manipulation"
+    },
+    {
+      "role": "heading",
+      "name": "DataGrid",
+      "level": 3
+    },
+    {
+      "role": "StaticText",
+      "name": "Planned"
+    },
+    {
+      "role": "StaticText",
+      "name": "Virtual scrolling data grid supporting 100K+ rows at 60fps."
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Virtual scrolling"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "SharedArrayBuffer data"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "GPU-accelerated sorting"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Real-time updates"
+    },
+    {
+      "role": "button",
+      "name": "Coming Soon",
+      "disabled": true
+    },
+    {
+      "role": "heading",
+      "name": "FormBuilder",
+      "level": 3
+    },
+    {
+      "role": "StaticText",
+      "name": "Planned"
+    },
+    {
+      "role": "StaticText",
+      "name": "Dynamic form generation with real-time validation and visual feedback."
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Schema-driven forms"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Real-time validation"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Particle success states"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Undo/redo support"
+    },
+    {
+      "role": "button",
+      "name": "Coming Soon",
+      "disabled": true
+    },
+    {
+      "role": "heading",
+      "name": "Charts",
+      "level": 3
+    },
+    {
+      "role": "StaticText",
+      "name": "Planned"
+    },
+    {
+      "role": "StaticText",
+      "name": "Canvas/WebGL hybrid charts with real-time data streaming."
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "WebGL rendering"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "60fps animations"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Real-time updates"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "GPU tooltips"
+    },
+    {
+      "role": "button",
+      "name": "Coming Soon",
+      "disabled": true
+    },
+    {
+      "role": "heading",
+      "name": "SearchBox",
+      "level": 3
+    },
+    {
+      "role": "StaticText",
+      "name": "Planned"
+    },
+    {
+      "role": "StaticText",
+      "name": "Fuzzy search with WebAssembly and GPU-accelerated results."
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "WASM fuzzy search"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "GPU dropdown render"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Real-time suggestions"
+    },
+    {
+      "role": "StaticText",
+      "name": "✓ "
+    },
+    {
+      "role": "StaticText",
+      "name": "Particle effects"
+    },
+    {
+      "role": "button",
+      "name": "Coming Soon",
+      "disabled": true
+    },
+    {
+      "role": "heading",
+      "name": "Development Roadmap",
+      "level": 2
+    },
+    {
+      "role": "StaticText",
+      "name": "Our journey to 20 groundbreaking components"
+    },
+    {
+      "role": "StaticText",
+      "name": "Phase 4.1"
+    },
+    {
+      "role": "StaticText",
+      "name": "Foundation Components"
+    },
+    {
+      "role": "StaticText",
+      "name": "HeroSection migration complete. NavigationBar in progress."
+    },
+    {
+      "role": "StaticText",
+      "name": "Phase 4.2"
+    },
+    {
+      "role": "StaticText",
+      "name": "Core UI Components"
+    },
+    {
+      "role": "StaticText",
+      "name": "Modal, DataGrid, FormBuilder, Notifications, SearchBox"
+    },
+    {
+      "role": "StaticText",
+      "name": "Phase 4.3"
+    },
+    {
+      "role": "StaticText",
+      "name": "Interactive Components"
+    },
+    {
+      "role": "StaticText",
+      "name": "TabPanel, Accordion, Carousel, Tooltip, ProgressBar, LoadingSpinner"
+    },
+    {
+      "role": "StaticText",
+      "name": "Phase 4.4"
+    },
+    {
+      "role": "StaticText",
+      "name": "Advanced Components"
+    },
+    {
+      "role": "StaticText",
+      "name": "Charts, Timeline, ImageGallery, VideoPlayer, CodeEditor, DragDropZone"
+    },
+    {
+      "role": "StaticText",
+      "name": "Phase 4.5"
+    },
+    {
+      "role": "StaticText",
+      "name": "Integration & Polish"
+    },
+    {
+      "role": "StaticText",
+      "name": "ShowcaseDemo, performance benchmarks, documentation, migration guide"
+    },
+    {
+      "role": "link",
+      "name": "Home"
+    },
+    {
+      "role": "link",
+      "name": "GitHub"
+    },
+    {
+      "role": "link",
+      "name": "Documentation"
+    },
+    {
+      "role": "link",
+      "name": "API Reference"
+    },
+    {
+      "role": "StaticText",
+      "name": "Built with BRUTAL V3 - The future of web components"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  brutal-dev:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=development
+    command: >
+      sh -c "
+        apk add --no-cache python3 &&
+        node server-with-headers.js
+      "
+    # Headers are set in server-with-headers.js
+    # No need for nginx proxy

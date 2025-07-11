@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - DataGrid Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .grid-container {
+            height: 600px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #1976d2;
+        }
+        
+        .stats {
+            margin-top: 20px;
+            padding: 16px;
+            background: #e3f2fd;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 BRUTAL DataGrid - 100K+ Rows Test</h1>
+        
+        <div class="controls">
+            <button onclick="loadSmallDataset()">Load 1K Rows</button>
+            <button onclick="loadMediumDataset()">Load 10K Rows</button>
+            <button onclick="loadLargeDataset()">Load 100K Rows</button>
+            <button onclick="loadMassiveDataset()">Load 1M Rows (WebGL)</button>
+            <button onclick="toggleSelection()">Toggle Multi-Select</button>
+            <button onclick="toggleEditing()">Toggle Editing</button>
+            <button onclick="randomSort()">Random Sort</button>
+        </div>
+        
+        <div class="grid-container">
+            <brutal-datagrid 
+                id="testGrid"
+                selectable="true"
+                multi-select="true"
+                resizable="true"
+                filterable="true"
+                exportable="true"
+                editable="false">
+            </brutal-datagrid>
+        </div>
+        
+        <div class="stats" id="stats">
+            Ready to load data...
+        </div>
+    </div>
+
+    <script type="module">
+        import { DataGrid } from './04-components/data/DataGrid.js';
+        
+        const grid = document.getElementById('testGrid');
+        const stats = document.getElementById('stats');
+        
+        // Column configuration
+        const columns = [
+            { 
+                key: 'id', 
+                label: 'ID', 
+                width: 80, 
+                type: 'number',
+                sortable: true 
+            },
+            { 
+                key: 'name', 
+                label: 'Name', 
+                width: 200,
+                sortable: true,
+                editable: true
+            },
+            { 
+                key: 'email', 
+                label: 'Email', 
+                width: 250,
+                sortable: true,
+                editable: true
+            },
+            { 
+                key: 'age', 
+                label: 'Age', 
+                width: 100,
+                type: 'number',
+                sortable: true,
+                editable: true,
+                editorType: 'number',
+                min: 0,
+                max: 120
+            },
+            { 
+                key: 'salary', 
+                label: 'Salary', 
+                width: 150,
+                type: 'currency',
+                sortable: true,
+                editable: true,
+                editorType: 'number'
+            },
+            { 
+                key: 'department', 
+                label: 'Department', 
+                width: 150,
+                sortable: true,
+                editable: true,
+                editorType: 'select',
+                options: [
+                    { value: 'Engineering', label: 'Engineering' },
+                    { value: 'Sales', label: 'Sales' },
+                    { value: 'Marketing', label: 'Marketing' },
+                    { value: 'HR', label: 'HR' },
+                    { value: 'Finance', label: 'Finance' }
+                ]
+            },
+            { 
+                key: 'startDate', 
+                label: 'Start Date', 
+                width: 150,
+                type: 'date',
+                sortable: true,
+                editable: true,
+                editorType: 'date'
+            },
+            { 
+                key: 'active', 
+                label: 'Active', 
+                width: 100,
+                type: 'boolean',
+                sortable: true
+            },
+            { 
+                key: 'performance', 
+                label: 'Performance', 
+                width: 150,
+                sortable: true,
+                formatter: (value) => {
+                    const stars = '★'.repeat(Math.floor(value)) + '☆'.repeat(5 - Math.floor(value));
+                    return `<span style="color: gold">${stars}</span>`;
+                },
+                renderer: (value, row, column) => {
+                    const stars = '★'.repeat(Math.floor(value)) + '☆'.repeat(5 - Math.floor(value));
+                    return `<span style="color: gold; font-size: 18px">${stars}</span>`;
+                }
+            }
+        ];
+        
+        // Set columns
+        grid.setAttribute('columns', JSON.stringify(columns));
+        
+        // Generate data
+        function generateData(count) {
+            const departments = ['Engineering', 'Sales', 'Marketing', 'HR', 'Finance'];
+            const firstNames = ['John', 'Jane', 'Bob', 'Alice', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Henry'];
+            const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+            
+            const data = [];
+            const startTime = performance.now();
+            
+            for (let i = 0; i < count; i++) {
+                data.push({
+                    id: i + 1,
+                    name: `${firstNames[i % firstNames.length]} ${lastNames[i % lastNames.length]}`,
+                    email: `user${i + 1}@company.com`,
+                    age: 25 + Math.floor(Math.random() * 40),
+                    salary: 50000 + Math.floor(Math.random() * 100000),
+                    department: departments[Math.floor(Math.random() * departments.length)],
+                    startDate: new Date(2010 + Math.floor(Math.random() * 14), Math.floor(Math.random() * 12), 1).toISOString().split('T')[0],
+                    active: Math.random() > 0.1,
+                    performance: 1 + Math.random() * 4
+                });
+            }
+            
+            const endTime = performance.now();
+            console.log(`Generated ${count} rows in ${(endTime - startTime).toFixed(2)}ms`);
+            
+            return data;
+        }
+        
+        // Load datasets
+        window.loadSmallDataset = () => {
+            const startTime = performance.now();
+            grid.data = generateData(1000);
+            const endTime = performance.now();
+            updateStats(1000, endTime - startTime);
+        };
+        
+        window.loadMediumDataset = () => {
+            const startTime = performance.now();
+            grid.data = generateData(10000);
+            const endTime = performance.now();
+            updateStats(10000, endTime - startTime);
+        };
+        
+        window.loadLargeDataset = () => {
+            const startTime = performance.now();
+            grid.data = generateData(100000);
+            const endTime = performance.now();
+            updateStats(100000, endTime - startTime);
+        };
+        
+        window.loadMassiveDataset = () => {
+            const startTime = performance.now();
+            grid.data = generateData(1000000);
+            const endTime = performance.now();
+            updateStats(1000000, endTime - startTime);
+        };
+        
+        // Toggle functions
+        window.toggleSelection = () => {
+            const current = grid.getAttribute('multi-select') === 'true';
+            grid.setAttribute('multi-select', !current);
+        };
+        
+        window.toggleEditing = () => {
+            const current = grid.getAttribute('editable') === 'true';
+            grid.setAttribute('editable', !current);
+        };
+        
+        window.randomSort = () => {
+            const column = columns[Math.floor(Math.random() * columns.length)];
+            grid._toggleSort(column.key);
+        };
+        
+        // Update stats
+        function updateStats(rowCount, loadTime) {
+            const memoryUsage = performance.memory ? 
+                `Memory: ${(performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2)} MB` : '';
+            
+            stats.innerHTML = `
+                Rows: ${rowCount.toLocaleString()}<br>
+                Load Time: ${loadTime.toFixed(2)}ms<br>
+                Render Speed: ${(rowCount / loadTime * 1000).toFixed(0)} rows/sec<br>
+                ${memoryUsage}
+            `;
+        }
+        
+        // Listen for selection changes
+        grid.addEventListener('selectionchange', (e) => {
+            console.log('Selection changed:', e.detail);
+        });
+        
+        // Monitor performance
+        if (window.PerformanceObserver) {
+            const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.name.includes('render')) {
+                        console.log(`${entry.name}: ${entry.duration.toFixed(2)}ms`);
+                    }
+                }
+            });
+            observer.observe({ entryTypes: ['measure'] });
+        }
+        
+        // Load initial dataset
+        loadSmallDataset();
+    </script>
+</body>
+</html>

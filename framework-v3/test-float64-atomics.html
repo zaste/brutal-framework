@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Float64 Atomics Test - BRUTAL Framework V3</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #f0f0f0;
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            border-bottom: 2px solid #ff6b6b;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #4ecdc4;
+            margin-top: 30px;
+        }
+        
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .success {
+            color: #51cf66;
+        }
+        
+        .error {
+            color: #ff6b6b;
+        }
+        
+        .warning {
+            color: #ffd93d;
+        }
+        
+        button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #ff5252;
+        }
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        #output {
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Consolas', monospace;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .benchmark-result {
+            display: inline-block;
+            background: #2a2a2a;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 3px;
+        }
+        
+        .code-block {
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-ok {
+            background: #51cf66;
+        }
+        
+        .status-error {
+            background: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Float64 Atomics Test Suite</h1>
+    
+    <div class="test-section">
+        <h2>Environment Check</h2>
+        <div id="env-status"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Controls</h2>
+        <button onclick="runTests()">Run All Tests</button>
+        <button onclick="runBenchmarks()">Run Benchmarks</button>
+        <button onclick="runExamples()">Run Examples</button>
+        <button onclick="runWorkerStress()">Worker Stress Test</button>
+        <button onclick="clearOutput()">Clear Output</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Output</h2>
+        <div id="output"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Implementation Details</h2>
+        <h3>Type Punning Approach</h3>
+        <div class="code-block">
+// Convert Float64 to Uint32 pair for atomic operations
+const temp = new ArrayBuffer(8);
+const tempFloat64 = new Float64Array(temp);
+const tempUint32 = new Uint32Array(temp);
+
+tempFloat64[0] = 3.14159;
+const low = tempUint32[0];
+const high = tempUint32[1];
+
+// Atomic operations on uint32
+Atomics.store(uint32View, index * 2, low);
+Atomics.store(uint32View, index * 2 + 1, high);
+        </div>
+        
+        <h3>Seqlock Pattern</h3>
+        <div class="code-block">
+// Reader never blocks but may retry
+do {
+    seq1 = Atomics.load(sequence, 0);
+    if (seq1 & 1) continue; // Write in progress
+    
+    data = readData();
+    
+    seq2 = Atomics.load(sequence, 0);
+} while (seq1 !== seq2);
+        </div>
+    </div>
+
+    <script type="module">
+        import { runAllTests } from './tests/test-float64-atomics.js';
+        import { runFloat64Examples } from './examples/float64-state-example.js';
+        
+        const output = document.getElementById('output');
+        const envStatus = document.getElementById('env-status');
+        
+        // Override console.log to capture output
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = (...args) => {
+            originalLog(...args);
+            const text = args.join(' ');
+            const color = text.includes('✓') ? 'success' : 
+                         text.includes('❌') ? 'error' : 
+                         text.includes('⚠️') ? 'warning' : '';
+            output.innerHTML += `<span class="${color}">${text}</span>\n`;
+        };
+        
+        console.error = (...args) => {
+            originalError(...args);
+            output.innerHTML += `<span class="error">${args.join(' ')}</span>\n`;
+        };
+        
+        // Check environment
+        function checkEnvironment() {
+            const checks = {
+                'SharedArrayBuffer': typeof SharedArrayBuffer !== 'undefined',
+                'Atomics': typeof Atomics !== 'undefined',
+                'crossOriginIsolated': window.crossOriginIsolated === true,
+                'Worker': typeof Worker !== 'undefined',
+                'BigInt64Array': typeof BigInt64Array !== 'undefined'
+            };
+            
+            let html = '<table style="width: 100%">';
+            for (const [feature, supported] of Object.entries(checks)) {
+                html += `<tr>
+                    <td><span class="status-indicator ${supported ? 'status-ok' : 'status-error'}"></span></td>
+                    <td>${feature}</td>
+                    <td>${supported ? '✓ Supported' : '❌ Not supported'}</td>
+                </tr>`;
+            }
+            html += '</table>';
+            
+            if (!checks.crossOriginIsolated) {
+                html += '<p class="warning">⚠️ SharedArrayBuffer requires proper headers. Run with: <code>npm start</code></p>';
+            }
+            
+            envStatus.innerHTML = html;
+            
+            return Object.values(checks).every(v => v);
+        }
+        
+        // Test runner functions
+        window.runTests = async function() {
+            output.innerHTML = '';
+            await runAllTests();
+        };
+        
+        window.runBenchmarks = async function() {
+            output.innerHTML = '';
+            console.log('Running benchmarks only...\n');
+            
+            // Import and run benchmarks
+            const { benchmarkFloat64Atomics } = await import('./tests/test-float64-atomics.js');
+            await benchmarkFloat64Atomics();
+        };
+        
+        window.runExamples = async function() {
+            output.innerHTML = '';
+            await runFloat64Examples();
+        };
+        
+        window.runWorkerStress = async function() {
+            output.innerHTML = '';
+            console.log('Running worker stress test...\n');
+            
+            const buffer = new SharedArrayBuffer(8192);
+            const view = new Float64Array(buffer);
+            const atomicView = new Uint32Array(buffer);
+            
+            // Initialize values
+            for (let i = 0; i < view.length; i++) {
+                view[i] = i;
+            }
+            
+            const workerCode = `
+                self.onmessage = function(e) {
+                    const { buffer, iterations, workerId } = e.data;
+                    const view = new Float64Array(buffer);
+                    const atomicView = new Uint32Array(buffer);
+                    
+                    let operations = 0;
+                    const start = performance.now();
+                    
+                    for (let i = 0; i < iterations; i++) {
+                        const index = Math.floor(Math.random() * view.length);
+                        
+                        // Read as float
+                        const value = view[index];
+                        
+                        // Increment atomically (via uint32)
+                        const uint32Index = index * 2;
+                        Atomics.add(atomicView, uint32Index, 1);
+                        
+                        operations++;
+                    }
+                    
+                    const elapsed = performance.now() - start;
+                    
+                    self.postMessage({
+                        workerId,
+                        operations,
+                        elapsed,
+                        opsPerSec: (operations / elapsed * 1000)
+                    });
+                };
+            `;
+            
+            const blob = new Blob([workerCode], { type: 'application/javascript' });
+            const workerUrl = URL.createObjectURL(blob);
+            
+            const numWorkers = 4;
+            const iterationsPerWorker = 100000;
+            const workers = [];
+            const promises = [];
+            
+            console.log(`Launching ${numWorkers} workers, ${iterationsPerWorker} iterations each...`);
+            
+            for (let i = 0; i < numWorkers; i++) {
+                const worker = new Worker(workerUrl);
+                workers.push(worker);
+                
+                const promise = new Promise(resolve => {
+                    worker.onmessage = (e) => resolve(e.data);
+                });
+                promises.push(promise);
+                
+                worker.postMessage({ 
+                    buffer, 
+                    iterations: iterationsPerWorker,
+                    workerId: i 
+                });
+            }
+            
+            const results = await Promise.all(promises);
+            
+            let totalOps = 0;
+            let totalTime = 0;
+            
+            console.log('\nWorker Results:');
+            results.forEach(result => {
+                console.log(`  Worker ${result.workerId}: ${result.operations} ops in ${result.elapsed.toFixed(2)}ms (${result.opsPerSec.toFixed(0)} ops/sec)`);
+                totalOps += result.operations;
+                totalTime = Math.max(totalTime, result.elapsed);
+            });
+            
+            console.log(`\nTotal: ${totalOps} operations in ${totalTime.toFixed(2)}ms`);
+            console.log(`Aggregate throughput: ${(totalOps / totalTime * 1000).toFixed(0)} ops/sec`);
+            
+            // Cleanup
+            workers.forEach(w => w.terminate());
+            URL.revokeObjectURL(workerUrl);
+        };
+        
+        window.clearOutput = function() {
+            output.innerHTML = '';
+        };
+        
+        // Check environment on load
+        const envOk = checkEnvironment();
+        if (envOk) {
+            output.innerHTML = '<span class="success">✅ Environment ready for Float64 Atomics!</span>\n';
+        } else {
+            output.innerHTML = '<span class="error">❌ Environment not properly configured for SharedArrayBuffer</span>\n';
+        }
+    </script>
+</body>
+</html>

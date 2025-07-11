@@ -1,0 +1,287 @@
+{
+  "file": "component-showcase.html",
+  "timestamp": "2025-07-10T14:14:27.207Z",
+  "console": [],
+  "errors": [],
+  "network": [
+    {
+      "requestId": "ECD11EA5925BF57533D3BA2E37F46726",
+      "url": "http://localhost:8080/component-showcase.html",
+      "method": "GET",
+      "timestamp": 21594.368883,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "20706",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:14:27 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 12:30:57 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21594.373242
+      },
+      "finished": {
+        "timestamp": 21594.374171,
+        "encodedDataLength": 20894
+      }
+    }
+  ],
+  "performance": {
+    "metrics": {
+      "Timestamp": 21596.97428,
+      "Documents": 3,
+      "Frames": 1,
+      "JSEventListeners": 8,
+      "Nodes": 559,
+      "LayoutCount": 2,
+      "RecalcStyleCount": 6,
+      "LayoutDuration": 0.045803,
+      "RecalcStyleDuration": 0.002542,
+      "ScriptDuration": 0.000945,
+      "TaskDuration": 0.083464,
+      "JSHeapUsedSize": 1150800,
+      "JSHeapTotalSize": 1572864
+    },
+    "timing": {
+      "connectStart": 1752156867210,
+      "secureConnectionStart": 0,
+      "unloadEventEnd": 0,
+      "domainLookupStart": 1752156867210,
+      "domainLookupEnd": 1752156867210,
+      "responseStart": 1752156867213,
+      "connectEnd": 1752156867210,
+      "responseEnd": 1752156867215,
+      "requestStart": 1752156867213,
+      "domLoading": 1752156867221,
+      "redirectStart": 0,
+      "loadEventEnd": 1752156867292,
+      "domComplete": 1752156867292,
+      "navigationStart": 1752156867209,
+      "loadEventStart": 1752156867292,
+      "domContentLoadedEventEnd": 1752156867292,
+      "unloadEventStart": 0,
+      "redirectEnd": 0,
+      "domInteractive": 1752156867291,
+      "fetchStart": 1752156867210,
+      "domContentLoadedEventStart": 1752156867292
+    },
+    "entries": [
+      {
+        "name": "http://localhost:8080/component-showcase.html",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 83
+      },
+      {
+        "name": "visible",
+        "entryType": "visibility-state",
+        "startTime": 0,
+        "duration": 0
+      },
+      {
+        "name": "long-animation-frame",
+        "entryType": "long-animation-frame",
+        "startTime": 10.5,
+        "duration": 65.90000000223517
+      },
+      {
+        "name": "first-paint",
+        "entryType": "paint",
+        "startTime": 132,
+        "duration": 0
+      },
+      {
+        "name": "first-contentful-paint",
+        "entryType": "paint",
+        "startTime": 132,
+        "duration": 0
+      }
+    ],
+    "calculated": {
+      "domContentLoaded": 83,
+      "load": 83,
+      "firstPaint": 132,
+      "firstContentfulPaint": 132
+    }
+  },
+  "memory": {
+    "initial": {
+      "usedJSHeapSize": 1209755,
+      "totalJSHeapSize": 1587519,
+      "jsHeapSizeLimit": 2248146944
+    },
+    "final": {
+      "usedJSHeapSize": 1825602,
+      "totalJSHeapSize": 2112366,
+      "jsHeapSizeLimit": 2248146944
+    },
+    "delta": {
+      "usedJSHeapSize": 615847,
+      "totalJSHeapSize": 524847
+    }
+  },
+  "coverage": {
+    "js": {
+      "totalBytes": 781,
+      "usedBytes": 143,
+      "percentage": "18.31"
+    },
+    "css": {
+      "totalBytes": 8314,
+      "usedBytes": 7223,
+      "percentage": "86.88"
+    }
+  },
+  "domMutations": [],
+  "eventListeners": [],
+  "userInteractions": [
+    {
+      "type": "click",
+      "target": {
+        "text": "View Code",
+        "id": "",
+        "className": "btn btn-secondary"
+      },
+      "timestamp": "2025-07-10T14:14:31.424Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Coming Soon",
+        "id": "",
+        "className": "btn btn-primary"
+      },
+      "timestamp": "2025-07-10T14:14:32.368Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Coming Soon",
+        "id": "",
+        "className": "btn btn-primary"
+      },
+      "timestamp": "2025-07-10T14:14:33.378Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Coming Soon",
+        "id": "",
+        "className": "btn btn-primary"
+      },
+      "timestamp": "2025-07-10T14:14:34.429Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Coming Soon",
+        "id": "",
+        "className": "btn btn-primary"
+      },
+      "timestamp": "2025-07-10T14:14:35.384Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Coming Soon",
+        "id": "",
+        "className": "btn btn-primary"
+      },
+      "timestamp": "2025-07-10T14:14:36.283Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Coming Soon",
+        "id": "",
+        "className": "btn btn-primary"
+      },
+      "timestamp": "2025-07-10T14:14:37.170Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Coming Soon",
+        "id": "",
+        "className": "btn btn-primary"
+      },
+      "timestamp": "2025-07-10T14:14:38.045Z",
+      "success": true
+    }
+  ],
+  "gpuInfo": null,
+  "screenshots": [
+    "screenshot-initial.png",
+    "screenshot-after-button-0.png",
+    "screenshot-after-button-1.png",
+    "screenshot-after-button-2.png",
+    "screenshot-after-button-3.png",
+    "screenshot-after-button-4.png",
+    "screenshot-after-button-5.png",
+    "screenshot-after-button-6.png",
+    "screenshot-after-button-7.png",
+    "screenshot-final.png"
+  ],
+  "video": "428 frames captured",
+  "trace": "trace.json",
+  "heapSnapshot": "heap-snapshot.json",
+  "environment": {
+    "url": "http://localhost:8080/component-showcase.html",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 800,
+      "height": 600,
+      "devicePixelRatio": 1
+    },
+    "features": {
+      "crossOriginIsolated": false,
+      "sharedArrayBuffer": true,
+      "webgl": false,
+      "webgl2": false,
+      "gpu": true,
+      "workers": true,
+      "serviceWorker": true
+    },
+    "brutal": {
+      "loaded": false,
+      "debug": false,
+      "config": null
+    }
+  },
+  "brutalFramework": null,
+  "summary": {
+    "success": true,
+    "errorCount": 0,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "networkRequests": 1,
+    "networkFailures": 0,
+    "domMutations": 0,
+    "coverage": {
+      "js": "18.31%",
+      "css": "86.88%"
+    },
+    "performance": {
+      "domContentLoaded": "83ms",
+      "load": "83ms",
+      "firstPaint": "132ms",
+      "firstContentfulPaint": "132ms"
+    },
+    "memory": {
+      "heapGrowth": "0.59MB"
+    }
+  }
+}

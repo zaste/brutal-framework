@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel Issues Test</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: system-ui;
+            background: #111;
+            color: #fff;
+        }
+        #log {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+        .warn { color: #ffff44; }
+        .test-carousel {
+            height: 300px;
+            margin: 20px 0;
+            border: 2px solid #444;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #0088ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Carousel Issues Detection</h1>
+    
+    <button onclick="testInitialization()">Test Initialization</button>
+    <button onclick="testTemplateRendering()">Test Template</button>
+    <button onclick="testEventHandlers()">Test Events</button>
+    <button onclick="testChildrenHandling()">Test Children</button>
+    <button onclick="testAttributeHandling()">Test Attributes</button>
+    <button onclick="testAllIssues()">Test All Issues</button>
+    
+    <div id="log"></div>
+    
+    <brutal-carousel id="carousel1" class="test-carousel">
+        <div style="background: red;">Slide 1</div>
+        <div style="background: blue;">Slide 2</div>
+        <div style="background: green;">Slide 3</div>
+    </brutal-carousel>
+
+    <script type="module">
+        import { Carousel } from './04-components/ui/Carousel.js';
+        
+        function log(msg, type = '') {
+            const logEl = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logEl.innerHTML += `<span class="${type}">[${time}] ${msg}</span>\n`;
+        }
+        
+        window.testInitialization = async () => {
+            log('Testing initialization...', 'warn');
+            const carousel = document.getElementById('carousel1');
+            
+            try {
+                // Check if component exists
+                log(`Carousel element: ${!!carousel}`, carousel ? 'success' : 'error');
+                log(`Is Carousel instance: ${carousel instanceof Carousel}`, carousel instanceof Carousel ? 'success' : 'error');
+                
+                // Check shadow DOM
+                log(`Has shadowRoot: ${!!carousel.shadowRoot}`, carousel.shadowRoot ? 'success' : 'error');
+                
+                // Check internal state
+                log(`_slides array: ${carousel._slides ? carousel._slides.length : 'undefined'}`, carousel._slides ? 'success' : 'error');
+                log(`_currentIndex: ${carousel._currentIndex}`, typeof carousel._currentIndex === 'number' ? 'success' : 'error');
+                
+                // Check if children are detected
+                log(`Children count: ${carousel.children.length}`);
+                log(`Carousel thinks it has ${carousel.totalSlides || 0} slides`);
+                
+                // Check if template rendered
+                const track = carousel.shadowRoot?.querySelector('.carousel-track');
+                log(`Track element exists: ${!!track}`, track ? 'success' : 'error');
+                
+                if (track) {
+                    const slides = track.querySelectorAll('.carousel-slide');
+                    log(`Rendered slides: ${slides.length}`, slides.length > 0 ? 'success' : 'error');
+                }
+                
+            } catch (error) {
+                log(`Initialization error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        };
+        
+        window.testTemplateRendering = async () => {
+            log('Testing template rendering...', 'warn');
+            const carousel = document.getElementById('carousel1');
+            
+            try {
+                // Check template method
+                log(`Has template method: ${typeof carousel.template === 'function'}`, 'success');
+                
+                // Try to get template content
+                const templateResult = carousel.template();
+                log(`Template returns: ${typeof templateResult}`);
+                
+                // Check if html template literal is used correctly
+                if (templateResult && templateResult._isTemplate) {
+                    log('Template uses html literal correctly', 'success');
+                    log(`Template content length: ${templateResult.content.length}`);
+                } else if (typeof templateResult === 'string') {
+                    log('Template returns string instead of template object', 'error');
+                } else {
+                    log('Template returns unexpected type', 'error');
+                }
+                
+                // Force update
+                carousel.scheduleUpdate?.();
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Check rendered content
+                const shadowContent = carousel.shadowRoot.innerHTML;
+                log(`Shadow DOM content length: ${shadowContent.length}`);
+                
+            } catch (error) {
+                log(`Template error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        };
+        
+        window.testEventHandlers = async () => {
+            log('Testing event handlers...', 'warn');
+            const carousel = document.getElementById('carousel1');
+            
+            try {
+                // Check onclick handlers in template
+                const nextBtn = carousel.shadowRoot?.querySelector('.carousel-control-next');
+                const prevBtn = carousel.shadowRoot?.querySelector('.carousel-control-prev');
+                
+                log(`Next button exists: ${!!nextBtn}`, nextBtn ? 'success' : 'error');
+                log(`Prev button exists: ${!!prevBtn}`, prevBtn ? 'success' : 'error');
+                
+                // Check if onclick is properly bound
+                if (nextBtn) {
+                    const onclickAttr = nextBtn.getAttribute('onclick');
+                    log(`Next button onclick: ${onclickAttr || 'none'}`);
+                    
+                    // Try clicking
+                    const beforeIndex = carousel.currentIndex;
+                    nextBtn.click();
+                    await new Promise(r => setTimeout(r, 400));
+                    const afterIndex = carousel.currentIndex;
+                    
+                    log(`Index changed from ${beforeIndex} to ${afterIndex}`, afterIndex !== beforeIndex ? 'success' : 'error');
+                }
+                
+                // Test indicator onclick
+                const indicators = carousel.shadowRoot?.querySelectorAll('.carousel-indicator');
+                if (indicators && indicators.length > 0) {
+                    log(`Found ${indicators.length} indicators`);
+                    const indicator = indicators[2];
+                    if (indicator) {
+                        const onclickAttr = indicator.getAttribute('onclick');
+                        log(`Indicator onclick: ${onclickAttr || 'none'}`);
+                    }
+                }
+                
+            } catch (error) {
+                log(`Event handler error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        };
+        
+        window.testChildrenHandling = () => {
+            log('Testing children handling...', 'warn');
+            const carousel = document.getElementById('carousel1');
+            
+            try {
+                // Check how children are collected
+                log(`Direct children: ${carousel.children.length}`);
+                log(`_slides array: ${carousel._slides ? carousel._slides.length : 'undefined'}`);
+                
+                // Check if _initialize is called
+                if (typeof carousel._initialize === 'function') {
+                    log('Has _initialize method', 'success');
+                    
+                    // Try calling it manually
+                    carousel._initialize();
+                    log(`After _initialize, _slides: ${carousel._slides ? carousel._slides.length : 'undefined'}`);
+                } else {
+                    log('Missing _initialize method', 'error');
+                }
+                
+                // Check slide rendering
+                const renderedSlides = carousel._renderSlides?.();
+                if (renderedSlides) {
+                    log(`_renderSlides returns: ${typeof renderedSlides}`);
+                    if (typeof renderedSlides === 'string') {
+                        log(`Rendered slides HTML length: ${renderedSlides.length}`);
+                    }
+                }
+                
+            } catch (error) {
+                log(`Children handling error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        };
+        
+        window.testAttributeHandling = () => {
+            log('Testing attribute handling...', 'warn');
+            const carousel = document.getElementById('carousel1');
+            
+            try {
+                // Test setting attributes
+                carousel.setAttribute('autoplay', 'true');
+                carousel.setAttribute('loop', 'true');
+                carousel.setAttribute('effect', 'fade');
+                
+                log(`Config autoplay: ${carousel._config?.autoplay}`, carousel._config?.autoplay === true ? 'success' : 'error');
+                log(`Config loop: ${carousel._config?.loop}`, carousel._config?.loop === true ? 'success' : 'error');
+                log(`Config effect: ${carousel._config?.effect}`, carousel._config?.effect === 'fade' ? 'success' : 'error');
+                
+                // Check observed attributes
+                log(`Observed attributes includes 'autoplay': ${Carousel.observedAttributes.includes('autoplay')}`, 'success');
+                
+            } catch (error) {
+                log(`Attribute handling error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        };
+        
+        window.testAllIssues = async () => {
+            log('\n=== COMPREHENSIVE ISSUE DETECTION ===\n', 'warn');
+            
+            // Issue 1: Check template literal usage
+            log('Issue 1: Template literal usage', 'warn');
+            const carousel = document.getElementById('carousel1');
+            const templateResult = carousel.template();
+            
+            if (!templateResult || !templateResult._isTemplate) {
+                log('CRITICAL: Template not returning html`` literal object!', 'error');
+                log('This will prevent proper rendering', 'error');
+            }
+            
+            // Issue 2: Event handler binding
+            log('\nIssue 2: Event handler binding', 'warn');
+            const controls = carousel.shadowRoot?.querySelectorAll('.carousel-control');
+            controls?.forEach(control => {
+                const onclick = control.getAttribute('onclick');
+                if (onclick && onclick.includes('${')) {
+                    log('CRITICAL: Event handlers using template syntax incorrectly!', 'error');
+                    log(`Found: ${onclick}`, 'error');
+                }
+            });
+            
+            // Issue 3: Array.join() usage
+            log('\nIssue 3: Array joining in templates', 'warn');
+            const slidesHtml = carousel._renderSlides?.();
+            if (slidesHtml && slidesHtml.includes('[object Object]')) {
+                log('CRITICAL: Template arrays not joined properly!', 'error');
+                log('Use .join("") after mapping html`` templates', 'error');
+            }
+            
+            // Issue 4: Missing initialization
+            log('\nIssue 4: Initialization timing', 'warn');
+            if (!carousel._slides || carousel._slides.length === 0) {
+                log('CRITICAL: Slides not initialized!', 'error');
+                log('_initialize() may not be called in connectedCallback', 'error');
+            }
+            
+            // Issue 5: Public API
+            log('\nIssue 5: Public API availability', 'warn');
+            const hasNext = typeof carousel.next === 'function';
+            const hasPrevious = typeof carousel.previous === 'function';
+            const hasGoTo = typeof carousel.goTo === 'function';
+            
+            log(`Has next(): ${hasNext}`, hasNext ? 'success' : 'error');
+            log(`Has previous(): ${hasPrevious}`, hasPrevious ? 'success' : 'error');
+            log(`Has goTo(): ${hasGoTo}`, hasGoTo ? 'success' : 'error');
+            
+            // Issue 6: CSS function usage
+            log('\nIssue 6: CSS template usage', 'warn');
+            const styles = carousel.shadowRoot?.querySelector('style');
+            if (!styles) {
+                log('CRITICAL: No styles found in shadow DOM!', 'error');
+            }
+            
+            // Summary
+            log('\n=== ISSUE SUMMARY ===', 'warn');
+            log('Major issues found:', 'error');
+            log('1. Template literal returns string instead of template object');
+            log('2. Event handlers using incorrect syntax in templates');
+            log('3. Arrays in templates not properly joined');
+            log('4. Component may not initialize properly');
+            log('5. onclick handlers may not work due to syntax');
+        };
+        
+        // Auto-detect on load
+        setTimeout(() => {
+            log('Carousel component loaded. Running initial diagnostics...', 'warn');
+            testInitialization();
+        }, 500);
+    </script>
+</body>
+</html>

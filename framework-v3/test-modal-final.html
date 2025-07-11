@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Modal Final Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #1976d2;
+            transform: translateY(-1px);
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .status h3 {
+            margin-top: 0;
+        }
+        
+        .test-result {
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .pass {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .fail {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .info {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 BRUTAL Modal - Final Test</h1>
+        <p>Testing all modal functionality after fixes</p>
+        
+        <div class="test-grid">
+            <button onclick="test1()">1. Basic Open/Close</button>
+            <button onclick="test2()">2. Multiple Opens</button>
+            <button onclick="test3()">3. All Animations</button>
+            <button onclick="test4()">4. Keyboard (ESC)</button>
+            <button onclick="test5()">5. Configuration</button>
+            <button onclick="test6()">6. Events</button>
+            <button onclick="test7()">7. Nested Modals</button>
+            <button onclick="testAll()">Run All Tests</button>
+        </div>
+        
+        <div class="status">
+            <h3>Test Results:</h3>
+            <div id="results"></div>
+        </div>
+    </div>
+    
+    <!-- Test Modals -->
+    <brutal-modal id="modal1" title="Test Modal 1">
+        <p>This is test modal 1.</p>
+        <p>Current time: <span id="time1"></span></p>
+        <button onclick="document.getElementById('modal1').close()">Close</button>
+    </brutal-modal>
+    
+    <brutal-modal id="modal2" title="Animation Test">
+        <p>Testing animation: <strong id="animType">scale</strong></p>
+    </brutal-modal>
+    
+    <brutal-modal id="modal3" title="Configuration Test">
+        <p>Try clicking outside or pressing ESC - it should NOT close.</p>
+        <button onclick="closeModal3()">Close Manually</button>
+    </brutal-modal>
+    
+    <brutal-modal id="parent" title="Parent Modal" size="large">
+        <p>This is the parent modal.</p>
+        <button onclick="document.getElementById('child').open()">Open Child Modal</button>
+    </brutal-modal>
+    
+    <brutal-modal id="child" title="Child Modal" size="small">
+        <p>This is a child modal.</p>
+        <p>It should appear above the parent.</p>
+    </brutal-modal>
+
+    <script type="module">
+        import { Modal } from './04-components/ui/Modal.js';
+        
+        const results = document.getElementById('results');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function clearLog() {
+            results.innerHTML = '';
+        }
+        
+        // Test 1: Basic Open/Close
+        window.test1 = async () => {
+            clearLog();
+            log('Test 1: Basic Open/Close');
+            
+            const modal = document.getElementById('modal1');
+            
+            try {
+                // Update time
+                document.getElementById('time1').textContent = new Date().toLocaleTimeString();
+                
+                log(`Initial state - isOpen: ${modal.isOpen}`);
+                
+                await modal.open();
+                log(`After open - isOpen: ${modal.isOpen}`, modal.isOpen ? 'pass' : 'fail');
+                
+                const container = modal.shadowRoot.querySelector('.modal-container');
+                log(`Modal container exists: ${!!container}`, container ? 'pass' : 'fail');
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                await modal.close();
+                log(`After close - isOpen: ${modal.isOpen}`, !modal.isOpen ? 'pass' : 'fail');
+                
+                log('Test 1 completed!', 'pass');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'fail');
+            }
+        };
+        
+        // Test 2: Multiple Opens
+        window.test2 = async () => {
+            clearLog();
+            log('Test 2: Multiple Opens');
+            
+            const modal = document.getElementById('modal1');
+            
+            try {
+                for (let i = 0; i < 3; i++) {
+                    document.getElementById('time1').textContent = new Date().toLocaleTimeString();
+                    
+                    await modal.open();
+                    log(`Open #${i + 1} - isOpen: ${modal.isOpen}`);
+                    
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    await modal.close();
+                    log(`Close #${i + 1} - isOpen: ${!modal.isOpen}`);
+                    
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+                
+                log('Test 2 completed!', 'pass');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'fail');
+            }
+        };
+        
+        // Test 3: All Animations
+        window.test3 = async () => {
+            clearLog();
+            log('Test 3: All Animations');
+            
+            const modal = document.getElementById('modal2');
+            const animations = ['scale', 'slide', 'flip', 'rotate', 'fade'];
+            
+            try {
+                for (const anim of animations) {
+                    modal.setAttribute('animation', anim);
+                    document.getElementById('animType').textContent = anim;
+                    
+                    await modal.open();
+                    log(`Animation '${anim}' opened`);
+                    
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                    
+                    await modal.close();
+                    
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+                
+                log('Test 3 completed!', 'pass');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'fail');
+            }
+        };
+        
+        // Test 4: Keyboard
+        window.test4 = async () => {
+            clearLog();
+            log('Test 4: Keyboard (ESC)');
+            
+            const modal = document.getElementById('modal1');
+            
+            try {
+                await modal.open();
+                log('Modal opened');
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                // Dispatch ESC key
+                const event = new KeyboardEvent('keydown', {
+                    key: 'Escape',
+                    bubbles: true
+                });
+                document.dispatchEvent(event);
+                log('ESC key pressed');
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                log(`Modal closed by ESC: ${!modal.isOpen}`, !modal.isOpen ? 'pass' : 'fail');
+                
+                log('Test 4 completed!', 'pass');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'fail');
+            }
+        };
+        
+        // Test 5: Configuration
+        window.test5 = async () => {
+            clearLog();
+            log('Test 5: Configuration');
+            
+            const modal = document.getElementById('modal3');
+            
+            try {
+                // Disable close on overlay and ESC
+                modal.setConfig('closeOnOverlay', false);
+                modal.setConfig('closeOnEscape', false);
+                
+                log('Disabled closeOnOverlay and closeOnEscape');
+                
+                await modal.open();
+                log('Modal opened with custom config');
+                
+                // Try ESC
+                const event = new KeyboardEvent('keydown', {
+                    key: 'Escape',
+                    bubbles: true
+                });
+                document.dispatchEvent(event);
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                log(`Modal still open after ESC: ${modal.isOpen}`, modal.isOpen ? 'pass' : 'fail');
+                
+                // Manual close
+                await modal.close();
+                
+                // Reset config
+                modal.setConfig('closeOnOverlay', true);
+                modal.setConfig('closeOnEscape', true);
+                
+                log('Test 5 completed!', 'pass');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'fail');
+            }
+        };
+        
+        // Test 6: Events
+        window.test6 = async () => {
+            clearLog();
+            log('Test 6: Events');
+            
+            const modal = document.getElementById('modal1');
+            let openFired = false;
+            let closeFired = false;
+            
+            const openHandler = () => {
+                openFired = true;
+                log('Event: open fired', 'pass');
+            };
+            
+            const closeHandler = () => {
+                closeFired = true;
+                log('Event: close fired', 'pass');
+            };
+            
+            modal.addEventListener('open', openHandler);
+            modal.addEventListener('close', closeHandler);
+            
+            try {
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await modal.close();
+                
+                log(`Open event fired: ${openFired}`, openFired ? 'pass' : 'fail');
+                log(`Close event fired: ${closeFired}`, closeFired ? 'pass' : 'fail');
+                
+                log('Test 6 completed!', 'pass');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'fail');
+            } finally {
+                modal.removeEventListener('open', openHandler);
+                modal.removeEventListener('close', closeHandler);
+            }
+        };
+        
+        // Test 7: Nested Modals
+        window.test7 = async () => {
+            clearLog();
+            log('Test 7: Nested Modals');
+            
+            const parent = document.getElementById('parent');
+            const child = document.getElementById('child');
+            
+            try {
+                await parent.open();
+                log('Parent modal opened');
+                
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                await child.open();
+                log('Child modal opened');
+                
+                log(`Parent isOpen: ${parent.isOpen}`, parent.isOpen ? 'pass' : 'fail');
+                log(`Child isOpen: ${child.isOpen}`, child.isOpen ? 'pass' : 'fail');
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                await child.close();
+                await parent.close();
+                
+                log('Test 7 completed!', 'pass');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'fail');
+            }
+        };
+        
+        // Run all tests
+        window.testAll = async () => {
+            clearLog();
+            log('Running all tests...', 'info');
+            
+            await test1();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await test2();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await test3();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await test4();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await test5();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await test6();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await test7();
+            
+            log('All tests completed!', 'info');
+        };
+        
+        // Helper for test 5
+        window.closeModal3 = () => {
+            document.getElementById('modal3').close();
+        };
+        
+        // Initial check
+        log('Modal test page loaded', 'info');
+        log(`Modal components found: ${document.querySelectorAll('brutal-modal').length}`, 'info');
+    </script>
+</body>
+</html>

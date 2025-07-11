@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications Test - BRUTAL V3</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #111;
+            color: #0f0;
+        }
+        
+        .controls {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            text-shadow: 0 0 20px #0f0;
+            margin-bottom: 30px;
+        }
+        
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #0ff;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            background: #000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .status {
+            background: #000;
+            border: 1px solid #0f0;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .theme-preview {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #0f0;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h1>BRUTAL Notifications Test</h1>
+        
+        <div class="config-grid">
+            <div class="control-group">
+                <label>Position</label>
+                <select id="position">
+                    <option value="top-right">Top Right</option>
+                    <option value="top-left">Top Left</option>
+                    <option value="bottom-right">Bottom Right</option>
+                    <option value="bottom-left">Bottom Left</option>
+                    <option value="center">Center</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>Theme</label>
+                <select id="theme">
+                    <option value="brutal">Brutal</option>
+                    <option value="minimal">Minimal</option>
+                    <option value="neon">Neon</option>
+                    <option value="glassmorphic">Glassmorphic</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>Animation</label>
+                <select id="animation">
+                    <option value="slide">Slide</option>
+                    <option value="fade">Fade</option>
+                    <option value="bounce">Bounce</option>
+                    <option value="explode">Explode</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>Duration (ms)</label>
+                <input type="number" id="duration" value="5000" min="0" step="1000">
+            </div>
+            
+            <div class="control-group">
+                <label>Max Stack</label>
+                <input type="number" id="maxStack" value="5" min="1" max="10">
+            </div>
+            
+            <div class="control-group">
+                <label>Spacing (px)</label>
+                <input type="number" id="spacing" value="10" min="0" max="50">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label>
+                <input type="checkbox" id="particleEffects" checked> Enable Particle Effects
+            </label>
+        </div>
+        
+        <div class="control-group">
+            <label>
+                <input type="checkbox" id="sounds"> Enable Sounds
+            </label>
+        </div>
+        
+        <button onclick="applyConfig()">Apply Configuration</button>
+        
+        <hr style="border-color: #0f0; margin: 20px 0;">
+        
+        <div class="config-grid">
+            <div class="control-group">
+                <label>Title</label>
+                <input type="text" id="title" placeholder="Optional title">
+            </div>
+            
+            <div class="control-group">
+                <label>Message</label>
+                <textarea id="message" rows="3" placeholder="Notification message">Hello! This is a test notification.</textarea>
+            </div>
+        </div>
+        
+        <h3>Quick Actions</h3>
+        <div class="button-grid">
+            <button onclick="showSuccess()">Success</button>
+            <button onclick="showError()">Error</button>
+            <button onclick="showWarning()">Warning</button>
+            <button onclick="showInfo()">Info</button>
+            <button onclick="showCustom()">Custom</button>
+            <button onclick="showWithActions()">With Actions</button>
+            <button onclick="showPersistent()">Persistent</button>
+            <button onclick="showMultiple()">Show 5 at Once</button>
+            <button onclick="testQueue()">Test Queue (10)</button>
+            <button onclick="clearAll()">Clear All</button>
+        </div>
+        
+        <h3>Stress Tests</h3>
+        <div class="button-grid">
+            <button onclick="rapidFire()">Rapid Fire (20)</button>
+            <button onclick="testPositions()">Test All Positions</button>
+            <button onclick="testThemes()">Test All Themes</button>
+            <button onclick="longMessage()">Long Message</button>
+            <button onclick="updateTest()">Update Test</button>
+        </div>
+        
+        <div class="status">
+            <h3>Status</h3>
+            <div class="status-item">
+                <span>Active Notifications:</span>
+                <span id="activeCount">0</span>
+            </div>
+            <div class="status-item">
+                <span>Queue Size:</span>
+                <span id="queueSize">0</span>
+            </div>
+            <div class="status-item">
+                <span>Last Action:</span>
+                <span id="lastAction">None</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Notifications } from './04-components/ui/Notifications.js';
+        
+        // Create notifications instance
+        const notifications = new Notifications();
+        document.body.appendChild(notifications);
+        
+        // Track for updates
+        let updateInterval;
+        
+        function updateStatus() {
+            document.getElementById('activeCount').textContent = notifications.getNotifications().length;
+            document.getElementById('queueSize').textContent = notifications.getQueueSize();
+        }
+        
+        // Listen to events
+        notifications.addEventListener('show', (e) => {
+            document.getElementById('lastAction').textContent = `Show: ${e.detail.notification.message.substring(0, 30)}...`;
+            updateStatus();
+        });
+        
+        notifications.addEventListener('dismiss', (e) => {
+            document.getElementById('lastAction').textContent = `Dismiss: ID ${e.detail.notification.id}`;
+            updateStatus();
+        });
+        
+        notifications.addEventListener('action', (e) => {
+            document.getElementById('lastAction').textContent = `Action: ${e.detail.action.label}`;
+        });
+        
+        // Apply configuration
+        window.applyConfig = function() {
+            notifications.setConfig({
+                position: document.getElementById('position').value,
+                theme: document.getElementById('theme').value,
+                animation: document.getElementById('animation').value,
+                duration: parseInt(document.getElementById('duration').value),
+                maxStack: parseInt(document.getElementById('maxStack').value),
+                spacing: parseInt(document.getElementById('spacing').value),
+                particleEffects: document.getElementById('particleEffects').checked,
+                sounds: document.getElementById('sounds').checked
+            });
+            
+            notifications.show('Configuration updated!', { type: 'success' });
+        };
+        
+        // Quick actions
+        window.showSuccess = function() {
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value || 'Operation completed successfully!';
+            notifications.show(message, { title, type: 'success' });
+        };
+        
+        window.showError = function() {
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value || 'An error occurred!';
+            notifications.show(message, { title, type: 'error' });
+        };
+        
+        window.showWarning = function() {
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value || 'Warning: Please check your input!';
+            notifications.show(message, { title, type: 'warning' });
+        };
+        
+        window.showInfo = function() {
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value || 'Information: Updates are available.';
+            notifications.show(message, { title, type: 'info' });
+        };
+        
+        window.showCustom = function() {
+            notifications.show('Custom notification with all options', {
+                title: 'Custom Notification',
+                type: 'info',
+                duration: 10000
+            });
+        };
+        
+        window.showWithActions = function() {
+            notifications.show('Would you like to proceed?', {
+                title: 'Confirmation Required',
+                type: 'warning',
+                duration: Infinity,
+                actions: [
+                    {
+                        label: 'Yes',
+                        handler: (notif) => {
+                            notifications.show('You clicked Yes!', { type: 'success' });
+                        }
+                    },
+                    {
+                        label: 'No',
+                        handler: (notif) => {
+                            notifications.show('You clicked No!', { type: 'info' });
+                        }
+                    }
+                ]
+            });
+        };
+        
+        window.showPersistent = function() {
+            notifications.show('This notification will stay until dismissed', {
+                title: 'Persistent Notification',
+                type: 'info',
+                duration: Infinity
+            });
+        };
+        
+        window.showMultiple = function() {
+            const types = ['success', 'error', 'warning', 'info', 'success'];
+            types.forEach((type, index) => {
+                setTimeout(() => {
+                    notifications.show(`Notification ${index + 1} of type ${type}`, {
+                        title: `${type.charAt(0).toUpperCase() + type.slice(1)} Message`,
+                        type
+                    });
+                }, index * 200);
+            });
+        };
+        
+        window.testQueue = function() {
+            for (let i = 1; i <= 10; i++) {
+                notifications.show(`Queued notification ${i}`, {
+                    title: `Queue Test ${i}`,
+                    type: i % 2 === 0 ? 'success' : 'info'
+                });
+            }
+        };
+        
+        window.clearAll = function() {
+            notifications.clear();
+        };
+        
+        // Stress tests
+        window.rapidFire = function() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    notifications.show(`Rapid notification ${i + 1}`, {
+                        type: ['success', 'error', 'warning', 'info'][i % 4],
+                        duration: 3000
+                    });
+                }, i * 100);
+            }
+        };
+        
+        window.testPositions = function() {
+            const positions = ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'center'];
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                if (index >= positions.length) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                notifications.setConfig({ position: positions[index] });
+                notifications.show(`Testing position: ${positions[index]}`, {
+                    type: 'info',
+                    duration: 3000
+                });
+                
+                index++;
+            }, 2000);
+        };
+        
+        window.testThemes = function() {
+            const themes = ['brutal', 'minimal', 'neon', 'glassmorphic'];
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                if (index >= themes.length) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                notifications.setConfig({ theme: themes[index] });
+                notifications.show(`Testing theme: ${themes[index]}`, {
+                    type: 'info',
+                    duration: 3000
+                });
+                
+                index++;
+            }, 2000);
+        };
+        
+        window.longMessage = function() {
+            notifications.show('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.', {
+                title: 'Very Long Message Test',
+                type: 'info',
+                duration: 10000
+            });
+        };
+        
+        window.updateTest = function() {
+            const id = notifications.show('This notification will be updated...', {
+                title: 'Update Test',
+                type: 'info',
+                duration: 10000
+            });
+            
+            setTimeout(() => {
+                notifications.update(id, {
+                    message: 'Updated message!',
+                    type: 'success'
+                });
+            }, 2000);
+            
+            setTimeout(() => {
+                notifications.update(id, {
+                    title: 'Final Update',
+                    message: 'This is the final update!',
+                    type: 'warning'
+                });
+            }, 4000);
+        };
+        
+        // Update status periodically
+        updateInterval = setInterval(updateStatus, 100);
+        
+        // Initial status
+        updateStatus();
+        
+        // Show welcome notification
+        setTimeout(() => {
+            notifications.show('Welcome to BRUTAL Notifications! Try the buttons above.', {
+                title: 'Welcome',
+                type: 'success'
+            });
+        }, 500);
+    </script>
+</body>
+</html>

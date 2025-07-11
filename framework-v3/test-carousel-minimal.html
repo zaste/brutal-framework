@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Carousel Test</title>
+    <style>
+        body { padding: 20px; background: #000; color: #0f0; font-family: monospace; }
+        .carousel { height: 300px; border: 2px solid #0f0; }
+        .slide { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+        .s1 { background: #400; }
+        .s2 { background: #040; }
+        .s3 { background: #004; }
+        #log { margin-top: 20px; padding: 10px; background: #111; border: 1px solid #0f0; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+    </style>
+</head>
+<body>
+    <h1>Minimal Carousel Test</h1>
+    
+    <brutal-carousel class="carousel">
+        <div class="slide s1">1</div>
+        <div class="slide s2">2</div>
+        <div class="slide s3">3</div>
+    </brutal-carousel>
+    
+    <div id="log"></div>
+
+    <script type="module">
+        const log = (msg, type = '') => {
+            document.getElementById('log').innerHTML += `<div class="${type}">${msg}</div>`;
+        };
+        
+        try {
+            // Import with error handling
+            const { Carousel } = await import('./04-components/ui/Carousel.js');
+            log('✓ Carousel imported successfully', 'success');
+            
+            // Wait for DOM
+            await new Promise(r => setTimeout(r, 100));
+            
+            // Check carousel
+            const carousel = document.querySelector('brutal-carousel');
+            log(`✓ Carousel element: ${!!carousel}`, carousel ? 'success' : 'error');
+            log(`✓ Is Carousel instance: ${carousel instanceof Carousel}`, carousel instanceof Carousel ? 'success' : 'error');
+            log(`✓ Has shadowRoot: ${!!carousel.shadowRoot}`, carousel.shadowRoot ? 'success' : 'error');
+            
+            // Check functionality
+            log(`✓ Current index: ${carousel.currentIndex}`);
+            log(`✓ Total slides: ${carousel.totalSlides}`);
+            
+            // Test navigation
+            await carousel.next();
+            await new Promise(r => setTimeout(r, 500));
+            log(`✓ After next(): index = ${carousel.currentIndex}`, carousel.currentIndex === 1 ? 'success' : 'error');
+            
+            // Check for errors
+            const shadowContent = carousel.shadowRoot?.innerHTML || '';
+            if (shadowContent.includes('[object Object]')) {
+                log('✗ Template contains [object Object]', 'error');
+            }
+            if (shadowContent.includes('${')) {
+                log('✗ Template contains unprocessed literals', 'error');
+            }
+            
+            log('\n✅ All basic tests passed!', 'success');
+            
+        } catch (error) {
+            log(`✗ Error: ${error.message}`, 'error');
+            log(`Stack: ${error.stack}`, 'error');
+        }
+    </script>
+</body>
+</html>

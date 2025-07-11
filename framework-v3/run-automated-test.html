@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Visual Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+        }
+        pre {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 20px;
+            border: 1px solid #00ff00;
+            overflow: auto;
+        }
+        .error { color: #ff0000; }
+        .warning { color: #ffff00; }
+        .success { color: #00ff00; }
+    </style>
+</head>
+<body>
+    <h1>🤖 BRUTAL V3 - Automated Visual Testing</h1>
+    <pre id="output">Initializing automated test system...</pre>
+    
+    <script type="module">
+        import { AutomatedVisualTester } from './03-visual/debug/AutomatedVisualTester.js';
+        
+        const output = document.getElementById('output');
+        
+        function log(message, type = 'info') {
+            const span = document.createElement('span');
+            span.className = type;
+            span.textContent = message + '\n';
+            output.appendChild(span);
+        }
+        
+        async function runTest() {
+            try {
+                log('Creating AutomatedVisualTester...');
+                
+                const tester = new AutomatedVisualTester({
+                    enabled: true,
+                    puppeteer: false,
+                    screenshotInterval: 1000
+                });
+                
+                log('Initializing tester...');
+                await tester.init();
+                
+                log('Running automated tests...');
+                
+                // Override the log method to capture output
+                tester._log = (source, message, level) => {
+                    log(`[${source}] ${message}`, level);
+                };
+                
+                // Run tests
+                await tester._runAutomatedTests();
+                
+                // Get report
+                const report = tester.getReport();
+                
+                log('\n=== TEST REPORT ===', 'success');
+                log(`Total Tests: ${report.summary.totalTests}`);
+                log(`Passed: ${report.summary.passed}`, 'success');
+                log(`Failed: ${report.summary.failed}`, report.summary.failed > 0 ? 'error' : 'success');
+                log(`Warnings: ${report.summary.warnings}`, report.summary.warnings > 0 ? 'warning' : 'success');
+                log(`Success Rate: ${report.summary.successRate}`);
+                
+                if (report.lastCheck && report.lastCheck.tests) {
+                    log('\n=== DETAILED RESULTS ===');
+                    for (const test of report.lastCheck.tests) {
+                        const icon = test.status === 'passed' ? '✅' : 
+                                    test.status === 'failed' ? '❌' : '⚠️';
+                        log(`${icon} ${test.name}: ${test.actual} (expected ${test.expected})`, test.status);
+                    }
+                }
+                
+                if (report.recentAnomalies.length > 0) {
+                    log('\n=== RECENT ANOMALIES ===', 'error');
+                    for (const anomaly of report.recentAnomalies) {
+                        log(`- ${anomaly.type}: ${JSON.stringify(anomaly.details)}`, 'error');
+                    }
+                }
+                
+                // Export logs button
+                log('\n=== ACTIONS ===');
+                const exportBtn = document.createElement('button');
+                exportBtn.textContent = 'Export Full Logs';
+                exportBtn.onclick = () => tester.exportLogs();
+                output.appendChild(exportBtn);
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+        
+        // Run test
+        runTest();
+    </script>
+</body>
+</html>

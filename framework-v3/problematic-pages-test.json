@@ -1,0 +1,14 @@
+{
+  "complete-test-all.html": {
+    "success": false,
+    "error": "page.waitForTimeout is not a function"
+  },
+  "hero-section-demo.html": {
+    "success": false,
+    "error": "page.waitForTimeout is not a function"
+  },
+  "visual-debug-demo.html": {
+    "success": false,
+    "error": "page.waitForTimeout is not a function"
+  }
+}

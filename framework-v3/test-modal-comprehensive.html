@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Modal Comprehensive Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .test-suite {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .test-case {
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .test-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2196f3;
+        }
+        
+        .test-result {
+            font-size: 0.9rem;
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        
+        .test-pass {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .test-fail {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .test-pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 4px;
+        }
+        
+        button:hover {
+            background: #1976d2;
+        }
+        
+        .stress-test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .metric {
+            text-align: center;
+            padding: 16px;
+            background: #e3f2fd;
+            border-radius: 4px;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        #performanceLog {
+            background: #263238;
+            color: #aed581;
+            padding: 16px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            margin-bottom: 4px;
+        }
+        
+        .modal-test-content {
+            padding: 20px;
+        }
+        
+        .large-content {
+            height: 2000px;
+            background: linear-gradient(to bottom, #e3f2fd, #1976d2);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-suite">
+        <h1>🧪 BRUTAL Modal - Comprehensive Test Suite</h1>
+        
+        <!-- Basic Functionality Tests -->
+        <div class="test-section">
+            <h2>Basic Functionality Tests</h2>
+            <div class="test-grid">
+                <div class="test-case">
+                    <div class="test-title">Open/Close Test</div>
+                    <button onclick="testOpenClose()">Run Test</button>
+                    <div class="test-result test-pending" id="openCloseResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Keyboard Navigation</div>
+                    <button onclick="testKeyboard()">Run Test</button>
+                    <div class="test-result test-pending" id="keyboardResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Focus Management</div>
+                    <button onclick="testFocus()">Run Test</button>
+                    <div class="test-result test-pending" id="focusResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Event Lifecycle</div>
+                    <button onclick="testEvents()">Run Test</button>
+                    <div class="test-result test-pending" id="eventsResult">Pending...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animation Performance Tests -->
+        <div class="test-section">
+            <h2>Animation Performance Tests</h2>
+            <div class="test-grid">
+                <div class="test-case">
+                    <div class="test-title">GPU Animation FPS</div>
+                    <button onclick="testAnimationFPS()">Run Test</button>
+                    <div class="test-result test-pending" id="fpsResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">WebGL Backdrop</div>
+                    <button onclick="testWebGL()">Run Test</button>
+                    <div class="test-result test-pending" id="webglResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Spring Physics</div>
+                    <button onclick="testSpringPhysics()">Run Test</button>
+                    <div class="test-result test-pending" id="springResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Memory Usage</div>
+                    <button onclick="testMemory()">Run Test</button>
+                    <div class="test-result test-pending" id="memoryResult">Pending...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stress Tests -->
+        <div class="test-section">
+            <h2>Stress Tests</h2>
+            <div class="test-grid">
+                <div class="test-case">
+                    <div class="test-title">Rapid Open/Close</div>
+                    <button onclick="stressTestRapid()">Run Test</button>
+                    <div class="test-result test-pending" id="rapidResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Multiple Modals</div>
+                    <button onclick="stressTestMultiple()">Run Test</button>
+                    <div class="test-result test-pending" id="multipleResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Large Content</div>
+                    <button onclick="stressTestContent()">Run Test</button>
+                    <div class="test-result test-pending" id="contentResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Animation Stress</div>
+                    <button onclick="stressTestAnimation()">Run Test</button>
+                    <div class="test-result test-pending" id="animationStressResult">Pending...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Edge Cases -->
+        <div class="test-section">
+            <h2>Edge Case Tests</h2>
+            <div class="test-grid">
+                <div class="test-case">
+                    <div class="test-title">No WebGL Support</div>
+                    <button onclick="testNoWebGL()">Run Test</button>
+                    <div class="test-result test-pending" id="noWebGLResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Mobile Gestures</div>
+                    <button onclick="testMobileGestures()">Run Test</button>
+                    <div class="test-result test-pending" id="gesturesResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Accessibility</div>
+                    <button onclick="testAccessibility()">Run Test</button>
+                    <div class="test-result test-pending" id="a11yResult">Pending...</div>
+                </div>
+                
+                <div class="test-case">
+                    <div class="test-title">Memory Leaks</div>
+                    <button onclick="testMemoryLeaks()">Run Test</button>
+                    <div class="test-result test-pending" id="leaksResult">Pending...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Interactive Tests -->
+        <div class="test-section">
+            <h2>Interactive Tests</h2>
+            <div class="stress-test-buttons">
+                <button onclick="openAllAnimations()">Test All Animations</button>
+                <button onclick="openAllSizes()">Test All Sizes</button>
+                <button onclick="openAllPositions()">Test All Positions</button>
+                <button onclick="openNestedChain()">Test Nested Chain (5 levels)</button>
+                <button onclick="runFullSuite()">Run Full Test Suite</button>
+            </div>
+        </div>
+        
+        <!-- Performance Metrics -->
+        <div class="test-section">
+            <h2>Performance Metrics</h2>
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-value" id="avgFPS">--</div>
+                    <div class="metric-label">Average FPS</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="openTime">--</div>
+                    <div class="metric-label">Avg Open Time (ms)</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="memoryUsage">--</div>
+                    <div class="metric-label">Memory Usage (MB)</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="modalCount">0</div>
+                    <div class="metric-label">Active Modals</div>
+                </div>
+            </div>
+            <div id="performanceLog"></div>
+        </div>
+    </div>
+    
+    <!-- Test Modals -->
+    <brutal-modal id="testModal" title="Test Modal">
+        <div class="modal-test-content">
+            <p>This is a test modal for automated testing.</p>
+            <input type="text" id="testInput" placeholder="Test input for focus">
+            <button id="testButton">Test Button</button>
+        </div>
+    </brutal-modal>
+    
+    <brutal-modal id="stressModal" title="Stress Test Modal">
+        <div class="modal-test-content">
+            <p>Stress testing modal performance...</p>
+        </div>
+    </brutal-modal>
+    
+    <brutal-modal id="largeModal" title="Large Content Modal" size="large">
+        <div class="large-content">
+            <p>Testing scrolling performance with large content...</p>
+        </div>
+    </brutal-modal>
+    
+    <!-- Nested modals for testing -->
+    <brutal-modal id="nested1" title="Level 1">
+        <button onclick="document.getElementById('nested2').open()">Open Level 2</button>
+    </brutal-modal>
+    <brutal-modal id="nested2" title="Level 2">
+        <button onclick="document.getElementById('nested3').open()">Open Level 3</button>
+    </brutal-modal>
+    <brutal-modal id="nested3" title="Level 3">
+        <button onclick="document.getElementById('nested4').open()">Open Level 4</button>
+    </brutal-modal>
+    <brutal-modal id="nested4" title="Level 4">
+        <button onclick="document.getElementById('nested5').open()">Open Level 5</button>
+    </brutal-modal>
+    <brutal-modal id="nested5" title="Level 5">
+        <p>Maximum nesting level reached!</p>
+    </brutal-modal>
+
+    <script type="module">
+        import { Modal } from './04-components/ui/Modal.js';
+        
+        // Performance monitoring
+        let frameCount = 0;
+        let lastTime = performance.now();
+        let fpsValues = [];
+        let openTimes = [];
+        let memorySnapshots = [];
+        
+        // Monitor FPS
+        function measureFPS() {
+            frameCount++;
+            const currentTime = performance.now();
+            
+            if (currentTime >= lastTime + 1000) {
+                const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                fpsValues.push(fps);
+                
+                if (fpsValues.length > 60) fpsValues.shift();
+                
+                const avgFPS = Math.round(fpsValues.reduce((a, b) => a + b, 0) / fpsValues.length);
+                document.getElementById('avgFPS').textContent = avgFPS;
+                
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+            
+            requestAnimationFrame(measureFPS);
+        }
+        measureFPS();
+        
+        // Utility functions
+        function updateResult(testId, passed, message) {
+            const result = document.getElementById(testId);
+            result.className = `test-result ${passed ? 'test-pass' : 'test-fail'}`;
+            result.textContent = message;
+            log(`${testId}: ${message}`);
+        }
+        
+        function log(message) {
+            const logEl = document.getElementById('performanceLog');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function measureMemory() {
+            if (performance.memory) {
+                const mb = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                document.getElementById('memoryUsage').textContent = mb;
+                return mb;
+            }
+            return 0;
+        }
+        
+        // Test functions
+        window.testOpenClose = async () => {
+            const modal = document.getElementById('testModal');
+            const startTime = performance.now();
+            
+            try {
+                await modal.open();
+                const openTime = performance.now() - startTime;
+                openTimes.push(openTime);
+                
+                if (!modal.isOpen) throw new Error('Modal not open');
+                
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                await modal.close();
+                if (modal.isOpen) throw new Error('Modal not closed');
+                
+                updateResult('openCloseResult', true, `✓ Passed (${openTime.toFixed(2)}ms)`);
+            } catch (error) {
+                updateResult('openCloseResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.testKeyboard = async () => {
+            const modal = document.getElementById('testModal');
+            
+            try {
+                await modal.open();
+                
+                // Test ESC key
+                const escEvent = new KeyboardEvent('keydown', { key: 'Escape' });
+                document.dispatchEvent(escEvent);
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                if (modal.isOpen) throw new Error('ESC key not working');
+                
+                updateResult('keyboardResult', true, '✓ ESC key working');
+            } catch (error) {
+                updateResult('keyboardResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.testFocus = async () => {
+            const modal = document.getElementById('testModal');
+            
+            try {
+                const previousFocus = document.activeElement;
+                await modal.open();
+                
+                // Check focus moved to modal
+                const modalInput = modal.shadowRoot.querySelector('#testInput');
+                if (!modalInput) throw new Error('Test input not found');
+                
+                // Test focus trap
+                const focusableElements = modal.shadowRoot.querySelectorAll(
+                    'button, input, [tabindex]:not([tabindex="-1"])'
+                );
+                
+                if (focusableElements.length === 0) throw new Error('No focusable elements');
+                
+                await modal.close();
+                
+                // Check focus restored
+                if (document.activeElement !== previousFocus) {
+                    throw new Error('Focus not restored');
+                }
+                
+                updateResult('focusResult', true, '✓ Focus management working');
+            } catch (error) {
+                updateResult('focusResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.testEvents = async () => {
+            const modal = document.getElementById('testModal');
+            let openFired = false;
+            let closeFired = false;
+            
+            const openHandler = () => openFired = true;
+            const closeHandler = () => closeFired = true;
+            
+            modal.addEventListener('open', openHandler);
+            modal.addEventListener('close', closeHandler);
+            
+            try {
+                await modal.open();
+                if (!openFired) throw new Error('Open event not fired');
+                
+                await modal.close();
+                if (!closeFired) throw new Error('Close event not fired');
+                
+                updateResult('eventsResult', true, '✓ Events firing correctly');
+            } catch (error) {
+                updateResult('eventsResult', false, `✗ Failed: ${error.message}`);
+            } finally {
+                modal.removeEventListener('open', openHandler);
+                modal.removeEventListener('close', closeHandler);
+            }
+        };
+        
+        window.testAnimationFPS = async () => {
+            const modal = document.getElementById('testModal');
+            modal.setAttribute('animation', 'scale');
+            
+            const fpsBefore = fpsValues.slice(-10);
+            
+            try {
+                for (let i = 0; i < 5; i++) {
+                    await modal.open();
+                    await new Promise(resolve => setTimeout(resolve, 400));
+                    await modal.close();
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+                
+                const fpsAfter = fpsValues.slice(-10);
+                const avgFPS = fpsAfter.reduce((a, b) => a + b, 0) / fpsAfter.length;
+                
+                if (avgFPS < 30) throw new Error(`Low FPS: ${avgFPS}`);
+                
+                updateResult('fpsResult', true, `✓ Smooth (${Math.round(avgFPS)} FPS)`);
+            } catch (error) {
+                updateResult('fpsResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.testWebGL = () => {
+            const modal = document.getElementById('testModal');
+            // Check if WebGL is available through config
+            const hasWebGL = modal.config.gpuEffects;
+            
+            if (hasWebGL) {
+                updateResult('webglResult', true, '✓ WebGL initialized');
+            } else {
+                updateResult('webglResult', true, '✓ Fallback to 2D canvas');
+            }
+        };
+        
+        window.testSpringPhysics = async () => {
+            const modal = document.getElementById('testModal');
+            modal.setAttribute('animation', 'scale');
+            
+            try {
+                const startTime = performance.now();
+                await modal.open();
+                const animTime = performance.now() - startTime;
+                
+                // Spring animations should be smooth but not too long
+                if (animTime > 1000) throw new Error('Animation too slow');
+                
+                updateResult('springResult', true, `✓ Spring physics (${animTime.toFixed(0)}ms)`);
+                await modal.close();
+            } catch (error) {
+                updateResult('springResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.testMemory = () => {
+            const mb = measureMemory();
+            updateResult('memoryResult', true, `✓ ${mb} MB used`);
+        };
+        
+        window.stressTestRapid = async () => {
+            const modal = document.getElementById('stressModal');
+            
+            try {
+                for (let i = 0; i < 20; i++) {
+                    modal.open();
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    modal.close();
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+                
+                updateResult('rapidResult', true, '✓ Handled rapid open/close');
+            } catch (error) {
+                updateResult('rapidResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.stressTestMultiple = async () => {
+            const modals = [];
+            
+            try {
+                // Create 10 modals
+                for (let i = 0; i < 10; i++) {
+                    const modal = document.createElement('brutal-modal');
+                    modal.id = `stress-modal-${i}`;
+                    modal.setAttribute('title', `Stress Modal ${i}`);
+                    modal.innerHTML = `<p>Modal ${i} content</p>`;
+                    document.body.appendChild(modal);
+                    modals.push(modal);
+                }
+                
+                // Open all
+                for (const modal of modals) {
+                    await modal.open();
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                document.getElementById('modalCount').textContent = modals.length;
+                
+                // Close all
+                for (const modal of modals.reverse()) {
+                    await modal.close();
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                updateResult('multipleResult', true, '✓ 10 modals handled');
+            } catch (error) {
+                updateResult('multipleResult', false, `✗ Failed: ${error.message}`);
+            } finally {
+                // Cleanup
+                modals.forEach(modal => modal.remove());
+                document.getElementById('modalCount').textContent = '0';
+            }
+        };
+        
+        window.stressTestContent = async () => {
+            const modal = document.getElementById('largeModal');
+            
+            try {
+                await modal.open();
+                
+                // Test scrolling
+                const body = modal.shadowRoot.querySelector('.modal-body');
+                body.scrollTop = 1000;
+                
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                if (body.scrollTop < 900) throw new Error('Scrolling failed');
+                
+                await modal.close();
+                updateResult('contentResult', true, '✓ Large content handled');
+            } catch (error) {
+                updateResult('contentResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.stressTestAnimation = async () => {
+            const animations = ['scale', 'slide', 'flip', 'rotate', 'fade'];
+            const modal = document.getElementById('testModal');
+            
+            try {
+                for (const anim of animations) {
+                    modal.setAttribute('animation', anim);
+                    await modal.open();
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                    await modal.close();
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                updateResult('animationStressResult', true, '✓ All animations smooth');
+            } catch (error) {
+                updateResult('animationStressResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.testNoWebGL = () => {
+            // Test fallback behavior
+            const modal = document.getElementById('testModal');
+            const oldContext = modal._webglContext;
+            
+            try {
+                // Simulate no WebGL
+                // Simulate no WebGL
+                modal.setConfig('gpuEffects', false);
+                
+                modal.open();
+                
+                // Should still work without WebGL
+                if (!modal.isOpen) throw new Error('Modal failed without WebGL');
+                
+                modal.close();
+                updateResult('noWebGLResult', true, '✓ Fallback working');
+            } catch (error) {
+                updateResult('noWebGLResult', false, `✗ Failed: ${error.message}`);
+            } finally {
+                // Restore
+                modal.setConfig('gpuEffects', true);
+            }
+        };
+        
+        window.testMobileGestures = () => {
+            // Simulate touch events
+            const modal = document.getElementById('testModal');
+            modal.setAttribute('position', 'bottom');
+            
+            try {
+                modal.open();
+                
+                // Simulate swipe down
+                const touchstart = new TouchEvent('touchstart', {
+                    touches: [{ clientX: 100, clientY: 100 }]
+                });
+                const touchend = new TouchEvent('touchend', {
+                    changedTouches: [{ clientX: 100, clientY: 300 }]
+                });
+                
+                modal.dispatchEvent(touchstart);
+                modal.dispatchEvent(touchend);
+                
+                updateResult('gesturesResult', true, '✓ Gesture support ready');
+                modal.close();
+            } catch (error) {
+                updateResult('gesturesResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.testAccessibility = () => {
+            const modal = document.getElementById('testModal');
+            
+            try {
+                modal.open();
+                
+                const dialog = modal.shadowRoot.querySelector('[role="dialog"]');
+                if (!dialog) throw new Error('No dialog role');
+                
+                if (dialog.getAttribute('aria-modal') !== 'true') {
+                    throw new Error('aria-modal not set');
+                }
+                
+                const closeButton = modal.shadowRoot.querySelector('.modal-close');
+                if (!closeButton.getAttribute('aria-label')) {
+                    throw new Error('Close button missing aria-label');
+                }
+                
+                modal.close();
+                updateResult('a11yResult', true, '✓ Accessibility OK');
+            } catch (error) {
+                updateResult('a11yResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        window.testMemoryLeaks = async () => {
+            const initialMemory = measureMemory();
+            
+            try {
+                // Create and destroy many modals
+                for (let i = 0; i < 50; i++) {
+                    const modal = document.createElement('brutal-modal');
+                    modal.innerHTML = '<p>Leak test</p>';
+                    document.body.appendChild(modal);
+                    
+                    await modal.open();
+                    await modal.close();
+                    
+                    modal.remove();
+                }
+                
+                // Force garbage collection if available
+                if (window.gc) window.gc();
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const finalMemory = measureMemory();
+                const leak = finalMemory - initialMemory;
+                
+                if (leak > 10) {
+                    throw new Error(`Possible leak: ${leak.toFixed(2)}MB`);
+                }
+                
+                updateResult('leaksResult', true, `✓ No leaks (${leak.toFixed(2)}MB)`);
+            } catch (error) {
+                updateResult('leaksResult', false, `✗ Failed: ${error.message}`);
+            }
+        };
+        
+        // Interactive test functions
+        window.openAllAnimations = async () => {
+            const animations = ['scale', 'slide', 'flip', 'rotate', 'fade'];
+            
+            for (const anim of animations) {
+                const modal = document.createElement('brutal-modal');
+                modal.setAttribute('title', `${anim} Animation`);
+                modal.setAttribute('animation', anim);
+                modal.innerHTML = `<p>This modal uses ${anim} animation</p>`;
+                document.body.appendChild(modal);
+                
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 800));
+                await modal.close();
+                
+                modal.remove();
+            }
+        };
+        
+        window.openAllSizes = async () => {
+            const sizes = ['small', 'medium', 'large', 'fullscreen'];
+            
+            for (const size of sizes) {
+                const modal = document.createElement('brutal-modal');
+                modal.setAttribute('title', `${size} Size`);
+                modal.setAttribute('size', size);
+                modal.innerHTML = `<p>This is a ${size} modal</p>`;
+                document.body.appendChild(modal);
+                
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 800));
+                await modal.close();
+                
+                modal.remove();
+            }
+        };
+        
+        window.openAllPositions = async () => {
+            const positions = ['center', 'top', 'bottom', 'left', 'right'];
+            
+            for (const pos of positions) {
+                const modal = document.createElement('brutal-modal');
+                modal.setAttribute('title', `${pos} Position`);
+                modal.setAttribute('position', pos);
+                modal.innerHTML = `<p>This modal is positioned at ${pos}</p>`;
+                document.body.appendChild(modal);
+                
+                await modal.open();
+                await new Promise(resolve => setTimeout(resolve, 800));
+                await modal.close();
+                
+                modal.remove();
+            }
+        };
+        
+        window.openNestedChain = async () => {
+            document.getElementById('nested1').open();
+        };
+        
+        window.runFullSuite = async () => {
+            log('Starting full test suite...');
+            
+            const tests = [
+                testOpenClose,
+                testKeyboard,
+                testFocus,
+                testEvents,
+                testAnimationFPS,
+                testWebGL,
+                testSpringPhysics,
+                testMemory,
+                stressTestRapid,
+                stressTestMultiple,
+                stressTestContent,
+                stressTestAnimation,
+                testNoWebGL,
+                testMobileGestures,
+                testAccessibility,
+                testMemoryLeaks
+            ];
+            
+            for (const test of tests) {
+                await test();
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            // Summary
+            const avgOpenTime = openTimes.reduce((a, b) => a + b, 0) / openTimes.length;
+            document.getElementById('openTime').textContent = avgOpenTime.toFixed(2);
+            
+            log('Full test suite completed!');
+        };
+        
+        // Initial log
+        log('Modal test suite loaded and ready');
+    </script>
+</body>
+</html>

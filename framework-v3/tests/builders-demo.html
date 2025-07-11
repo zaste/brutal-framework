@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Visual Builders Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        .demo-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .demo-header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .demo-title {
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .demo-nav {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn:hover {
+            background: #3a3a3a;
+            border-color: #3b82f6;
+        }
+        
+        .nav-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .demo-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .demo-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: none;
+        }
+        
+        .demo-section.active {
+            display: block;
+        }
+        
+        .intro-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem;
+            text-align: center;
+        }
+        
+        .intro-content {
+            max-width: 800px;
+        }
+        
+        .intro-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #3b82f6, #10b981, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .intro-content p {
+            font-size: 1.25rem;
+            color: #888;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: left;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        
+        .feature-desc {
+            color: #888;
+            line-height: 1.5;
+        }
+        
+        .demo-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        
+        .action-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .action-btn.primary {
+            background: #3b82f6;
+            color: #fff;
+        }
+        
+        .action-btn.primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.secondary {
+            background: #2a2a2a;
+            color: #fff;
+            border: 1px solid #333;
+        }
+        
+        .action-btn.secondary:hover {
+            background: #3a3a3a;
+            border-color: #3b82f6;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 1.25rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <header class="demo-header">
+            <h1 class="demo-title">BRUTAL Visual Builders</h1>
+            <nav class="demo-nav">
+                <button class="nav-btn active" data-section="intro">
+                    <span>🏠</span> Overview
+                </button>
+                <button class="nav-btn" data-section="dragdrop">
+                    <span>🔄</span> Drag & Drop
+                </button>
+                <button class="nav-btn" data-section="pagebuilder">
+                    <span>🏗️</span> Page Builder
+                </button>
+                <button class="nav-btn" data-section="theme">
+                    <span>🎨</span> Theme Engine
+                </button>
+            </nav>
+        </header>
+        
+        <main class="demo-content">
+            <section class="demo-section intro-section active" id="intro">
+                <div class="intro-content">
+                    <h2>Visual Development Tools</h2>
+                    <p>Build stunning web applications visually with BRUTAL Framework's professional-grade visual builders. No code required, but full code control when you need it.</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <span class="feature-icon">🔄</span>
+                            <h3 class="feature-title">Drag & Drop System</h3>
+                            <p class="feature-desc">High-performance drag and drop with smooth animations, multi-select, and auto-scroll support.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <span class="feature-icon">🏗️</span>
+                            <h3 class="feature-title">Page Builder</h3>
+                            <p class="feature-desc">Visual page composition with component palette, real-time preview, and AI-powered generation.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <span class="feature-icon">🎨</span>
+                            <h3 class="feature-title">Theme Engine</h3>
+                            <p class="feature-desc">Professional theme customization with live preview, CSS variables, and export functionality.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="demo-actions">
+                        <button class="action-btn primary" onclick="showSection('pagebuilder')">
+                            <span>🚀</span> Try Page Builder
+                        </button>
+                        <button class="action-btn secondary" onclick="showSection('theme')">
+                            <span>🎨</span> Customize Theme
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="demo-section" id="dragdrop">
+                <div class="loading">Loading Drag & Drop Demo...</div>
+            </section>
+            
+            <section class="demo-section" id="pagebuilder">
+                <div class="loading">Loading Page Builder...</div>
+            </section>
+            
+            <section class="demo-section" id="theme">
+                <div class="loading">Loading Theme Engine...</div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        import { dragDropSystem } from '../08-builders/DragDropSystem.js';
+        import { PageBuilder } from '../08-builders/PageBuilder.js';
+        import { ThemeEngine } from '../08-builders/ThemeEngine.js';
+        
+        // Load all components
+        Promise.all([
+            import('../04-components/core/Button.js'),
+            import('../04-components/core/Input.js'),
+            import('../04-components/core/Card.js'),
+            import('../04-components/core/Select.js'),
+            import('../04-components/feedback/Alert.js'),
+            import('../04-components/feedback/Toast.js')
+        ]).then(() => {
+            console.log('Components loaded');
+        });
+        
+        // Navigation
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('.demo-section');
+        
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const sectionId = btn.dataset.section;
+                showSection(sectionId);
+            });
+        });
+        
+        window.showSection = (sectionId) => {
+            // Update nav
+            navButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.section === sectionId);
+            });
+            
+            // Update sections
+            sections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionId);
+            });
+            
+            // Load content if needed
+            loadSectionContent(sectionId);
+        };
+        
+        function loadSectionContent(sectionId) {
+            const section = document.getElementById(sectionId);
+            
+            if (section.querySelector('.loading')) {
+                switch(sectionId) {
+                    case 'dragdrop':
+                        section.innerHTML = createDragDropDemo();
+                        initDragDropDemo();
+                        break;
+                    
+                    case 'pagebuilder':
+                        section.innerHTML = '<brutal-page-builder></brutal-page-builder>';
+                        break;
+                    
+                    case 'theme':
+                        section.innerHTML = '<brutal-theme-engine></brutal-theme-engine>';
+                        break;
+                }
+            }
+        }
+        
+        function createDragDropDemo() {
+            return `
+                <div style="height: 100%; padding: 2rem;">
+                    <h2 style="margin-bottom: 1rem;">Drag & Drop Demo</h2>
+                    <p style="color: #888; margin-bottom: 2rem;">Drag items between columns. Multi-select with Ctrl/Cmd.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; height: calc(100% - 120px);">
+                        <div class="drop-column" id="column1">
+                            <h3 style="margin-bottom: 1rem; color: #3b82f6;">To Do</h3>
+                            <div class="drop-zone" data-zone="todo">
+                                <div class="drag-item" data-id="1">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <div class="drag-content">
+                                        <h4>Design Homepage</h4>
+                                        <p>Create wireframes and mockups</p>
+                                    </div>
+                                </div>
+                                <div class="drag-item" data-id="2">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <div class="drag-content">
+                                        <h4>Implement API</h4>
+                                        <p>Build REST endpoints</p>
+                                    </div>
+                                </div>
+                                <div class="drag-item" data-id="3">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <div class="drag-content">
+                                        <h4>Write Tests</h4>
+                                        <p>Unit and integration tests</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="drop-column" id="column2">
+                            <h3 style="margin-bottom: 1rem; color: #f59e0b;">In Progress</h3>
+                            <div class="drop-zone" data-zone="progress">
+                                <div class="drag-item" data-id="4">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <div class="drag-content">
+                                        <h4>User Authentication</h4>
+                                        <p>OAuth2 integration</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="drop-column" id="column3">
+                            <h3 style="margin-bottom: 1rem; color: #10b981;">Done</h3>
+                            <div class="drop-zone" data-zone="done">
+                                <div class="drag-item" data-id="5">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <div class="drag-content">
+                                        <h4>Setup Project</h4>
+                                        <p>Initialize repository</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <style>
+                    .drop-column {
+                        background: #1a1a1a;
+                        border: 1px solid #333;
+                        border-radius: 0.5rem;
+                        padding: 1rem;
+                    }
+                    
+                    .drop-zone {
+                        min-height: 400px;
+                        padding: 0.5rem;
+                        border-radius: 0.25rem;
+                        transition: all 0.2s;
+                    }
+                    
+                    .drag-item {
+                        background: #2a2a2a;
+                        border: 1px solid #333;
+                        border-radius: 0.25rem;
+                        padding: 1rem;
+                        margin-bottom: 0.5rem;
+                        display: flex;
+                        gap: 0.75rem;
+                        transition: all 0.2s;
+                    }
+                    
+                    .drag-item:hover {
+                        border-color: #3b82f6;
+                        transform: translateY(-1px);
+                    }
+                    
+                    .drag-handle {
+                        color: #666;
+                        cursor: move;
+                        user-select: none;
+                    }
+                    
+                    .drag-content {
+                        flex: 1;
+                    }
+                    
+                    .drag-content h4 {
+                        margin: 0 0 0.25rem 0;
+                        font-size: 0.875rem;
+                    }
+                    
+                    .drag-content p {
+                        margin: 0;
+                        font-size: 0.75rem;
+                        color: #888;
+                    }
+                </style>
+            `;
+        }
+        
+        function initDragDropDemo() {
+            // Setup drop zones
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                dragDropSystem.createDropZone(zone, {
+                    accepts: ['task'],
+                    onDrop: (items, dropZone) => {
+                        console.log('Dropped', items.length, 'items into', dropZone.dataset.zone);
+                    }
+                });
+            });
+            
+            // Make items draggable
+            document.querySelectorAll('.drag-item').forEach(item => {
+                dragDropSystem.enableDrag(item, {
+                    handle: '.drag-handle',
+                    group: 'task',
+                    data: { id: item.dataset.id }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

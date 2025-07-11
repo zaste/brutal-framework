@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Diagnostic Test</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+        }
+        h1 { text-shadow: 0 0 10px #0f0; }
+        .diagnostic { 
+            background: #111; 
+            padding: 20px; 
+            border: 1px solid #0f0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .warning { color: #ff0; }
+        .info { color: #0ff; }
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0f0;
+            color: #000;
+        }
+        .test-timeline {
+            height: 300px;
+            border: 2px solid #0f0;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Timeline Component Diagnostic</h1>
+    
+    <button onclick="runDiagnostic()">Run Full Diagnostic</button>
+    <button onclick="testMinimal()">Test Minimal Timeline</button>
+    <button onclick="checkConsoleErrors()">Check Console</button>
+    
+    <div id="log" class="diagnostic"></div>
+    
+    <brutal-timeline id="timeline1" class="test-timeline">
+        <div date="2024-01-01" title="Item 1">Test 1</div>
+        <div date="2024-02-01" title="Item 2">Test 2</div>
+        <div date="2024-03-01" title="Item 3">Test 3</div>
+    </brutal-timeline>
+
+    <script type="module">
+        import { Timeline } from './04-components/ui/Timeline.js';
+        
+        const log = (msg, type = 'info') => {
+            const logEl = document.getElementById('log');
+            logEl.innerHTML += `<div class="${type}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+        };
+        
+        // Override console to catch errors
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        let consoleErrors = [];
+        let consoleWarnings = [];
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            consoleErrors.push(args.join(' '));
+            log('Console Error: ' + args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            consoleWarnings.push(args.join(' '));
+            log('Console Warning: ' + args.join(' '), 'warning');
+        };
+        
+        window.runDiagnostic = async function() {
+            log('=== STARTING DIAGNOSTIC ===', 'warning');
+            const timeline = document.getElementById('timeline1');
+            
+            // 1. Check basic initialization
+            log('\n1. INITIALIZATION CHECK', 'info');
+            try {
+                log(`Timeline element exists: ${!!timeline}`, timeline ? 'success' : 'error');
+                log(`Is Timeline instance: ${timeline instanceof Timeline}`, timeline instanceof Timeline ? 'success' : 'error');
+                log(`Has shadowRoot: ${!!timeline.shadowRoot}`, timeline.shadowRoot ? 'success' : 'error');
+                
+                // Check template
+                if (typeof timeline.template === 'function') {
+                    const templateResult = timeline.template();
+                    log(`template() returns: ${typeof templateResult}`, typeof templateResult === 'string' ? 'success' : 'error');
+                    
+                    if (templateResult && typeof templateResult === 'string') {
+                        log(`Template length: ${templateResult.length} chars`, 'info');
+                        
+                        // Check for common issues
+                        if (templateResult.includes('[object Object]')) {
+                            log('ERROR: Template contains [object Object]', 'error');
+                        }
+                        if (templateResult.includes('${')) {
+                            log('ERROR: Template contains unprocessed literals', 'error');
+                        }
+                    }
+                }
+                
+            } catch (e) {
+                log(`Initialization error: ${e.message}`, 'error');
+                console.error(e);
+            }
+            
+            // 2. Check internal state
+            log('\n2. INTERNAL STATE CHECK', 'info');
+            try {
+                log(`_items: ${Array.isArray(timeline._items)} (${timeline._items?.length || 0} items)`, 'info');
+                log(`_config: ${typeof timeline._config}`, 'info');
+                log(`_activeIndex: ${timeline._activeIndex}`, 'info');
+                log(`_isPlaying: ${timeline._isPlaying}`, 'info');
+                log(`_zoomLevel: ${timeline._zoomLevel}`, 'info');
+                
+                // Check WebGL
+                log(`_gl (WebGL context): ${!!timeline._gl}`, timeline._gl ? 'success' : 'warning');
+                log(`_canvas: ${!!timeline._canvas}`, 'info');
+                log(`_programs: ${Object.keys(timeline._programs || {}).length} shaders`, 'info');
+                
+                // Check physics
+                log(`_physics.particles: ${timeline._physics?.particles?.length || 0}`, 'info');
+                
+            } catch (e) {
+                log(`State check error: ${e.message}`, 'error');
+            }
+            
+            // 3. Check render loop
+            log('\n3. RENDER LOOP CHECK', 'info');
+            try {
+                log(`RAF ID: ${timeline._rafId}`, timeline._rafId ? 'success' : 'error');
+                log(`FPS: ${timeline._fps?.toFixed(1) || 'N/A'}`, 'info');
+                log(`Last frame: ${timeline._lastFrame}`, 'info');
+                
+            } catch (e) {
+                log(`Render loop error: ${e.message}`, 'error');
+            }
+            
+            // 4. Check DOM structure
+            log('\n4. DOM STRUCTURE CHECK', 'info');
+            try {
+                const container = timeline.shadowRoot?.querySelector('.timeline-container');
+                const scrollContainer = timeline.shadowRoot?.querySelector('.timeline-scroll-container');
+                const track = timeline.shadowRoot?.querySelector('.timeline-track');
+                const canvas = timeline.shadowRoot?.querySelector('.timeline-webgl-canvas');
+                
+                log(`Container: ${!!container}`, container ? 'success' : 'error');
+                log(`Scroll container: ${!!scrollContainer}`, scrollContainer ? 'success' : 'error');
+                log(`Track: ${!!track}`, track ? 'success' : 'error');
+                log(`WebGL canvas: ${!!canvas}`, canvas ? 'success' : 'warning');
+                
+                // Check items rendering
+                const renderedItems = timeline.shadowRoot?.querySelectorAll('.timeline-item');
+                log(`Rendered items: ${renderedItems?.length || 0}`, 'info');
+                
+            } catch (e) {
+                log(`DOM check error: ${e.message}`, 'error');
+            }
+            
+            // 5. Test functionality
+            log('\n5. FUNCTIONALITY TEST', 'info');
+            try {
+                // Test navigation
+                timeline.setActiveItem(1);
+                await new Promise(r => setTimeout(r, 100));
+                log(`Active item after setActiveItem(1): ${timeline._activeIndex}`, timeline._activeIndex === 1 ? 'success' : 'error');
+                
+                // Test zoom
+                timeline.setZoom(2);
+                log(`Zoom after setZoom(2): ${timeline._zoomLevel}`, timeline._zoomLevel === 2 ? 'success' : 'error');
+                
+            } catch (e) {
+                log(`Functionality test error: ${e.message}`, 'error');
+            }
+            
+            // 6. Performance check
+            log('\n6. PERFORMANCE CHECK', 'info');
+            await new Promise(r => setTimeout(r, 1000));
+            log(`Current FPS: ${timeline._fps?.toFixed(1) || 'N/A'}`, timeline._fps > 30 ? 'success' : 'warning');
+            log(`Particles: ${timeline._particles?.length || 0}`, 'info');
+            log(`Visible items: ${timeline._visibleItems?.size || 0}`, 'info');
+            
+            // Summary
+            log('\n=== DIAGNOSTIC COMPLETE ===', 'warning');
+            log(`Console errors: ${consoleErrors.length}`, consoleErrors.length === 0 ? 'success' : 'error');
+            log(`Console warnings: ${consoleWarnings.length}`, consoleWarnings.length === 0 ? 'success' : 'warning');
+        };
+        
+        window.testMinimal = function() {
+            log('Creating minimal timeline...', 'info');
+            
+            const minimal = document.createElement('brutal-timeline');
+            minimal.innerHTML = '<div date="2024-01-01" title="Test">Minimal test</div>';
+            minimal.style.height = '200px';
+            minimal.style.border = '1px solid #0f0';
+            
+            document.body.appendChild(minimal);
+            
+            setTimeout(() => {
+                log(`Minimal timeline created`, 'success');
+                log(`Has items: ${minimal._items?.length > 0}`, minimal._items?.length > 0 ? 'success' : 'error');
+                log(`Has shadowRoot: ${!!minimal.shadowRoot}`, minimal.shadowRoot ? 'success' : 'error');
+            }, 500);
+        };
+        
+        window.checkConsoleErrors = function() {
+            log(`\nConsole Errors (${consoleErrors.length}):`, 'warning');
+            consoleErrors.forEach(err => log(err, 'error'));
+            
+            log(`\nConsole Warnings (${consoleWarnings.length}):`, 'warning');
+            consoleWarnings.forEach(warn => log(warn, 'warning'));
+        };
+        
+        // Initial check
+        setTimeout(() => {
+            log('Timeline diagnostic ready', 'success');
+            
+            // Check for immediate errors
+            const timeline = document.getElementById('timeline1');
+            if (!timeline) {
+                log('ERROR: Timeline element not found!', 'error');
+            } else if (!timeline.shadowRoot) {
+                log('WARNING: Shadow DOM not initialized', 'warning');
+            } else {
+                log('Timeline element initialized', 'success');
+                
+                // Check WebGL support
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+                log(`WebGL support: ${!!gl}`, gl ? 'success' : 'warning');
+            }
+        }, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Visual Debug Layer Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-bottom: 2px solid #00ff00;
+        }
+        
+        h1 {
+            font-size: 3em;
+            text-shadow: 0 0 20px #00ff00;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #00ffff;
+            font-size: 1.2em;
+        }
+        
+        .controls {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff00;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            min-width: 250px;
+        }
+        
+        .controls h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            background: #001100;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        .section {
+            margin: 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #003300;
+        }
+        
+        .demo-area {
+            padding: 40px;
+            min-height: 600px;
+            position: relative;
+        }
+        
+        /* Demo Components */
+        .demo-component {
+            position: absolute;
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            cursor: move;
+            transition: all 0.3s;
+        }
+        
+        .demo-component:hover {
+            background: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+        
+        .demo-component h4 {
+            margin-bottom: 10px;
+            color: #00ffff;
+        }
+        
+        .demo-state {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 300px;
+        }
+        
+        .shortcuts {
+            font-size: 0.8em;
+            line-height: 1.6;
+        }
+        
+        .shortcuts kbd {
+            background: #003300;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #00ff00;
+        }
+        
+        #status {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: none;
+            z-index: 10000;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5em;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔥 BRUTAL V3</h1>
+        <div class="subtitle">Visual Debug Layer Demo</div>
+    </div>
+    
+    <div id="status"></div>
+    
+    <div class="controls">
+        <h3>🎮 Debug Controls</h3>
+        
+        <div class="section">
+            <h4>System</h4>
+            <button onclick="toggleDebugLayer()">Toggle Debug Layer</button>
+            <button onclick="toggleRecording()">Toggle Recording</button>
+            <button onclick="clearEffects()">Clear All Effects</button>
+            <button onclick="exportLogs()">Export Logs</button>
+        </div>
+        
+        <div class="section">
+            <h4>Component Effects</h4>
+            <button onclick="simulateMount()">Simulate Mount</button>
+            <button onclick="simulateUpdate()">Simulate Update</button>
+            <button onclick="simulateUnmount()">Simulate Unmount</button>
+            <button onclick="simulateError()">Simulate Error</button>
+        </div>
+        
+        <div class="section">
+            <h4>Performance</h4>
+            <button onclick="simulateFastRender()">Fast Render</button>
+            <button onclick="simulateSlowRender()">Slow Render</button>
+            <button onclick="simulateMemoryPressure()">Memory Pressure</button>
+        </div>
+        
+        <div class="section">
+            <h4>Visual Effects</h4>
+            <button onclick="playConfetti()">🎉 Confetti</button>
+            <button onclick="playFireworks()">🎆 Fireworks</button>
+            <button onclick="playMatrix()">💊 Matrix Rain</button>
+            <button onclick="runAutoTest()">🤖 Run Auto Test</button>
+        </div>
+    </div>
+    
+    <div class="demo-area" id="demoArea">
+        <div class="loading pulse">Loading Visual Debug System...</div>
+    </div>
+    
+    <div class="info">
+        <h4>⌨️ Keyboard Shortcuts</h4>
+        <div class="shortcuts">
+            <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd> - Toggle Debug</div>
+            <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> - Toggle Recording</div>
+            <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> - Clear Effects</div>
+            <div>Click components to interact!</div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { Component } from './01-core/Component.js';
+        import { html } from './01-core/index.js';
+        import { State } from './01-core/State.js';
+        import { initVisualDebug, effects } from './03-visual/index.js';
+        
+        // Demo Component
+        class DemoComponent extends Component {
+            constructor() {
+                super();
+                this.state = new State({
+                    count: 0,
+                    status: 'idle',
+                    lastUpdate: Date.now()
+                });
+            }
+            
+            connectedCallback() {
+                super.connectedCallback();
+                
+                // Emit mount event
+                const rect = this.getBoundingClientRect();
+                effects.mount(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                
+                // Make draggable
+                this._makeDraggable();
+            }
+            
+            template() {
+                const { count, status } = this.state.get();
+                
+                return html`
+                    <div class="demo-component-content">
+                        <h4>${this.getAttribute('name') || 'Component'}</h4>
+                        <div class="demo-state">
+                            Count: ${count}<br>
+                            Status: ${status}
+                        </div>
+                        <button @click=${() => this.increment()}>Increment</button>
+                    </div>
+                `;
+            }
+            
+            styles() {
+                return `
+                    :host {
+                        display: block;
+                    }
+                    button {
+                        margin-top: 10px;
+                        padding: 5px 10px;
+                        font-size: 0.9em;
+                    }
+                `;
+            }
+            
+            increment() {
+                const oldState = this.state.get();
+                this.state.set({
+                    count: oldState.count + 1,
+                    status: 'active',
+                    lastUpdate: Date.now()
+                });
+                
+                // Visual feedback
+                const rect = this.getBoundingClientRect();
+                effects.update(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                
+                // Emit state change event
+                this.dispatchEvent(new CustomEvent('brutal:state-change', {
+                    detail: {
+                        component: this,
+                        oldState,
+                        newState: this.state.get()
+                    },
+                    bubbles: true
+                }));
+            }
+            
+            _makeDraggable() {
+                let isDragging = false;
+                let startX, startY, initialX, initialY;
+                
+                const onMouseDown = (e) => {
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    initialX = this.offsetLeft;
+                    initialY = this.offsetTop;
+                    this.style.cursor = 'grabbing';
+                };
+                
+                const onMouseMove = (e) => {
+                    if (!isDragging) return;
+                    
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    
+                    this.style.left = (initialX + dx) + 'px';
+                    this.style.top = (initialY + dy) + 'px';
+                };
+                
+                const onMouseUp = () => {
+                    isDragging = false;
+                    this.style.cursor = 'move';
+                };
+                
+                this.addEventListener('mousedown', onMouseDown);
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            }
+        }
+        
+        // Register component
+        customElements.define('demo-component', DemoComponent);
+        
+        // Initialize Visual Debug Layer
+        let debugLayer;
+        let isRecording = false;
+        
+        async function init() {
+            // Initialize debug system
+            await initVisualDebug({
+                enabled: true,
+                autoTest: false,
+                puppeteer: false
+            });
+            
+            debugLayer = window.__BRUTAL_DEBUG__;
+            
+            // Clear loading message
+            const demoArea = document.getElementById('demoArea');
+            demoArea.innerHTML = '';
+            
+            // Create demo components
+            createDemoComponents();
+            
+            showStatus('✅ Visual Debug Layer Ready!');
+        }
+        
+        function createDemoComponents() {
+            const demoArea = document.getElementById('demoArea');
+            
+            // Create multiple components
+            const components = [
+                { name: 'Header Component', x: 100, y: 50 },
+                { name: 'Data Display', x: 400, y: 50 },
+                { name: 'User Input', x: 100, y: 200 },
+                { name: 'Status Panel', x: 400, y: 200 }
+            ];
+            
+            components.forEach(({ name, x, y }) => {
+                const comp = document.createElement('demo-component');
+                comp.setAttribute('name', name);
+                comp.classList.add('demo-component');
+                comp.style.left = x + 'px';
+                comp.style.top = y + 'px';
+                demoArea.appendChild(comp);
+            });
+        }
+        
+        // Control functions
+        window.toggleDebugLayer = () => {
+            if (debugLayer) {
+                debugLayer.toggle();
+                showStatus(debugLayer.enabled ? '✅ Debug Layer ON' : '❌ Debug Layer OFF');
+            }
+        };
+        
+        window.toggleRecording = () => {
+            if (debugLayer) {
+                debugLayer.toggleRecording();
+                isRecording = !isRecording;
+                showStatus(isRecording ? '🎥 Recording Started' : '🎬 Recording Stopped');
+            }
+        };
+        
+        window.clearEffects = () => {
+            if (debugLayer) {
+                debugLayer.clear();
+                showStatus('🧹 Effects Cleared');
+            }
+        };
+        
+        window.exportLogs = () => {
+            const tester = window.__BRUTAL_VISUAL_TESTER__;
+            if (tester) {
+                tester.exportLogs();
+                showStatus('📁 Logs Exported');
+            }
+        };
+        
+        // Effect simulations
+        window.simulateMount = () => {
+            effects.mount(300, 300);
+            showStatus('🌱 Component Mount');
+        };
+        
+        window.simulateUpdate = () => {
+            effects.update(350, 300);
+            showStatus('🔄 Component Update');
+        };
+        
+        window.simulateUnmount = () => {
+            effects.unmount(400, 300);
+            showStatus('💨 Component Unmount');
+        };
+        
+        window.simulateError = () => {
+            effects.error(350, 350);
+            showStatus('💥 Error Simulated');
+        };
+        
+        window.simulateFastRender = () => {
+            effects.fastRender(300, 250);
+            showStatus('⚡ Fast Render');
+        };
+        
+        window.simulateSlowRender = () => {
+            effects.slowRender(400, 250);
+            showStatus('🐌 Slow Render Warning');
+        };
+        
+        window.simulateMemoryPressure = () => {
+            effects.memoryPressure(350, 200);
+            showStatus('💾 Memory Pressure');
+        };
+        
+        window.playConfetti = () => {
+            effects.confetti();
+            showStatus('🎉 Celebration!');
+        };
+        
+        window.playFireworks = () => {
+            effects.fireworks();
+            showStatus('🎆 Fireworks!');
+        };
+        
+        window.playMatrix = () => {
+            effects.matrix();
+            showStatus('💊 Enter The Matrix');
+        };
+        
+        window.runAutoTest = async () => {
+            showStatus('🤖 Running Automated Test...');
+            
+            // Initialize automated tester if not already
+            if (!window.__BRUTAL_VISUAL_TESTER__) {
+                const { AutomatedVisualTester } = await import('./03-visual/debug/AutomatedVisualTester.js');
+                const tester = new AutomatedVisualTester({ enabled: true });
+                await tester.init();
+            }
+            
+            // Force a test run
+            const tester = window.__BRUTAL_VISUAL_TESTER__;
+            await tester._runAutomatedTests();
+            
+            const report = tester.getReport();
+            showStatus(`✅ Tests: ${report.summary.passed} passed, ${report.summary.failed} failed`);
+        };
+        
+        function showStatus(message) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Simulate some activity
+        function simulateActivity() {
+            const components = document.querySelectorAll('demo-component');
+            
+            // Random component updates
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const comp = components[Math.floor(Math.random() * components.length)];
+                    if (comp && comp.increment) {
+                        comp.increment();
+                    }
+                }
+            }, 2000);
+            
+            // Simulate state flows
+            setInterval(() => {
+                if (Math.random() > 0.8 && components.length >= 2) {
+                    const from = components[Math.floor(Math.random() * components.length)];
+                    const to = components[Math.floor(Math.random() * components.length)];
+                    
+                    if (from !== to) {
+                        const fromRect = from.getBoundingClientRect();
+                        const toRect = to.getBoundingClientRect();
+                        
+                        effects.stateFlow(
+                            fromRect.left + fromRect.width / 2,
+                            fromRect.top + fromRect.height / 2,
+                            toRect.left + toRect.width / 2,
+                            toRect.top + toRect.height / 2
+                        );
+                    }
+                }
+            }, 3000);
+            
+            // Occasional errors
+            setInterval(() => {
+                if (Math.random() > 0.95) {
+                    const comp = components[Math.floor(Math.random() * components.length)];
+                    const rect = comp.getBoundingClientRect();
+                    
+                    // Dispatch error event
+                    comp.dispatchEvent(new CustomEvent('brutal:error', {
+                        detail: {
+                            component: comp,
+                            error: new Error('Simulated error for demo')
+                        },
+                        bubbles: true
+                    }));
+                }
+            }, 5000);
+        }
+        
+        // Initialize on load
+        init().then(() => {
+            setTimeout(simulateActivity, 1000);
+        });
+    </script>
+</body>
+</html>

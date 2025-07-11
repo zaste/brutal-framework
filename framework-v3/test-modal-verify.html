@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Verification Test</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: system-ui;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #00cc00;
+        }
+        .test-results {
+            margin-top: 20px;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        .pass { color: #00ff00; }
+        .fail { color: #ff0000; }
+        .info { color: #00ffff; }
+    </style>
+</head>
+<body>
+    <h1>🚀 BRUTAL Modal - Verification Test</h1>
+    
+    <button onclick="runTest()">Run Verification Test</button>
+    
+    <div class="test-results" id="results"></div>
+    
+    <brutal-modal id="modal" title="BRUTAL Modal Test" animation="scale">
+        <p>✅ Modal is working correctly!</p>
+        <p>All functionality has been verified.</p>
+    </brutal-modal>
+
+    <script type="module">
+        import { Modal } from './04-components/ui/Modal.js';
+        
+        function log(msg, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            results.appendChild(div);
+        }
+        
+        window.runTest = async () => {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            
+            log('Starting Modal verification test...', 'info');
+            
+            const modal = document.getElementById('modal');
+            let allPassed = true;
+            
+            try {
+                // Test 1: Initial state
+                log(`✓ Initial state - isOpen: ${modal.isOpen === false}`, modal.isOpen === false ? 'pass' : 'fail');
+                if (modal.isOpen !== false) allPassed = false;
+                
+                // Test 2: Open modal
+                await modal.open();
+                log(`✓ After open - isOpen: ${modal.isOpen === true}`, modal.isOpen === true ? 'pass' : 'fail');
+                if (modal.isOpen !== true) allPassed = false;
+                
+                // Test 3: Check DOM
+                const container = modal.shadowRoot.querySelector('.modal-container');
+                log(`✓ Modal container exists: ${!!container}`, container ? 'pass' : 'fail');
+                if (!container) allPassed = false;
+                
+                // Test 4: Check visibility
+                const wrapper = modal.shadowRoot.querySelector('.modal-wrapper');
+                const isVisible = wrapper && wrapper.classList.contains('modal-open');
+                log(`✓ Modal is visible: ${isVisible}`, isVisible ? 'pass' : 'fail');
+                if (!isVisible) allPassed = false;
+                
+                // Wait for user to see the modal
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Test 5: Close modal
+                await modal.close();
+                log(`✓ After close - isOpen: ${modal.isOpen === false}`, modal.isOpen === false ? 'pass' : 'fail');
+                if (modal.isOpen !== false) allPassed = false;
+                
+                // Test 6: ESC key
+                await modal.open();
+                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                await new Promise(resolve => setTimeout(resolve, 300));
+                log(`✓ ESC key closes modal: ${modal.isOpen === false}`, modal.isOpen === false ? 'pass' : 'fail');
+                if (modal.isOpen !== false) allPassed = false;
+                
+                log('', 'info');
+                if (allPassed) {
+                    log('✅ ALL TESTS PASSED! Modal is working correctly.', 'pass');
+                } else {
+                    log('❌ Some tests failed. Check the results above.', 'fail');
+                }
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'fail');
+                console.error(error);
+            }
+        };
+        
+        // Auto-run test on load
+        setTimeout(() => {
+            log('Modal component loaded. Click the button to run the test.', 'info');
+        }, 100);
+    </script>
+</body>
+</html>

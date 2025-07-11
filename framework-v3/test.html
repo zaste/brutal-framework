@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Framework V3 - Core Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { background: #0f3a0f; border: 1px solid #0f0; }
+        .error { background: #3a0f0f; border: 1px solid #f00; }
+        .info { background: #1a1a2a; border: 1px solid #00f; }
+        h1 { font-size: 24px; margin-bottom: 20px; }
+        test-component {
+            display: block;
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>BRUTAL Framework V3 - Core Test</h1>
+    <div id="test-results"></div>
+    <test-component></test-component>
+    
+    <script type="module">
+        const results = document.getElementById('test-results');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        try {
+            // Test 1: Import core modules
+            log('Testing core imports...');
+            const core = await import('./01-core/index.js');
+            log('✅ Core modules imported successfully', 'success');
+            
+            // Test 2: Check exports
+            const exports = ['Component', 'EnhancedComponent', 'State', 'Router', 'html', 'css'];
+            for (const exp of exports) {
+                if (core[exp]) {
+                    log(`✅ Export '${exp}' found`, 'success');
+                } else {
+                    log(`❌ Export '${exp}' missing`, 'error');
+                }
+            }
+            
+            // Test 3: Create test component
+            log('Creating test component...');
+            const { Component, html, css } = core;
+            
+            class TestComponent extends Component {
+                constructor() {
+                    super();
+                    this.count = 0;
+                }
+                
+                template() {
+                    return html`
+                        <div class="test-component">
+                            <h2>Test Component</h2>
+                            <p>Count: <span data-number>${this.count}</span></p>
+                            <button id="increment">Increment</button>
+                            <div class="metrics">
+                                Renders: ${this._metrics.renders} | 
+                                Avg time: ${this._metrics.avgTime.toFixed(2)}ms
+                            </div>
+                        </div>
+                    `.content;
+                }
+                
+                styles() {
+                    return css`
+                        :host {
+                            display: block;
+                            background: linear-gradient(135deg, #1a1a2e, #16213e);
+                            border-radius: 10px;
+                            overflow: hidden;
+                        }
+                        .test-component {
+                            padding: 20px;
+                            color: #fff;
+                        }
+                        h2 {
+                            margin: 0 0 15px 0;
+                            color: #0ff;
+                        }
+                        button {
+                            background: #0ff;
+                            color: #000;
+                            border: none;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-weight: bold;
+                            transition: transform 0.1s;
+                        }
+                        button:hover {
+                            transform: scale(1.05);
+                        }
+                        button:active {
+                            transform: scale(0.95);
+                        }
+                        .metrics {
+                            margin-top: 15px;
+                            font-size: 12px;
+                            opacity: 0.7;
+                            font-family: monospace;
+                        }
+                    `.content;
+                }
+                
+                connectedCallback() {
+                    super.connectedCallback();
+                    
+                    // Set up click handler after render
+                    setTimeout(() => {
+                        const button = this.shadow.getElementById('increment');
+                        if (button) {
+                            button.addEventListener('click', () => {
+                                this.count++;
+                                this.updateNumber(this.count);
+                                log(`Count updated to ${this.count}`, 'info');
+                            });
+                        }
+                    }, 0);
+                }
+            }
+            
+            customElements.define('test-component', TestComponent);
+            log('✅ Test component registered', 'success');
+            
+            // Test 4: State management
+            log('Testing state management...');
+            const { createState } = core;
+            
+            const appState = createState('test', { 
+                counter: 0,
+                user: { name: 'Test User' }
+            });
+            
+            appState.subscribe('counter', (newVal, oldVal) => {
+                log(`State counter changed: ${oldVal} → ${newVal}`, 'info');
+            });
+            
+            appState.set('counter', 42);
+            log('✅ State management working', 'success');
+            
+            // Test 5: Router
+            log('Testing router...');
+            const { router } = core;
+            
+            router
+                .route('/', () => log('Home route', 'info'))
+                .route('/test', () => log('Test route', 'info'))
+                .route('/user/:id', (ctx) => log(`User ${ctx.params.id}`, 'info'));
+            
+            log('✅ Router configured', 'success');
+            
+            // Test 6: Performance metrics
+            log('Testing performance metrics...');
+            const component = document.querySelector('test-component');
+            
+            setTimeout(() => {
+                const metrics = component.getMetrics();
+                log(`Component metrics: ${JSON.stringify(metrics)}`, 'info');
+                log('✅ All core tests passed!', 'success');
+            }, 100);
+            
+        } catch (error) {
+            log(`❌ Test failed: ${error.message}`, 'error');
+            console.error(error);
+        }
+    </script>
+</body>
+</html>

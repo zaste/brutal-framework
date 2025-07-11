@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Complete Test Suite</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-card {
+            background: #001100;
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .test-card:hover {
+            box-shadow: 0 0 20px #00ff00;
+        }
+        
+        .test-card h3 {
+            margin: 0 0 10px 0;
+            color: #0ff;
+        }
+        
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .pending { background: #333; color: #999; }
+        .running { background: #003366; color: #0ff; }
+        .passed { background: #003300; color: #0f0; }
+        .failed { background: #330000; color: #f00; }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 0.8em;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+        }
+        
+        #summary {
+            background: #001100;
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #00ff00;
+        }
+        
+        pre {
+            background: #000;
+            padding: 20px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            overflow: auto;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 BRUTAL V3 - Complete Test Suite</h1>
+    
+    <div id="controls" style="text-align: center;">
+        <button onclick="runAllTests()">Run All Tests</button>
+        <button onclick="exportResults()">Export Results</button>
+    </div>
+    
+    <div id="summary" style="display: none;"></div>
+    
+    <div class="test-grid" id="testGrid"></div>
+    
+    <pre id="console"></pre>
+    
+    <script type="module">
+        // Import core modules
+        import { Component, State, Router, init as initCore } from './01-core/index.js';
+        import { initPerformanceGems, performance } from './02-performance/index.js';
+        import { initVisualDebug } from './03-visual/index.js';
+        
+        const tests = [
+            {
+                name: 'Core Components',
+                id: 'core',
+                run: async () => {
+                    const comp = new Component();
+                    const state = new State({ test: true });
+                    const router = new Router();
+                    
+                    return {
+                        componentCreated: !!comp.shadowRoot,
+                        stateCreated: state.get().test === true,
+                        routerCreated: !!router,
+                        sharedArrayBuffer: window.crossOriginIsolated
+                    };
+                }
+            },
+            {
+                name: 'Performance Gems',
+                id: 'gems',
+                run: async () => {
+                    initPerformanceGems();
+                    const metrics = performance.getMetrics();
+                    
+                    return {
+                        styleManager: !!metrics.styleManager,
+                        fragmentPool: !!metrics.fragmentPool,
+                        domScheduler: !!metrics.domScheduler,
+                        templateCache: !!metrics.templateCache,
+                        eventManager: !!metrics.eventManager,
+                        themeEngine: !!metrics.themeEngine,
+                        layoutOptimizer: !!metrics.layoutOptimizer
+                    };
+                }
+            },
+            {
+                name: 'Visual Debug Layer',
+                id: 'visual',
+                run: async () => {
+                    await initVisualDebug({ enabled: true, autoTest: false });
+                    
+                    return {
+                        debugLayerCreated: !!window.__BRUTAL_DEBUG__,
+                        particleEffects: !!window.__BRUTAL_DEBUG__?.particleEngine,
+                        componentMonitor: !!window.__BRUTAL_DEBUG__?.componentMonitor,
+                        performanceHUD: !!window.__BRUTAL_DEBUG__?.performanceHUD
+                    };
+                }
+            },
+            {
+                name: 'State Management',
+                id: 'state',
+                run: async () => {
+                    const state = new State({ count: 0 });
+                    let updateCount = 0;
+                    
+                    const unsubscribe = state.subscribe('count', () => updateCount++);
+                    state.set('count', 1);
+                    state.set('count', 2);
+                    state.set('count', 3);
+                    
+                    return {
+                        subscriptionsWork: updateCount === 3,
+                        currentValue: state.get('count') === 3,
+                        sharedMemoryAvailable: state.useSharedMemory
+                    };
+                }
+            },
+            {
+                name: 'Component Lifecycle',
+                id: 'lifecycle',
+                run: async () => {
+                    let mounted = false;
+                    let rendered = false;
+                    
+                    class TestComp extends Component {
+                        connectedCallback() {
+                            super.connectedCallback();
+                            mounted = true;
+                        }
+                        
+                        template() {
+                            rendered = true;
+                            return '<div>Test</div>';
+                        }
+                    }
+                    
+                    if (!customElements.get('test-lifecycle')) {
+                        customElements.define('test-lifecycle', TestComp);
+                    }
+                    
+                    const el = document.createElement('test-lifecycle');
+                    document.body.appendChild(el);
+                    
+                    await new Promise(r => setTimeout(r, 100));
+                    
+                    const result = {
+                        mounted,
+                        rendered,
+                        shadowDOM: !!el.shadowRoot
+                    };
+                    
+                    el.remove();
+                    return result;
+                }
+            },
+            {
+                name: 'Performance Benchmark',
+                id: 'benchmark',
+                run: async () => {
+                    const start = performance.now();
+                    const components = [];
+                    
+                    // Create 100 components
+                    for (let i = 0; i < 100; i++) {
+                        const comp = new Component();
+                        components.push(comp);
+                    }
+                    
+                    const createTime = performance.now() - start;
+                    
+                    // Update all components
+                    const updateStart = performance.now();
+                    for (const comp of components) {
+                        comp.render();
+                    }
+                    const updateTime = performance.now() - updateStart;
+                    
+                    return {
+                        createTime: createTime.toFixed(2) + 'ms',
+                        updateTime: updateTime.toFixed(2) + 'ms',
+                        avgCreateTime: (createTime / 100).toFixed(3) + 'ms',
+                        avgUpdateTime: (updateTime / 100).toFixed(3) + 'ms'
+                    };
+                }
+            }
+        ];
+        
+        const testGrid = document.getElementById('testGrid');
+        const consoleEl = document.getElementById('console');
+        const summaryEl = document.getElementById('summary');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#f00' : type === 'success' ? '#0f0' : '#0ff';
+            consoleEl.innerHTML += `<span style="color: ${color}">[${timestamp}] ${message}</span>\n`;
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+        
+        function createTestCard(test) {
+            const card = document.createElement('div');
+            card.className = 'test-card';
+            card.id = `test-${test.id}`;
+            card.innerHTML = `
+                <h3>${test.name}</h3>
+                <div class="status pending">Pending</div>
+                <div class="results"></div>
+            `;
+            return card;
+        }
+        
+        async function runTest(test) {
+            const card = document.getElementById(`test-${test.id}`);
+            const statusEl = card.querySelector('.status');
+            const resultsEl = card.querySelector('.results');
+            
+            statusEl.className = 'status running';
+            statusEl.textContent = 'Running...';
+            log(`Running test: ${test.name}`);
+            
+            try {
+                const results = await test.run();
+                const passed = Object.values(results).every(v => 
+                    typeof v === 'boolean' ? v : true
+                );
+                
+                statusEl.className = `status ${passed ? 'passed' : 'failed'}`;
+                statusEl.textContent = passed ? '✅ Passed' : '❌ Failed';
+                
+                resultsEl.innerHTML = Object.entries(results)
+                    .map(([key, value]) => {
+                        const icon = typeof value === 'boolean' ? 
+                            (value ? '✅' : '❌') : '📊';
+                        return `
+                            <div class="metric">
+                                <span>${key}:</span>
+                                <span class="metric-value">${icon} ${value}</span>
+                            </div>
+                        `;
+                    })
+                    .join('');
+                
+                log(`Test ${test.name}: ${passed ? 'PASSED' : 'FAILED'}`, 
+                    passed ? 'success' : 'error');
+                
+                return { test: test.name, passed, results };
+            } catch (error) {
+                statusEl.className = 'status failed';
+                statusEl.textContent = '❌ Error';
+                resultsEl.innerHTML = `<div style="color: #f00;">${error.message}</div>`;
+                log(`Test ${test.name} ERROR: ${error.message}`, 'error');
+                
+                return { test: test.name, passed: false, error: error.message };
+            }
+        }
+        
+        window.runAllTests = async function() {
+            log('🚀 Starting BRUTAL V3 Complete Test Suite', 'info');
+            
+            // Clear previous results
+            testGrid.innerHTML = '';
+            summaryEl.style.display = 'none';
+            
+            // Create test cards
+            for (const test of tests) {
+                testGrid.appendChild(createTestCard(test));
+            }
+            
+            // Run all tests
+            const results = [];
+            for (const test of tests) {
+                const result = await runTest(test);
+                results.push(result);
+                await new Promise(r => setTimeout(r, 500)); // Visual delay
+            }
+            
+            // Show summary
+            const passed = results.filter(r => r.passed).length;
+            const failed = results.filter(r => !r.passed).length;
+            const successRate = ((passed / results.length) * 100).toFixed(1);
+            
+            summaryEl.innerHTML = `
+                <h2>Test Summary</h2>
+                <div style="font-size: 48px; margin: 20px 0;">
+                    ${passed === results.length ? '🎉' : '⚠️'} ${successRate}%
+                </div>
+                <div style="font-size: 24px;">
+                    ✅ Passed: ${passed} | ❌ Failed: ${failed}
+                </div>
+                ${passed === results.length ? 
+                    '<div style="color: #0f0; margin-top: 20px;">ALL SYSTEMS OPERATIONAL!</div>' :
+                    '<div style="color: #ff0; margin-top: 20px;">Some tests need attention</div>'
+                }
+            `;
+            summaryEl.style.display = 'block';
+            
+            log(`\n✅ Test Suite Complete: ${passed}/${results.length} passed (${successRate}%)`, 
+                passed === results.length ? 'success' : 'error');
+        };
+        
+        window.exportResults = function() {
+            const content = consoleEl.textContent;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `brutal-v3-test-results-${Date.now()}.txt`;
+            a.click();
+        };
+        
+        // Initialize
+        log('BRUTAL V3 Test Suite Ready', 'info');
+        log(`Environment: crossOriginIsolated=${window.crossOriginIsolated}`, 'info');
+    </script>
+</body>
+</html>

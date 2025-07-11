@@ -1,0 +1,2077 @@
+{
+  "file": "complete-test-all.html",
+  "timestamp": "2025-07-10T14:14:19.673Z",
+  "console": [
+    {
+      "level": "error",
+      "text": "404: Route not found: /complete-test-all.html",
+      "timestamp": "2025-07-10T14:14:19.818Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/01-core/Router.js",
+      "line": 567,
+      "column": 15
+    },
+    {
+      "level": "error",
+      "text": "404: Route not found: /complete-test-all.html",
+      "timestamp": "2025-07-10T14:14:23.970Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/01-core/Router.js",
+      "line": 567,
+      "column": 15
+    },
+    {
+      "level": "log",
+      "text": "✨ Particle Engine initialized (GPU: false)",
+      "timestamp": "2025-07-10T14:14:24.988Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/03-visual/gpu/ParticleEngine.js",
+      "line": 64,
+      "column": 17
+    },
+    {
+      "level": "log",
+      "text": "🎬 BRUTAL Visual Debug Layer initialized",
+      "timestamp": "2025-07-10T14:14:24.991Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+      "line": 75,
+      "column": 17
+    },
+    {
+      "level": "log",
+      "text": "🎬 BRUTAL Visual Debug Layer initialized",
+      "timestamp": "2025-07-10T14:14:24.991Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/03-visual/index.js",
+      "line": 51,
+      "column": 17
+    }
+  ],
+  "errors": [
+    {
+      "type": "pageerror",
+      "message": "Cannot read properties of undefined (reading 'getBoundingClientRect')",
+      "stack": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at _handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at _notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at set (http://localhost:8080/01-core/State.js:104:14)\n    at set (http://localhost:8080/01-core/State.js:298:21)\n    at run (http://localhost:8080/complete-test-all.html:182:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+      "timestamp": "2025-07-10T14:14:25.518Z"
+    },
+    {
+      "timestamp": 1752156865499.631,
+      "exceptionDetails": {
+        "exceptionId": 2,
+        "text": "Uncaught",
+        "lineNumber": 43,
+        "columnNumber": 31,
+        "scriptId": "27",
+        "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "renderStateChange",
+              "scriptId": "27",
+              "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+              "lineNumber": 43,
+              "columnNumber": 31
+            },
+            {
+              "functionName": "_handleStateChange",
+              "scriptId": "24",
+              "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+              "lineNumber": 218,
+              "columnNumber": 30
+            },
+            {
+              "functionName": "emitBrutalEvent",
+              "scriptId": "18",
+              "url": "http://localhost:8080/01-core/events.js",
+              "lineNumber": 61,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "_notifyChange",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 421,
+              "columnNumber": 6
+            },
+            {
+              "functionName": "set",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 103,
+              "columnNumber": 13
+            },
+            {
+              "functionName": "set",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 297,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "run",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 181,
+              "columnNumber": 26
+            },
+            {
+              "functionName": "runTest",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 295,
+              "columnNumber": 43
+            },
+            {
+              "functionName": "window.runAllTests",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 345,
+              "columnNumber": 37
+            }
+          ]
+        },
+        "exception": {
+          "type": "object",
+          "subtype": "error",
+          "className": "TypeError",
+          "description": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at DataFlowRenderer.renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at VisualDebugLayer._handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at State._notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at Object.set (http://localhost:8080/01-core/State.js:104:14)\n    at State.set (http://localhost:8080/01-core/State.js:298:21)\n    at Object.run (http://localhost:8080/complete-test-all.html:182:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+          "objectId": "-1594751898236567348.3.1",
+          "preview": {
+            "type": "object",
+            "subtype": "error",
+            "description": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at DataFlowRenderer.renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at VisualDebugLayer._handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at State._notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at Object.set (http://localhost:8080/01-core/State.js:104:14)\n    at State.set (http://localhost:8080/01-core/State.js:298:21)\n    at Object.run (http://localhost:8080/complete-test-all.html:182:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+            "overflow": false,
+            "properties": [
+              {
+                "name": "stack",
+                "type": "string",
+                "value": "TypeError: Cannot read properties of undefined (re…p://localhost:8080/complete-test-all.html:346:38)"
+              },
+              {
+                "name": "message",
+                "type": "string",
+                "value": "Cannot read properties of undefined (reading 'getBoundingClientRect')"
+              }
+            ]
+          }
+        },
+        "executionContextId": 3
+      },
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "renderStateChange",
+            "scriptId": "27",
+            "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+            "lineNumber": 43,
+            "columnNumber": 31
+          },
+          {
+            "functionName": "_handleStateChange",
+            "scriptId": "24",
+            "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+            "lineNumber": 218,
+            "columnNumber": 30
+          },
+          {
+            "functionName": "emitBrutalEvent",
+            "scriptId": "18",
+            "url": "http://localhost:8080/01-core/events.js",
+            "lineNumber": 61,
+            "columnNumber": 10
+          },
+          {
+            "functionName": "_notifyChange",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 421,
+            "columnNumber": 6
+          },
+          {
+            "functionName": "set",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 103,
+            "columnNumber": 13
+          },
+          {
+            "functionName": "set",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 297,
+            "columnNumber": 20
+          },
+          {
+            "functionName": "run",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 181,
+            "columnNumber": 26
+          },
+          {
+            "functionName": "runTest",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 295,
+            "columnNumber": 43
+          },
+          {
+            "functionName": "window.runAllTests",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 345,
+            "columnNumber": 37
+          }
+        ]
+      }
+    },
+    {
+      "type": "pageerror",
+      "message": "Cannot read properties of undefined (reading 'getBoundingClientRect')",
+      "stack": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at _handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at _notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at set (http://localhost:8080/01-core/State.js:104:14)\n    at set (http://localhost:8080/01-core/State.js:298:21)\n    at run (http://localhost:8080/complete-test-all.html:183:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+      "timestamp": "2025-07-10T14:14:25.518Z"
+    },
+    {
+      "timestamp": 1752156865501.26,
+      "exceptionDetails": {
+        "exceptionId": 3,
+        "text": "Uncaught",
+        "lineNumber": 43,
+        "columnNumber": 31,
+        "scriptId": "27",
+        "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "renderStateChange",
+              "scriptId": "27",
+              "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+              "lineNumber": 43,
+              "columnNumber": 31
+            },
+            {
+              "functionName": "_handleStateChange",
+              "scriptId": "24",
+              "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+              "lineNumber": 218,
+              "columnNumber": 30
+            },
+            {
+              "functionName": "emitBrutalEvent",
+              "scriptId": "18",
+              "url": "http://localhost:8080/01-core/events.js",
+              "lineNumber": 61,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "_notifyChange",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 421,
+              "columnNumber": 6
+            },
+            {
+              "functionName": "set",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 103,
+              "columnNumber": 13
+            },
+            {
+              "functionName": "set",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 297,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "run",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 182,
+              "columnNumber": 26
+            },
+            {
+              "functionName": "runTest",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 295,
+              "columnNumber": 43
+            },
+            {
+              "functionName": "window.runAllTests",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 345,
+              "columnNumber": 37
+            }
+          ]
+        },
+        "exception": {
+          "type": "object",
+          "subtype": "error",
+          "className": "TypeError",
+          "description": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at DataFlowRenderer.renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at VisualDebugLayer._handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at State._notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at Object.set (http://localhost:8080/01-core/State.js:104:14)\n    at State.set (http://localhost:8080/01-core/State.js:298:21)\n    at Object.run (http://localhost:8080/complete-test-all.html:183:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+          "objectId": "-1594751898236567348.3.2",
+          "preview": {
+            "type": "object",
+            "subtype": "error",
+            "description": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at DataFlowRenderer.renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at VisualDebugLayer._handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at State._notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at Object.set (http://localhost:8080/01-core/State.js:104:14)\n    at State.set (http://localhost:8080/01-core/State.js:298:21)\n    at Object.run (http://localhost:8080/complete-test-all.html:183:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+            "overflow": false,
+            "properties": [
+              {
+                "name": "stack",
+                "type": "string",
+                "value": "TypeError: Cannot read properties of undefined (re…p://localhost:8080/complete-test-all.html:346:38)"
+              },
+              {
+                "name": "message",
+                "type": "string",
+                "value": "Cannot read properties of undefined (reading 'getBoundingClientRect')"
+              }
+            ]
+          }
+        },
+        "executionContextId": 3
+      },
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "renderStateChange",
+            "scriptId": "27",
+            "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+            "lineNumber": 43,
+            "columnNumber": 31
+          },
+          {
+            "functionName": "_handleStateChange",
+            "scriptId": "24",
+            "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+            "lineNumber": 218,
+            "columnNumber": 30
+          },
+          {
+            "functionName": "emitBrutalEvent",
+            "scriptId": "18",
+            "url": "http://localhost:8080/01-core/events.js",
+            "lineNumber": 61,
+            "columnNumber": 10
+          },
+          {
+            "functionName": "_notifyChange",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 421,
+            "columnNumber": 6
+          },
+          {
+            "functionName": "set",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 103,
+            "columnNumber": 13
+          },
+          {
+            "functionName": "set",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 297,
+            "columnNumber": 20
+          },
+          {
+            "functionName": "run",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 182,
+            "columnNumber": 26
+          },
+          {
+            "functionName": "runTest",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 295,
+            "columnNumber": 43
+          },
+          {
+            "functionName": "window.runAllTests",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 345,
+            "columnNumber": 37
+          }
+        ]
+      }
+    },
+    {
+      "type": "pageerror",
+      "message": "Cannot read properties of undefined (reading 'getBoundingClientRect')",
+      "stack": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at _handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at _notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at set (http://localhost:8080/01-core/State.js:104:14)\n    at set (http://localhost:8080/01-core/State.js:298:21)\n    at run (http://localhost:8080/complete-test-all.html:184:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+      "timestamp": "2025-07-10T14:14:25.519Z"
+    },
+    {
+      "timestamp": 1752156865502.11,
+      "exceptionDetails": {
+        "exceptionId": 4,
+        "text": "Uncaught",
+        "lineNumber": 43,
+        "columnNumber": 31,
+        "scriptId": "27",
+        "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "renderStateChange",
+              "scriptId": "27",
+              "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+              "lineNumber": 43,
+              "columnNumber": 31
+            },
+            {
+              "functionName": "_handleStateChange",
+              "scriptId": "24",
+              "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+              "lineNumber": 218,
+              "columnNumber": 30
+            },
+            {
+              "functionName": "emitBrutalEvent",
+              "scriptId": "18",
+              "url": "http://localhost:8080/01-core/events.js",
+              "lineNumber": 61,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "_notifyChange",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 421,
+              "columnNumber": 6
+            },
+            {
+              "functionName": "set",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 103,
+              "columnNumber": 13
+            },
+            {
+              "functionName": "set",
+              "scriptId": "12",
+              "url": "http://localhost:8080/01-core/State.js",
+              "lineNumber": 297,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "run",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 183,
+              "columnNumber": 26
+            },
+            {
+              "functionName": "runTest",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 295,
+              "columnNumber": 43
+            },
+            {
+              "functionName": "window.runAllTests",
+              "scriptId": "7",
+              "url": "http://localhost:8080/complete-test-all.html",
+              "lineNumber": 345,
+              "columnNumber": 37
+            }
+          ]
+        },
+        "exception": {
+          "type": "object",
+          "subtype": "error",
+          "className": "TypeError",
+          "description": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at DataFlowRenderer.renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at VisualDebugLayer._handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at State._notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at Object.set (http://localhost:8080/01-core/State.js:104:14)\n    at State.set (http://localhost:8080/01-core/State.js:298:21)\n    at Object.run (http://localhost:8080/complete-test-all.html:184:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+          "objectId": "-1594751898236567348.3.3",
+          "preview": {
+            "type": "object",
+            "subtype": "error",
+            "description": "TypeError: Cannot read properties of undefined (reading 'getBoundingClientRect')\n    at DataFlowRenderer.renderStateChange (http://localhost:8080/03-visual/debug/DataFlowRenderer.js:44:32)\n    at VisualDebugLayer._handleStateChange (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:219:31)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at State._notifyChange (http://localhost:8080/01-core/State.js:422:7)\n    at Object.set (http://localhost:8080/01-core/State.js:104:14)\n    at State.set (http://localhost:8080/01-core/State.js:298:21)\n    at Object.run (http://localhost:8080/complete-test-all.html:184:27)\n    at runTest (http://localhost:8080/complete-test-all.html:296:44)\n    at window.runAllTests (http://localhost:8080/complete-test-all.html:346:38)",
+            "overflow": false,
+            "properties": [
+              {
+                "name": "stack",
+                "type": "string",
+                "value": "TypeError: Cannot read properties of undefined (re…p://localhost:8080/complete-test-all.html:346:38)"
+              },
+              {
+                "name": "message",
+                "type": "string",
+                "value": "Cannot read properties of undefined (reading 'getBoundingClientRect')"
+              }
+            ]
+          }
+        },
+        "executionContextId": 3
+      },
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "renderStateChange",
+            "scriptId": "27",
+            "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+            "lineNumber": 43,
+            "columnNumber": 31
+          },
+          {
+            "functionName": "_handleStateChange",
+            "scriptId": "24",
+            "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+            "lineNumber": 218,
+            "columnNumber": 30
+          },
+          {
+            "functionName": "emitBrutalEvent",
+            "scriptId": "18",
+            "url": "http://localhost:8080/01-core/events.js",
+            "lineNumber": 61,
+            "columnNumber": 10
+          },
+          {
+            "functionName": "_notifyChange",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 421,
+            "columnNumber": 6
+          },
+          {
+            "functionName": "set",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 103,
+            "columnNumber": 13
+          },
+          {
+            "functionName": "set",
+            "scriptId": "12",
+            "url": "http://localhost:8080/01-core/State.js",
+            "lineNumber": 297,
+            "columnNumber": 20
+          },
+          {
+            "functionName": "run",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 183,
+            "columnNumber": 26
+          },
+          {
+            "functionName": "runTest",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 295,
+            "columnNumber": 43
+          },
+          {
+            "functionName": "window.runAllTests",
+            "scriptId": "7",
+            "url": "http://localhost:8080/complete-test-all.html",
+            "lineNumber": 345,
+            "columnNumber": 37
+          }
+        ]
+      }
+    },
+    {
+      "type": "pageerror",
+      "message": "component.getBoundingClientRect is not a function",
+      "stack": "TypeError: component.getBoundingClientRect is not a function\n    at _handleRender (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:152:32)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at _emitRenderEvent (http://localhost:8080/01-core/Component.js:361:5)\n    at render (http://localhost:8080/01-core/Component.js:135:14)",
+      "timestamp": "2025-07-10T14:14:26.024Z"
+    },
+    {
+      "timestamp": 1752156866023.977,
+      "exceptionDetails": {
+        "exceptionId": 5,
+        "text": "Uncaught",
+        "lineNumber": 151,
+        "columnNumber": 31,
+        "scriptId": "24",
+        "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "_handleRender",
+              "scriptId": "24",
+              "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+              "lineNumber": 151,
+              "columnNumber": 31
+            },
+            {
+              "functionName": "emitBrutalEvent",
+              "scriptId": "18",
+              "url": "http://localhost:8080/01-core/events.js",
+              "lineNumber": 61,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "_emitRenderEvent",
+              "scriptId": "11",
+              "url": "http://localhost:8080/01-core/Component.js",
+              "lineNumber": 360,
+              "columnNumber": 4
+            },
+            {
+              "functionName": "render",
+              "scriptId": "11",
+              "url": "http://localhost:8080/01-core/Component.js",
+              "lineNumber": 134,
+              "columnNumber": 13
+            }
+          ]
+        },
+        "exception": {
+          "type": "object",
+          "subtype": "error",
+          "className": "TypeError",
+          "description": "TypeError: component.getBoundingClientRect is not a function\n    at VisualDebugLayer._handleRender (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:152:32)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at TestComp._emitRenderEvent (http://localhost:8080/01-core/Component.js:361:5)\n    at TestComp.render (http://localhost:8080/01-core/Component.js:135:14)",
+          "objectId": "-1594751898236567348.3.4",
+          "preview": {
+            "type": "object",
+            "subtype": "error",
+            "description": "TypeError: component.getBoundingClientRect is not a function\n    at VisualDebugLayer._handleRender (http://localhost:8080/03-visual/debug/VisualDebugLayer.js:152:32)\n    at emitBrutalEvent (http://localhost:8080/01-core/events.js:62:11)\n    at TestComp._emitRenderEvent (http://localhost:8080/01-core/Component.js:361:5)\n    at TestComp.render (http://localhost:8080/01-core/Component.js:135:14)",
+            "overflow": false,
+            "properties": [
+              {
+                "name": "stack",
+                "type": "string",
+                "value": "TypeError: component.getBoundingClientRect is not …ttp://localhost:8080/01-core/Component.js:135:14)"
+              },
+              {
+                "name": "message",
+                "type": "string",
+                "value": "component.getBoundingClientRect is not a function"
+              }
+            ]
+          }
+        },
+        "executionContextId": 3
+      },
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "_handleRender",
+            "scriptId": "24",
+            "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+            "lineNumber": 151,
+            "columnNumber": 31
+          },
+          {
+            "functionName": "emitBrutalEvent",
+            "scriptId": "18",
+            "url": "http://localhost:8080/01-core/events.js",
+            "lineNumber": 61,
+            "columnNumber": 10
+          },
+          {
+            "functionName": "_emitRenderEvent",
+            "scriptId": "11",
+            "url": "http://localhost:8080/01-core/Component.js",
+            "lineNumber": 360,
+            "columnNumber": 4
+          },
+          {
+            "functionName": "render",
+            "scriptId": "11",
+            "url": "http://localhost:8080/01-core/Component.js",
+            "lineNumber": 134,
+            "columnNumber": 13
+          }
+        ]
+      }
+    }
+  ],
+  "network": [
+    {
+      "requestId": "AC60BAA97F5199BA63D4C383D5DCB466",
+      "url": "http://localhost:8080/complete-test-all.html",
+      "method": "GET",
+      "timestamp": 21586.834451,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "14277",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 11:53:25 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21586.839592
+      },
+      "finished": {
+        "timestamp": 21586.837453,
+        "encodedDataLength": 14465
+      }
+    },
+    {
+      "requestId": "239969.2",
+      "url": "http://localhost:8080/01-core/index.js",
+      "method": "GET",
+      "timestamp": 21586.871142,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/complete-test-all.html",
+        "lineNumber": 120,
+        "columnNumber": 67
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "1592",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:28:58 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.886092
+      },
+      "finished": {
+        "timestamp": 21586.878103,
+        "encodedDataLength": 1785
+      }
+    },
+    {
+      "requestId": "239969.3",
+      "url": "http://localhost:8080/02-performance/index.js",
+      "method": "GET",
+      "timestamp": 21586.872323,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/complete-test-all.html",
+        "lineNumber": 121,
+        "columnNumber": 57
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "3308",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:48:52 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.88682
+      },
+      "finished": {
+        "timestamp": 21586.878561,
+        "encodedDataLength": 3501
+      }
+    },
+    {
+      "requestId": "239969.4",
+      "url": "http://localhost:8080/03-visual/index.js",
+      "method": "GET",
+      "timestamp": 21586.872542,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/complete-test-all.html",
+        "lineNumber": 122,
+        "columnNumber": 40
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "4679",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:13:19 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.887145
+      },
+      "finished": {
+        "timestamp": 21586.879921,
+        "encodedDataLength": 4872
+      }
+    },
+    {
+      "requestId": "239969.5",
+      "url": "http://localhost:8080/01-core/Component.js",
+      "method": "GET",
+      "timestamp": 21586.887551,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 6,
+        "columnNumber": 26
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11730",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:38 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.898524
+      },
+      "finished": {
+        "timestamp": 21586.891623,
+        "encodedDataLength": 11924
+      }
+    },
+    {
+      "requestId": "239969.6",
+      "url": "http://localhost:8080/01-core/EnhancedComponent.js",
+      "method": "GET",
+      "timestamp": 21586.887657,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 7,
+        "columnNumber": 34
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "12975",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:35:40 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.9061
+      },
+      "finished": {
+        "timestamp": 21586.905087,
+        "encodedDataLength": 13169
+      }
+    },
+    {
+      "requestId": "239969.10",
+      "url": "http://localhost:8080/01-core/Template.js",
+      "method": "GET",
+      "timestamp": 21586.88876,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 19,
+        "columnNumber": 26
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "5946",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:32:44 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.912729
+      },
+      "finished": {
+        "timestamp": 21586.911343,
+        "encodedDataLength": 6139
+      }
+    },
+    {
+      "requestId": "239969.9",
+      "url": "http://localhost:8080/01-core/Registry.js",
+      "method": "GET",
+      "timestamp": 21586.888681,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 16,
+        "columnNumber": 34
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11029",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:54:22 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.91303
+      },
+      "finished": {
+        "timestamp": 21586.910956,
+        "encodedDataLength": 11223
+      }
+    },
+    {
+      "requestId": "239969.11",
+      "url": "http://localhost:8080/01-core/events.js",
+      "method": "GET",
+      "timestamp": 21586.888862,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 22,
+        "columnNumber": 66
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "1399",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:10 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.91594
+      },
+      "finished": {
+        "timestamp": 21586.911171,
+        "encodedDataLength": 1592
+      }
+    },
+    {
+      "requestId": "239969.7",
+      "url": "http://localhost:8080/01-core/State.js",
+      "method": "GET",
+      "timestamp": 21586.888478,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 10,
+        "columnNumber": 61
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "17122",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.916199
+      },
+      "finished": {
+        "timestamp": 21586.910617,
+        "encodedDataLength": 17316
+      }
+    },
+    {
+      "requestId": "239969.8",
+      "url": "http://localhost:8080/01-core/Router.js",
+      "method": "GET",
+      "timestamp": 21586.88858,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 13,
+        "columnNumber": 53
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "15688",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:30 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.916477
+      },
+      "finished": {
+        "timestamp": 21586.910796,
+        "encodedDataLength": 15882
+      }
+    },
+    {
+      "requestId": "239969.12",
+      "url": "http://localhost:8080/02-performance/01-StyleManager.js",
+      "method": "GET",
+      "timestamp": 21586.88979,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 13,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8965",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:42:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.91676
+      },
+      "finished": {
+        "timestamp": 21586.911731,
+        "encodedDataLength": 9158
+      }
+    },
+    {
+      "requestId": "239969.13",
+      "url": "http://localhost:8080/02-performance/02-FragmentPool.js",
+      "method": "GET",
+      "timestamp": 21586.889913,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 22,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8534",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:27:12 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.926962
+      },
+      "finished": {
+        "timestamp": 21586.916181,
+        "encodedDataLength": 8727
+      }
+    },
+    {
+      "requestId": "239969.14",
+      "url": "http://localhost:8080/02-performance/03-DOMScheduler.js",
+      "method": "GET",
+      "timestamp": 21586.890016,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 35,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "9205",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:44:28 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.929716
+      },
+      "finished": {
+        "timestamp": 21586.919674,
+        "encodedDataLength": 9398
+      }
+    },
+    {
+      "requestId": "239969.17",
+      "url": "http://localhost:8080/02-performance/06-ThemeEngine.js",
+      "method": "GET",
+      "timestamp": 21586.890272,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 64,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11999",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:47:17 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.938239
+      },
+      "finished": {
+        "timestamp": 21586.932948,
+        "encodedDataLength": 12193
+      }
+    },
+    {
+      "requestId": "239969.15",
+      "url": "http://localhost:8080/02-performance/04-TemplateCache.js",
+      "method": "GET",
+      "timestamp": 21586.890095,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 44,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8994",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:45:18 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.938554
+      },
+      "finished": {
+        "timestamp": 21586.932243,
+        "encodedDataLength": 9187
+      }
+    },
+    {
+      "requestId": "239969.16",
+      "url": "http://localhost:8080/02-performance/05-EventManager.js",
+      "method": "GET",
+      "timestamp": 21586.890179,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 54,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "10247",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:46:11 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.938802
+      },
+      "finished": {
+        "timestamp": 21586.932791,
+        "encodedDataLength": 10441
+      }
+    },
+    {
+      "requestId": "239969.19",
+      "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+      "method": "GET",
+      "timestamp": 21586.893812,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 7,
+        "columnNumber": 33
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "15682",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:53:23 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.941083
+      },
+      "finished": {
+        "timestamp": 21586.936671,
+        "encodedDataLength": 15876
+      }
+    },
+    {
+      "requestId": "239969.18",
+      "url": "http://localhost:8080/02-performance/07-LayoutOptimizer.js",
+      "method": "GET",
+      "timestamp": 21586.890352,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 73,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "13406",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:48:33 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.942302
+      },
+      "finished": {
+        "timestamp": 21586.936853,
+        "encodedDataLength": 13600
+      }
+    },
+    {
+      "requestId": "239969.21",
+      "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+      "method": "GET",
+      "timestamp": 21586.894082,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 9,
+        "columnNumber": 33
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "16256",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:55:39 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.946311
+      },
+      "finished": {
+        "timestamp": 21586.937868,
+        "encodedDataLength": 16450
+      }
+    },
+    {
+      "requestId": "239969.20",
+      "url": "http://localhost:8080/03-visual/debug/ComponentMonitor.js",
+      "method": "GET",
+      "timestamp": 21586.893942,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 8,
+        "columnNumber": 33
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "13582",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:54:23 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.946601
+      },
+      "finished": {
+        "timestamp": 21586.937427,
+        "encodedDataLength": 13776
+      }
+    },
+    {
+      "requestId": "239969.24",
+      "url": "http://localhost:8080/03-visual/gpu/GPUComponent.js",
+      "method": "GET",
+      "timestamp": 21586.894372,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 14,
+        "columnNumber": 29
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "12331",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:59:40 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.952519
+      },
+      "finished": {
+        "timestamp": 21586.951116,
+        "encodedDataLength": 12525
+      }
+    },
+    {
+      "requestId": "239969.22",
+      "url": "http://localhost:8080/03-visual/debug/PerformanceHUD.js",
+      "method": "GET",
+      "timestamp": 21586.894184,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 10,
+        "columnNumber": 31
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11078",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:56:35 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.955459
+      },
+      "finished": {
+        "timestamp": 21586.951199,
+        "encodedDataLength": 11272
+      }
+    },
+    {
+      "requestId": "239969.23",
+      "url": "http://localhost:8080/03-visual/debug/AutomatedVisualTester.js",
+      "method": "GET",
+      "timestamp": 21586.894274,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 11,
+        "columnNumber": 38
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "21966",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:58:44 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.955721
+      },
+      "finished": {
+        "timestamp": 21586.951018,
+        "encodedDataLength": 22160
+      }
+    },
+    {
+      "requestId": "239969.27",
+      "url": "http://localhost:8080/03-visual/effects/ParticleEffects.js",
+      "method": "GET",
+      "timestamp": 21586.894646,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 19,
+        "columnNumber": 49
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "20424",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:07:23 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.956022
+      },
+      "finished": {
+        "timestamp": 21586.95145,
+        "encodedDataLength": 20618
+      }
+    },
+    {
+      "requestId": "239969.25",
+      "url": "http://localhost:8080/03-visual/gpu/ParticleEngine.js",
+      "method": "GET",
+      "timestamp": 21586.894459,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 15,
+        "columnNumber": 31
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "14639",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:01:21 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.956424
+      },
+      "finished": {
+        "timestamp": 21586.95129,
+        "encodedDataLength": 14833
+      }
+    },
+    {
+      "requestId": "239969.26",
+      "url": "http://localhost:8080/03-visual/gpu/ShaderLibrary.js",
+      "method": "GET",
+      "timestamp": 21586.894546,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 16,
+        "columnNumber": 45
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "19564",
+          "Date": "Thu, 10 Jul 2025 14:14:19 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:05:24 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21586.959529
+      },
+      "finished": {
+        "timestamp": 21586.950895,
+        "encodedDataLength": 19758
+      }
+    }
+  ],
+  "performance": {
+    "metrics": {
+      "Timestamp": 21591.005491,
+      "Documents": 3,
+      "Frames": 1,
+      "JSEventListeners": 6,
+      "Nodes": 163,
+      "LayoutCount": 4,
+      "RecalcStyleCount": 4,
+      "LayoutDuration": 0.01168,
+      "RecalcStyleDuration": 0.000623,
+      "ScriptDuration": 0.043599,
+      "TaskDuration": 0.107405,
+      "JSHeapUsedSize": 1528608,
+      "JSHeapTotalSize": 3407872
+    },
+    "timing": {
+      "connectStart": 1752156859675,
+      "secureConnectionStart": 0,
+      "unloadEventEnd": 0,
+      "domainLookupStart": 1752156859675,
+      "domainLookupEnd": 1752156859675,
+      "responseStart": 1752156859677,
+      "connectEnd": 1752156859675,
+      "responseEnd": 1752156859678,
+      "requestStart": 1752156859677,
+      "domLoading": 1752156859687,
+      "redirectStart": 0,
+      "loadEventEnd": 1752156859847,
+      "domComplete": 1752156859847,
+      "navigationStart": 1752156859675,
+      "loadEventStart": 1752156859847,
+      "domContentLoadedEventEnd": 1752156859844,
+      "unloadEventStart": 0,
+      "redirectEnd": 0,
+      "domInteractive": 1752156859714,
+      "fetchStart": 1752156859675,
+      "domContentLoadedEventStart": 1752156859844
+    },
+    "entries": [
+      {
+        "name": "http://localhost:8080/complete-test-all.html",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 171.80000000074506
+      },
+      {
+        "name": "visible",
+        "entryType": "visibility-state",
+        "startTime": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://localhost:8080/01-core/index.js",
+        "entryType": "resource",
+        "startTime": 37.5,
+        "duration": 6.800000000745058
+      },
+      {
+        "name": "http://localhost:8080/02-performance/index.js",
+        "entryType": "resource",
+        "startTime": 38.599999997764826,
+        "duration": 6.200000002980232
+      },
+      {
+        "name": "http://localhost:8080/03-visual/index.js",
+        "entryType": "resource",
+        "startTime": 38.80000000074506,
+        "duration": 7.399999998509884
+      },
+      {
+        "name": "http://localhost:8080/01-core/Component.js",
+        "entryType": "resource",
+        "startTime": 53.80000000074506,
+        "duration": 4.099999997764826
+      },
+      {
+        "name": "http://localhost:8080/01-core/EnhancedComponent.js",
+        "entryType": "resource",
+        "startTime": 54.599999997764826,
+        "duration": 16.700000002980232
+      },
+      {
+        "name": "http://localhost:8080/01-core/State.js",
+        "entryType": "resource",
+        "startTime": 54.69999999925494,
+        "duration": 22.100000001490116
+      },
+      {
+        "name": "http://localhost:8080/01-core/Registry.js",
+        "entryType": "resource",
+        "startTime": 54.899999998509884,
+        "duration": 22.199999999254942
+      },
+      {
+        "name": "http://localhost:8080/01-core/Router.js",
+        "entryType": "resource",
+        "startTime": 54.899999998509884,
+        "duration": 22.100000001490116
+      },
+      {
+        "name": "http://localhost:8080/01-core/Template.js",
+        "entryType": "resource",
+        "startTime": 55,
+        "duration": 22.599999997764826
+      },
+      {
+        "name": "http://localhost:8080/01-core/events.js",
+        "entryType": "resource",
+        "startTime": 55.099999997764826,
+        "duration": 22.300000000745058
+      },
+      {
+        "name": "http://localhost:8080/02-performance/01-StyleManager.js",
+        "entryType": "resource",
+        "startTime": 56,
+        "duration": 21.899999998509884
+      },
+      {
+        "name": "http://localhost:8080/02-performance/02-FragmentPool.js",
+        "entryType": "resource",
+        "startTime": 56.099999997764826,
+        "duration": 26.300000000745058
+      },
+      {
+        "name": "http://localhost:8080/02-performance/03-DOMScheduler.js",
+        "entryType": "resource",
+        "startTime": 56.30000000074506,
+        "duration": 29.599999997764826
+      },
+      {
+        "name": "http://localhost:8080/02-performance/04-TemplateCache.js",
+        "entryType": "resource",
+        "startTime": 56.30000000074506,
+        "duration": 42.099999997764826
+      },
+      {
+        "name": "http://localhost:8080/02-performance/05-EventManager.js",
+        "entryType": "resource",
+        "startTime": 56.399999998509884,
+        "duration": 42.600000001490116
+      },
+      {
+        "name": "http://localhost:8080/02-performance/06-ThemeEngine.js",
+        "entryType": "resource",
+        "startTime": 56.599999997764826,
+        "duration": 42.600000001490116
+      },
+      {
+        "name": "http://localhost:8080/02-performance/07-LayoutOptimizer.js",
+        "entryType": "resource",
+        "startTime": 56.599999997764826,
+        "duration": 46.5
+      },
+      {
+        "name": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+        "entryType": "resource",
+        "startTime": 60.099999997764826,
+        "duration": 42.70000000298023
+      },
+      {
+        "name": "http://localhost:8080/03-visual/debug/ComponentMonitor.js",
+        "entryType": "resource",
+        "startTime": 60.19999999925494,
+        "duration": 43.399999998509884
+      },
+      {
+        "name": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+        "entryType": "resource",
+        "startTime": 60.30000000074506,
+        "duration": 43.79999999701977
+      },
+      {
+        "name": "http://localhost:8080/03-visual/debug/PerformanceHUD.js",
+        "entryType": "resource",
+        "startTime": 60.399999998509884,
+        "duration": 57
+      },
+      {
+        "name": "http://localhost:8080/03-visual/debug/AutomatedVisualTester.js",
+        "entryType": "resource",
+        "startTime": 60.5,
+        "duration": 56.69999999925494
+      },
+      {
+        "name": "http://localhost:8080/03-visual/gpu/GPUComponent.js",
+        "entryType": "resource",
+        "startTime": 60.599999997764826,
+        "duration": 56.70000000298023
+      },
+      {
+        "name": "http://localhost:8080/03-visual/gpu/ParticleEngine.js",
+        "entryType": "resource",
+        "startTime": 60.69999999925494,
+        "duration": 56.80000000074506
+      },
+      {
+        "name": "http://localhost:8080/03-visual/gpu/ShaderLibrary.js",
+        "entryType": "resource",
+        "startTime": 60.80000000074506,
+        "duration": 56.29999999701977
+      },
+      {
+        "name": "http://localhost:8080/03-visual/effects/ParticleEffects.js",
+        "entryType": "resource",
+        "startTime": 60.899999998509884,
+        "duration": 56.69999999925494
+      },
+      {
+        "name": "first-paint",
+        "entryType": "paint",
+        "startTime": 100,
+        "duration": 0
+      },
+      {
+        "name": "first-contentful-paint",
+        "entryType": "paint",
+        "startTime": 100,
+        "duration": 0
+      }
+    ],
+    "calculated": {
+      "domContentLoaded": 169,
+      "load": 172,
+      "firstPaint": 100,
+      "firstContentfulPaint": 100
+    }
+  },
+  "memory": {
+    "initial": {
+      "usedJSHeapSize": 2010753,
+      "totalJSHeapSize": 3838381,
+      "jsHeapSizeLimit": 2248146944
+    },
+    "final": {
+      "usedJSHeapSize": 2840927,
+      "totalJSHeapSize": 4639171,
+      "jsHeapSizeLimit": 2248146944
+    },
+    "delta": {
+      "usedJSHeapSize": 830174,
+      "totalJSHeapSize": 800790
+    }
+  },
+  "coverage": {
+    "js": {
+      "totalBytes": 207723,
+      "usedBytes": 48869,
+      "percentage": "23.53"
+    },
+    "css": {
+      "totalBytes": 2384,
+      "usedBytes": 2109,
+      "percentage": "88.46"
+    }
+  },
+  "domMutations": [
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156863970
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156863974
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863974
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156863974
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156863974
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156864476
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156864476
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156864476
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156864478
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156864478
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156864478
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156864478
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156864980
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156864980
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156864980
+    },
+    {
+      "type": "childList",
+      "target": "BODY",
+      "timestamp": 1752156864985
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156864990
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156864990
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156864990
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156864990
+    },
+    {
+      "type": "attributes",
+      "target": "CANVAS",
+      "timestamp": 1752156865100
+    },
+    {
+      "type": "attributes",
+      "target": "CANVAS",
+      "timestamp": 1752156865100
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156865502
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156865502
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156865502
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156865504
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156865504
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156865504
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156865504
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156866011
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156866011
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156866011
+    },
+    {
+      "type": "childList",
+      "target": "BODY",
+      "timestamp": 1752156866011
+    },
+    {
+      "type": "childList",
+      "target": "BODY",
+      "timestamp": 1752156866111
+    },
+    {
+      "type": "attributes",
+      "target": "DIV",
+      "timestamp": 1752156866114
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156866114
+    },
+    {
+      "type": "childList",
+      "target": "DIV",
+      "timestamp": 1752156866114
+    },
+    {
+      "type": "childList",
+      "target": "PRE",
+      "timestamp": 1752156866114
+    }
+  ],
+  "eventListeners": [],
+  "userInteractions": [
+    {
+      "type": "click",
+      "target": {
+        "text": "Run All Tests",
+        "id": "",
+        "className": ""
+      },
+      "timestamp": "2025-07-10T14:14:24.560Z",
+      "success": true
+    },
+    {
+      "type": "click",
+      "target": {
+        "text": "Export Results",
+        "id": "",
+        "className": ""
+      },
+      "timestamp": "2025-07-10T14:14:25.272Z",
+      "success": true
+    }
+  ],
+  "gpuInfo": null,
+  "screenshots": [
+    "screenshot-initial.png",
+    "screenshot-after-button-0.png",
+    "screenshot-after-button-1.png",
+    "screenshot-final.png"
+  ],
+  "video": "82 frames captured",
+  "trace": "trace.json",
+  "heapSnapshot": "heap-snapshot.json",
+  "environment": {
+    "url": "http://localhost:8080/complete-test-all.html",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 800,
+      "height": 600,
+      "devicePixelRatio": 1
+    },
+    "features": {
+      "crossOriginIsolated": false,
+      "sharedArrayBuffer": true,
+      "webgl": false,
+      "webgl2": false,
+      "gpu": true,
+      "workers": true,
+      "serviceWorker": true
+    },
+    "brutal": {
+      "loaded": false,
+      "debug": false,
+      "config": null
+    }
+  },
+  "brutalFramework": {
+    "components": [],
+    "state": {},
+    "performance": {},
+    "debug": true
+  },
+  "summary": {
+    "success": false,
+    "errorCount": 8,
+    "consoleErrors": 2,
+    "consoleWarnings": 0,
+    "networkRequests": 27,
+    "networkFailures": 0,
+    "domMutations": 47,
+    "coverage": {
+      "js": "23.53%",
+      "css": "88.46%"
+    },
+    "performance": {
+      "domContentLoaded": "169ms",
+      "load": "172ms",
+      "firstPaint": "100ms",
+      "firstContentfulPaint": "100ms"
+    },
+    "memory": {
+      "heapGrowth": "0.79MB"
+    }
+  }
+}

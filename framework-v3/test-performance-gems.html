@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Framework V3 - Performance Gems Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background: #111;
+        }
+        .test-section h2 {
+            margin: 0 0 15px 0;
+            color: #0ff;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success { background: #0f3a0f; border: 1px solid #0f0; }
+        .error { background: #3a0f0f; border: 1px solid #f00; }
+        .info { background: #1a1a2a; border: 1px solid #00f; }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .metric-card h3 {
+            margin: 0 0 10px 0;
+            color: #0ff;
+            font-size: 16px;
+        }
+        .metric-value {
+            font-family: monospace;
+            font-size: 24px;
+            color: #0f0;
+        }
+        button {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .test-elements {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .test-element {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .test-element:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>BRUTAL Framework V3 - Performance Gems Test Suite</h1>
+    
+    <div class="test-section">
+        <h2>Test Controls</h2>
+        <button onclick="runAllTests()">Run All Tests</button>
+        <button onclick="showMetrics()">Show Metrics</button>
+        <button onclick="stressTest()">Stress Test</button>
+        <button onclick="clearAll()">Clear All</button>
+    </div>
+    
+    <div id="test-results"></div>
+    <div id="metrics-display" class="metrics"></div>
+    <div id="test-container"></div>
+    
+    <script type="module">
+        import * as performanceGems from './02-performance/index.js';
+        
+        // Make functions global for button clicks
+        window.performanceGems = performanceGems;
+        
+        // Global functions will be defined later after test functions are declared
+        
+        const results = document.getElementById('test-results');
+        const container = document.getElementById('test-container');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        // Initialize performance gems
+        log('Initializing Performance Gems...');
+        performanceGems.initPerformanceGems();
+        log('✅ Performance Gems initialized', 'success');
+        
+        // Test 1: StyleManager
+        async function testStyleManager() {
+            log('Testing StyleManager...');
+            
+            const { styleManager, createSharedStyles } = performanceGems;
+            
+            // Create shared styles
+            const sharedStyles = createSharedStyles('test-theme', `
+                .test-element {
+                    background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+                    color: white;
+                }
+            `);
+            
+            // Create 100 elements with shared styles
+            const elements = [];
+            for (let i = 0; i < 100; i++) {
+                const el = document.createElement('div');
+                el.className = 'test-element';
+                el.textContent = i;
+                el.attachShadow({ mode: 'open' });
+                
+                // Apply shared stylesheet
+                styleManager.applyTo(el.shadowRoot, `
+                    :host { display: block; }
+                    .content { padding: 10px; }
+                `);
+                
+                elements.push(el);
+            }
+            
+            const metrics = styleManager.getMetrics();
+            log(`✅ StyleManager: ${metrics.created} stylesheets created, ${metrics.cacheHits} cache hits`, 'success');
+            
+            return elements;
+        }
+        
+        // Test 2: FragmentPool
+        async function testFragmentPool() {
+            log('Testing FragmentPool...');
+            
+            const { fragmentPool, withFragment } = performanceGems;
+            
+            // Pre-warm the pool
+            await fragmentPool.warmup(50);
+            
+            // Create elements using fragments
+            const start = performance.now();
+            const elements = [];
+            
+            for (let i = 0; i < 100; i++) {
+                await withFragment('<div class="fragment-test">Fragment ' + i + '</div>', (fragment) => {
+                    const div = document.createElement('div');
+                    div.appendChild(fragment);
+                    elements.push(div);
+                });
+            }
+            
+            const time = performance.now() - start;
+            const metrics = fragmentPool.getMetrics();
+            
+            log(`✅ FragmentPool: Created 100 elements in ${time.toFixed(2)}ms, ${metrics.hitRate * 100}% hit rate`, 'success');
+            
+            return elements;
+        }
+        
+        // Test 3: DOMScheduler
+        async function testDOMScheduler() {
+            log('Testing DOMScheduler...');
+            
+            const { domScheduler, schedule, read, write, measure } = performanceGems;
+            
+            // Batch DOM operations
+            const elements = [];
+            
+            // Schedule reads and writes
+            for (let i = 0; i < 50; i++) {
+                const el = document.createElement('div');
+                el.className = 'scheduled-element';
+                el.textContent = `Scheduled ${i}`;
+                elements.push(el);
+                
+                // Measure and update
+                await measure(
+                    () => el.getBoundingClientRect(),
+                    (rect) => {
+                        el.style.transform = `translateX(${i * 2}px)`;
+                        el.style.opacity = 1 - (i / 100);
+                    }
+                );
+            }
+            
+            const metrics = domScheduler.getMetrics();
+            log(`✅ DOMScheduler: ${metrics.tasksExecuted} tasks executed, ${metrics.avgBatchTime.toFixed(2)}ms avg batch time`, 'success');
+            
+            return elements;
+        }
+        
+        // Test 4: TemplateCache
+        async function testTemplateCache() {
+            log('Testing TemplateCache...');
+            
+            const { templateCache, getTemplate } = performanceGems;
+            
+            // Pre-compile templates
+            const templates = [];
+            for (let i = 0; i < 10; i++) {
+                templates.push(`
+                    <div class="cached-template">
+                        <h3>Template ${i}</h3>
+                        <p>This is a cached template with ID ${i}</p>
+                    </div>
+                `);
+            }
+            
+            // Warm cache
+            await templateCache.warmup(templates);
+            
+            // Use templates
+            const elements = [];
+            const start = performance.now();
+            
+            for (let j = 0; j < 10; j++) {
+                for (let i = 0; i < 10; i++) {
+                    const template = await getTemplate(templates[i]);
+                    const el = document.createElement('div');
+                    el.appendChild(template.content.cloneNode(true));
+                    elements.push(el);
+                }
+            }
+            
+            const time = performance.now() - start;
+            const metrics = templateCache.getMetrics();
+            
+            log(`✅ TemplateCache: 100 templates in ${time.toFixed(2)}ms, ${(metrics.hitRate * 100).toFixed(1)}% hit rate`, 'success');
+            
+            return elements;
+        }
+        
+        // Test 5: EventManager
+        function testEventManager() {
+            log('Testing EventManager...');
+            
+            const { eventManager, on } = performanceGems;
+            
+            // Create test container
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test-section';
+            testDiv.innerHTML = '<h2>Event Delegation Test</h2>';
+            
+            // Add delegated listeners
+            let clickCount = 0;
+            on('click', '.test-element', (e) => {
+                clickCount++;
+                e.target.style.transform = `scale(${1 + clickCount * 0.1})`;
+                log(`Clicked element ${e.target.textContent}, total clicks: ${clickCount}`, 'info');
+            });
+            
+            // Create clickable elements
+            for (let i = 0; i < 20; i++) {
+                const el = document.createElement('div');
+                el.className = 'test-element';
+                el.textContent = i;
+                testDiv.appendChild(el);
+            }
+            
+            const metrics = eventManager.getMetrics();
+            log(`✅ EventManager: ${metrics.activeListeners} active listeners, ${metrics.registeredHandlers} handlers`, 'success');
+            
+            return testDiv;
+        }
+        
+        // Test 6: ThemeEngine
+        function testThemeEngine() {
+            log('Testing ThemeEngine...');
+            
+            const { themeEngine, registerTheme, applyTheme } = performanceGems;
+            
+            // Register themes
+            registerTheme('light', {
+                colors: {
+                    primary: '#007bff',
+                    secondary: '#6c757d',
+                    background: '#ffffff',
+                    text: '#212529'
+                }
+            });
+            
+            registerTheme('dark', {
+                colors: {
+                    primary: '#0dcaf0',
+                    secondary: '#6c757d',
+                    background: '#212529',
+                    text: '#ffffff'
+                }
+            });
+            
+            // Apply theme
+            applyTheme('dark');
+            
+            const metrics = themeEngine.getMetrics();
+            log(`✅ ThemeEngine: ${metrics.registeredThemes} themes, ${metrics.variablesSet} variables set`, 'success');
+            
+            return null;
+        }
+        
+        // Test 7: LayoutOptimizer
+        function testLayoutOptimizer() {
+            log('Testing LayoutOptimizer...');
+            
+            const { layoutOptimizer, optimizeLayout } = performanceGems;
+            
+            // Create complex elements
+            const elements = [];
+            
+            for (let i = 0; i < 10; i++) {
+                const el = document.createElement('div');
+                el.className = 'optimized-element';
+                el.style.width = '200px';
+                el.style.height = '200px';
+                el.style.overflow = 'hidden';
+                el.innerHTML = `
+                    <h3>Optimized ${i}</h3>
+                    <p>This element has containment applied</p>
+                    <div style="height: 300px;">Overflowing content</div>
+                `;
+                
+                optimizeLayout(el);
+                elements.push(el);
+            }
+            
+            const metrics = layoutOptimizer.getMetrics();
+            log(`✅ LayoutOptimizer: ${metrics.elementsOptimized} optimized, ${metrics.containmentApplied} containments`, 'success');
+            
+            return elements;
+        }
+        
+        // Run all tests
+        window.runAllTests = async function() {
+            results.innerHTML = '';
+            container.innerHTML = '';
+            
+            log('Running all Performance Gems tests...', 'info');
+            
+            const testSection = document.createElement('div');
+            testSection.className = 'test-section';
+            testSection.innerHTML = '<h2>Test Elements</h2>';
+            
+            const elementsDiv = document.createElement('div');
+            elementsDiv.className = 'test-elements';
+            
+            // Run tests sequentially
+            const styleElements = await testStyleManager();
+            const fragmentElements = await testFragmentPool();
+            const scheduledElements = await testDOMScheduler();
+            const cachedElements = await testTemplateCache();
+            const eventDiv = testEventManager();
+            testThemeEngine();
+            const optimizedElements = testLayoutOptimizer();
+            
+            // Add some elements to display
+            [...styleElements.slice(0, 10), ...fragmentElements.slice(0, 10)].forEach(el => {
+                elementsDiv.appendChild(el);
+            });
+            
+            testSection.appendChild(elementsDiv);
+            container.appendChild(eventDiv);
+            container.appendChild(testSection);
+            
+            log('✅ All tests completed!', 'success');
+            showMetrics();
+        };
+        
+        // Show metrics
+        window.showMetrics = function() {
+            const metricsDiv = document.getElementById('metrics-display');
+            metricsDiv.innerHTML = '';
+            
+            const allMetrics = performanceGems.performance.getMetrics();
+            
+            for (const [gem, metrics] of Object.entries(allMetrics)) {
+                const card = document.createElement('div');
+                card.className = 'metric-card';
+                card.innerHTML = `
+                    <h3>${gem}</h3>
+                    <pre>${JSON.stringify(metrics, null, 2)}</pre>
+                `;
+                metricsDiv.appendChild(card);
+            }
+        };
+        
+        // Stress test
+        window.stressTest = async function() {
+            log('Running stress test...', 'info');
+            
+            const start = performance.now();
+            const { fragmentPool, templateCache, domScheduler, batch } = performanceGems;
+            
+            // Create 1000 elements
+            const tasks = [];
+            
+            for (let i = 0; i < 1000; i++) {
+                tasks.push(() => {
+                    const el = document.createElement('div');
+                    el.className = 'stress-element';
+                    el.textContent = i;
+                    el.style.transform = `translate(${Math.random() * 100}px, ${Math.random() * 100}px)`;
+                });
+            }
+            
+            await batch(tasks);
+            
+            const time = performance.now() - start;
+            log(`✅ Stress test: 1000 elements in ${time.toFixed(2)}ms (${(1000/time * 1000).toFixed(0)} ops/sec)`, 'success');
+            
+            showMetrics();
+        };
+        
+        // Clear all
+        window.clearAll = function() {
+            results.innerHTML = '';
+            container.innerHTML = '';
+            performanceGems.performance.resetMetrics();
+            log('Cleared all tests and metrics', 'info');
+        };
+        
+        // Initial message
+        log('Performance Gems test suite ready. Click "Run All Tests" to begin.', 'info');
+    </script>
+</body>
+</html>

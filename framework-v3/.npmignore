@@ -1,0 +1,63 @@
+# Development files
+*.md
+!README.md
+!API-REFERENCE.md
+
+# Test files
+tests/
+test/
+demos/
+examples/
+landing/
+
+# Build files
+build-*.js
+analyze-*.js
+remove-*.js
+optimize-*.js
+performance-*.js
+verify-*.js
+run-*.js
+debug-*.js
+check-*.js
+test-*.js
+rollup.config.js
+server-*.js
+expose-*.js
+index-*.js
+ultimate-*.js
+comprehensive-*.js
+visual-*.js
+error-*.js
+
+# Source control
+.git/
+.gitignore
+
+# Temporary files
+*.log
+*.tmp
+.DS_Store
+node_modules/
+
+# Documentation source
+docs/
+
+# Framework backup
+framework-backup-*.tar.gz
+
+# Migration files
+migration/
+framework/
+framework-v2/
+tools/
+
+# Other project files
+BRUTAL-*.md
+FRAMEWORK-*.md
+FASE-*.md
+HANDSHAKE-*.md
+PHASE-*.md
+CJS-*.md
+create-*.sh
+framework-*.sh

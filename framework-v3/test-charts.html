@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Charts Component Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #000;
+            color: #0f0;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #0f0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .demo-section {
+            margin: 40px 0;
+            padding: 30px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+        }
+        
+        .demo-section h2 {
+            margin-top: 0;
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
+        }
+        
+        .chart-demo {
+            height: 400px;
+            margin: 20px 0;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .stats {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            font-family: monospace;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0ff;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .test-log {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin: 4px 0;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+        
+        .log-success { background: rgba(0, 255, 0, 0.1); color: #0f0; }
+        .log-error { background: rgba(255, 0, 0, 0.1); color: #f00; }
+        .log-warning { background: rgba(255, 255, 0, 0.1); color: #ff0; }
+        .log-info { background: rgba(0, 255, 255, 0.1); color: #0ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 BRUTAL Charts Component</h1>
+        <p>GPU-accelerated charting with WebGL rendering and real-time updates</p>
+        
+        <!-- Line Chart Demo -->
+        <div class="demo-section">
+            <h2>Line Chart - Real-time Data</h2>
+            <brutal-charts class="chart-demo" id="lineChart" type="line" theme="brutal" realtime="true"></brutal-charts>
+            
+            <div class="controls">
+                <button onclick="toggleRealtime('lineChart')">Toggle Realtime</button>
+                <button onclick="addLineData()">Add Data Point</button>
+                <button onclick="clearLineData()">Clear Data</button>
+                <button onclick="animateLineChart()">Animate</button>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="linePoints">0</div>
+                    <div class="stat-label">Data Points</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="lineFPS">60</div>
+                    <div class="stat-label">FPS</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="lineDatasets">0</div>
+                    <div class="stat-label">Datasets</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bar Chart Demo -->
+        <div class="demo-section">
+            <h2>Bar Chart - Comparative Data</h2>
+            <brutal-charts class="chart-demo" id="barChart" type="bar" theme="neon"></brutal-charts>
+            
+            <div class="controls">
+                <button onclick="generateBarData()">Generate Data</button>
+                <button onclick="addBarDataset()">Add Dataset</button>
+                <button onclick="animateBarChart()">Animate</button>
+                <button onclick="changeTheme('barChart')">Change Theme</button>
+            </div>
+        </div>
+        
+        <!-- Mixed Chart Types Demo -->
+        <div class="demo-section">
+            <h2>Chart Type Transitions</h2>
+            <brutal-charts class="chart-demo" id="mixedChart" type="scatter" theme="holographic"></brutal-charts>
+            
+            <div class="controls">
+                <button onclick="setChartType('mixedChart', 'line')">Line</button>
+                <button onclick="setChartType('mixedChart', 'bar')">Bar</button>
+                <button onclick="setChartType('mixedChart', 'area')">Area</button>
+                <button onclick="setChartType('mixedChart', 'scatter')">Scatter</button>
+                <button onclick="setChartType('mixedChart', 'pie')">Pie</button>
+                <button onclick="setChartType('mixedChart', 'donut')">Donut</button>
+                <button onclick="setChartType('mixedChart', 'radar')">Radar</button>
+                <button onclick="setChartType('mixedChart', 'heatmap')">Heatmap</button>
+            </div>
+        </div>
+        
+        <!-- Pie/Donut Chart Demo -->
+        <div class="demo-section">
+            <h2>Pie & Donut Charts</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <brutal-charts class="chart-demo" id="pieChart" type="pie" theme="minimal"></brutal-charts>
+                <brutal-charts class="chart-demo" id="donutChart" type="donut" theme="brutal"></brutal-charts>
+            </div>
+            
+            <div class="controls">
+                <button onclick="updatePieData()">Update Data</button>
+                <button onclick="addPieSlice()">Add Slice</button>
+                <button onclick="animatePieCharts()">Animate</button>
+            </div>
+        </div>
+        
+        <!-- Advanced Charts Demo -->
+        <div class="demo-section">
+            <h2>Advanced Chart Types</h2>
+            
+            <h3>Radar Chart</h3>
+            <brutal-charts class="chart-demo" id="radarChart" type="radar" theme="neon" style="height: 500px;"></brutal-charts>
+            
+            <h3>Heatmap Chart</h3>
+            <brutal-charts class="chart-demo" id="heatmapChart" type="heatmap" theme="holographic"></brutal-charts>
+            
+            <div class="controls">
+                <button onclick="generateRadarData()">Generate Radar Data</button>
+                <button onclick="generateHeatmapData()">Generate Heatmap</button>
+                <button onclick="performanceTest()">Performance Test</button>
+            </div>
+        </div>
+        
+        <!-- Test Results -->
+        <div class="demo-section">
+            <h2>Test Results</h2>
+            <div class="test-log" id="testLog"></div>
+            
+            <div class="controls">
+                <button onclick="runAllTests()">Run All Tests</button>
+                <button onclick="clearLog()">Clear Log</button>
+                <button onclick="checkWebGL()">Check WebGL</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Charts } from './04-components/ui/Charts.js';
+        
+        // Logging utility
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('testLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        // Initialize charts
+        const charts = {
+            line: document.getElementById('lineChart'),
+            bar: document.getElementById('barChart'),
+            mixed: document.getElementById('mixedChart'),
+            pie: document.getElementById('pieChart'),
+            donut: document.getElementById('donutChart'),
+            radar: document.getElementById('radarChart'),
+            heatmap: document.getElementById('heatmapChart')
+        };
+        
+        // Generate initial data
+        function generateLineData() {
+            const datasets = [
+                {
+                    label: 'Revenue',
+                    color: '#00ff00',
+                    data: []
+                },
+                {
+                    label: 'Costs',
+                    color: '#ff0000',
+                    data: []
+                }
+            ];
+            
+            for (let i = 0; i < 20; i++) {
+                datasets[0].data.push({
+                    x: i,
+                    y: Math.sin(i * 0.3) * 50 + 50 + Math.random() * 10
+                });
+                datasets[1].data.push({
+                    x: i,
+                    y: Math.cos(i * 0.3) * 30 + 40 + Math.random() * 10
+                });
+            }
+            
+            return datasets;
+        }
+        
+        function generateBarData() {
+            const labels = ['Q1', 'Q2', 'Q3', 'Q4'];
+            const datasets = [
+                {
+                    label: '2023',
+                    color: '#00ffff',
+                    data: labels.map((label, i) => ({
+                        x: i,
+                        y: Math.random() * 100
+                    }))
+                },
+                {
+                    label: '2024',
+                    color: '#ff00ff',
+                    data: labels.map((label, i) => ({
+                        x: i,
+                        y: Math.random() * 100
+                    }))
+                }
+            ];
+            
+            charts.bar.setData(datasets);
+            log('Generated bar chart data', 'success');
+        }
+        
+        function generateScatterData() {
+            const datasets = [
+                {
+                    label: 'Cluster A',
+                    color: '#ff006e',
+                    data: Array(50).fill(0).map(() => ({
+                        x: Math.random() * 100,
+                        y: Math.random() * 100,
+                        size: Math.random() * 10 + 5
+                    }))
+                },
+                {
+                    label: 'Cluster B',
+                    color: '#3a86ff',
+                    data: Array(50).fill(0).map(() => ({
+                        x: Math.random() * 100 + 50,
+                        y: Math.random() * 100 + 20,
+                        size: Math.random() * 10 + 5
+                    }))
+                }
+            ];
+            
+            return datasets;
+        }
+        
+        function generatePieData() {
+            const data = [
+                { label: 'Desktop', value: 45, color: '#00ff00' },
+                { label: 'Mobile', value: 30, color: '#00ffff' },
+                { label: 'Tablet', value: 15, color: '#ff00ff' },
+                { label: 'Other', value: 10, color: '#ffff00' }
+            ];
+            
+            return [{ data }];
+        }
+        
+        function generateRadarData() {
+            const categories = ['Speed', 'Power', 'Agility', 'Defense', 'Magic', 'Stamina'];
+            const datasets = [
+                {
+                    label: 'Player 1',
+                    color: '#00ff00',
+                    data: categories.map(label => ({
+                        label,
+                        value: Math.random() * 100
+                    }))
+                },
+                {
+                    label: 'Player 2',
+                    color: '#ff00ff',
+                    data: categories.map(label => ({
+                        label,
+                        value: Math.random() * 100
+                    }))
+                }
+            ];
+            
+            charts.radar.setData(datasets);
+            log('Generated radar chart data', 'success');
+        }
+        
+        function generateHeatmapData() {
+            const rows = 10;
+            const cols = 20;
+            const data = [];
+            
+            for (let i = 0; i < rows; i++) {
+                const row = [];
+                for (let j = 0; j < cols; j++) {
+                    row.push(Math.random() * 100);
+                }
+                data.push(row);
+            }
+            
+            charts.heatmap.setData([{ data }]);
+            log('Generated heatmap data', 'success');
+        }
+        
+        // Chart interactions
+        window.toggleRealtime = function(chartId) {
+            const chart = charts[chartId] || document.getElementById(chartId);
+            const current = chart.getAttribute('realtime') === 'true';
+            chart.setAttribute('realtime', !current);
+            log(`Realtime ${!current ? 'enabled' : 'disabled'} for ${chartId}`, 'info');
+        };
+        
+        window.addLineData = function() {
+            const chart = charts.line;
+            const datasets = chart._datasets;
+            
+            if (datasets.length === 0) {
+                chart.setData(generateLineData());
+            } else {
+                datasets.forEach(dataset => {
+                    const lastX = dataset.data[dataset.data.length - 1]?.x || 0;
+                    dataset.data.push({
+                        x: lastX + 1,
+                        y: Math.random() * 100
+                    });
+                });
+                chart.updateDataset(0, datasets[0].data);
+                chart.updateDataset(1, datasets[1].data);
+            }
+            
+            log('Added line data point', 'success');
+        };
+        
+        window.clearLineData = function() {
+            charts.line.setData([]);
+            log('Cleared line chart data', 'info');
+        };
+        
+        window.animateLineChart = function() {
+            const data = generateLineData();
+            charts.line.setData(data);
+            log('Animated line chart', 'success');
+        };
+        
+        window.addBarDataset = function() {
+            const colors = ['#06d6a0', '#fb5607', '#ffbe0b'];
+            const newDataset = {
+                label: `Dataset ${charts.bar._datasets.length + 1}`,
+                color: colors[charts.bar._datasets.length % colors.length],
+                data: [0, 1, 2, 3].map(i => ({
+                    x: i,
+                    y: Math.random() * 100
+                }))
+            };
+            
+            charts.bar.addDataset(newDataset);
+            log('Added bar dataset', 'success');
+        };
+        
+        window.animateBarChart = function() {
+            generateBarData();
+        };
+        
+        window.changeTheme = function(chartId) {
+            const chart = charts[chartId] || document.getElementById(chartId);
+            const themes = ['brutal', 'neon', 'minimal', 'holographic'];
+            const current = chart.getAttribute('theme');
+            const index = themes.indexOf(current);
+            const next = themes[(index + 1) % themes.length];
+            
+            chart.setAttribute('theme', next);
+            log(`Changed theme to ${next}`, 'info');
+        };
+        
+        window.setChartType = function(chartId, type) {
+            const chart = charts[chartId] || document.getElementById(chartId);
+            chart.setType(type);
+            log(`Changed chart type to ${type}`, 'success');
+        };
+        
+        window.updatePieData = function() {
+            const data = generatePieData();
+            charts.pie.setData(data);
+            charts.donut.setData(data);
+            log('Updated pie/donut data', 'success');
+        };
+        
+        window.addPieSlice = function() {
+            const colors = ['#8338ec', '#3a86ff', '#06ffa5', '#ffbe0b', '#fb5607'];
+            const chart = charts.pie;
+            
+            if (chart._datasets.length === 0) {
+                updatePieData();
+            } else {
+                const newSlice = {
+                    label: `Slice ${chart._datasets[0].data.length + 1}`,
+                    value: Math.random() * 30 + 10,
+                    color: colors[chart._datasets[0].data.length % colors.length]
+                };
+                
+                chart._datasets[0].data.push(newSlice);
+                chart.updateDataset(0, chart._datasets[0].data);
+                
+                // Update donut too
+                charts.donut._datasets[0].data.push(newSlice);
+                charts.donut.updateDataset(0, charts.donut._datasets[0].data);
+            }
+            
+            log('Added pie slice', 'success');
+        };
+        
+        window.animatePieCharts = function() {
+            updatePieData();
+        };
+        
+        window.performanceTest = function() {
+            log('Starting performance test...', 'warning');
+            
+            // Generate large dataset
+            const largeDataset = {
+                label: 'Performance Test',
+                color: '#00ff00',
+                data: Array(1000).fill(0).map((_, i) => ({
+                    x: i,
+                    y: Math.sin(i * 0.1) * 50 + 50 + Math.random() * 20
+                }))
+            };
+            
+            charts.mixed.setData([largeDataset]);
+            
+            // Monitor FPS
+            let frameCount = 0;
+            let lastTime = performance.now();
+            
+            const measureFPS = () => {
+                frameCount++;
+                const currentTime = performance.now();
+                
+                if (currentTime - lastTime >= 1000) {
+                    const fps = Math.round(frameCount * 1000 / (currentTime - lastTime));
+                    log(`Performance: ${fps} FPS with 1000 data points`, fps > 30 ? 'success' : 'error');
+                    frameCount = 0;
+                    lastTime = currentTime;
+                }
+                
+                if (currentTime - lastTime < 5000) {
+                    requestAnimationFrame(measureFPS);
+                } else {
+                    log('Performance test complete', 'success');
+                }
+            };
+            
+            requestAnimationFrame(measureFPS);
+        };
+        
+        window.checkWebGL = function() {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+            
+            if (gl) {
+                log('WebGL supported', 'success');
+                log(`Version: ${gl.getParameter(gl.VERSION)}`, 'info');
+                log(`Vendor: ${gl.getParameter(gl.VENDOR)}`, 'info');
+                log(`Renderer: ${gl.getParameter(gl.RENDERER)}`, 'info');
+            } else {
+                log('WebGL not supported', 'error');
+            }
+        };
+        
+        window.runAllTests = async function() {
+            log('Running all tests...', 'warning');
+            
+            // Test 1: Chart creation
+            try {
+                const testChart = document.createElement('brutal-charts');
+                document.body.appendChild(testChart);
+                await new Promise(r => setTimeout(r, 100));
+                
+                if (testChart.shadowRoot) {
+                    log('✓ Chart creation test passed', 'success');
+                } else {
+                    log('✗ Chart creation test failed', 'error');
+                }
+                
+                document.body.removeChild(testChart);
+            } catch (e) {
+                log(`✗ Chart creation error: ${e.message}`, 'error');
+            }
+            
+            // Test 2: Data rendering
+            try {
+                charts.line.setData(generateLineData());
+                await new Promise(r => setTimeout(r, 500));
+                
+                if (charts.line._datasets.length > 0) {
+                    log('✓ Data rendering test passed', 'success');
+                } else {
+                    log('✗ Data rendering test failed', 'error');
+                }
+            } catch (e) {
+                log(`✗ Data rendering error: ${e.message}`, 'error');
+            }
+            
+            // Test 3: Chart type transitions
+            try {
+                const types = ['line', 'bar', 'area', 'scatter'];
+                for (const type of types) {
+                    charts.mixed.setType(type);
+                    await new Promise(r => setTimeout(r, 300));
+                }
+                log('✓ Chart type transition test passed', 'success');
+            } catch (e) {
+                log(`✗ Chart type transition error: ${e.message}`, 'error');
+            }
+            
+            // Test 4: Interactivity
+            try {
+                charts.line.zoom(1.5);
+                charts.line.reset();
+                log('✓ Interactivity test passed', 'success');
+            } catch (e) {
+                log(`✗ Interactivity error: ${e.message}`, 'error');
+            }
+            
+            // Test 5: Performance
+            performanceTest();
+            
+            log('All tests completed', 'warning');
+        };
+        
+        window.clearLog = function() {
+            document.getElementById('testLog').innerHTML = '';
+        };
+        
+        // Initialize charts with data
+        setTimeout(() => {
+            // Line chart
+            charts.line.setData(generateLineData());
+            
+            // Bar chart
+            generateBarData();
+            
+            // Mixed chart
+            charts.mixed.setData(generateScatterData());
+            
+            // Pie charts
+            updatePieData();
+            
+            // Radar chart
+            generateRadarData();
+            
+            // Heatmap
+            generateHeatmapData();
+            
+            log('All charts initialized', 'success');
+            
+            // Update stats
+            setInterval(() => {
+                const lineState = charts.line.state;
+                document.getElementById('linePoints').textContent = 
+                    charts.line._datasets.reduce((sum, d) => sum + d.data.length, 0);
+                document.getElementById('lineFPS').textContent = 
+                    Math.round(lineState.fps);
+                document.getElementById('lineDatasets').textContent = 
+                    lineState.datasets;
+            }, 100);
+        }, 500);
+        
+        // Log initial status
+        log('BRUTAL Charts test suite loaded', 'success');
+        checkWebGL();
+    </script>
+</body>
+</html>

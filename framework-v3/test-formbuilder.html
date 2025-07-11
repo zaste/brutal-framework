@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - FormBuilder Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .form-demos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+        }
+        
+        .demo-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        .demo-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2196f3;
+        }
+        
+        .schema-selector {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        button {
+            padding: 8px 16px;
+            margin: 0 5px 5px 0;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #1976d2;
+        }
+        
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .event-log {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 300px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            overflow-y: auto;
+        }
+        
+        .event-log-title {
+            color: #0f0;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .event-entry {
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 BRUTAL FormBuilder</h1>
+        <p class="subtitle">Dynamic forms with reactive validation and GPU-accelerated animations</p>
+        
+        <div class="schema-selector">
+            <h3>Select Form Schema:</h3>
+            <button onclick="loadBasicForm()">Basic Form</button>
+            <button onclick="loadRegistrationForm()">Registration Form</button>
+            <button onclick="loadEmployeeForm()">Employee Form</button>
+            <button onclick="loadWizardForm()">Multi-Step Wizard</button>
+            <button onclick="loadConditionalForm()">Conditional Fields</button>
+            <button onclick="loadComputedForm()">Computed Fields</button>
+            <button onclick="loadValidationForm()">Advanced Validation</button>
+            <button onclick="loadCustomForm()">Custom Components</button>
+        </div>
+        
+        <div class="form-demos">
+            <div class="demo-card">
+                <div class="demo-title">Form Preview</div>
+                <brutal-formbuilder id="testForm"></brutal-formbuilder>
+                <div class="output" id="formOutput">Form data will appear here...</div>
+            </div>
+            
+            <div class="demo-card">
+                <div class="demo-title">Schema Editor</div>
+                <textarea id="schemaEditor" style="width: 100%; height: 400px; font-family: monospace; font-size: 0.9rem;"></textarea>
+                <button onclick="applySchema()">Apply Schema</button>
+                <button onclick="validateSchema()">Validate JSON</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="event-log" id="eventLog">
+        <div class="event-log-title">Event Log</div>
+    </div>
+
+    <script type="module">
+        import { FormBuilder } from './04-components/forms/FormBuilder.js';
+        
+        const form = document.getElementById('testForm');
+        const output = document.getElementById('formOutput');
+        const schemaEditor = document.getElementById('schemaEditor');
+        const eventLog = document.getElementById('eventLog');
+        
+        // Form schemas
+        const schemas = {
+            basic: {
+                type: 'simple',
+                fields: [
+                    {
+                        name: 'firstName',
+                        label: 'First Name',
+                        type: 'text',
+                        required: true,
+                        placeholder: 'Enter your first name'
+                    },
+                    {
+                        name: 'lastName',
+                        label: 'Last Name',
+                        type: 'text',
+                        required: true,
+                        placeholder: 'Enter your last name'
+                    },
+                    {
+                        name: 'email',
+                        label: 'Email',
+                        type: 'email',
+                        required: true,
+                        placeholder: 'email@example.com'
+                    },
+                    {
+                        name: 'message',
+                        label: 'Message',
+                        type: 'textarea',
+                        rows: 4,
+                        placeholder: 'Enter your message...'
+                    }
+                ]
+            },
+            
+            registration: {
+                type: 'simple',
+                sections: [
+                    {
+                        title: 'Account Information',
+                        fields: [
+                            {
+                                name: 'username',
+                                label: 'Username',
+                                type: 'text',
+                                required: true,
+                                validators: [
+                                    { type: 'minLength', value: 3, message: 'Username must be at least 3 characters' },
+                                    { type: 'pattern', value: '^[a-zA-Z0-9_]+$', message: 'Only letters, numbers, and underscores allowed' }
+                                ],
+                                asyncValidators: [
+                                    {
+                                        type: 'custom',
+                                        validator: async (value) => {
+                                            // Simulate API check
+                                            await new Promise(resolve => setTimeout(resolve, 500));
+                                            if (value === 'admin' || value === 'test') {
+                                                return 'Username already taken';
+                                            }
+                                            return null;
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'email',
+                                label: 'Email',
+                                type: 'email',
+                                required: true
+                            },
+                            {
+                                name: 'password',
+                                label: 'Password',
+                                type: 'password',
+                                required: true,
+                                validators: [
+                                    { type: 'minLength', value: 8, message: 'Password must be at least 8 characters' },
+                                    { type: 'pattern', value: '(?=.*[A-Z])(?=.*[0-9])', message: 'Must contain uppercase and number' }
+                                ]
+                            },
+                            {
+                                name: 'confirmPassword',
+                                label: 'Confirm Password',
+                                type: 'password',
+                                required: true,
+                                validators: [
+                                    {
+                                        type: 'custom',
+                                        validator: (value, formData) => {
+                                            if (value !== formData.password) {
+                                                return 'Passwords do not match';
+                                            }
+                                            return null;
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: 'Personal Information',
+                        fields: [
+                            {
+                                name: 'fullName',
+                                label: 'Full Name',
+                                type: 'text',
+                                required: true
+                            },
+                            {
+                                name: 'birthDate',
+                                label: 'Birth Date',
+                                type: 'date',
+                                required: true,
+                                max: new Date().toISOString().split('T')[0]
+                            },
+                            {
+                                name: 'newsletter',
+                                label: 'Subscribe to newsletter',
+                                type: 'checkbox',
+                                checkboxLabel: 'Yes, I want to receive updates'
+                            },
+                            {
+                                name: 'terms',
+                                label: 'Terms and Conditions',
+                                type: 'checkbox',
+                                required: true,
+                                checkboxLabel: 'I agree to the terms and conditions'
+                            }
+                        ]
+                    }
+                ]
+            },
+            
+            employee: {
+                type: 'simple',
+                sections: [
+                    {
+                        title: 'Employee Information',
+                        description: 'Please fill in all required employee details',
+                        fields: [
+                            {
+                                name: 'employeeId',
+                                label: 'Employee ID',
+                                type: 'text',
+                                required: true,
+                                pattern: '^EMP[0-9]{6}$',
+                                placeholder: 'EMP123456'
+                            },
+                            {
+                                name: 'fullName',
+                                label: 'Full Name',
+                                type: 'text',
+                                required: true,
+                                grid: { span: 2 }
+                            },
+                            {
+                                name: 'department',
+                                label: 'Department',
+                                type: 'select',
+                                required: true,
+                                options: [
+                                    { value: '', label: 'Select Department' },
+                                    { value: 'engineering', label: 'Engineering' },
+                                    { value: 'sales', label: 'Sales' },
+                                    { value: 'marketing', label: 'Marketing' },
+                                    { value: 'hr', label: 'Human Resources' },
+                                    { value: 'finance', label: 'Finance' }
+                                ]
+                            },
+                            {
+                                name: 'position',
+                                label: 'Position',
+                                type: 'text',
+                                required: true
+                            },
+                            {
+                                name: 'salary',
+                                label: 'Annual Salary',
+                                type: 'number',
+                                required: true,
+                                min: 0,
+                                step: 1000
+                            },
+                            {
+                                name: 'startDate',
+                                label: 'Start Date',
+                                type: 'date',
+                                required: true
+                            },
+                            {
+                                name: 'skills',
+                                label: 'Skills',
+                                type: 'checkbox',
+                                multiple: true,
+                                grid: { span: 2 },
+                                options: [
+                                    { value: 'javascript', label: 'JavaScript' },
+                                    { value: 'python', label: 'Python' },
+                                    { value: 'java', label: 'Java' },
+                                    { value: 'csharp', label: 'C#' },
+                                    { value: 'sql', label: 'SQL' },
+                                    { value: 'react', label: 'React' },
+                                    { value: 'angular', label: 'Angular' },
+                                    { value: 'vue', label: 'Vue.js' }
+                                ]
+                            },
+                            {
+                                name: 'experience',
+                                label: 'Years of Experience',
+                                type: 'range',
+                                min: 0,
+                                max: 30,
+                                step: 1,
+                                defaultValue: 5
+                            },
+                            {
+                                name: 'remote',
+                                label: 'Work Preference',
+                                type: 'radio',
+                                required: true,
+                                options: [
+                                    { value: 'office', label: 'Office' },
+                                    { value: 'remote', label: 'Remote' },
+                                    { value: 'hybrid', label: 'Hybrid' }
+                                ]
+                            },
+                            {
+                                name: 'resume',
+                                label: 'Resume',
+                                type: 'file',
+                                accept: '.pdf,.doc,.docx'
+                            },
+                            {
+                                name: 'notes',
+                                label: 'Additional Notes',
+                                type: 'textarea',
+                                rows: 3,
+                                grid: { span: 2 }
+                            }
+                        ]
+                    }
+                ],
+                initialValues: {
+                    department: 'engineering',
+                    experience: 5,
+                    remote: 'hybrid'
+                }
+            },
+            
+            wizard: {
+                type: 'wizard',
+                showProgress: true,
+                sections: [
+                    {
+                        title: 'Personal Details',
+                        fields: [
+                            {
+                                name: 'firstName',
+                                label: 'First Name',
+                                type: 'text',
+                                required: true
+                            },
+                            {
+                                name: 'lastName',
+                                label: 'Last Name',
+                                type: 'text',
+                                required: true
+                            },
+                            {
+                                name: 'email',
+                                label: 'Email',
+                                type: 'email',
+                                required: true
+                            },
+                            {
+                                name: 'phone',
+                                label: 'Phone',
+                                type: 'tel',
+                                pattern: '[0-9]{3}-[0-9]{3}-[0-9]{4}',
+                                placeholder: '123-456-7890'
+                            }
+                        ]
+                    },
+                    {
+                        title: 'Address Information',
+                        fields: [
+                            {
+                                name: 'street',
+                                label: 'Street Address',
+                                type: 'text',
+                                required: true
+                            },
+                            {
+                                name: 'city',
+                                label: 'City',
+                                type: 'text',
+                                required: true
+                            },
+                            {
+                                name: 'state',
+                                label: 'State',
+                                type: 'select',
+                                required: true,
+                                options: [
+                                    { value: '', label: 'Select State' },
+                                    { value: 'CA', label: 'California' },
+                                    { value: 'NY', label: 'New York' },
+                                    { value: 'TX', label: 'Texas' },
+                                    { value: 'FL', label: 'Florida' }
+                                ]
+                            },
+                            {
+                                name: 'zip',
+                                label: 'ZIP Code',
+                                type: 'text',
+                                pattern: '[0-9]{5}',
+                                required: true
+                            }
+                        ]
+                    },
+                    {
+                        title: 'Preferences',
+                        fields: [
+                            {
+                                name: 'notifications',
+                                label: 'Notification Preferences',
+                                type: 'checkbox',
+                                multiple: true,
+                                options: [
+                                    { value: 'email', label: 'Email notifications' },
+                                    { value: 'sms', label: 'SMS notifications' },
+                                    { value: 'push', label: 'Push notifications' }
+                                ]
+                            },
+                            {
+                                name: 'theme',
+                                label: 'Theme Preference',
+                                type: 'radio',
+                                options: [
+                                    { value: 'light', label: 'Light' },
+                                    { value: 'dark', label: 'Dark' },
+                                    { value: 'auto', label: 'Auto' }
+                                ],
+                                defaultValue: 'auto'
+                            },
+                            {
+                                name: 'language',
+                                label: 'Language',
+                                type: 'select',
+                                options: [
+                                    { value: 'en', label: 'English' },
+                                    { value: 'es', label: 'Spanish' },
+                                    { value: 'fr', label: 'French' },
+                                    { value: 'de', label: 'German' }
+                                ],
+                                defaultValue: 'en'
+                            }
+                        ]
+                    }
+                ]
+            },
+            
+            conditional: {
+                type: 'simple',
+                sections: [
+                    {
+                        title: 'Conditional Form Demo',
+                        description: 'Fields appear/disappear based on other field values',
+                        fields: [
+                            {
+                                name: 'userType',
+                                label: 'User Type',
+                                type: 'radio',
+                                required: true,
+                                options: [
+                                    { value: 'individual', label: 'Individual' },
+                                    { value: 'business', label: 'Business' }
+                                ]
+                            },
+                            {
+                                name: 'firstName',
+                                label: 'First Name',
+                                type: 'text',
+                                required: true,
+                                conditional: true
+                            },
+                            {
+                                name: 'lastName',
+                                label: 'Last Name',
+                                type: 'text',
+                                required: true,
+                                conditional: true
+                            },
+                            {
+                                name: 'companyName',
+                                label: 'Company Name',
+                                type: 'text',
+                                required: true,
+                                conditional: true
+                            },
+                            {
+                                name: 'taxId',
+                                label: 'Tax ID',
+                                type: 'text',
+                                required: true,
+                                conditional: true
+                            },
+                            {
+                                name: 'hasShipping',
+                                label: 'Different shipping address?',
+                                type: 'checkbox'
+                            },
+                            {
+                                name: 'shippingAddress',
+                                label: 'Shipping Address',
+                                type: 'text',
+                                required: true,
+                                conditional: true
+                            },
+                            {
+                                name: 'shippingCity',
+                                label: 'Shipping City',
+                                type: 'text',
+                                required: true,
+                                conditional: true
+                            },
+                            {
+                                name: 'paymentMethod',
+                                label: 'Payment Method',
+                                type: 'select',
+                                required: true,
+                                options: [
+                                    { value: '', label: 'Select Payment Method' },
+                                    { value: 'credit', label: 'Credit Card' },
+                                    { value: 'paypal', label: 'PayPal' },
+                                    { value: 'bank', label: 'Bank Transfer' }
+                                ]
+                            },
+                            {
+                                name: 'cardNumber',
+                                label: 'Card Number',
+                                type: 'text',
+                                pattern: '[0-9]{16}',
+                                required: true,
+                                conditional: true
+                            },
+                            {
+                                name: 'paypalEmail',
+                                label: 'PayPal Email',
+                                type: 'email',
+                                required: true,
+                                conditional: true
+                            },
+                            {
+                                name: 'bankAccount',
+                                label: 'Bank Account',
+                                type: 'text',
+                                required: true,
+                                conditional: true
+                            }
+                        ]
+                    }
+                ],
+                conditionals: {
+                    firstName: 'values.userType === "individual"',
+                    lastName: 'values.userType === "individual"',
+                    companyName: 'values.userType === "business"',
+                    taxId: 'values.userType === "business"',
+                    shippingAddress: 'values.hasShipping === true',
+                    shippingCity: 'values.hasShipping === true',
+                    cardNumber: 'values.paymentMethod === "credit"',
+                    paypalEmail: 'values.paymentMethod === "paypal"',
+                    bankAccount: 'values.paymentMethod === "bank"'
+                }
+            },
+            
+            computed: {
+                type: 'simple',
+                sections: [
+                    {
+                        title: 'Computed Fields Demo',
+                        description: 'Some fields are automatically calculated based on other values',
+                        fields: [
+                            {
+                                name: 'quantity',
+                                label: 'Quantity',
+                                type: 'number',
+                                min: 1,
+                                defaultValue: 1,
+                                required: true
+                            },
+                            {
+                                name: 'unitPrice',
+                                label: 'Unit Price',
+                                type: 'number',
+                                min: 0,
+                                step: 0.01,
+                                defaultValue: 10,
+                                required: true
+                            },
+                            {
+                                name: 'subtotal',
+                                label: 'Subtotal',
+                                type: 'number',
+                                readonly: true,
+                                computed: true
+                            },
+                            {
+                                name: 'taxRate',
+                                label: 'Tax Rate (%)',
+                                type: 'number',
+                                min: 0,
+                                max: 100,
+                                step: 0.1,
+                                defaultValue: 8.5
+                            },
+                            {
+                                name: 'tax',
+                                label: 'Tax Amount',
+                                type: 'number',
+                                readonly: true,
+                                computed: true
+                            },
+                            {
+                                name: 'shipping',
+                                label: 'Shipping',
+                                type: 'number',
+                                min: 0,
+                                defaultValue: 5
+                            },
+                            {
+                                name: 'discount',
+                                label: 'Discount',
+                                type: 'number',
+                                min: 0,
+                                defaultValue: 0
+                            },
+                            {
+                                name: 'total',
+                                label: 'Total',
+                                type: 'number',
+                                readonly: true,
+                                computed: true
+                            },
+                            {
+                                name: 'birthYear',
+                                label: 'Birth Year',
+                                type: 'number',
+                                min: 1900,
+                                max: new Date().getFullYear(),
+                                defaultValue: 2000
+                            },
+                            {
+                                name: 'age',
+                                label: 'Age',
+                                type: 'number',
+                                readonly: true,
+                                computed: true
+                            }
+                        ]
+                    }
+                ],
+                computed: {
+                    subtotal: 'values.quantity * values.unitPrice',
+                    tax: '(values.subtotal * values.taxRate / 100).toFixed(2)',
+                    total: '(parseFloat(values.subtotal) + parseFloat(values.tax) + parseFloat(values.shipping) - parseFloat(values.discount)).toFixed(2)',
+                    age: 'new Date().getFullYear() - values.birthYear'
+                }
+            },
+            
+            validation: {
+                type: 'simple',
+                sections: [
+                    {
+                        title: 'Advanced Validation Demo',
+                        description: 'Showcasing various validation types',
+                        fields: [
+                            {
+                                name: 'username',
+                                label: 'Username (async check)',
+                                type: 'text',
+                                required: true,
+                                description: 'Try "admin" or "test" to see async validation',
+                                asyncValidators: [
+                                    {
+                                        type: 'custom',
+                                        validator: async (value) => {
+                                            if (!value) return null;
+                                            // Show loading state
+                                            await new Promise(resolve => setTimeout(resolve, 1000));
+                                            if (value === 'admin' || value === 'test') {
+                                                return 'This username is already taken';
+                                            }
+                                            return null;
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'age',
+                                label: 'Age (18-100)',
+                                type: 'number',
+                                required: true,
+                                min: 18,
+                                max: 100,
+                                validators: [
+                                    {
+                                        type: 'custom',
+                                        validator: (value) => {
+                                            if (value && value < 21) {
+                                                return 'You must be 21 or older for this form';
+                                            }
+                                            return null;
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'email',
+                                label: 'Corporate Email',
+                                type: 'email',
+                                required: true,
+                                validators: [
+                                    {
+                                        type: 'pattern',
+                                        value: '^[^@]+@(company\\.com|corp\\.com)$',
+                                        message: 'Must be a corporate email (@company.com or @corp.com)'
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'website',
+                                label: 'Website URL',
+                                type: 'url',
+                                validators: [
+                                    {
+                                        type: 'pattern',
+                                        value: '^https://',
+                                        message: 'URL must start with https://'
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'password',
+                                label: 'Strong Password',
+                                type: 'password',
+                                required: true,
+                                description: 'Min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char',
+                                validators: [
+                                    {
+                                        type: 'minLength',
+                                        value: 8,
+                                        message: 'Password must be at least 8 characters'
+                                    },
+                                    {
+                                        type: 'pattern',
+                                        value: '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])',
+                                        message: 'Password must contain uppercase, lowercase, number, and special character'
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'confirmPassword',
+                                label: 'Confirm Password',
+                                type: 'password',
+                                required: true,
+                                validators: [
+                                    {
+                                        type: 'custom',
+                                        validator: (value, formData) => {
+                                            if (value !== formData.password) {
+                                                return 'Passwords do not match';
+                                            }
+                                            return null;
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'phone',
+                                label: 'Phone (US format)',
+                                type: 'tel',
+                                pattern: '\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}',
+                                placeholder: '(123) 456-7890',
+                                validators: [
+                                    {
+                                        type: 'pattern',
+                                        value: '^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$',
+                                        message: 'Phone must be in format (123) 456-7890'
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'creditCard',
+                                label: 'Credit Card',
+                                type: 'text',
+                                pattern: '[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}',
+                                placeholder: '1234 5678 9012 3456',
+                                validators: [
+                                    {
+                                        type: 'custom',
+                                        validator: (value) => {
+                                            if (!value) return null;
+                                            // Simple Luhn algorithm check
+                                            const digits = value.replace(/\s/g, '');
+                                            if (!/^\d{16}$/.test(digits)) {
+                                                return 'Credit card must be 16 digits';
+                                            }
+                                            
+                                            let sum = 0;
+                                            let isEven = false;
+                                            for (let i = digits.length - 1; i >= 0; i--) {
+                                                let digit = parseInt(digits[i]);
+                                                if (isEven) {
+                                                    digit *= 2;
+                                                    if (digit > 9) digit -= 9;
+                                                }
+                                                sum += digit;
+                                                isEven = !isEven;
+                                            }
+                                            
+                                            if (sum % 10 !== 0) {
+                                                return 'Invalid credit card number';
+                                            }
+                                            return null;
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            
+            custom: {
+                type: 'simple',
+                sections: [
+                    {
+                        title: 'Custom Components Demo',
+                        description: 'Forms can include custom field components',
+                        fields: [
+                            {
+                                name: 'color',
+                                label: 'Favorite Color',
+                                type: 'custom',
+                                customComponent: (field, value, onChange) => {
+                                    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+                                    return `
+                                        <div style="display: flex; gap: 10px;">
+                                            ${colors.map(color => `
+                                                <div style="
+                                                    width: 40px; 
+                                                    height: 40px; 
+                                                    background: ${color}; 
+                                                    border: 3px solid ${value === color ? '#000' : 'transparent'};
+                                                    border-radius: 50%;
+                                                    cursor: pointer;
+                                                " onclick="this.getRootNode().host.setFieldValue('${field.name}', '${color}')"></div>
+                                            `).join('')}
+                                        </div>
+                                        <input type="hidden" value="${value || ''}">
+                                    `;
+                                }
+                            },
+                            {
+                                name: 'rating',
+                                label: 'Rate this form',
+                                type: 'custom',
+                                customComponent: (field, value, onChange) => {
+                                    const stars = 5;
+                                    const rating = parseInt(value) || 0;
+                                    return `
+                                        <div style="font-size: 24px; cursor: pointer;">
+                                            ${Array.from({length: stars}, (_, i) => `
+                                                <span onclick="this.getRootNode().host.setFieldValue('${field.name}', ${i + 1})"
+                                                      style="color: ${i < rating ? 'gold' : '#ddd'}">★</span>
+                                            `).join('')}
+                                        </div>
+                                        <input type="hidden" value="${rating}">
+                                    `;
+                                }
+                            },
+                            {
+                                name: 'tags',
+                                label: 'Tags',
+                                type: 'custom',
+                                customComponent: (field, value, onChange) => {
+                                    const tags = value || [];
+                                    return `
+                                        <div style="display: flex; flex-wrap: wrap; gap: 5px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; min-height: 40px;">
+                                            ${tags.map((tag, i) => `
+                                                <span style="
+                                                    background: #e0e0e0; 
+                                                    padding: 5px 10px; 
+                                                    border-radius: 20px;
+                                                    display: inline-flex;
+                                                    align-items: center;
+                                                    gap: 5px;
+                                                ">
+                                                    ${tag}
+                                                    <span onclick="
+                                                        const tags = this.getRootNode().host.getFieldValue('${field.name}') || [];
+                                                        tags.splice(${i}, 1);
+                                                        this.getRootNode().host.setFieldValue('${field.name}', tags);
+                                                    " style="cursor: pointer; color: #666;">×</span>
+                                                </span>
+                                            `).join('')}
+                                            <input type="text" 
+                                                   placeholder="Add tag..." 
+                                                   style="border: none; outline: none; flex: 1; min-width: 100px;"
+                                                   onkeypress="if(event.key === 'Enter') {
+                                                       event.preventDefault();
+                                                       const tags = this.getRootNode().host.getFieldValue('${field.name}') || [];
+                                                       if (this.value.trim()) {
+                                                           tags.push(this.value.trim());
+                                                           this.getRootNode().host.setFieldValue('${field.name}', tags);
+                                                           this.value = '';
+                                                       }
+                                                   }">
+                                        </div>
+                                    `;
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+        
+        // Load form schemas
+        window.loadBasicForm = () => loadSchema(schemas.basic);
+        window.loadRegistrationForm = () => loadSchema(schemas.registration);
+        window.loadEmployeeForm = () => loadSchema(schemas.employee);
+        window.loadWizardForm = () => loadSchema(schemas.wizard);
+        window.loadConditionalForm = () => loadSchema(schemas.conditional);
+        window.loadComputedForm = () => loadSchema(schemas.computed);
+        window.loadValidationForm = () => loadSchema(schemas.validation);
+        window.loadCustomForm = () => loadSchema(schemas.custom);
+        
+        function loadSchema(schema) {
+            form.schema = schema;
+            schemaEditor.value = JSON.stringify(schema, null, 2);
+            updateOutput();
+        }
+        
+        // Apply schema from editor
+        window.applySchema = () => {
+            try {
+                const schema = JSON.parse(schemaEditor.value);
+                form.schema = schema;
+                logEvent('Schema applied successfully', 'success');
+            } catch (error) {
+                logEvent(`Schema error: ${error.message}`, 'error');
+            }
+        };
+        
+        // Validate JSON
+        window.validateSchema = () => {
+            try {
+                JSON.parse(schemaEditor.value);
+                logEvent('Valid JSON', 'success');
+            } catch (error) {
+                logEvent(`Invalid JSON: ${error.message}`, 'error');
+            }
+        };
+        
+        // Update output
+        function updateOutput() {
+            const data = form.getData();
+            output.textContent = JSON.stringify(data, null, 2);
+        }
+        
+        // Log events
+        function logEvent(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = 'event-entry';
+            entry.style.color = type === 'error' ? '#f44' : type === 'success' ? '#4f4' : '#0f0';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            eventLog.appendChild(entry);
+            eventLog.scrollTop = eventLog.scrollHeight;
+            
+            // Keep only last 20 events
+            while (eventLog.children.length > 21) {
+                eventLog.removeChild(eventLog.children[1]);
+            }
+        }
+        
+        // Form event listeners
+        form.addEventListener('fieldchange', (e) => {
+            updateOutput();
+            logEvent(`Field changed: ${e.detail.field} = ${JSON.stringify(e.detail.value)}`);
+        });
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            logEvent('Form submitted', 'success');
+            console.log('Form data:', e.detail.data);
+            alert('Form submitted! Check console for data.');
+        });
+        
+        form.addEventListener('error', (e) => {
+            logEvent(`Form error: ${e.detail.error.message}`, 'error');
+        });
+        
+        form.addEventListener('validationerror', (e) => {
+            logEvent(`Validation error: ${e.detail.field} - ${e.detail.error}`, 'error');
+        });
+        
+        // Load initial form
+        loadBasicForm();
+    </script>
+</body>
+</html>

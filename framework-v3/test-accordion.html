@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion Test - BRUTAL V3</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #111;
+            color: #0f0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            text-shadow: 0 0 20px #0f0;
+            margin-bottom: 30px;
+        }
+        
+        .demo-section {
+            margin: 40px 0;
+            padding: 20px;
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            background: rgba(0, 255, 0, 0.02);
+        }
+        
+        .demo-section h2 {
+            color: #0ff;
+            margin-bottom: 20px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        select, input {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .accordion-demo {
+            margin: 20px 0;
+        }
+        
+        .content-box {
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+        }
+        
+        .code-block {
+            background: #000;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BRUTAL Accordion Component</h1>
+        
+        <!-- Basic Demo -->
+        <div class="demo-section">
+            <h2>Basic Accordion</h2>
+            <brutal-accordion id="basicAccordion" class="accordion-demo"></brutal-accordion>
+            <div class="controls">
+                <button onclick="addBasicPanel()">Add Panel</button>
+                <button onclick="expandAll()">Expand All</button>
+                <button onclick="collapseAll()">Collapse All</button>
+            </div>
+        </div>
+        
+        <!-- Configurable Demo -->
+        <div class="demo-section">
+            <h2>Configurable Accordion</h2>
+            <div class="controls">
+                <label>Theme:
+                    <select id="theme" onchange="updateConfig()">
+                        <option value="brutal">Brutal</option>
+                        <option value="minimal">Minimal</option>
+                        <option value="neon">Neon</option>
+                        <option value="glassmorphic">Glassmorphic</option>
+                    </select>
+                </label>
+                
+                <label>Animation:
+                    <select id="animation" onchange="updateConfig()">
+                        <option value="smooth">Smooth</option>
+                        <option value="bounce">Bounce</option>
+                        <option value="spring">Spring</option>
+                        <option value="none">None</option>
+                    </select>
+                </label>
+                
+                <label>
+                    <input type="checkbox" id="multiple" onchange="updateConfig()">
+                    Multiple
+                </label>
+                
+                <label>
+                    <input type="checkbox" id="collapsible" onchange="updateConfig()" checked>
+                    Collapsible
+                </label>
+                
+                <label>
+                    <input type="checkbox" id="icons" onchange="updateConfig()" checked>
+                    Show Icons
+                </label>
+            </div>
+            <brutal-accordion id="configAccordion" class="accordion-demo"></brutal-accordion>
+        </div>
+        
+        <!-- Advanced Features -->
+        <div class="demo-section">
+            <h2>Advanced Features</h2>
+            <brutal-accordion id="advancedAccordion" class="accordion-demo"></brutal-accordion>
+            <div class="controls">
+                <button onclick="addLazyPanel()">Add Lazy Panel</button>
+                <button onclick="disableRandom()">Disable Random</button>
+                <button onclick="updateContent()">Update Content</button>
+            </div>
+            <div class="status" id="status">
+                <strong>Events:</strong>
+                <div id="eventLog"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Accordion } from './04-components/ui/Accordion.js';
+        
+        // Initialize basic accordion
+        const basicAccordion = document.getElementById('basicAccordion');
+        
+        // Add initial panels
+        basicAccordion.addPanel({
+            id: 'intro',
+            title: 'Introduction',
+            content: '<div class="content-box"><h3>Welcome to BRUTAL Accordion</h3><p>This is a high-performance accordion component with smooth animations and zero dependencies.</p></div>'
+        });
+        
+        basicAccordion.addPanel({
+            id: 'features',
+            title: 'Features',
+            content: '<div class="content-box"><ul><li>GPU-accelerated animations</li><li>Keyboard navigation</li><li>ARIA compliant</li><li>Multiple themes</li><li>Lazy loading support</li></ul></div>'
+        });
+        
+        basicAccordion.addPanel({
+            id: 'usage',
+            title: 'Usage',
+            content: '<div class="content-box"><div class="code-block">const accordion = new Accordion();<br>accordion.addPanel({<br>  title: "Panel Title",<br>  content: "Panel content"<br>});</div></div>'
+        });
+        
+        // Initialize configurable accordion
+        const configAccordion = document.getElementById('configAccordion');
+        
+        configAccordion.addPanel({
+            id: 'config1',
+            title: 'Configuration Options',
+            content: '<div class="content-box"><p>Use the controls above to change the accordion behavior and appearance.</p></div>'
+        });
+        
+        configAccordion.addPanel({
+            id: 'config2',
+            title: 'Multiple Mode',
+            content: '<div class="content-box"><p>When enabled, multiple panels can be expanded at the same time.</p></div>'
+        });
+        
+        configAccordion.addPanel({
+            id: 'config3',
+            title: 'Animation Types',
+            content: '<div class="content-box"><p>Choose from smooth, bounce, spring, or no animation.</p></div>'
+        });
+        
+        // Initialize advanced accordion
+        const advancedAccordion = document.getElementById('advancedAccordion');
+        advancedAccordion.setConfig({ multiple: true });
+        
+        advancedAccordion.addPanel({
+            id: 'advanced1',
+            title: 'Dynamic Content',
+            content: '<div class="content-box"><p>This content can be updated dynamically.</p><p id="timestamp">Last updated: Never</p></div>'
+        });
+        
+        advancedAccordion.addPanel({
+            id: 'advanced2',
+            title: 'Lazy Loading Example',
+            loader: async () => {
+                // Simulate async loading
+                await new Promise(r => setTimeout(r, 1500));
+                return '<div class="content-box"><h3>Lazy Loaded!</h3><p>This content was loaded asynchronously when the panel was first expanded.</p><p>Loading completed at: ' + new Date().toLocaleTimeString() + '</p></div>';
+            }
+        });
+        
+        advancedAccordion.addPanel({
+            id: 'advanced3',
+            title: 'Disabled Panel',
+            content: '<div class="content-box"><p>This panel is disabled and cannot be expanded.</p></div>',
+            disabled: true
+        });
+        
+        // Event logging
+        const eventLog = document.getElementById('eventLog');
+        let eventCount = 0;
+        
+        function logEvent(message) {
+            eventCount++;
+            const entry = document.createElement('div');
+            entry.textContent = `${eventCount}. ${message}`;
+            eventLog.appendChild(entry);
+            eventLog.scrollTop = eventLog.scrollHeight;
+            
+            // Keep only last 10 events
+            while (eventLog.children.length > 10) {
+                eventLog.removeChild(eventLog.firstChild);
+            }
+        }
+        
+        // Listen to events
+        advancedAccordion.addEventListener('expand', (e) => {
+            logEvent(`Expanded: ${e.detail.panel.title}`);
+        });
+        
+        advancedAccordion.addEventListener('collapse', (e) => {
+            logEvent(`Collapsed: ${e.detail.panel.title}`);
+        });
+        
+        advancedAccordion.addEventListener('paneladd', (e) => {
+            logEvent(`Added: ${e.detail.panel.title}`);
+        });
+        
+        advancedAccordion.addEventListener('panelremove', (e) => {
+            logEvent(`Removed: ${e.detail.panel.title}`);
+        });
+        
+        // Functions for controls
+        let panelCounter = 1;
+        
+        window.addBasicPanel = function() {
+            basicAccordion.addPanel({
+                id: `panel-${Date.now()}`,
+                title: `Dynamic Panel ${panelCounter++}`,
+                content: `<div class="content-box"><p>This panel was added dynamically.</p><p>Created at: ${new Date().toLocaleTimeString()}</p></div>`
+            });
+        };
+        
+        window.expandAll = function() {
+            basicAccordion.expandAll();
+        };
+        
+        window.collapseAll = function() {
+            basicAccordion.collapseAll();
+        };
+        
+        window.updateConfig = function() {
+            configAccordion.setConfig({
+                theme: document.getElementById('theme').value,
+                animation: document.getElementById('animation').value,
+                multiple: document.getElementById('multiple').checked,
+                collapsible: document.getElementById('collapsible').checked,
+                icons: document.getElementById('icons').checked
+            });
+        };
+        
+        window.addLazyPanel = function() {
+            advancedAccordion.addPanel({
+                id: `lazy-${Date.now()}`,
+                title: `Lazy Panel ${panelCounter++}`,
+                loader: async () => {
+                    await new Promise(r => setTimeout(r, 1000));
+                    return `<div class="content-box"><h3>Lazy Loaded!</h3><p>This content took 1 second to load.</p><p>Panel ${panelCounter - 1} loaded at: ${new Date().toLocaleTimeString()}</p></div>`;
+                }
+            });
+        };
+        
+        window.disableRandom = function() {
+            const panels = advancedAccordion.getPanels().filter(p => !p.disabled);
+            if (panels.length > 0) {
+                const randomPanel = panels[Math.floor(Math.random() * panels.length)];
+                advancedAccordion.updatePanel(randomPanel.id, { disabled: true });
+                logEvent(`Disabled: ${randomPanel.title}`);
+            }
+        };
+        
+        window.updateContent = function() {
+            const timestamp = new Date().toLocaleTimeString();
+            advancedAccordion.updatePanel('advanced1', {
+                content: `<div class="content-box"><p>This content has been updated!</p><p id="timestamp">Last updated: ${timestamp}</p><p>Update count: ${++updateCounter}</p></div>`
+            });
+            logEvent('Content updated');
+        };
+        
+        let updateCounter = 0;
+        
+        // Initial log
+        logEvent('Accordion initialized');
+    </script>
+</body>
+</html>

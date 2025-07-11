@@ -1,0 +1,230 @@
+{
+  "file": "test-float64-atomics.html",
+  "timestamp": "2025-07-10T14:12:50.237Z",
+  "console": [
+    {
+      "level": "log",
+      "text": "=== Float64 Atomics Test Suite ===\n",
+      "timestamp": "2025-07-10T14:12:50.347Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/tests/test-float64-atomics.js",
+      "line": 292,
+      "column": 11
+    },
+    {
+      "level": "error",
+      "text": "❌ Not cross-origin isolated!",
+      "timestamp": "2025-07-10T14:12:50.347Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/tests/test-float64-atomics.js",
+      "line": 303,
+      "column": 15
+    },
+    {
+      "level": "log",
+      "text": "SharedArrayBuffer requires crossOriginIsolated",
+      "timestamp": "2025-07-10T14:12:50.347Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/tests/test-float64-atomics.js",
+      "line": 304,
+      "column": 15
+    }
+  ],
+  "errors": [
+    {
+      "type": "test-failure",
+      "message": "page.waitForTimeout is not a function",
+      "stack": "TypeError: page.waitForTimeout is not a function\n    at runUltimateTest (file:///workspaces/web/framework-v3/ultimate-test-system.js:205:20)\n    at async runAllTests (file:///workspaces/web/framework-v3/ultimate-test-system.js:613:28)"
+    }
+  ],
+  "network": [
+    {
+      "requestId": "4F03BCED3F43D5A2131863F0F200CFC4",
+      "url": "http://localhost:8080/test-float64-atomics.html",
+      "method": "GET",
+      "timestamp": 21497.399656,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11341",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:12:50 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 13:40:41 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21497.402948
+      },
+      "finished": {
+        "timestamp": 21497.402377,
+        "encodedDataLength": 11529
+      }
+    },
+    {
+      "requestId": "238291.2",
+      "url": "http://localhost:8080/tests/test-float64-atomics.js",
+      "method": "GET",
+      "timestamp": 21497.427875,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/test-float64-atomics.html",
+        "lineNumber": 168,
+        "columnNumber": 36
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "9243",
+          "Date": "Thu, 10 Jul 2025 14:12:50 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:38:39 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21497.484782
+      },
+      "finished": {
+        "timestamp": 21497.444332,
+        "encodedDataLength": 9436
+      }
+    },
+    {
+      "requestId": "238291.3",
+      "url": "http://localhost:8080/examples/float64-state-example.js",
+      "method": "GET",
+      "timestamp": 21497.43025,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/test-float64-atomics.html",
+        "lineNumber": 169,
+        "columnNumber": 43
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11301",
+          "Date": "Thu, 10 Jul 2025 14:12:50 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:39:44 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21497.485231
+      },
+      "finished": {
+        "timestamp": 21497.444447,
+        "encodedDataLength": 11495
+      }
+    },
+    {
+      "requestId": "238291.4",
+      "url": "http://localhost:8080/01-core/Float64Atomics.js",
+      "method": "GET",
+      "timestamp": 21497.485599,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/tests/test-float64-atomics.js",
+        "lineNumber": 9,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11548",
+          "Date": "Thu, 10 Jul 2025 14:12:50 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:37:49 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21497.49249
+      },
+      "finished": {
+        "timestamp": 21497.492159,
+        "encodedDataLength": 11742
+      }
+    },
+    {
+      "requestId": "238291.5",
+      "url": "http://localhost:8080/01-core/State.js",
+      "method": "GET",
+      "timestamp": 21497.485825,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/examples/float64-state-example.js",
+        "lineNumber": 5,
+        "columnNumber": 22
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "17122",
+          "Date": "Thu, 10 Jul 2025 14:12:50 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21497.496201
+      },
+      "finished": {
+        "timestamp": 21497.495725,
+        "encodedDataLength": 17316
+      }
+    },
+    {
+      "requestId": "238291.6",
+      "url": "http://localhost:8080/01-core/events.js",
+      "method": "GET",
+      "timestamp": 21497.497346,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/State.js",
+        "lineNumber": 5,
+        "columnNumber": 47
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "1399",
+          "Date": "Thu, 10 Jul 2025 14:12:50 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:10 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21497.500928
+      },
+      "finished": {
+        "timestamp": 21497.500163,
+        "encodedDataLength": 1592
+      }
+    }
+  ],
+  "performance": {},
+  "memory": {},
+  "coverage": {},
+  "domMutations": [],
+  "eventListeners": [],
+  "userInteractions": [],
+  "gpuInfo": {},
+  "screenshots": [],
+  "video": null,
+  "trace": null,
+  "heapSnapshot": null
+}

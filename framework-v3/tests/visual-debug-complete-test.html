@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Visual Debug Layer Complete Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ff88, #00aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .info-panel {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+        
+        .info-panel h2 {
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .feature-card {
+            background: #0f0f0f;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+        
+        .feature-card h3 {
+            color: #00aaff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-card kbd {
+            background: #333;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .demo-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .demo-component {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #333;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .demo-component:hover {
+            border-color: #00ff88;
+            transform: translateY(-2px);
+        }
+        
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            background: #00ff88;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #00cc70;
+            transform: translateY(-2px);
+        }
+        
+        .alert {
+            background: #ff0044;
+            color: #fff;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 BRUTAL Visual Debug Layer Complete</h1>
+    
+    <div class="info-panel">
+        <h2>✨ New Features Showcase</h2>
+        <p>This demo showcases all the new Visual Debug Layer features including GPU acceleration, recording engine, configuration panel, and 3D component tree visualization.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>🎬 Recording Engine</h3>
+                <p>Time-travel debugging with 60fps recording</p>
+                <p><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd></p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>⚙️ Configuration Panel</h3>
+                <p>Real-time configuration of all debug features</p>
+                <p><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd></p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🌳 3D Component Tree</h3>
+                <p>Navigate your component hierarchy in 3D space</p>
+                <p><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>T</kbd></p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🎮 GPU Acceleration</h3>
+                <p>1M+ particles at 60fps with WebGPU/WebGL</p>
+                <p><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> for benchmark</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🎆 Particle Controls</h3>
+                <p>Fine-tune particle physics in real-time</p>
+                <p><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>👁️ Toggle Debug Layer</h3>
+                <p>Show/hide the entire debug visualization</p>
+                <p><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="alert" id="error-alert">
+        ⚠️ Error triggered! Watch the explosion effect!
+    </div>
+    
+    <h2 style="margin-bottom: 1rem;">Interactive Demo Components</h2>
+    
+    <div class="demo-components" id="demo-grid">
+        <!-- Demo components will be dynamically created -->
+    </div>
+    
+    <div class="status-bar">
+        <div class="status-item">
+            <span class="status-indicator"></span>
+            <span>Debug Layer: <span id="debug-status">Active</span></span>
+        </div>
+        <div class="status-item">
+            <span>FPS: <span id="fps-counter">60</span></span>
+        </div>
+        <div class="status-item">
+            <span>Particles: <span id="particle-count">0</span></span>
+        </div>
+        <div class="status-item">
+            <span>Components: <span id="component-count">0</span></span>
+        </div>
+    </div>
+    
+    <script type="module">
+        // Set debug mode
+        window.__BRUTAL__ = { debug: true };
+        
+        // Import the Visual Debug Layer
+        import { VisualDebugLayerGPU } from '../03-visual/debug/VisualDebugLayerGPU.js';
+        
+        // Initialize debug layer
+        let debugLayer = null;
+        
+        async function init() {
+            console.log('Initializing BRUTAL Visual Debug Layer Complete Test...');
+            
+            // Create debug layer
+            debugLayer = new VisualDebugLayerGPU({ enabled: true });
+            await debugLayer.init();
+            
+            // Create demo components
+            createDemoComponents();
+            
+            // Start demo sequence
+            setTimeout(startDemoSequence, 2000);
+            
+            // Update status displays
+            setInterval(updateStatus, 100);
+            
+            console.log('✅ Test initialized successfully');
+        }
+        
+        function createDemoComponents() {
+            const grid = document.getElementById('demo-grid');
+            const componentTypes = [
+                { name: 'Data Processor', icon: '📊', type: 'worker' },
+                { name: 'GPU Renderer', icon: '🎮', type: 'gpu' },
+                { name: 'State Manager', icon: '🗃️', type: 'component' },
+                { name: 'Event Handler', icon: '⚡', type: 'component' },
+                { name: 'API Gateway', icon: '🌐', type: 'component' },
+                { name: 'Cache Layer', icon: '💾', type: 'component' }
+            ];
+            
+            componentTypes.forEach((comp, index) => {
+                const element = document.createElement('div');
+                element.className = 'demo-component';
+                element.id = `component-${index}`;
+                element.setAttribute('data-brutal-component', 'true');
+                element.innerHTML = `
+                    <h3>${comp.icon} ${comp.name}</h3>
+                    <p>Component ID: ${index}</p>
+                    <div style="margin-top: 1rem;">
+                        <div>Renders: <span id="renders-${index}">0</span></div>
+                        <div>Updates: <span id="updates-${index}">0</span></div>
+                        <div>Status: <span id="status-${index}" style="color: #00ff88;">Active</span></div>
+                    </div>
+                    <button onclick="window.updateComponent(${index})" style="margin-top: 1rem;">
+                        Update State
+                    </button>
+                `;
+                
+                // Store component state
+                element.__brutalState = {
+                    renders: 0,
+                    updates: 0,
+                    type: comp.type,
+                    active: true
+                };
+                
+                grid.appendChild(element);
+                
+                // Emit mount event
+                window.dispatchEvent(new CustomEvent('brutal:render', {
+                    detail: {
+                        component: element,
+                        metrics: {
+                            renderTime: Math.random() * 10,
+                            componentCount: index + 1
+                        }
+                    }
+                }));
+            });
+            
+            document.getElementById('component-count').textContent = componentTypes.length;
+        }
+        
+        // Global function for button clicks
+        window.updateComponent = function(index) {
+            const element = document.getElementById(`component-${index}`);
+            if (!element) return;
+            
+            const oldState = { ...element.__brutalState };
+            element.__brutalState.updates++;
+            element.__brutalState.lastUpdate = Date.now();
+            
+            // Update UI
+            document.getElementById(`updates-${index}`).textContent = element.__brutalState.updates;
+            
+            // Emit state change event
+            window.dispatchEvent(new CustomEvent('brutal:state-change', {
+                detail: {
+                    component: element,
+                    oldState,
+                    newState: element.__brutalState
+                }
+            }));
+            
+            // Emit render event
+            window.dispatchEvent(new CustomEvent('brutal:render', {
+                detail: {
+                    component: element,
+                    metrics: {
+                        renderTime: Math.random() * 20 + 5,
+                        componentCount: 1
+                    }
+                }
+            }));
+            
+            element.__brutalState.renders++;
+            document.getElementById(`renders-${index}`).textContent = element.__brutalState.renders;
+        };
+        
+        function startDemoSequence() {
+            console.log('🎬 Starting automated demo sequence...');
+            
+            // Sequence 1: Rapid updates
+            let updateCount = 0;
+            const rapidUpdates = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * 6);
+                window.updateComponent(randomIndex);
+                updateCount++;
+                
+                if (updateCount > 20) {
+                    clearInterval(rapidUpdates);
+                    // Sequence 2: Trigger error
+                    setTimeout(triggerError, 2000);
+                }
+            }, 200);
+        }
+        
+        function triggerError() {
+            const errorComponent = document.getElementById('component-2');
+            
+            // Show alert
+            document.getElementById('error-alert').style.display = 'block';
+            
+            // Update status
+            document.getElementById('status-2').textContent = 'Error!';
+            document.getElementById('status-2').style.color = '#ff0044';
+            
+            // Emit error event
+            window.dispatchEvent(new CustomEvent('brutal:error', {
+                detail: {
+                    component: errorComponent,
+                    error: new Error('Simulated component error for demo!')
+                }
+            }));
+            
+            // Hide alert after 3 seconds
+            setTimeout(() => {
+                document.getElementById('error-alert').style.display = 'none';
+                document.getElementById('status-2').textContent = 'Recovered';
+                document.getElementById('status-2').style.color = '#ffaa00';
+            }, 3000);
+            
+            // Continue with state flow visualization
+            setTimeout(demonstrateStateFlow, 2000);
+        }
+        
+        function demonstrateStateFlow() {
+            console.log('🌊 Demonstrating state flow...');
+            
+            // Create chain reaction
+            let currentIndex = 0;
+            const flowInterval = setInterval(() => {
+                window.updateComponent(currentIndex);
+                
+                // Update next component
+                currentIndex = (currentIndex + 1) % 6;
+                
+                // Show flow between components
+                if (currentIndex > 0) {
+                    const source = document.getElementById(`component-${currentIndex - 1}`);
+                    const target = document.getElementById(`component-${currentIndex}`);
+                    
+                    // Emit custom flow event (if supported by debug layer)
+                    window.dispatchEvent(new CustomEvent('brutal:data-flow', {
+                        detail: {
+                            source,
+                            target,
+                            data: { value: Math.random() * 100 }
+                        }
+                    }));
+                }
+                
+                if (currentIndex === 0) {
+                    clearInterval(flowInterval);
+                    console.log('✅ Demo sequence complete!');
+                }
+            }, 500);
+        }
+        
+        function updateStatus() {
+            if (!debugLayer) return;
+            
+            // Update FPS
+            const metrics = debugLayer.metrics;
+            if (metrics) {
+                document.getElementById('fps-counter').textContent = Math.round(metrics.fps || 60);
+                document.getElementById('particle-count').textContent = (metrics.particleCount || 0).toLocaleString();
+            }
+            
+            // Update debug status
+            document.getElementById('debug-status').textContent = debugLayer.enabled ? 'Active' : 'Inactive';
+        }
+        
+        // Initialize on load
+        window.addEventListener('load', init);
+        
+        // Help message
+        console.log(`
+🎮 BRUTAL Visual Debug Layer Controls:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ctrl+Shift+D - Toggle Debug Layer
+Ctrl+Shift+C - Open Configuration Panel
+Ctrl+Shift+R - Start/Stop Recording
+Ctrl+Shift+T - Show 3D Component Tree
+Ctrl+Shift+B - Run GPU Benchmark
+Ctrl+Shift+P - Show Particle Controls
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        `);
+    </script>
+</body>
+</html>

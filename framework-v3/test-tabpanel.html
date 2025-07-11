@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TabPanel Test - BRUTAL V3</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #111;
+            color: #0f0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            text-shadow: 0 0 20px #0f0;
+            margin-bottom: 30px;
+        }
+        
+        .demo-section {
+            margin: 40px 0;
+            padding: 20px;
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            background: rgba(0, 255, 0, 0.02);
+        }
+        
+        .demo-section h2 {
+            color: #0ff;
+            margin-bottom: 20px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        select {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .tab-demo {
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .content-box {
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .code-content {
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BRUTAL TabPanel Component</h1>
+        
+        <!-- Basic Demo -->
+        <div class="demo-section">
+            <h2>Basic TabPanel</h2>
+            <brutal-tabpanel id="basicTabs" class="tab-demo"></brutal-tabpanel>
+            <div class="controls">
+                <button onclick="addBasicTab()">Add Tab</button>
+                <button onclick="removeLastTab()">Remove Last</button>
+                <button onclick="activateRandom()">Activate Random</button>
+            </div>
+        </div>
+        
+        <!-- Configuration Demo -->
+        <div class="demo-section">
+            <h2>Configurable TabPanel</h2>
+            <div class="controls">
+                <label>Orientation:
+                    <select id="orientation" onchange="updateConfig()">
+                        <option value="horizontal">Horizontal</option>
+                        <option value="vertical">Vertical</option>
+                    </select>
+                </label>
+                
+                <label>Theme:
+                    <select id="theme" onchange="updateConfig()">
+                        <option value="brutal">Brutal</option>
+                        <option value="minimal">Minimal</option>
+                        <option value="neon">Neon</option>
+                        <option value="glassmorphic">Glassmorphic</option>
+                    </select>
+                </label>
+                
+                <label>Animation:
+                    <select id="animation" onchange="updateConfig()">
+                        <option value="slide">Slide</option>
+                        <option value="fade">Fade</option>
+                        <option value="flip">Flip</option>
+                        <option value="morph">Morph</option>
+                    </select>
+                </label>
+                
+                <label>
+                    <input type="checkbox" id="closeable" onchange="updateConfig()" checked>
+                    Closeable
+                </label>
+                
+                <label>
+                    <input type="checkbox" id="draggable" onchange="updateConfig()">
+                    Draggable
+                </label>
+                
+                <label>
+                    <input type="checkbox" id="lazy" onchange="updateConfig()" checked>
+                    Lazy Loading
+                </label>
+            </div>
+            <brutal-tabpanel id="configTabs" class="tab-demo"></brutal-tabpanel>
+        </div>
+        
+        <!-- Advanced Features -->
+        <div class="demo-section">
+            <h2>Advanced Features</h2>
+            <brutal-tabpanel id="advancedTabs" class="tab-demo"></brutal-tabpanel>
+            <div class="controls">
+                <button onclick="addManyTabs()">Add 10 Tabs</button>
+                <button onclick="updateTabContent()">Update Active Content</button>
+                <button onclick="disableRandom()">Disable Random Tab</button>
+                <button onclick="addBadge()">Add Badge</button>
+            </div>
+            <div class="status" id="status">
+                <strong>Events:</strong>
+                <div id="eventLog"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { TabPanel } from './04-components/ui/TabPanel.js';
+        
+        // Initialize basic tabs
+        const basicTabs = document.getElementById('basicTabs');
+        
+        // Add initial tabs
+        basicTabs.addTab({
+            id: 'home',
+            label: 'Home',
+            content: '<div class="content-box"><h3>Welcome Home</h3><p>This is the home tab content.</p></div>',
+            icon: '🏠',
+            active: true
+        });
+        
+        basicTabs.addTab({
+            id: 'about',
+            label: 'About',
+            content: '<div class="content-box"><h3>About Us</h3><p>Learn more about our BRUTAL framework.</p></div>',
+            icon: 'ℹ️'
+        });
+        
+        basicTabs.addTab({
+            id: 'contact',
+            label: 'Contact',
+            content: '<div class="content-box"><h3>Contact Information</h3><p>Email: brutal@framework.dev</p></div>',
+            icon: '📧'
+        });
+        
+        // Initialize configurable tabs
+        const configTabs = document.getElementById('configTabs');
+        configTabs.setConfig({
+            closeable: true,
+            lazy: true
+        });
+        
+        configTabs.addTab({
+            id: 'code',
+            label: 'Code Example',
+            content: '<div class="content-box code-content">const brutal = {\n  fast: true,\n  dependencies: 0,\n  performance: "10-100x"\n};</div>',
+            active: true
+        });
+        
+        configTabs.addTab({
+            id: 'docs',
+            label: 'Documentation',
+            loader: async () => {
+                // Simulate async loading
+                await new Promise(r => setTimeout(r, 1000));
+                return '<div class="content-box"><h3>Documentation</h3><p>Loading completed! This content was lazy loaded.</p></div>';
+            }
+        });
+        
+        configTabs.addTab({
+            id: 'api',
+            label: 'API Reference',
+            content: '<div class="content-box"><h3>API Methods</h3><ul><li>addTab()</li><li>removeTab()</li><li>activateTab()</li></ul></div>'
+        });
+        
+        // Initialize advanced tabs
+        const advancedTabs = document.getElementById('advancedTabs');
+        advancedTabs.setConfig({
+            closeable: true,
+            draggable: true,
+            overflow: 'scroll'
+        });
+        
+        // Add tabs with various features
+        advancedTabs.addTab({
+            id: 'dashboard',
+            label: 'Dashboard',
+            icon: '📊',
+            badge: '3',
+            content: '<div class="content-box"><h3>Dashboard</h3><p>Real-time metrics and analytics.</p></div>',
+            active: true
+        });
+        
+        advancedTabs.addTab({
+            id: 'users',
+            label: 'Users',
+            icon: '👥',
+            badge: 'NEW',
+            content: '<div class="content-box"><h3>User Management</h3><p>Manage system users.</p></div>'
+        });
+        
+        advancedTabs.addTab({
+            id: 'settings',
+            label: 'Settings',
+            icon: '⚙️',
+            content: '<div class="content-box"><h3>System Settings</h3><p>Configure your application.</p></div>',
+            closeable: false
+        });
+        
+        // Event logging
+        const eventLog = document.getElementById('eventLog');
+        let eventCount = 0;
+        
+        function logEvent(message) {
+            eventCount++;
+            const entry = document.createElement('div');
+            entry.textContent = `${eventCount}. ${message}`;
+            eventLog.appendChild(entry);
+            eventLog.scrollTop = eventLog.scrollHeight;
+            
+            // Keep only last 10 events
+            while (eventLog.children.length > 10) {
+                eventLog.removeChild(eventLog.firstChild);
+            }
+        }
+        
+        // Listen to events
+        advancedTabs.addEventListener('tabchange', (e) => {
+            logEvent(`Tab changed: ${e.detail.oldTab?.label || 'none'} → ${e.detail.newTab.label}`);
+        });
+        
+        advancedTabs.addEventListener('tabadd', (e) => {
+            logEvent(`Tab added: ${e.detail.tab.label}`);
+        });
+        
+        advancedTabs.addEventListener('tabremove', (e) => {
+            logEvent(`Tab removed: ${e.detail.tab.label}`);
+        });
+        
+        advancedTabs.addEventListener('tabsreordered', (e) => {
+            logEvent(`Tabs reordered`);
+        });
+        
+        // Functions for controls
+        let tabCounter = 1;
+        
+        window.addBasicTab = function() {
+            basicTabs.addTab({
+                id: `tab-${Date.now()}`,
+                label: `Tab ${tabCounter++}`,
+                content: `<div class="content-box"><h3>Dynamic Tab ${tabCounter - 1}</h3><p>This tab was added dynamically.</p></div>`
+            });
+        };
+        
+        window.removeLastTab = function() {
+            const tabs = basicTabs.getTabs();
+            if (tabs.length > 1) {
+                basicTabs.removeTab(tabs[tabs.length - 1].id);
+            }
+        };
+        
+        window.activateRandom = function() {
+            const tabs = basicTabs.getTabs();
+            const randomTab = tabs[Math.floor(Math.random() * tabs.length)];
+            basicTabs.activateTab(randomTab.id);
+        };
+        
+        window.updateConfig = function() {
+            configTabs.setConfig({
+                orientation: document.getElementById('orientation').value,
+                theme: document.getElementById('theme').value,
+                animation: document.getElementById('animation').value,
+                closeable: document.getElementById('closeable').checked,
+                draggable: document.getElementById('draggable').checked,
+                lazy: document.getElementById('lazy').checked
+            });
+        };
+        
+        window.addManyTabs = function() {
+            for (let i = 0; i < 10; i++) {
+                advancedTabs.addTab({
+                    id: `extra-${Date.now()}-${i}`,
+                    label: `Extra ${tabCounter++}`,
+                    content: `<div class="content-box"><p>Tab ${tabCounter - 1} content</p></div>`
+                });
+            }
+        };
+        
+        window.updateTabContent = function() {
+            const activeTab = advancedTabs.getActiveTab();
+            if (activeTab) {
+                const newContent = `<div class="content-box"><h3>Updated Content!</h3><p>Updated at ${new Date().toLocaleTimeString()}</p></div>`;
+                advancedTabs.updateTab(activeTab.id, { content: newContent });
+            }
+        };
+        
+        window.disableRandom = function() {
+            const tabs = advancedTabs.getTabs().filter(t => !t.disabled);
+            if (tabs.length > 1) {
+                const randomTab = tabs[Math.floor(Math.random() * tabs.length)];
+                advancedTabs.updateTab(randomTab.id, { disabled: true });
+                logEvent(`Disabled tab: ${randomTab.label}`);
+            }
+        };
+        
+        window.addBadge = function() {
+            const tabs = advancedTabs.getTabs();
+            const randomTab = tabs[Math.floor(Math.random() * tabs.length)];
+            const badge = Math.floor(Math.random() * 99) + 1;
+            advancedTabs.updateTab(randomTab.id, { badge: badge.toString() });
+            logEvent(`Added badge ${badge} to: ${randomTab.label}`);
+        };
+        
+        // Initial log
+        logEvent('TabPanel initialized');
+    </script>
+</body>
+</html>

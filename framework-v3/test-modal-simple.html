@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Modal Test</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: system-ui;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #log {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Simple Modal Test</h1>
+    
+    <button onclick="testBasic()">Test Basic Open/Close</button>
+    <button onclick="testRender()">Test Render</button>
+    <button onclick="checkShadowDOM()">Check Shadow DOM</button>
+    <button onclick="testAnimation()">Test Animation</button>
+    
+    <div id="log"></div>
+    
+    <brutal-modal id="testModal" title="Test Modal">
+        <p>This is a test modal content.</p>
+    </brutal-modal>
+
+    <script type="module">
+        import { Modal } from './04-components/ui/Modal.js';
+        
+        function log(msg, type = '') {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logEl.innerHTML += `<span class="${type}">[${timestamp}] ${msg}</span>\n`;
+        }
+        
+        window.testBasic = async () => {
+            log('Testing basic open/close...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                log(`Initial isOpen: ${modal.isOpen}`);
+                log('Opening modal...');
+                
+                await modal.open();
+                log(`After open - isOpen: ${modal.isOpen}`, 'success');
+                
+                // Wait a bit
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                log('Closing modal...');
+                await modal.close();
+                log(`After close - isOpen: ${modal.isOpen}`, 'success');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        };
+        
+        window.testRender = () => {
+            log('Testing render...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                // Check shadow DOM before open
+                const beforeContent = modal.shadowRoot.innerHTML;
+                log(`Shadow DOM before open: ${beforeContent.length} chars`);
+                
+                // Open modal
+                modal._isOpen = true;
+                modal.scheduleUpdate();
+                
+                // Check after a delay
+                setTimeout(() => {
+                    const afterContent = modal.shadowRoot.innerHTML;
+                    log(`Shadow DOM after scheduleUpdate: ${afterContent.length} chars`);
+                    
+                    if (afterContent.includes('modal-container')) {
+                        log('Modal container found!', 'success');
+                    } else {
+                        log('Modal container NOT found!', 'error');
+                    }
+                    
+                    // Reset
+                    modal._isOpen = false;
+                    modal.scheduleUpdate();
+                }, 100);
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        };
+        
+        window.checkShadowDOM = () => {
+            log('Checking shadow DOM structure...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                log(`Shadow DOM exists: ${!!modal.shadowRoot}`);
+                log(`Shadow DOM content length: ${modal.shadowRoot.innerHTML.length}`);
+                
+                // List all elements in shadow DOM
+                const elements = modal.shadowRoot.querySelectorAll('*');
+                log(`Elements in shadow DOM: ${elements.length}`);
+                
+                elements.forEach(el => {
+                    log(`  - ${el.tagName}${el.className ? '.' + el.className : ''}`);
+                });
+                
+                // Check for styles
+                const styles = modal.shadowRoot.querySelector('style');
+                if (styles) {
+                    log(`Style element found: ${styles.textContent.length} chars`, 'success');
+                } else {
+                    log('No style element found', 'error');
+                }
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testAnimation = async () => {
+            log('Testing animation...');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                // Set animation type
+                modal.setAttribute('animation', 'scale');
+                log('Animation set to: scale');
+                
+                // Monitor animation
+                const startTime = performance.now();
+                await modal.open();
+                const openTime = performance.now() - startTime;
+                
+                log(`Open animation took: ${openTime.toFixed(2)}ms`, 'success');
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const closeStart = performance.now();
+                await modal.close();
+                const closeTime = performance.now() - closeStart;
+                
+                log(`Close animation took: ${closeTime.toFixed(2)}ms`, 'success');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        };
+        
+        // Initial check
+        log('Page loaded. Modal component registered.', 'success');
+        
+        // Check if modal is properly initialized
+        const modal = document.getElementById('testModal');
+        log(`Modal element found: ${!!modal}`);
+        log(`Modal is instance of Modal: ${modal instanceof Modal}`);
+        log(`Modal has shadowRoot: ${!!modal.shadowRoot}`);
+    </script>
+</body>
+</html>

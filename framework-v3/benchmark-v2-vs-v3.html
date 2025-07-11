@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V2 vs V3 Benchmark</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        
+        h1 {
+            color: #0ff;
+            text-align: center;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        button {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .result-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .result-card h3 {
+            color: #0ff;
+            margin: 0 0 15px 0;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 5px;
+        }
+        
+        .metric-name {
+            color: #999;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+            font-family: monospace;
+        }
+        
+        .v3-better {
+            color: #0f0;
+        }
+        
+        .v3-worse {
+            color: #f00;
+        }
+        
+        .summary {
+            background: #1a1a1a;
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .summary h2 {
+            color: #0ff;
+            margin: 0 0 20px 0;
+        }
+        
+        .improvement {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .chart {
+            margin: 20px 0;
+            height: 200px;
+            position: relative;
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .bar {
+            position: absolute;
+            bottom: 20px;
+            width: 60px;
+            background: #0ff;
+            border-radius: 5px 5px 0 0;
+            transition: height 0.3s;
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: 0;
+            width: 60px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        #output {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚡ BRUTAL V2 vs V3 Performance Benchmark</h1>
+    
+    <div class="controls">
+        <button id="runBenchmark" onclick="runBenchmark()">Run Complete Benchmark</button>
+        <button id="clearResults" onclick="clearResults()">Clear Results</button>
+    </div>
+    
+    <div id="output"></div>
+    
+    <div class="summary" id="summary" style="display: none;">
+        <h2>Overall Performance Improvement</h2>
+        <div class="improvement" id="overallImprovement">Calculating...</div>
+        <div id="summaryText"></div>
+    </div>
+    
+    <div class="results" id="results"></div>
+    
+    <script type="module">
+        // Import V3 modules
+        import { Component as ComponentV3 } from './01-core/Component.js';
+        import { State as StateV3 } from './01-core/State.js';
+        import { Router as RouterV3 } from './01-core/Router.js';
+        import * as performanceGems from './02-performance/index.js';
+        
+        // Simple V2 implementations for comparison
+        class ComponentV2 extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+            }
+            
+            connectedCallback() {
+                this.render();
+            }
+            
+            render() {
+                this.shadowRoot.innerHTML = this.template();
+                const style = document.createElement('style');
+                style.textContent = this.styles();
+                this.shadowRoot.appendChild(style);
+            }
+            
+            template() { return ''; }
+            styles() { return ''; }
+        }
+        
+        class StateV2 {
+            constructor(initial = {}) {
+                this.state = { ...initial };
+                this.listeners = [];
+            }
+            
+            get(key) {
+                return this.state[key];
+            }
+            
+            set(key, value) {
+                const old = this.state[key];
+                this.state[key] = value;
+                this.listeners.forEach(fn => fn(key, value, old));
+            }
+            
+            subscribe(fn) {
+                this.listeners.push(fn);
+            }
+        }
+        
+        let output = document.getElementById('output');
+        let results = {};
+        
+        function log(message) {
+            output.textContent += message + '\n';
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        async function benchmark(name, fn, iterations = 1000) {
+            // Warm up
+            for (let i = 0; i < 100; i++) await fn();
+            
+            // Measure
+            const start = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                await fn();
+            }
+            const time = performance.now() - start;
+            
+            return {
+                totalTime: time,
+                avgTime: time / iterations,
+                opsPerSec: Math.round(1000 / (time / iterations))
+            };
+        }
+        
+        window.runBenchmark = async function() {
+            const button = document.getElementById('runBenchmark');
+            button.disabled = true;
+            output.textContent = '';
+            results = {};
+            
+            log('🚀 Starting V2 vs V3 Benchmark...\n');
+            
+            // Test 1: Component Creation
+            log('📋 Test 1: Component Creation');
+            
+            // Generate unique element names for each test run
+            const timestamp = Date.now();
+            const v2CreateName = `test-v2-create-${timestamp}`;
+            const v3CreateName = `test-v3-create-${timestamp}`;
+            
+            customElements.define(v2CreateName, class extends ComponentV2 {});
+            customElements.define(v3CreateName, class extends ComponentV3 {});
+            
+            const v2Create = await benchmark('V2 Component Creation', () => {
+                const el = document.createElement(v2CreateName);
+            }, 10000);
+            
+            const v3Create = await benchmark('V3 Component Creation', () => {
+                const el = document.createElement(v3CreateName);
+            }, 10000);
+            
+            results.componentCreation = {
+                v2: v2Create,
+                v3: v3Create,
+                improvement: ((v2Create.avgTime - v3Create.avgTime) / v2Create.avgTime * 100).toFixed(1)
+            };
+            
+            log(`V2: ${v2Create.avgTime.toFixed(3)}ms avg, ${v2Create.opsPerSec} ops/sec`);
+            log(`V3: ${v3Create.avgTime.toFixed(3)}ms avg, ${v3Create.opsPerSec} ops/sec`);
+            log(`Improvement: ${results.componentCreation.improvement}%\n`);
+            
+            // Test 2: Component Rendering
+            log('📋 Test 2: Component Rendering');
+            
+            class TestV2Render extends ComponentV2 {
+                template() { return '<div>Test Content</div>'; }
+                styles() { return ':host { display: block; }'; }
+            }
+            
+            class TestV3Render extends ComponentV3 {
+                template() { return '<div>Test Content</div>'; }
+                styles() { return ':host { display: block; }'; }
+            }
+            
+            // Generate unique element names for render test
+            const v2RenderName = `test-v2-render-${timestamp}`;
+            const v3RenderName = `test-v3-render-${timestamp}`;
+            
+            customElements.define(v2RenderName, TestV2Render);
+            customElements.define(v3RenderName, TestV3Render);
+            
+            const v2El = new TestV2Render();
+            const v3El = new TestV3Render();
+            
+            const v2Render = await benchmark('V2 Render', () => {
+                v2El.render();
+            }, 5000);
+            
+            const v3Render = await benchmark('V3 Render', () => {
+                v3El.render();
+            }, 5000);
+            
+            results.rendering = {
+                v2: v2Render,
+                v3: v3Render,
+                improvement: ((v2Render.avgTime - v3Render.avgTime) / v2Render.avgTime * 100).toFixed(1)
+            };
+            
+            log(`V2: ${v2Render.avgTime.toFixed(3)}ms avg, ${v2Render.opsPerSec} ops/sec`);
+            log(`V3: ${v3Render.avgTime.toFixed(3)}ms avg, ${v3Render.opsPerSec} ops/sec`);
+            log(`Improvement: ${results.rendering.improvement}%\n`);
+            
+            // Test 3: State Management
+            log('📋 Test 3: State Management');
+            
+            const stateV2 = new StateV2({ count: 0 });
+            const stateV3 = new StateV3({ count: 0 });
+            
+            const v2StateWrite = await benchmark('V2 State Write', () => {
+                stateV2.set('count', Math.random());
+            }, 10000);
+            
+            const v3StateWrite = await benchmark('V3 State Write', () => {
+                stateV3.state.count = Math.random();
+            }, 10000);
+            
+            results.stateWrite = {
+                v2: v2StateWrite,
+                v3: v3StateWrite,
+                improvement: ((v2StateWrite.avgTime - v3StateWrite.avgTime) / v2StateWrite.avgTime * 100).toFixed(1)
+            };
+            
+            log(`V2 Write: ${v2StateWrite.avgTime.toFixed(3)}ms avg, ${v2StateWrite.opsPerSec} ops/sec`);
+            log(`V3 Write: ${v3StateWrite.avgTime.toFixed(3)}ms avg, ${v3StateWrite.opsPerSec} ops/sec`);
+            log(`Improvement: ${results.stateWrite.improvement}%\n`);
+            
+            // Test 4: Style Application (V3 Gem)
+            log('📋 Test 4: Style Application');
+            
+            const v2StyleApply = await benchmark('V2 Style Apply', () => {
+                const div = document.createElement('div');
+                const shadow = div.attachShadow({ mode: 'open' });
+                const style = document.createElement('style');
+                style.textContent = '.test { color: red; }';
+                shadow.appendChild(style);
+            }, 1000);
+            
+            const v3StyleApply = await benchmark('V3 Style Apply', () => {
+                const div = document.createElement('div');
+                const shadow = div.attachShadow({ mode: 'open' });
+                performanceGems.styleManager.applyTo(shadow, '.test { color: red; }');
+            }, 1000);
+            
+            results.styleApplication = {
+                v2: v2StyleApply,
+                v3: v3StyleApply,
+                improvement: ((v2StyleApply.avgTime - v3StyleApply.avgTime) / v2StyleApply.avgTime * 100).toFixed(1)
+            };
+            
+            log(`V2 Style: ${v2StyleApply.avgTime.toFixed(3)}ms avg`);
+            log(`V3 Style: ${v3StyleApply.avgTime.toFixed(3)}ms avg`);
+            log(`Improvement: ${results.styleApplication.improvement}%\n`);
+            
+            // Test 5: DOM Operations (V3 Gem)
+            log('📋 Test 5: DOM Operations');
+            
+            const v2DomOps = await benchmark('V2 DOM Ops', () => {
+                for (let i = 0; i < 10; i++) {
+                    const div = document.createElement('div');
+                    div.textContent = i;
+                }
+            }, 1000);
+            
+            const v3DomOps = await benchmark('V3 DOM Ops', async () => {
+                const tasks = [];
+                for (let i = 0; i < 10; i++) {
+                    tasks.push(() => {
+                        const div = document.createElement('div');
+                        div.textContent = i;
+                    });
+                }
+                await performanceGems.batch(tasks);
+            }, 1000);
+            
+            results.domOperations = {
+                v2: v2DomOps,
+                v3: v3DomOps,
+                improvement: ((v2DomOps.avgTime - v3DomOps.avgTime) / v2DomOps.avgTime * 100).toFixed(1)
+            };
+            
+            log(`V2 DOM: ${v2DomOps.avgTime.toFixed(3)}ms avg`);
+            log(`V3 DOM: ${v3DomOps.avgTime.toFixed(3)}ms avg`);
+            log(`Improvement: ${results.domOperations.improvement}%\n`);
+            
+            // Display results
+            displayResults();
+            
+            button.disabled = false;
+        };
+        
+        function displayResults() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            let totalImprovement = 0;
+            let testCount = 0;
+            
+            for (const [test, data] of Object.entries(results)) {
+                const improvement = parseFloat(data.improvement);
+                totalImprovement += improvement;
+                testCount++;
+                
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <h3>${test.replace(/([A-Z])/g, ' $1').trim()}</h3>
+                    <div class="metric">
+                        <span class="metric-name">V2 Average:</span>
+                        <span class="metric-value">${data.v2.avgTime.toFixed(3)}ms</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-name">V3 Average:</span>
+                        <span class="metric-value">${data.v3.avgTime.toFixed(3)}ms</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-name">Improvement:</span>
+                        <span class="metric-value ${improvement > 0 ? 'v3-better' : 'v3-worse'}">
+                            ${improvement > 0 ? '+' : ''}${improvement}%
+                        </span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-name">V3 Speed:</span>
+                        <span class="metric-value v3-better">
+                            ${(data.v2.avgTime / data.v3.avgTime).toFixed(2)}x faster
+                        </span>
+                    </div>
+                `;
+                resultsDiv.appendChild(card);
+            }
+            
+            // Show summary
+            const avgImprovement = totalImprovement / testCount;
+            const summaryDiv = document.getElementById('summary');
+            const improvementDiv = document.getElementById('overallImprovement');
+            const summaryText = document.getElementById('summaryText');
+            
+            summaryDiv.style.display = 'block';
+            improvementDiv.textContent = `${avgImprovement.toFixed(1)}%`;
+            improvementDiv.className = avgImprovement > 0 ? 'improvement v3-better' : 'improvement v3-worse';
+            
+            const avgSpeedup = Object.values(results)
+                .map(r => r.v2.avgTime / r.v3.avgTime)
+                .reduce((a, b) => a + b, 0) / testCount;
+            
+            summaryText.innerHTML = `
+                V3 is on average <strong>${avgSpeedup.toFixed(2)}x faster</strong> than V2<br>
+                ${avgImprovement > 50 ? '🚀 BRUTAL performance achieved!' : ''}
+            `;
+        }
+        
+        window.clearResults = function() {
+            document.getElementById('output').textContent = '';
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('summary').style.display = 'none';
+        };
+    </script>
+</body>
+</html>

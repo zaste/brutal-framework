@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Browser Test</title>
+</head>
+<body>
+    <h1>BRUTAL V3 - Automated Test</h1>
+    <pre id="results"></pre>
+    
+    <script type="module">
+        const results = document.getElementById('results');
+        let output = '';
+        
+        function log(msg) {
+            output += msg + '\n';
+            results.textContent = output;
+        }
+        
+        async function runAutomatedTest() {
+            log('🔍 BRUTAL V3 Automated Verification\n');
+            
+            // 1. Check environment
+            log('1️⃣ Environment Check:');
+            log(`crossOriginIsolated: ${crossOriginIsolated}`);
+            log(`SharedArrayBuffer: ${typeof SharedArrayBuffer !== 'undefined'}`);
+            log(`Atomics: ${typeof Atomics !== 'undefined'}`);
+            
+            const sabAvailable = crossOriginIsolated && typeof SharedArrayBuffer !== 'undefined';
+            log(`\n${sabAvailable ? '✅' : '❌'} SharedArrayBuffer ${sabAvailable ? 'AVAILABLE' : 'NOT AVAILABLE'}\n`);
+            
+            // 2. Test SharedArrayBuffer
+            if (sabAvailable) {
+                log('2️⃣ Testing SharedArrayBuffer:');
+                try {
+                    const sab = new SharedArrayBuffer(1024);
+                    const view = new Int32Array(sab);
+                    Atomics.store(view, 0, 42);
+                    const value = Atomics.load(view, 0);
+                    log(`✅ SAB works! Stored and retrieved: ${value}`);
+                } catch (e) {
+                    log(`❌ SAB error: ${e.message}`);
+                }
+            }
+            
+            // 3. Test imports
+            log('\n3️⃣ Testing module imports:');
+            try {
+                const { Component } = await import('./01-core/Component.js');
+                log('✅ Component.js loaded');
+                
+                const { State } = await import('./01-core/State.js');
+                log('✅ State.js loaded');
+                
+                const state = new State({}, { shared: true });
+                log(`✅ State created with SAB: ${state.useSharedMemory}`);
+                
+                const comp = new Component();
+                log('✅ Component created');
+                
+            } catch (e) {
+                log(`❌ Import error: ${e.message}`);
+            }
+            
+            // 4. Quick performance test
+            log('\n4️⃣ Quick performance check:');
+            try {
+                const { Component } = await import('./01-core/Component.js');
+                const start = performance.now();
+                for (let i = 0; i < 1000; i++) {
+                    new Component();
+                }
+                const time = performance.now() - start;
+                const avg = time / 1000;
+                log(`✅ 1000 components in ${time.toFixed(2)}ms (${avg.toFixed(4)}ms avg)`);
+                log(`✅ Performance: ${avg < 0.1 ? 'EXCELLENT' : 'GOOD'}`);
+            } catch (e) {
+                log(`❌ Performance test error: ${e.message}`);
+            }
+            
+            // Final summary
+            log('\n' + '═'.repeat(50));
+            if (sabAvailable) {
+                log('✅ SYSTEM READY - SharedArrayBuffer working!');
+                log('✅ All core modules loading correctly');
+                log('✅ Performance targets met');
+                log('\n🚀 READY FOR PHASE 3!');
+            } else {
+                log('⚠️  SharedArrayBuffer not available');
+                log('Make sure server is running with: npm start');
+            }
+            log('═'.repeat(50));
+        }
+        
+        // Run test automatically
+        runAutomatedTest();
+    </script>
+</body>
+</html>

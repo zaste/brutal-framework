@@ -1,0 +1,52 @@
+{
+  "file": "test-shared-array-buffer.html",
+  "timestamp": "2025-07-10T14:12:57.141Z",
+  "console": [],
+  "errors": [
+    {
+      "type": "test-failure",
+      "message": "page.waitForTimeout is not a function",
+      "stack": "TypeError: page.waitForTimeout is not a function\n    at runUltimateTest (file:///workspaces/web/framework-v3/ultimate-test-system.js:205:20)\n    at async runAllTests (file:///workspaces/web/framework-v3/ultimate-test-system.js:613:28)"
+    }
+  ],
+  "network": [
+    {
+      "requestId": "9E7BFC013383F50BCC8FA233F2326CD5",
+      "url": "http://localhost:8080/test-shared-array-buffer.html",
+      "method": "GET",
+      "timestamp": 21504.302905,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "19224",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:12:57 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 10:17:02 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21504.312023
+      },
+      "finished": {
+        "timestamp": 21504.311161,
+        "encodedDataLength": 19412
+      }
+    }
+  ],
+  "performance": {},
+  "memory": {},
+  "coverage": {},
+  "domMutations": [],
+  "eventListeners": [],
+  "userInteractions": [],
+  "gpuInfo": {},
+  "screenshots": [],
+  "video": null,
+  "trace": null,
+  "heapSnapshot": null
+}

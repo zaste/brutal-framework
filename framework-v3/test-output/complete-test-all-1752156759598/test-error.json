@@ -1,0 +1,842 @@
+{
+  "file": "complete-test-all.html",
+  "timestamp": "2025-07-10T14:12:39.724Z",
+  "console": [
+    {
+      "level": "error",
+      "text": "404: Route not found: /complete-test-all.html",
+      "timestamp": "2025-07-10T14:12:39.893Z",
+      "source": "console-api",
+      "url": "http://localhost:8080/01-core/Router.js",
+      "line": 567,
+      "column": 15
+    }
+  ],
+  "errors": [
+    {
+      "type": "test-failure",
+      "message": "page.waitForTimeout is not a function",
+      "stack": "TypeError: page.waitForTimeout is not a function\n    at runUltimateTest (file:///workspaces/web/framework-v3/ultimate-test-system.js:205:20)\n    at async runAllTests (file:///workspaces/web/framework-v3/ultimate-test-system.js:613:28)"
+    }
+  ],
+  "network": [
+    {
+      "requestId": "671A8424A11DC0EA12EC269D318B9852",
+      "url": "http://localhost:8080/complete-test-all.html",
+      "method": "GET",
+      "timestamp": 21486.885201,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "14277",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 11:53:25 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21486.889164
+      },
+      "finished": {
+        "timestamp": 21486.88882,
+        "encodedDataLength": 14465
+      }
+    },
+    {
+      "requestId": "237966.2",
+      "url": "http://localhost:8080/01-core/index.js",
+      "method": "GET",
+      "timestamp": 21486.911789,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/complete-test-all.html",
+        "lineNumber": 120,
+        "columnNumber": 67
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "1592",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:28:58 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.94126
+      },
+      "finished": {
+        "timestamp": 21486.920427,
+        "encodedDataLength": 1785
+      }
+    },
+    {
+      "requestId": "237966.3",
+      "url": "http://localhost:8080/02-performance/index.js",
+      "method": "GET",
+      "timestamp": 21486.913379,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/complete-test-all.html",
+        "lineNumber": 121,
+        "columnNumber": 57
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "3308",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:48:52 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.941786
+      },
+      "finished": {
+        "timestamp": 21486.929691,
+        "encodedDataLength": 3501
+      }
+    },
+    {
+      "requestId": "237966.4",
+      "url": "http://localhost:8080/03-visual/index.js",
+      "method": "GET",
+      "timestamp": 21486.913504,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/complete-test-all.html",
+        "lineNumber": 122,
+        "columnNumber": 40
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "4679",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:13:19 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.942072
+      },
+      "finished": {
+        "timestamp": 21486.929815,
+        "encodedDataLength": 4872
+      }
+    },
+    {
+      "requestId": "237966.6",
+      "url": "http://localhost:8080/01-core/EnhancedComponent.js",
+      "method": "GET",
+      "timestamp": 21486.946561,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 7,
+        "columnNumber": 34
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "12975",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:35:40 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.971056
+      },
+      "finished": {
+        "timestamp": 21486.968418,
+        "encodedDataLength": 13169
+      }
+    },
+    {
+      "requestId": "237966.5",
+      "url": "http://localhost:8080/01-core/Component.js",
+      "method": "GET",
+      "timestamp": 21486.946428,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 6,
+        "columnNumber": 26
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11730",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:38 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.974846
+      },
+      "finished": {
+        "timestamp": 21486.9699,
+        "encodedDataLength": 11924
+      }
+    },
+    {
+      "requestId": "237966.7",
+      "url": "http://localhost:8080/01-core/State.js",
+      "method": "GET",
+      "timestamp": 21486.946657,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 10,
+        "columnNumber": 61
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "17122",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.979402
+      },
+      "finished": {
+        "timestamp": 21486.971644,
+        "encodedDataLength": 17316
+      }
+    },
+    {
+      "requestId": "237966.8",
+      "url": "http://localhost:8080/01-core/Router.js",
+      "method": "GET",
+      "timestamp": 21486.94673,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 13,
+        "columnNumber": 53
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "15688",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:30 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.981249
+      },
+      "finished": {
+        "timestamp": 21486.979871,
+        "encodedDataLength": 15882
+      }
+    },
+    {
+      "requestId": "237966.10",
+      "url": "http://localhost:8080/01-core/Template.js",
+      "method": "GET",
+      "timestamp": 21486.946908,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 19,
+        "columnNumber": 26
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "5946",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:32:44 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.988452
+      },
+      "finished": {
+        "timestamp": 21486.987623,
+        "encodedDataLength": 6139
+      }
+    },
+    {
+      "requestId": "237966.11",
+      "url": "http://localhost:8080/01-core/events.js",
+      "method": "GET",
+      "timestamp": 21486.946989,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 22,
+        "columnNumber": 66
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "1399",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:10 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.989161
+      },
+      "finished": {
+        "timestamp": 21486.987822,
+        "encodedDataLength": 1592
+      }
+    },
+    {
+      "requestId": "237966.9",
+      "url": "http://localhost:8080/01-core/Registry.js",
+      "method": "GET",
+      "timestamp": 21486.946817,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/index.js",
+        "lineNumber": 16,
+        "columnNumber": 34
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11029",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:54:22 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.989689
+      },
+      "finished": {
+        "timestamp": 21486.985997,
+        "encodedDataLength": 11223
+      }
+    },
+    {
+      "requestId": "237966.12",
+      "url": "http://localhost:8080/02-performance/01-StyleManager.js",
+      "method": "GET",
+      "timestamp": 21486.947292,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 13,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8965",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:42:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.992104
+      },
+      "finished": {
+        "timestamp": 21486.991665,
+        "encodedDataLength": 9158
+      }
+    },
+    {
+      "requestId": "237966.13",
+      "url": "http://localhost:8080/02-performance/02-FragmentPool.js",
+      "method": "GET",
+      "timestamp": 21486.947384,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 22,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8534",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:27:12 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21486.992409
+      },
+      "finished": {
+        "timestamp": 21486.992138,
+        "encodedDataLength": 8727
+      }
+    },
+    {
+      "requestId": "237966.18",
+      "url": "http://localhost:8080/02-performance/07-LayoutOptimizer.js",
+      "method": "GET",
+      "timestamp": 21486.949106,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 73,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "13406",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:48:33 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.006783
+      },
+      "finished": {
+        "timestamp": 21487.003366,
+        "encodedDataLength": 13600
+      }
+    },
+    {
+      "requestId": "237966.16",
+      "url": "http://localhost:8080/02-performance/05-EventManager.js",
+      "method": "GET",
+      "timestamp": 21486.948809,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 54,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "10247",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:46:11 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.007203
+      },
+      "finished": {
+        "timestamp": 21487.003223,
+        "encodedDataLength": 10441
+      }
+    },
+    {
+      "requestId": "237966.14",
+      "url": "http://localhost:8080/02-performance/03-DOMScheduler.js",
+      "method": "GET",
+      "timestamp": 21486.94746,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 35,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "9205",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:44:28 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.008428
+      },
+      "finished": {
+        "timestamp": 21487.003068,
+        "encodedDataLength": 9398
+      }
+    },
+    {
+      "requestId": "237966.19",
+      "url": "http://localhost:8080/03-visual/debug/VisualDebugLayer.js",
+      "method": "GET",
+      "timestamp": 21486.950126,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 7,
+        "columnNumber": 33
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "15682",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:53:23 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.00902
+      },
+      "finished": {
+        "timestamp": 21487.003501,
+        "encodedDataLength": 15876
+      }
+    },
+    {
+      "requestId": "237966.15",
+      "url": "http://localhost:8080/02-performance/04-TemplateCache.js",
+      "method": "GET",
+      "timestamp": 21486.948675,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 44,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "8994",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:45:18 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.011884
+      },
+      "finished": {
+        "timestamp": 21487.002878,
+        "encodedDataLength": 9187
+      }
+    },
+    {
+      "requestId": "237966.17",
+      "url": "http://localhost:8080/02-performance/06-ThemeEngine.js",
+      "method": "GET",
+      "timestamp": 21486.948954,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/02-performance/index.js",
+        "lineNumber": 64,
+        "columnNumber": 7
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11999",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 09:47:17 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.017683
+      },
+      "finished": {
+        "timestamp": 21487.003641,
+        "encodedDataLength": 12193
+      }
+    },
+    {
+      "requestId": "237966.20",
+      "url": "http://localhost:8080/03-visual/debug/ComponentMonitor.js",
+      "method": "GET",
+      "timestamp": 21486.950619,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 8,
+        "columnNumber": 33
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "13582",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:54:23 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.030187
+      },
+      "finished": {
+        "timestamp": 21487.027381,
+        "encodedDataLength": 13776
+      }
+    },
+    {
+      "requestId": "237966.22",
+      "url": "http://localhost:8080/03-visual/debug/PerformanceHUD.js",
+      "method": "GET",
+      "timestamp": 21486.95146,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 10,
+        "columnNumber": 31
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11078",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:56:35 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.03109
+      },
+      "finished": {
+        "timestamp": 21487.029232,
+        "encodedDataLength": 11272
+      }
+    },
+    {
+      "requestId": "237966.24",
+      "url": "http://localhost:8080/03-visual/gpu/GPUComponent.js",
+      "method": "GET",
+      "timestamp": 21486.95317,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 14,
+        "columnNumber": 29
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "12331",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:59:40 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.031398
+      },
+      "finished": {
+        "timestamp": 21487.029331,
+        "encodedDataLength": 12525
+      }
+    },
+    {
+      "requestId": "237966.23",
+      "url": "http://localhost:8080/03-visual/debug/AutomatedVisualTester.js",
+      "method": "GET",
+      "timestamp": 21486.952185,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 11,
+        "columnNumber": 38
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "21966",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:58:44 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.034147
+      },
+      "finished": {
+        "timestamp": 21487.02908,
+        "encodedDataLength": 22160
+      }
+    },
+    {
+      "requestId": "237966.21",
+      "url": "http://localhost:8080/03-visual/debug/DataFlowRenderer.js",
+      "method": "GET",
+      "timestamp": 21486.95096,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 9,
+        "columnNumber": 33
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "16256",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 10:55:39 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.036356
+      },
+      "finished": {
+        "timestamp": 21487.02942,
+        "encodedDataLength": 16450
+      }
+    },
+    {
+      "requestId": "237966.25",
+      "url": "http://localhost:8080/03-visual/gpu/ParticleEngine.js",
+      "method": "GET",
+      "timestamp": 21486.953271,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 15,
+        "columnNumber": 31
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "14639",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:01:21 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.038795
+      },
+      "finished": {
+        "timestamp": 21487.031789,
+        "encodedDataLength": 14833
+      }
+    },
+    {
+      "requestId": "237966.27",
+      "url": "http://localhost:8080/03-visual/effects/ParticleEffects.js",
+      "method": "GET",
+      "timestamp": 21486.955406,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 19,
+        "columnNumber": 49
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "20424",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:07:23 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.040797
+      },
+      "finished": {
+        "timestamp": 21487.038472,
+        "encodedDataLength": 20618
+      }
+    },
+    {
+      "requestId": "237966.26",
+      "url": "http://localhost:8080/03-visual/gpu/ShaderLibrary.js",
+      "method": "GET",
+      "timestamp": 21486.953359,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/03-visual/index.js",
+        "lineNumber": 16,
+        "columnNumber": 45
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "19564",
+          "Date": "Thu, 10 Jul 2025 14:12:39 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 11:05:24 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21487.041124
+      },
+      "finished": {
+        "timestamp": 21487.038331,
+        "encodedDataLength": 19758
+      }
+    }
+  ],
+  "performance": {},
+  "memory": {},
+  "coverage": {},
+  "domMutations": [],
+  "eventListeners": [],
+  "userInteractions": [],
+  "gpuInfo": {},
+  "screenshots": [],
+  "video": null,
+  "trace": null,
+  "heapSnapshot": null
+}

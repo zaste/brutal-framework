@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Framework V3 - Integration Test Runner</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Monaco', 'Menlo', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: var(--bg-secondary);
+            border: 1px solid #333;
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: #2a2a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.primary {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .btn.primary:hover {
+            background: #2563eb;
+        }
+
+        .btn.success {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .btn.danger {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: var(--bg-secondary);
+            border: 1px solid #333;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .metric-card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .test-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .test-section {
+            background: var(--bg-secondary);
+            border: 1px solid #333;
+            border-radius: 0.5rem;
+            padding: 2rem;
+        }
+
+        .test-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.running {
+            background: var(--accent-yellow);
+        }
+
+        .status-indicator.success {
+            background: var(--accent-green);
+            animation: none;
+        }
+
+        .status-indicator.error {
+            background: var(--accent-red);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .test-results {
+            font-family: 'Monaco', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            background: var(--bg-primary);
+            border-radius: 0.25rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .test-results::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .test-results::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .test-results::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg-primary);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .test-canvas {
+            background: var(--bg-primary);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            overflow: auto;
+        }
+
+        .fps-counter {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            z-index: 1000;
+        }
+
+        .fps-value {
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fps-counter">
+        FPS: <span class="fps-value">60</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>BRUTAL FRAMEWORK V3</h1>
+            <p>Integration Test Runner - Zero Dependencies, Maximum Performance</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn primary" id="runAllTests">Run All Tests</button>
+            <button class="btn" id="runComponentTests">Component Matrix</button>
+            <button class="btn" id="runWorkerTests">Worker Stress Test</button>
+            <button class="btn" id="runGPUTests">GPU Performance</button>
+            <button class="btn success" id="runBenchmarks">React Comparison</button>
+            <button class="btn danger" id="stopTests">Stop All</button>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-value" id="testsRun">0</div>
+                <div class="metric-label">Tests Run</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="testsPassed">0</div>
+                <div class="metric-label">Passed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="testsFailed">0</div>
+                <div class="metric-label">Failed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="avgPerformance">0ms</div>
+                <div class="metric-label">Avg Performance</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="memoryUsage">0MB</div>
+                <div class="metric-label">Memory Usage</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="coveragePercent">0%</div>
+                <div class="metric-label">Coverage</div>
+            </div>
+        </div>
+
+        <div class="test-grid">
+            <div class="test-section" id="componentTestSection">
+                <h2>
+                    <span class="status-indicator" id="componentStatus"></span>
+                    Component Integration Tests
+                </h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="componentProgress"></div>
+                </div>
+                <div class="test-results" id="componentResults">Ready to test 400 component combinations...</div>
+                <div class="test-canvas" id="componentCanvas"></div>
+            </div>
+
+            <div class="test-section" id="workerTestSection">
+                <h2>
+                    <span class="status-indicator" id="workerStatus"></span>
+                    Worker Stress Tests
+                </h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="workerProgress"></div>
+                </div>
+                <div class="test-results" id="workerResults">Ready to spawn workers with SharedArrayBuffer...</div>
+                <div class="test-canvas" id="workerCanvas"></div>
+            </div>
+
+            <div class="test-section" id="gpuTestSection">
+                <h2>
+                    <span class="status-indicator" id="gpuStatus"></span>
+                    GPU Performance Tests
+                </h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="gpuProgress"></div>
+                </div>
+                <div class="test-results" id="gpuResults">Ready to render millions of particles...</div>
+                <div class="test-canvas" id="gpuCanvas"></div>
+            </div>
+
+            <div class="test-section" id="benchmarkSection">
+                <h2>
+                    <span class="status-indicator" id="benchmarkStatus"></span>
+                    React vs BRUTAL Benchmarks
+                </h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="benchmarkProgress"></div>
+                </div>
+                <div class="test-results" id="benchmarkResults">Ready to prove 15x performance claim...</div>
+                <div class="test-canvas" id="benchmarkCanvas"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import './component-matrix.js';
+        import './performance-baseline.js';
+        import './test-orchestrator.js';
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Fixes</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+        }
+        .test {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #0f0;
+        }
+        .passed { background: #001100; }
+        .failed { background: #110000; color: #f00; }
+    </style>
+</head>
+<body>
+    <h1>Verifying Error Fixes</h1>
+    <div id="results"></div>
+    
+    <script type="module">
+        const results = document.getElementById('results');
+        
+        async function test(name, fn) {
+            const div = document.createElement('div');
+            div.className = 'test';
+            
+            try {
+                await fn();
+                div.className += ' passed';
+                div.innerHTML = `✅ ${name}`;
+            } catch (error) {
+                div.className += ' failed';
+                div.innerHTML = `❌ ${name}: ${error.message}`;
+                console.error(error);
+            }
+            
+            results.appendChild(div);
+        }
+        
+        // Test visual module imports
+        await test('Import visual module', async () => {
+            const visual = await import('./03-visual/index.js');
+            if (!visual.particleEffects) throw new Error('particleEffects not exported');
+            if (!visual.effects) throw new Error('effects not exported');
+        });
+        
+        // Test particle effects access
+        await test('Access particleEffects', async () => {
+            const { particleEffects } = await import('./03-visual/effects/ParticleEffects.js');
+            if (!particleEffects) throw new Error('particleEffects singleton not available');
+        });
+        
+        // Test effects functions
+        await test('Test effects functions', async () => {
+            const { effects } = await import('./03-visual/index.js');
+            // These should not throw errors even without initialization
+            effects.mount(100, 100);
+            effects.update(100, 100);
+            effects.error(100, 100);
+        });
+        
+        // Test global function definitions
+        await test('Test global functions exist', async () => {
+            // Load complete-test-all.html functions
+            const response = await fetch('./complete-test-all.html');
+            const html = await response.text();
+            
+            // Check if functions are defined globally
+            const hasRunAllTests = html.includes('window.runAllTests');
+            const hasExportResults = html.includes('window.exportResults');
+            
+            if (!hasRunAllTests) throw new Error('runAllTests not defined globally');
+            if (!hasExportResults) throw new Error('exportResults not defined globally');
+        });
+        
+        // Test HeroSection import
+        await test('Import HeroSection', async () => {
+            const { HeroSection } = await import('./04-components/core/HeroSection.js');
+            if (!HeroSection) throw new Error('HeroSection not exported');
+            
+            // Test creating instance
+            const hero = document.createElement('hero-section');
+            if (!hero) throw new Error('Could not create HeroSection element');
+        });
+        
+        console.log('✅ All tests completed!');
+    </script>
+</body>
+</html>

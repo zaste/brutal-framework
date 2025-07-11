@@ -1,0 +1,51 @@
+{
+  "name": "@brutal/framework",
+  "version": "3.0.0",
+  "description": "15x faster than React. Zero dependencies. GPU-accelerated web framework.",
+  "main": "dist/brutal.min.js",
+  "module": "dist/brutal.min.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/brutal.min.js",
+      "require": "./dist/brutal.min.js"
+    },
+    "./core": "./dist/brutal.core.min.js",
+    "./components": "./dist/brutal.components.min.js",
+    "./visual": "./dist/brutal.visual.min.js",
+    "./ecosystem": "./dist/brutal.ecosystem.min.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "framework",
+    "web-components",
+    "gpu",
+    "performance",
+    "zero-dependencies",
+    "webgpu",
+    "workers",
+    "fast"
+  ],
+  "author": "BRUTAL Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brutal/framework"
+  },
+  "bugs": {
+    "url": "https://github.com/brutal/framework/issues"
+  },
+  "homepage": "https://brutalframework.com",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "sideEffects": false,
+  "browser": {
+    "./dist/brutal.core.min.js": "./dist/brutal.core.min.js",
+    "./dist/brutal.components.min.js": "./dist/brutal.components.min.js",
+    "./dist/brutal.visual.min.js": "./dist/brutal.visual.min.js",
+    "./dist/brutal.ecosystem.min.js": "./dist/brutal.ecosystem.min.js"
+  }
+}

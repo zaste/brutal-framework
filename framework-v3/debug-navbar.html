@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NavigationBar Debug</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        #output { background: #f0f0f0; padding: 10px; white-space: pre; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>NavigationBar Component Debug</h1>
+    
+    <brutal-navbar id="test-navbar" brand="Debug Test"></brutal-navbar>
+    
+    <pre id="output"></pre>
+    
+    <script type="module">
+        const output = document.getElementById('output');
+        const log = (msg, type = '') => {
+            const line = document.createElement('div');
+            line.className = type;
+            line.textContent = msg;
+            output.appendChild(line);
+            console.log(msg);
+        };
+        
+        log('=== NavigationBar Debug Started ===\n');
+        
+        try {
+            // Step 1: Import NavigationBar directly
+            log('1. Importing NavigationBar module...');
+            const navModule = await import('./04-components/navigation/NavigationBar.js');
+            log('   ✓ Module loaded', 'success');
+            log('   Exports: ' + Object.keys(navModule).join(', '));
+            
+            // Step 2: Check the class
+            if (navModule.NavigationBar) {
+                log('\n2. NavigationBar class analysis:');
+                log('   ✓ Class found', 'success');
+                log('   Name: ' + navModule.NavigationBar.name);
+                log('   Extends: ' + Object.getPrototypeOf(navModule.NavigationBar).name);
+                
+                // Check if it has required methods
+                const instance = new navModule.NavigationBar();
+                log('   ✓ Can instantiate', 'success');
+                log('   Has connectedCallback: ' + ('connectedCallback' in instance));
+                log('   Has template: ' + ('template' in instance));
+                log('   Has styles: ' + ('styles' in instance));
+            } else {
+                log('   ✗ NavigationBar class not found!', 'error');
+            }
+            
+            // Step 3: Check custom element registration
+            log('\n3. Custom element registration:');
+            const beforeImport = customElements.get('brutal-navbar');
+            log('   Before framework import: ' + (beforeImport ? 'Registered' : 'Not registered'));
+            
+            // Step 4: Import framework
+            log('\n4. Importing main framework...');
+            const framework = await import('./index.js');
+            log('   ✓ Framework loaded', 'success');
+            
+            // Wait a bit for any async registration
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            // Step 5: Check registration again
+            const afterImport = customElements.get('brutal-navbar');
+            log('\n5. After framework import:');
+            log('   Custom element: ' + (afterImport ? 'Registered as ' + afterImport.name : 'Still not registered'));
+            
+            // Step 6: Check the actual element
+            log('\n6. DOM element check:');
+            const navbar = document.getElementById('test-navbar');
+            log('   Element found: ' + !!navbar);
+            if (navbar) {
+                log('   Tag name: ' + navbar.tagName);
+                log('   Constructor: ' + navbar.constructor.name);
+                log('   Has shadowRoot: ' + !!navbar.shadowRoot);
+                log('   Is connected: ' + navbar.isConnected);
+                
+                // Check prototype chain
+                log('\n   Prototype chain:');
+                let proto = Object.getPrototypeOf(navbar);
+                let depth = 0;
+                while (proto && depth < 5) {
+                    log('   ' + '  '.repeat(depth) + '└─ ' + proto.constructor.name);
+                    proto = Object.getPrototypeOf(proto);
+                    depth++;
+                }
+            }
+            
+            // Step 7: Try manual registration if needed
+            if (!afterImport && navModule.NavigationBar) {
+                log('\n7. Attempting manual registration...');
+                try {
+                    customElements.define('brutal-navbar', navModule.NavigationBar);
+                    log('   ✓ Manual registration successful!', 'success');
+                    
+                    // Force upgrade
+                    const navbar = document.getElementById('test-navbar');
+                    if (navbar && navbar.constructor === HTMLElement) {
+                        log('   Attempting to upgrade element...');
+                        customElements.upgrade(navbar);
+                        log('   After upgrade - Constructor: ' + navbar.constructor.name);
+                        log('   After upgrade - Has shadowRoot: ' + !!navbar.shadowRoot);
+                    }
+                } catch (e) {
+                    log('   ✗ Registration failed: ' + e.message, 'error');
+                }
+            }
+            
+            // Step 8: List all custom elements
+            log('\n8. All custom elements in page:');
+            const allCustom = Array.from(document.querySelectorAll('*'))
+                .filter(el => el.tagName.includes('-'))
+                .map(el => el.tagName.toLowerCase());
+            const unique = [...new Set(allCustom)];
+            unique.forEach(tag => {
+                const def = customElements.get(tag);
+                log('   - ' + tag + ': ' + (def ? def.name : 'not defined'));
+            });
+            
+            // Step 9: Check BRUTAL global
+            log('\n9. BRUTAL Framework global:');
+            if (window.__BRUTAL__) {
+                log('   ✓ __BRUTAL__ exists', 'success');
+                log('   Properties: ' + Object.keys(window.__BRUTAL__).join(', '));
+                if (window.__BRUTAL__.registry) {
+                    log('   Registry exists: ' + !!window.__BRUTAL__.registry);
+                }
+            } else {
+                log('   ✗ __BRUTAL__ not found', 'error');
+            }
+            
+        } catch (error) {
+            log('\n✗ ERROR: ' + error.message, 'error');
+            log('Stack trace:', 'error');
+            log(error.stack, 'error');
+        }
+        
+        log('\n=== Debug Complete ===');
+    </script>
+</body>
+</html>

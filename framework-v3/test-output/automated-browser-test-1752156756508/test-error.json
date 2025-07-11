@@ -1,0 +1,192 @@
+{
+  "file": "automated-browser-test.html",
+  "timestamp": "2025-07-10T14:12:36.646Z",
+  "console": [],
+  "errors": [
+    {
+      "type": "test-failure",
+      "message": "page.waitForTimeout is not a function",
+      "stack": "TypeError: page.waitForTimeout is not a function\n    at runUltimateTest (file:///workspaces/web/framework-v3/ultimate-test-system.js:205:20)\n    at async runAllTests (file:///workspaces/web/framework-v3/ultimate-test-system.js:613:28)"
+    }
+  ],
+  "network": [
+    {
+      "requestId": "4CB85C4ECD55B949C6F32CE1719798B3",
+      "url": "http://localhost:8080/automated-browser-test.html",
+      "method": "GET",
+      "timestamp": 21483.814248,
+      "type": "Document",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "3884",
+          "Content-type": "text/html",
+          "Date": "Thu, 10 Jul 2025 14:12:36 GMT",
+          "Last-Modified": "Thu, 10 Jul 2025 10:37:06 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21483.824791
+      },
+      "finished": {
+        "timestamp": 21483.823386,
+        "encodedDataLength": 4071
+      }
+    },
+    {
+      "requestId": "237895.2",
+      "url": "http://localhost:8080/01-core/Component.js",
+      "method": "GET",
+      "timestamp": 21483.868288,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "stack": {
+          "callFrames": [
+            {
+              "functionName": "runAutomatedTest",
+              "scriptId": "7",
+              "url": "http://localhost:8080/automated-browser-test.html",
+              "lineNumber": 49,
+              "columnNumber": 38
+            },
+            {
+              "functionName": "",
+              "scriptId": "7",
+              "url": "http://localhost:8080/automated-browser-test.html",
+              "lineNumber": 96,
+              "columnNumber": 8
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "11730",
+          "Date": "Thu, 10 Jul 2025 14:12:36 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:38 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21483.885269
+      },
+      "finished": {
+        "timestamp": 21483.874472,
+        "encodedDataLength": 11924
+      }
+    },
+    {
+      "requestId": "237895.3",
+      "url": "http://localhost:8080/01-core/events.js",
+      "method": "GET",
+      "timestamp": 21483.885862,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "url": "http://localhost:8080/01-core/Component.js",
+        "lineNumber": 6,
+        "columnNumber": 47
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "1399",
+          "Date": "Thu, 10 Jul 2025 14:12:36 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:52:10 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21483.893339
+      },
+      "finished": {
+        "timestamp": 21483.888321,
+        "encodedDataLength": 1592
+      }
+    },
+    {
+      "requestId": "237895.4",
+      "url": "http://localhost:8080/01-core/State.js",
+      "method": "GET",
+      "timestamp": 21483.893981,
+      "type": "Script",
+      "initiator": {
+        "type": "script",
+        "stack": {
+          "callFrames": [
+            {
+              "functionName": "runAutomatedTest",
+              "scriptId": "7",
+              "url": "http://localhost:8080/automated-browser-test.html",
+              "lineNumber": 52,
+              "columnNumber": 34
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "Content-Length": "17122",
+          "Date": "Thu, 10 Jul 2025 14:12:36 GMT",
+          "Content-type": "text/javascript",
+          "Last-Modified": "Thu, 10 Jul 2025 13:53:05 GMT",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1"
+        },
+        "mimeType": "text/javascript",
+        "timestamp": 21483.904736
+      },
+      "finished": {
+        "timestamp": 21483.901485,
+        "encodedDataLength": 17316
+      }
+    },
+    {
+      "requestId": "237895.5",
+      "url": "http://localhost:8080/favicon.ico",
+      "method": "GET",
+      "timestamp": 21483.901909,
+      "type": "Other",
+      "initiator": {
+        "type": "other"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "File not found",
+        "headers": {
+          "Content-Length": "335",
+          "Date": "Thu, 10 Jul 2025 14:12:36 GMT",
+          "Content-Type": "text/html;charset=utf-8",
+          "Server": "SimpleHTTP/0.6 Python/3.12.1",
+          "Connection": "close"
+        },
+        "mimeType": "text/html",
+        "timestamp": 21483.911992
+      },
+      "finished": {
+        "timestamp": 21483.90726,
+        "encodedDataLength": 520
+      }
+    }
+  ],
+  "performance": {},
+  "memory": {},
+  "coverage": {},
+  "domMutations": [],
+  "eventListeners": [],
+  "userInteractions": [],
+  "gpuInfo": {},
+  "screenshots": [],
+  "video": null,
+  "trace": null,
+  "heapSnapshot": null
+}

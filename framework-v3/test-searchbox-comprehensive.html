@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - SearchBox Comprehensive Test Suite</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #000;
+            color: #0f0;
+        }
+        
+        .test-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #0f0, #0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px #0f0;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .test-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .test-card:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .test-card h3 {
+            margin-top: 0;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        button:disabled {
+            background: #333;
+            border-color: #666;
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .test-output {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        
+        .log-entry {
+            margin: 4px 0;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+        
+        .log-success { background: rgba(0, 255, 0, 0.1); color: #0f0; }
+        .log-error { background: rgba(255, 0, 0, 0.1); color: #f00; }
+        .log-warning { background: rgba(255, 255, 0, 0.1); color: #ff0; }
+        .log-info { background: rgba(0, 255, 255, 0.1); color: #0ff; }
+        
+        .search-test {
+            max-width: 600px;
+            margin: 10px auto;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background: #666;
+        }
+        
+        .status-indicator.pass { background: #0f0; box-shadow: 0 0 10px #0f0; }
+        .status-indicator.fail { background: #f00; box-shadow: 0 0 10px #f00; }
+        .status-indicator.running { 
+            background: #ff0; 
+            box-shadow: 0 0 10px #ff0;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .test-summary {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+        
+        .test-summary.fail {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #f00;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>BRUTAL V3 - SearchBox Component Test Suite</h1>
+        <p>Comprehensive testing for high-performance fuzzy search</p>
+        
+        <div class="test-summary" id="testSummary">
+            <h2>Test Summary</h2>
+            <div>Total Tests: <span id="totalTests">0</span></div>
+            <div>Passed: <span id="passedTests" style="color: #0f0;">0</span></div>
+            <div>Failed: <span id="failedTests" style="color: #f00;">0</span></div>
+            <div>Status: <span id="testStatus">Not Started</span></div>
+        </div>
+        
+        <div class="test-grid">
+            <!-- Test 1: Basic Initialization -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status1"></span>Basic Initialization</h3>
+                <p>Tests component creation and shadow DOM setup</p>
+                <button onclick="runTest1()">Run Test</button>
+                <div id="result1"></div>
+            </div>
+            
+            <!-- Test 2: Data Management -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status2"></span>Data Management</h3>
+                <p>Tests setData and data handling</p>
+                <button onclick="runTest2()">Run Test</button>
+                <div id="result2"></div>
+            </div>
+            
+            <!-- Test 3: Fuzzy Search -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status3"></span>Fuzzy Search Algorithm</h3>
+                <p>Tests fuzzy matching accuracy</p>
+                <button onclick="runTest3()">Run Test</button>
+                <div id="result3"></div>
+            </div>
+            
+            <!-- Test 4: Highlighting -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status4"></span>Match Highlighting</h3>
+                <p>Tests search result highlighting</p>
+                <button onclick="runTest4()">Run Test</button>
+                <div id="result4"></div>
+            </div>
+            
+            <!-- Test 5: Keyboard Navigation -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status5"></span>Keyboard Navigation</h3>
+                <p>Tests arrow keys and enter/escape</p>
+                <button onclick="runTest5()">Run Test</button>
+                <div id="result5"></div>
+            </div>
+            
+            <!-- Test 6: Events -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status6"></span>Event System</h3>
+                <p>Tests select and submit events</p>
+                <button onclick="runTest6()">Run Test</button>
+                <div id="result6"></div>
+            </div>
+            
+            <!-- Test 7: Performance -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status7"></span>Performance</h3>
+                <p>Tests with large datasets</p>
+                <button onclick="runTest7()">Run Test</button>
+                <div id="result7"></div>
+            </div>
+            
+            <!-- Test 8: Caching -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status8"></span>Cache System</h3>
+                <p>Tests result caching</p>
+                <button onclick="runTest8()">Run Test</button>
+                <div id="result8"></div>
+            </div>
+            
+            <!-- Test 9: Themes -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status9"></span>Themes</h3>
+                <p>Tests all theme variations</p>
+                <button onclick="runTest9()">Run Test</button>
+                <div id="result9"></div>
+            </div>
+            
+            <!-- Test 10: Configuration -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status10"></span>Configuration</h3>
+                <p>Tests config options</p>
+                <button onclick="runTest10()">Run Test</button>
+                <div id="result10"></div>
+            </div>
+            
+            <!-- Test 11: API Methods -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status11"></span>API Methods</h3>
+                <p>Tests public API functionality</p>
+                <button onclick="runTest11()">Run Test</button>
+                <div id="result11"></div>
+            </div>
+            
+            <!-- Test 12: Edge Cases -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status12"></span>Edge Cases</h3>
+                <p>Tests error handling and edge cases</p>
+                <button onclick="runTest12()">Run Test</button>
+                <div id="result12"></div>
+            </div>
+        </div>
+        
+        <div style="margin: 40px 0;">
+            <button onclick="runAllTests()" style="font-size: 1.2rem; padding: 15px 30px;">
+                Run All Tests
+            </button>
+            <button onclick="clearResults()" style="font-size: 1.2rem; padding: 15px 30px;">
+                Clear Results
+            </button>
+        </div>
+        
+        <h2>Test Output</h2>
+        <div class="test-output" id="testOutput"></div>
+        
+        <!-- Hidden test area -->
+        <div id="testArea" style="display: none;"></div>
+    </div>
+
+    <script type="module">
+        import { SearchBox } from './04-components/ui/SearchBox.js';
+        
+        let totalTests = 0;
+        let passedTests = 0;
+        let failedTests = 0;
+        
+        function log(message, type = 'info') {
+            const output = document.getElementById('testOutput');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            output.appendChild(entry);
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        function updateSummary() {
+            document.getElementById('totalTests').textContent = totalTests;
+            document.getElementById('passedTests').textContent = passedTests;
+            document.getElementById('failedTests').textContent = failedTests;
+            
+            const status = totalTests === 0 ? 'Not Started' :
+                          failedTests === 0 ? 'All Passed ✓' :
+                          'Some Failed ✗';
+            document.getElementById('testStatus').textContent = status;
+            
+            const summary = document.getElementById('testSummary');
+            summary.className = failedTests > 0 ? 'test-summary fail' : 'test-summary';
+        }
+        
+        function setTestStatus(testId, status) {
+            const indicator = document.getElementById(`status${testId}`);
+            indicator.className = `status-indicator ${status}`;
+        }
+        
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message);
+            }
+        }
+        
+        // Test 1: Basic Initialization
+        window.runTest1 = async function() {
+            totalTests++;
+            setTestStatus(1, 'running');
+            const resultEl = document.getElementById('result1');
+            
+            try {
+                log('Test 1: Basic Initialization - Starting', 'info');
+                
+                // Create search element
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                // Wait for initialization
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Verify shadow DOM
+                assert(search.shadowRoot, 'Shadow DOM not created');
+                assert(search instanceof SearchBox, 'Not a SearchBox instance');
+                
+                // Check template rendering
+                const container = search.shadowRoot.querySelector('.search-container');
+                assert(container, 'Container not found');
+                
+                // Check input
+                const input = search.shadowRoot.querySelector('.search-input');
+                assert(input, 'Input not found');
+                assert(input.type === 'search', 'Input type not search');
+                
+                // Check initial state
+                assert(Array.isArray(search._data), 'Data not initialized');
+                assert(search._query === '', 'Query not empty initially');
+                assert(search._isOpen === false, 'Search open initially');
+                
+                // Cleanup
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(1, 'pass');
+                passedTests++;
+                log('Test 1: Passed - SearchBox initializes correctly', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(1, 'fail');
+                failedTests++;
+                log(`Test 1: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 2: Data Management
+        window.runTest2 = async function() {
+            totalTests++;
+            setTestStatus(2, 'running');
+            const resultEl = document.getElementById('result2');
+            
+            try {
+                log('Test 2: Data Management - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Test setData
+                const testData = [
+                    { title: 'Item 1', description: 'First item' },
+                    { title: 'Item 2', description: 'Second item' },
+                    { title: 'Item 3', description: 'Third item' }
+                ];
+                
+                search.setData(testData);
+                assert(search._data.length === 3, 'Data not set correctly');
+                
+                // Test empty data
+                search.setData([]);
+                assert(search._data.length === 0, 'Empty data not handled');
+                
+                // Test non-array data
+                search.setData(null);
+                assert(Array.isArray(search._data), 'Non-array data not handled');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(2, 'pass');
+                passedTests++;
+                log('Test 2: Passed - Data management working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(2, 'fail');
+                failedTests++;
+                log(`Test 2: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 3: Fuzzy Search
+        window.runTest3 = async function() {
+            totalTests++;
+            setTestStatus(3, 'running');
+            const resultEl = document.getElementById('result3');
+            
+            try {
+                log('Test 3: Fuzzy Search Algorithm - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Set test data
+                search.setData([
+                    { title: 'JavaScript', description: 'Programming language' },
+                    { title: 'Java', description: 'Another language' },
+                    { title: 'TypeScript', description: 'Typed JavaScript' },
+                    { title: 'Python', description: 'Snake language' }
+                ]);
+                
+                // Test exact match
+                search.search('JavaScript');
+                await new Promise(r => setTimeout(r, 200));
+                assert(search.results.length > 0, 'Exact match failed');
+                assert(search.results[0].title === 'JavaScript', 'Wrong exact match result');
+                
+                // Test fuzzy match
+                search.search('jvscpt');
+                await new Promise(r => setTimeout(r, 200));
+                assert(search.results.length > 0, 'Fuzzy match failed');
+                assert(search.results[0].title === 'JavaScript', 'Wrong fuzzy match result');
+                
+                // Test partial match
+                search.search('Script');
+                await new Promise(r => setTimeout(r, 200));
+                assert(search.results.length >= 2, 'Partial match failed');
+                
+                // Test no match
+                search.search('xyz123');
+                await new Promise(r => setTimeout(r, 200));
+                assert(search.results.length === 0, 'Should return no results');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(3, 'pass');
+                passedTests++;
+                log('Test 3: Passed - Fuzzy search working correctly', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(3, 'fail');
+                failedTests++;
+                log(`Test 3: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 4: Highlighting
+        window.runTest4 = async function() {
+            totalTests++;
+            setTestStatus(4, 'running');
+            const resultEl = document.getElementById('result4');
+            
+            try {
+                log('Test 4: Match Highlighting - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                search.setAttribute('highlight-matches', 'true');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                search.setData([
+                    { title: 'Test Item', description: 'This is a test' }
+                ]);
+                
+                search.search('test');
+                await new Promise(r => setTimeout(r, 200));
+                
+                const resultTitle = search.shadowRoot.querySelector('.search-result-title');
+                assert(resultTitle, 'Result title not found');
+                assert(resultTitle.innerHTML.includes('search-highlight'), 'Highlighting not applied');
+                
+                // Check highlight HTML
+                const highlightSpans = resultTitle.querySelectorAll('.search-highlight');
+                assert(highlightSpans.length > 0, 'No highlight spans found');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(4, 'pass');
+                passedTests++;
+                log('Test 4: Passed - Highlighting working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(4, 'fail');
+                failedTests++;
+                log(`Test 4: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 5: Keyboard Navigation
+        window.runTest5 = async function() {
+            totalTests++;
+            setTestStatus(5, 'running');
+            const resultEl = document.getElementById('result5');
+            
+            try {
+                log('Test 5: Keyboard Navigation - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                search.setData([
+                    { title: 'Item 1' },
+                    { title: 'Item 2' },
+                    { title: 'Item 3' }
+                ]);
+                
+                search.search('Item');
+                await new Promise(r => setTimeout(r, 200));
+                
+                const input = search.shadowRoot.querySelector('.search-input');
+                
+                // Test ArrowDown
+                input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+                assert(search._selectedIndex === 0, 'ArrowDown not working');
+                
+                // Test ArrowDown again
+                input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+                assert(search._selectedIndex === 1, 'ArrowDown navigation failed');
+                
+                // Test ArrowUp
+                input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+                assert(search._selectedIndex === 0, 'ArrowUp not working');
+                
+                // Test Escape
+                input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                await new Promise(r => setTimeout(r, 100));
+                assert(!search._isOpen, 'Escape not closing results');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(5, 'pass');
+                passedTests++;
+                log('Test 5: Passed - Keyboard navigation working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(5, 'fail');
+                failedTests++;
+                log(`Test 5: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 6: Events
+        window.runTest6 = async function() {
+            totalTests++;
+            setTestStatus(6, 'running');
+            const resultEl = document.getElementById('result6');
+            
+            try {
+                log('Test 6: Event System - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                let selectFired = false;
+                let selectDetail = null;
+                let submitFired = false;
+                let submitDetail = null;
+                
+                search.addEventListener('select', (e) => {
+                    selectFired = true;
+                    selectDetail = e.detail;
+                });
+                
+                search.addEventListener('submit', (e) => {
+                    submitFired = true;
+                    submitDetail = e.detail;
+                });
+                
+                search.setData([{ title: 'Test Item' }]);
+                search.search('Test');
+                await new Promise(r => setTimeout(r, 200));
+                
+                // Simulate selection
+                search._selectResult(0);
+                assert(selectFired, 'Select event not fired');
+                assert(selectDetail && selectDetail.result, 'Select detail missing');
+                
+                // Test submit
+                search._submitSearch();
+                assert(submitFired, 'Submit event not fired');
+                assert(submitDetail && submitDetail.query, 'Submit detail missing');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(6, 'pass');
+                passedTests++;
+                log('Test 6: Passed - Events working correctly', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(6, 'fail');
+                failedTests++;
+                log(`Test 6: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 7: Performance
+        window.runTest7 = async function() {
+            totalTests++;
+            setTestStatus(7, 'running');
+            const resultEl = document.getElementById('result7');
+            
+            try {
+                log('Test 7: Performance - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Generate large dataset
+                const largeData = Array(5000).fill(0).map((_, i) => ({
+                    title: `Item ${i}`,
+                    description: `Description for item ${i} with keywords`,
+                    category: `Category ${i % 10}`
+                }));
+                
+                const startTime = performance.now();
+                search.setData(largeData);
+                const setDataTime = performance.now() - startTime;
+                
+                log(`Set 5000 items in ${setDataTime.toFixed(2)}ms`, 'info');
+                
+                // Test search performance
+                const searchStart = performance.now();
+                search.search('item 999');
+                await new Promise(r => setTimeout(r, 300));
+                const searchTime = performance.now() - searchStart;
+                
+                assert(searchTime < 500, `Search too slow: ${searchTime}ms`);
+                assert(search.results.length > 0, 'No results found');
+                
+                log(`Search completed in ${searchTime.toFixed(2)}ms`, 'info');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(7, 'pass');
+                passedTests++;
+                log('Test 7: Passed - Performance acceptable', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(7, 'fail');
+                failedTests++;
+                log(`Test 7: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 8: Caching
+        window.runTest8 = async function() {
+            totalTests++;
+            setTestStatus(8, 'running');
+            const resultEl = document.getElementById('result8');
+            
+            try {
+                log('Test 8: Cache System - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                search.setData([
+                    { title: 'Test 1' },
+                    { title: 'Test 2' },
+                    { title: 'Test 3' }
+                ]);
+                
+                // First search
+                const firstStart = performance.now();
+                search.search('test');
+                await new Promise(r => setTimeout(r, 200));
+                const firstTime = performance.now() - firstStart;
+                
+                // Same search (should be cached)
+                const secondStart = performance.now();
+                search.search('test');
+                await new Promise(r => setTimeout(r, 50));
+                const secondTime = performance.now() - secondStart;
+                
+                log(`First search: ${firstTime.toFixed(2)}ms`, 'info');
+                log(`Cached search: ${secondTime.toFixed(2)}ms`, 'info');
+                
+                assert(secondTime < firstTime / 2, 'Cache not improving performance');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(8, 'pass');
+                passedTests++;
+                log('Test 8: Passed - Caching working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(8, 'fail');
+                failedTests++;
+                log(`Test 8: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 9: Themes
+        window.runTest9 = async function() {
+            totalTests++;
+            setTestStatus(9, 'running');
+            const resultEl = document.getElementById('result9');
+            
+            try {
+                log('Test 9: Themes - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                const themes = ['brutal', 'minimal', 'neon', 'glassmorphic'];
+                
+                for (const theme of themes) {
+                    search.setAttribute('theme', theme);
+                    await new Promise(r => setTimeout(r, 100));
+                    
+                    const container = search.shadowRoot.querySelector('.search-container');
+                    assert(container.classList.contains(theme), `Theme ${theme} not applied`);
+                    
+                    log(`Theme ${theme} applied`, 'info');
+                }
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(9, 'pass');
+                passedTests++;
+                log('Test 9: Passed - All themes working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(9, 'fail');
+                failedTests++;
+                log(`Test 9: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 10: Configuration
+        window.runTest10 = async function() {
+            totalTests++;
+            setTestStatus(10, 'running');
+            const resultEl = document.getElementById('result10');
+            
+            try {
+                log('Test 10: Configuration - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Test config changes
+                search.setConfig({
+                    minChars: 3,
+                    maxResults: 5,
+                    debounceMs: 500,
+                    showScores: true
+                });
+                
+                assert(search._config.minChars === 3, 'minChars not set');
+                assert(search._config.maxResults === 5, 'maxResults not set');
+                assert(search._config.showScores === true, 'showScores not set');
+                
+                // Test that minChars works
+                search.setData([{ title: 'Test' }]);
+                search.search('te');
+                await new Promise(r => setTimeout(r, 200));
+                assert(!search._isOpen, 'Search opened with less than minChars');
+                
+                search.search('tes');
+                await new Promise(r => setTimeout(r, 200));
+                assert(search._isOpen, 'Search not opened with minChars');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(10, 'pass');
+                passedTests++;
+                log('Test 10: Passed - Configuration working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(10, 'fail');
+                failedTests++;
+                log(`Test 10: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 11: API Methods
+        window.runTest11 = async function() {
+            totalTests++;
+            setTestStatus(11, 'running');
+            const resultEl = document.getElementById('result11');
+            
+            try {
+                log('Test 11: API Methods - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Test value getter/setter
+                search.value = 'test value';
+                assert(search.value === 'test value', 'Value setter not working');
+                assert(search._query === 'test value', 'Internal query not updated');
+                
+                // Test clear
+                search.clear();
+                assert(search.value === '', 'Clear not working');
+                assert(!search._isOpen, 'Clear not closing results');
+                
+                // Test focus
+                search.focus();
+                const input = search.shadowRoot.querySelector('.search-input');
+                assert(search.shadowRoot.activeElement === input, 'Focus not working');
+                
+                // Test programmatic search
+                search.setData([{ title: 'Test' }]);
+                search.search('test');
+                await new Promise(r => setTimeout(r, 200));
+                assert(search.results.length > 0, 'Programmatic search failed');
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(11, 'pass');
+                passedTests++;
+                log('Test 11: Passed - API methods working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(11, 'fail');
+                failedTests++;
+                log(`Test 11: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 12: Edge Cases
+        window.runTest12 = async function() {
+            totalTests++;
+            setTestStatus(12, 'running');
+            const resultEl = document.getElementById('result12');
+            
+            try {
+                log('Test 12: Edge Cases - Starting', 'info');
+                
+                const search = document.createElement('brutal-searchbox');
+                document.getElementById('testArea').appendChild(search);
+                
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Test empty search
+                search.search('');
+                await new Promise(r => setTimeout(r, 100));
+                assert(!search._isOpen, 'Search opened with empty query');
+                
+                // Test special characters
+                search.setData([{ title: 'Test <script>alert("xss")</script>' }]);
+                search.search('script');
+                await new Promise(r => setTimeout(r, 200));
+                
+                const resultTitle = search.shadowRoot.querySelector('.search-result-title');
+                assert(!resultTitle.innerHTML.includes('<script>'), 'XSS vulnerability');
+                
+                // Test very long query
+                const longQuery = 'a'.repeat(1000);
+                search.search(longQuery);
+                await new Promise(r => setTimeout(r, 200));
+                // Should not crash
+                
+                // Test rapid searches
+                for (let i = 0; i < 10; i++) {
+                    search.search(`test${i}`);
+                    await new Promise(r => setTimeout(r, 50));
+                }
+                // Should handle rapid searches without errors
+                
+                search.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(12, 'pass');
+                passedTests++;
+                log('Test 12: Passed - Edge cases handled', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(12, 'fail');
+                failedTests++;
+                log(`Test 12: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Run all tests
+        window.runAllTests = async function() {
+            log('Running all tests...', 'warning');
+            clearResults();
+            
+            const tests = [
+                runTest1, runTest2, runTest3, runTest4,
+                runTest5, runTest6, runTest7, runTest8,
+                runTest9, runTest10, runTest11, runTest12
+            ];
+            
+            for (const test of tests) {
+                await test();
+                await new Promise(r => setTimeout(r, 100));
+            }
+            
+            log(`All tests completed: ${passedTests}/${totalTests} passed`, 
+                failedTests === 0 ? 'success' : 'error');
+        };
+        
+        // Clear results
+        window.clearResults = function() {
+            totalTests = 0;
+            passedTests = 0;
+            failedTests = 0;
+            
+            document.getElementById('testOutput').innerHTML = '';
+            document.getElementById('testArea').innerHTML = '';
+            
+            for (let i = 1; i <= 12; i++) {
+                document.getElementById(`status${i}`).className = 'status-indicator';
+                document.getElementById(`result${i}`).textContent = '';
+            }
+            
+            updateSummary();
+            log('Results cleared', 'info');
+        };
+        
+        // Initial setup
+        log('BRUTAL SearchBox Test Suite Ready', 'success');
+        log('Click "Run All Tests" to start comprehensive testing', 'info');
+    </script>
+</body>
+</html>

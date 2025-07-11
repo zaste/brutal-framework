@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Notifications Comprehensive Test Suite</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #000;
+            color: #0f0;
+        }
+        
+        .test-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #0f0, #0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px #0f0;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .test-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .test-card:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .test-card h3 {
+            margin-top: 0;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        button:disabled {
+            background: #333;
+            border-color: #666;
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .test-output {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        
+        .log-entry {
+            margin: 4px 0;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+        
+        .log-success { background: rgba(0, 255, 0, 0.1); color: #0f0; }
+        .log-error { background: rgba(255, 0, 0, 0.1); color: #f00; }
+        .log-warning { background: rgba(255, 255, 0, 0.1); color: #ff0; }
+        .log-info { background: rgba(0, 255, 255, 0.1); color: #0ff; }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background: #666;
+        }
+        
+        .status-indicator.pass { background: #0f0; box-shadow: 0 0 10px #0f0; }
+        .status-indicator.fail { background: #f00; box-shadow: 0 0 10px #f00; }
+        .status-indicator.running { 
+            background: #ff0; 
+            box-shadow: 0 0 10px #ff0;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .test-summary {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+        
+        .test-summary.fail {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #f00;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>BRUTAL V3 - Notifications Component Test Suite</h1>
+        <p>Comprehensive testing for GPU-accelerated notification system</p>
+        
+        <div class="test-summary" id="testSummary">
+            <h2>Test Summary</h2>
+            <div>Total Tests: <span id="totalTests">0</span></div>
+            <div>Passed: <span id="passedTests" style="color: #0f0;">0</span></div>
+            <div>Failed: <span id="failedTests" style="color: #f00;">0</span></div>
+            <div>Status: <span id="testStatus">Not Started</span></div>
+        </div>
+        
+        <div class="test-grid">
+            <!-- Test 1: Basic Initialization -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status1"></span>Basic Initialization</h3>
+                <p>Tests component creation and shadow DOM setup</p>
+                <button onclick="runTest1()">Run Test</button>
+                <div id="result1"></div>
+            </div>
+            
+            <!-- Test 2: Show/Dismiss -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status2"></span>Show/Dismiss Functionality</h3>
+                <p>Tests notification creation and dismissal</p>
+                <button onclick="runTest2()">Run Test</button>
+                <div id="result2"></div>
+            </div>
+            
+            <!-- Test 3: Notification Types -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status3"></span>Notification Types</h3>
+                <p>Tests all notification types</p>
+                <button onclick="runTest3()">Run Test</button>
+                <div id="result3"></div>
+            </div>
+            
+            <!-- Test 4: Queue System -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status4"></span>Queue Management</h3>
+                <p>Tests stack limits and queue processing</p>
+                <button onclick="runTest4()">Run Test</button>
+                <div id="result4"></div>
+            </div>
+            
+            <!-- Test 5: Auto-dismiss -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status5"></span>Auto-dismiss Timer</h3>
+                <p>Tests automatic dismissal and pause on hover</p>
+                <button onclick="runTest5()">Run Test</button>
+                <div id="result5"></div>
+            </div>
+            
+            <!-- Test 6: Actions -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status6"></span>Action Buttons</h3>
+                <p>Tests custom action buttons</p>
+                <button onclick="runTest6()">Run Test</button>
+                <div id="result6"></div>
+            </div>
+            
+            <!-- Test 7: Update Functionality -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status7"></span>Update Notifications</h3>
+                <p>Tests dynamic notification updates</p>
+                <button onclick="runTest7()">Run Test</button>
+                <div id="result7"></div>
+            </div>
+            
+            <!-- Test 8: Positions -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status8"></span>Position Variants</h3>
+                <p>Tests all position configurations</p>
+                <button onclick="runTest8()">Run Test</button>
+                <div id="result8"></div>
+            </div>
+            
+            <!-- Test 9: Themes -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status9"></span>Theme System</h3>
+                <p>Tests all theme variations</p>
+                <button onclick="runTest9()">Run Test</button>
+                <div id="result9"></div>
+            </div>
+            
+            <!-- Test 10: Particle Effects -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status10"></span>Particle System</h3>
+                <p>Tests GPU particle effects</p>
+                <button onclick="runTest10()">Run Test</button>
+                <div id="result10"></div>
+            </div>
+            
+            <!-- Test 11: Performance -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status11"></span>Performance</h3>
+                <p>Tests with rapid notifications</p>
+                <button onclick="runTest11()">Run Test</button>
+                <div id="result11"></div>
+            </div>
+            
+            <!-- Test 12: Events -->
+            <div class="test-card">
+                <h3><span class="status-indicator" id="status12"></span>Event System</h3>
+                <p>Tests all event emissions</p>
+                <button onclick="runTest12()">Run Test</button>
+                <div id="result12"></div>
+            </div>
+        </div>
+        
+        <div style="margin: 40px 0;">
+            <button onclick="runAllTests()" style="font-size: 1.2rem; padding: 15px 30px;">
+                Run All Tests
+            </button>
+            <button onclick="clearResults()" style="font-size: 1.2rem; padding: 15px 30px;">
+                Clear Results
+            </button>
+        </div>
+        
+        <h2>Test Output</h2>
+        <div class="test-output" id="testOutput"></div>
+    </div>
+
+    <script type="module">
+        import { Notifications } from './04-components/ui/Notifications.js';
+        
+        let totalTests = 0;
+        let passedTests = 0;
+        let failedTests = 0;
+        
+        function log(message, type = 'info') {
+            const output = document.getElementById('testOutput');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            output.appendChild(entry);
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        function updateSummary() {
+            document.getElementById('totalTests').textContent = totalTests;
+            document.getElementById('passedTests').textContent = passedTests;
+            document.getElementById('failedTests').textContent = failedTests;
+            
+            const status = totalTests === 0 ? 'Not Started' :
+                          failedTests === 0 ? 'All Passed ✓' :
+                          'Some Failed ✗';
+            document.getElementById('testStatus').textContent = status;
+            
+            const summary = document.getElementById('testSummary');
+            summary.className = failedTests > 0 ? 'test-summary fail' : 'test-summary';
+        }
+        
+        function setTestStatus(testId, status) {
+            const indicator = document.getElementById(`status${testId}`);
+            indicator.className = `status-indicator ${status}`;
+        }
+        
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message);
+            }
+        }
+        
+        // Test 1: Basic Initialization
+        window.runTest1 = async function() {
+            totalTests++;
+            setTestStatus(1, 'running');
+            const resultEl = document.getElementById('result1');
+            
+            try {
+                log('Test 1: Basic Initialization - Starting', 'info');
+                
+                // Create notifications element
+                const notifications = document.createElement('brutal-notifications');
+                document.body.appendChild(notifications);
+                
+                // Wait for initialization
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Verify basic setup
+                assert(notifications instanceof Notifications, 'Not a Notifications instance');
+                assert(notifications.shadowRoot, 'Shadow DOM not created');
+                
+                // Check template rendering
+                const wrapper = notifications.shadowRoot.querySelector('.notifications-wrapper');
+                assert(wrapper, 'Wrapper not found');
+                
+                const container = notifications.shadowRoot.querySelector('.notifications-container');
+                assert(container, 'Container not found');
+                
+                const canvas = notifications.shadowRoot.querySelector('.particle-canvas');
+                assert(canvas, 'Particle canvas not found');
+                
+                // Check initial state
+                assert(Array.isArray(notifications._notifications), 'Notifications array not initialized');
+                assert(notifications._notifications.length === 0, 'Notifications not empty initially');
+                assert(Array.isArray(notifications._queue), 'Queue array not initialized');
+                assert(notifications._queue.length === 0, 'Queue not empty initially');
+                
+                // Check config
+                assert(notifications._config, 'Config not initialized');
+                assert(notifications._config.position === 'top-right', 'Default position incorrect');
+                assert(notifications._config.maxStack === 5, 'Default max stack incorrect');
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(1, 'pass');
+                passedTests++;
+                log('Test 1: Passed - Notifications initializes correctly', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(1, 'fail');
+                failedTests++;
+                log(`Test 1: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 2: Show/Dismiss
+        window.runTest2 = async function() {
+            totalTests++;
+            setTestStatus(2, 'running');
+            const resultEl = document.getElementById('result2');
+            
+            try {
+                log('Test 2: Show/Dismiss Functionality - Starting', 'info');
+                
+                const notifications = new Notifications();
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Test show
+                const id = notifications.show('Test notification');
+                assert(typeof id === 'number', 'Show did not return ID');
+                assert(id > 0, 'Invalid ID returned');
+                
+                await new Promise(r => setTimeout(r, 200));
+                
+                // Check if rendered
+                const notifEl = notifications.shadowRoot.querySelector(`[data-id="${id}"]`);
+                assert(notifEl, 'Notification not rendered');
+                assert(notifEl.classList.contains('notification'), 'Missing notification class');
+                
+                // Check content
+                const message = notifEl.querySelector('.notification-message');
+                assert(message, 'Message element not found');
+                assert(message.textContent === 'Test notification', 'Message content incorrect');
+                
+                // Test dismiss
+                notifications.dismiss(id);
+                await new Promise(r => setTimeout(r, 400));
+                
+                const dismissedEl = notifications.shadowRoot.querySelector(`[data-id="${id}"]`);
+                assert(!dismissedEl, 'Notification not removed after dismiss');
+                assert(notifications._notifications.length === 0, 'Notification not removed from array');
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(2, 'pass');
+                passedTests++;
+                log('Test 2: Passed - Show/dismiss working correctly', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(2, 'fail');
+                failedTests++;
+                log(`Test 2: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 3: Notification Types
+        window.runTest3 = async function() {
+            totalTests++;
+            setTestStatus(3, 'running');
+            const resultEl = document.getElementById('result3');
+            
+            try {
+                log('Test 3: Notification Types - Starting', 'info');
+                
+                const notifications = new Notifications();
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                const types = ['success', 'error', 'warning', 'info'];
+                const ids = [];
+                
+                // Create all types
+                for (const type of types) {
+                    const id = notifications.show(`${type} notification`, { type });
+                    ids.push(id);
+                    await new Promise(r => setTimeout(r, 100));
+                    
+                    const notifEl = notifications.shadowRoot.querySelector(`[data-id="${id}"]`);
+                    assert(notifEl, `${type} notification not rendered`);
+                    assert(notifEl.classList.contains(type), `Missing ${type} class`);
+                    
+                    // Check icon
+                    const icon = notifEl.querySelector('.notification-icon svg');
+                    assert(icon, `${type} icon not found`);
+                }
+                
+                // Test static methods
+                Notifications.success('Static success');
+                Notifications.error('Static error');
+                Notifications.warning('Static warning');
+                Notifications.info('Static info');
+                
+                await new Promise(r => setTimeout(r, 200));
+                
+                // Clear all
+                notifications.clear();
+                await new Promise(r => setTimeout(r, 500));
+                
+                assert(notifications._notifications.length === 0, 'Clear did not remove all');
+                
+                // Cleanup
+                notifications.remove();
+                Notifications._instance = null;
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(3, 'pass');
+                passedTests++;
+                log('Test 3: Passed - All notification types working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(3, 'fail');
+                failedTests++;
+                log(`Test 3: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 4: Queue System
+        window.runTest4 = async function() {
+            totalTests++;
+            setTestStatus(4, 'running');
+            const resultEl = document.getElementById('result4');
+            
+            try {
+                log('Test 4: Queue Management - Starting', 'info');
+                
+                const notifications = new Notifications();
+                notifications.setConfig({ maxStack: 3 });
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Add 5 notifications (should queue 2)
+                for (let i = 1; i <= 5; i++) {
+                    notifications.show(`Notification ${i}`, { type: 'info', duration: 10000 });
+                }
+                
+                await new Promise(r => setTimeout(r, 200));
+                
+                assert(notifications.getNotifications().length === 3, 'Max stack not enforced');
+                assert(notifications.getQueueSize() === 2, 'Queue size incorrect');
+                
+                // Dismiss one, should process from queue
+                const active = notifications.getNotifications();
+                notifications.dismiss(active[0].id);
+                
+                await new Promise(r => setTimeout(r, 400));
+                
+                assert(notifications.getNotifications().length === 3, 'Queue not processed');
+                assert(notifications.getQueueSize() === 1, 'Queue not decremented');
+                
+                // Clear all
+                notifications.clear();
+                await new Promise(r => setTimeout(r, 500));
+                
+                assert(notifications.getQueueSize() === 0, 'Queue not cleared');
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(4, 'pass');
+                passedTests++;
+                log('Test 4: Passed - Queue system working correctly', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(4, 'fail');
+                failedTests++;
+                log(`Test 4: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 5: Auto-dismiss
+        window.runTest5 = async function() {
+            totalTests++;
+            setTestStatus(5, 'running');
+            const resultEl = document.getElementById('result5');
+            
+            try {
+                log('Test 5: Auto-dismiss Timer - Starting', 'info');
+                
+                const notifications = new Notifications();
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Test auto-dismiss
+                const id1 = notifications.show('Auto-dismiss test', { duration: 1000 });
+                assert(notifications.getNotifications().length === 1, 'Notification not added');
+                
+                // Wait for auto-dismiss
+                await new Promise(r => setTimeout(r, 1500));
+                assert(notifications.getNotifications().length === 0, 'Auto-dismiss failed');
+                
+                // Test persistent
+                const id2 = notifications.show('Persistent test', { duration: Infinity });
+                await new Promise(r => setTimeout(r, 1000));
+                assert(notifications.getNotifications().length === 1, 'Persistent notification dismissed');
+                
+                // Test pause on hover simulation
+                const id3 = notifications.show('Hover pause test', { duration: 2000 });
+                const notif = notifications._notifications.find(n => n.id === id3);
+                assert(notif, 'Notification not found in array');
+                assert(notif.timer, 'Timer not set');
+                
+                // Simulate pause
+                notifications._pauseAutoDismiss(id3);
+                assert(!notif.timer, 'Timer not cleared on pause');
+                assert(notif.paused, 'Paused flag not set');
+                
+                // Resume
+                notifications._resumeAutoDismiss(id3);
+                assert(notif.timer, 'Timer not resumed');
+                assert(!notif.paused, 'Paused flag not cleared');
+                
+                // Clear
+                notifications.clear();
+                await new Promise(r => setTimeout(r, 500));
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(5, 'pass');
+                passedTests++;
+                log('Test 5: Passed - Auto-dismiss and pause working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(5, 'fail');
+                failedTests++;
+                log(`Test 5: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 6: Actions
+        window.runTest6 = async function() {
+            totalTests++;
+            setTestStatus(6, 'running');
+            const resultEl = document.getElementById('result6');
+            
+            try {
+                log('Test 6: Action Buttons - Starting', 'info');
+                
+                const notifications = new Notifications();
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                let actionCalled = false;
+                let actionData = null;
+                
+                // Create notification with actions
+                const id = notifications.show('Action test', {
+                    type: 'warning',
+                    duration: Infinity,
+                    actions: [
+                        {
+                            label: 'Yes',
+                            handler: (notif) => {
+                                actionCalled = true;
+                                actionData = notif;
+                            }
+                        },
+                        {
+                            label: 'No',
+                            dismiss: false,
+                            handler: () => {}
+                        }
+                    ]
+                });
+                
+                await new Promise(r => setTimeout(r, 200));
+                
+                // Check action buttons rendered
+                const notifEl = notifications.shadowRoot.querySelector(`[data-id="${id}"]`);
+                const actions = notifEl.querySelectorAll('.notification-action');
+                assert(actions.length === 2, 'Actions not rendered correctly');
+                assert(actions[0].textContent === 'Yes', 'First action label incorrect');
+                assert(actions[1].textContent === 'No', 'Second action label incorrect');
+                
+                // Simulate action click
+                notifications._handleCustomAction(id, 0);
+                assert(actionCalled, 'Action handler not called');
+                assert(actionData && actionData.id === id, 'Action data incorrect');
+                
+                // Clear
+                notifications.clear();
+                await new Promise(r => setTimeout(r, 500));
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(6, 'pass');
+                passedTests++;
+                log('Test 6: Passed - Action buttons working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(6, 'fail');
+                failedTests++;
+                log(`Test 6: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 7: Update Functionality
+        window.runTest7 = async function() {
+            totalTests++;
+            setTestStatus(7, 'running');
+            const resultEl = document.getElementById('result7');
+            
+            try {
+                log('Test 7: Update Notifications - Starting', 'info');
+                
+                const notifications = new Notifications();
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Create notification
+                const id = notifications.show('Original message', {
+                    title: 'Original Title',
+                    type: 'info',
+                    duration: 10000
+                });
+                
+                await new Promise(r => setTimeout(r, 200));
+                
+                // Update message
+                notifications.update(id, {
+                    message: 'Updated message',
+                    title: 'Updated Title',
+                    type: 'success'
+                });
+                
+                await new Promise(r => setTimeout(r, 200));
+                
+                // Check updates
+                const notif = notifications._notifications.find(n => n.id === id);
+                assert(notif.message === 'Updated message', 'Message not updated');
+                assert(notif.title === 'Updated Title', 'Title not updated');
+                assert(notif.type === 'success', 'Type not updated');
+                
+                const notifEl = notifications.shadowRoot.querySelector(`[data-id="${id}"]`);
+                const messageEl = notifEl.querySelector('.notification-message');
+                assert(messageEl.textContent === 'Updated message', 'DOM not updated');
+                
+                // Clear
+                notifications.clear();
+                await new Promise(r => setTimeout(r, 500));
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(7, 'pass');
+                passedTests++;
+                log('Test 7: Passed - Update functionality working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(7, 'fail');
+                failedTests++;
+                log(`Test 7: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 8: Positions
+        window.runTest8 = async function() {
+            totalTests++;
+            setTestStatus(8, 'running');
+            const resultEl = document.getElementById('result8');
+            
+            try {
+                log('Test 8: Position Variants - Starting', 'info');
+                
+                const notifications = new Notifications();
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                const positions = ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'center'];
+                
+                for (const position of positions) {
+                    notifications.setConfig({ position });
+                    notifications.show(`Testing ${position}`, { type: 'info', duration: 1000 });
+                    
+                    await new Promise(r => setTimeout(r, 100));
+                    
+                    const container = notifications.shadowRoot.querySelector('.notifications-container');
+                    assert(container.classList.contains(position), `Position class ${position} not applied`);
+                    
+                    await new Promise(r => setTimeout(r, 1200));
+                }
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(8, 'pass');
+                passedTests++;
+                log('Test 8: Passed - All positions working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(8, 'fail');
+                failedTests++;
+                log(`Test 8: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 9: Themes
+        window.runTest9 = async function() {
+            totalTests++;
+            setTestStatus(9, 'running');
+            const resultEl = document.getElementById('result9');
+            
+            try {
+                log('Test 9: Theme System - Starting', 'info');
+                
+                const notifications = new Notifications();
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                const themes = ['brutal', 'minimal', 'neon', 'glassmorphic'];
+                
+                for (const theme of themes) {
+                    notifications.setConfig({ theme });
+                    notifications.show(`Testing ${theme} theme`, { type: 'info', duration: 1500 });
+                    
+                    await new Promise(r => setTimeout(r, 100));
+                    
+                    const container = notifications.shadowRoot.querySelector('.notifications-container');
+                    assert(container.classList.contains(theme), `Theme class ${theme} not applied`);
+                    
+                    await new Promise(r => setTimeout(r, 1700));
+                }
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(9, 'pass');
+                passedTests++;
+                log('Test 9: Passed - All themes working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(9, 'fail');
+                failedTests++;
+                log(`Test 9: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 10: Particle Effects
+        window.runTest10 = async function() {
+            totalTests++;
+            setTestStatus(10, 'running');
+            const resultEl = document.getElementById('result10');
+            
+            try {
+                log('Test 10: Particle System - Starting', 'info');
+                
+                const notifications = new Notifications();
+                notifications.setConfig({ particleEffects: true });
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Check canvas setup
+                assert(notifications._particleCanvas, 'Particle canvas not created');
+                assert(notifications._particleCtx, 'Particle context not created');
+                
+                // Create notification to trigger particles
+                const id = notifications.show('Particle test', { type: 'success', duration: 2000 });
+                await new Promise(r => setTimeout(r, 200));
+                
+                // Check particles created
+                assert(notifications._particles.length > 0, 'No particles created');
+                const initialCount = notifications._particles.length;
+                
+                // Wait for some decay
+                await new Promise(r => setTimeout(r, 500));
+                assert(notifications._particles.length < initialCount, 'Particles not decaying');
+                
+                // Test explode particles on dismiss
+                notifications.dismiss(id);
+                await new Promise(r => setTimeout(r, 100));
+                assert(notifications._particles.length > 0, 'No explode particles created');
+                
+                // Clear
+                notifications.clear();
+                await new Promise(r => setTimeout(r, 500));
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(10, 'pass');
+                passedTests++;
+                log('Test 10: Passed - Particle system working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(10, 'fail');
+                failedTests++;
+                log(`Test 10: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 11: Performance
+        window.runTest11 = async function() {
+            totalTests++;
+            setTestStatus(11, 'running');
+            const resultEl = document.getElementById('result11');
+            
+            try {
+                log('Test 11: Performance - Starting', 'info');
+                
+                const notifications = new Notifications();
+                notifications.setConfig({ maxStack: 10 });
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                // Rapid creation test
+                const startTime = performance.now();
+                
+                for (let i = 0; i < 20; i++) {
+                    notifications.show(`Performance test ${i}`, {
+                        type: ['success', 'error', 'warning', 'info'][i % 4],
+                        duration: 2000
+                    });
+                }
+                
+                const createTime = performance.now() - startTime;
+                log(`Created 20 notifications in ${createTime.toFixed(2)}ms`, 'info');
+                assert(createTime < 500, 'Creation too slow');
+                
+                // Wait for some to auto-dismiss
+                await new Promise(r => setTimeout(r, 2500));
+                
+                // Rapid dismiss test
+                const dismissStart = performance.now();
+                notifications.clear();
+                const dismissTime = performance.now() - dismissStart;
+                
+                log(`Cleared all in ${dismissTime.toFixed(2)}ms`, 'info');
+                assert(dismissTime < 100, 'Clear too slow');
+                
+                await new Promise(r => setTimeout(r, 500));
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(11, 'pass');
+                passedTests++;
+                log('Test 11: Passed - Performance acceptable', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(11, 'fail');
+                failedTests++;
+                log(`Test 11: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Test 12: Events
+        window.runTest12 = async function() {
+            totalTests++;
+            setTestStatus(12, 'running');
+            const resultEl = document.getElementById('result12');
+            
+            try {
+                log('Test 12: Event System - Starting', 'info');
+                
+                const notifications = new Notifications();
+                document.body.appendChild(notifications);
+                await new Promise(r => setTimeout(r, 100));
+                
+                let showFired = false;
+                let dismissFired = false;
+                let updateFired = false;
+                let actionFired = false;
+                
+                // Add event listeners
+                notifications.addEventListener('show', (e) => {
+                    showFired = true;
+                    assert(e.detail.notification, 'Show event missing notification');
+                });
+                
+                notifications.addEventListener('dismiss', (e) => {
+                    dismissFired = true;
+                    assert(e.detail.notification, 'Dismiss event missing notification');
+                });
+                
+                notifications.addEventListener('update', (e) => {
+                    updateFired = true;
+                    assert(e.detail.notification, 'Update event missing notification');
+                });
+                
+                notifications.addEventListener('action', (e) => {
+                    actionFired = true;
+                    assert(e.detail.notification, 'Action event missing notification');
+                    assert(e.detail.action, 'Action event missing action');
+                });
+                
+                // Test show event
+                const id = notifications.show('Event test', {
+                    actions: [{ label: 'Test', handler: () => {} }]
+                });
+                await new Promise(r => setTimeout(r, 100));
+                assert(showFired, 'Show event not fired');
+                
+                // Test update event
+                notifications.update(id, { message: 'Updated' });
+                await new Promise(r => setTimeout(r, 100));
+                assert(updateFired, 'Update event not fired');
+                
+                // Test action event
+                notifications._handleCustomAction(id, 0);
+                assert(actionFired, 'Action event not fired');
+                
+                // Test dismiss event
+                notifications.dismiss(id);
+                await new Promise(r => setTimeout(r, 400));
+                assert(dismissFired, 'Dismiss event not fired');
+                
+                // Cleanup
+                notifications.remove();
+                
+                resultEl.textContent = '✓ Passed';
+                setTestStatus(12, 'pass');
+                passedTests++;
+                log('Test 12: Passed - All events working', 'success');
+                
+            } catch (error) {
+                resultEl.textContent = `✗ Failed: ${error.message}`;
+                setTestStatus(12, 'fail');
+                failedTests++;
+                log(`Test 12: Failed - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        };
+        
+        // Run all tests
+        window.runAllTests = async function() {
+            log('Running all tests...', 'warning');
+            clearResults();
+            
+            const tests = [
+                runTest1, runTest2, runTest3, runTest4,
+                runTest5, runTest6, runTest7, runTest8,
+                runTest9, runTest10, runTest11, runTest12
+            ];
+            
+            for (const test of tests) {
+                await test();
+                await new Promise(r => setTimeout(r, 100));
+            }
+            
+            log(`All tests completed: ${passedTests}/${totalTests} passed`, 
+                failedTests === 0 ? 'success' : 'error');
+        };
+        
+        // Clear results
+        window.clearResults = function() {
+            totalTests = 0;
+            passedTests = 0;
+            failedTests = 0;
+            
+            document.getElementById('testOutput').innerHTML = '';
+            
+            for (let i = 1; i <= 12; i++) {
+                document.getElementById(`status${i}`).className = 'status-indicator';
+                document.getElementById(`result${i}`).textContent = '';
+            }
+            
+            updateSummary();
+            log('Results cleared', 'info');
+        };
+        
+        // Initial setup
+        log('BRUTAL Notifications Test Suite Ready', 'success');
+        log('Click "Run All Tests" to start comprehensive testing', 'info');
+    </script>
+</body>
+</html>

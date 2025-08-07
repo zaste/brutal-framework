@@ -1,0 +1,43 @@
+{
+  "name": "@brutal/v6",
+  "version": "0.4.3",
+  "description": "Ultra-lightweight web framework - 8.5KB to replace React",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "node scripts/build-all.js",
+    "size": "node scripts/validate-size.js",
+    "test": "echo 'Tests pending implementation'",
+    "validate": "npm run build && npm run size"
+  },
+  "workspaces": [
+    "packages/@brutal/*"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.19.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zaste/web.git",
+    "directory": "brutal-v6"
+  },
+  "keywords": [
+    "brutal",
+    "framework",
+    "minimal",
+    "zero-dependencies",
+    "8.5kb"
+  ],
+  "author": "BRUTAL Team",
+  "license": "MIT",
+  "status": {
+    "stage": "alpha",
+    "completion": "43%",
+    "packages": {
+      "implemented": ["@brutal/core", "@brutal/dom", "@brutal/state"],
+      "pending": ["@brutal/events", "@brutal/router", "@brutal/animation", "@brutal/utils"]
+    }
+  }
+}

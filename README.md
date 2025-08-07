@@ -1,4 +1,4 @@
-# 🚀 BRUTAL V6 - The 8.5KB Web Framework
+# 🚀 BRUTAL V6 - The 8.5KB Web Native APIs "Framework"
 
 > **"Proving that 8.5KB can replace React's 300KB+ for 80% of use cases"**
 

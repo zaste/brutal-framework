@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompanyCity - BRUTAL V6 Structures Matched</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #8b5cf6;
+            --secondary: #00ff88;
+            --accent: #ff0080;
+            --bg-dark: #0a0a0a;
+        }
+        
+        body { 
+            background: var(--bg-dark); 
+            color: #fff; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow: hidden;
+        }
+        
+        /* Glass Morphism Panels */
+        .glass-panel {
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.1), 
+                rgba(0, 255, 136, 0.05));
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.5),
+                rgba(0, 255, 136, 0.3),
+                rgba(255, 0, 128, 0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                         linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        #canvas-container {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+        }
+        
+        .ui-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .district-label {
+            position: absolute;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .district-label.visible {
+            opacity: 0.8;
+        }
+        
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #1a0033, #000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 1s;
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div style="text-align: center;">
+            <h1 style="font-size: 48px; background: linear-gradient(135deg, #8b5cf6, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Loading Structures...
+            </h1>
+        </div>
+    </div>
+    
+    <div id="canvas-container"></div>
+    <div class="ui-layer" id="ui-layer"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    
+    <script type="module">
+        // BRUTAL V6 Composition
+        const compose = (...behaviors) => (Base = HTMLElement) => {
+            return behaviors.reduce((Acc, behavior) => behavior(Acc), Base);
+        };
+        
+        const withState = (initialState) => (Base) => {
+            return class extends Base {
+                constructor() {
+                    super();
+                    this.state = { ...initialState };
+                }
+            };
+        };
+        
+        const withThree = () => (Base) => {
+            return class extends Base {
+                constructor() {
+                    super();
+                    this.clock = new THREE.Clock();
+                    this.setupThree();
+                }
+                
+                setupThree() {
+                    // Scene
+                    this.scene = new THREE.Scene();
+                    this.scene.fog = new THREE.FogExp2(0x000000, 0.001);
+                    
+                    // Camera
+                    this.camera = new THREE.PerspectiveCamera(
+                        60, window.innerWidth / window.innerHeight, 0.1, 1000
+                    );
+                    this.camera.position.set(100, 80, 120);
+                    
+                    // Renderer
+                    this.renderer = new THREE.WebGLRenderer({ 
+                        antialias: true,
+                        powerPreference: "high-performance"
+                    });
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                    this.renderer.shadowMap.enabled = true;
+                    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    this.renderer.toneMappingExposure = 1;
+                    
+                    // Controls
+                    this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                    this.controls.enableDamping = true;
+                    this.controls.dampingFactor = 0.05;
+                    this.controls.maxDistance = 300;
+                    this.controls.minDistance = 30;
+                    
+                    // Post-processing
+                    this.composer = new THREE.EffectComposer(this.renderer);
+                    const renderPass = new THREE.RenderPass(this.scene, this.camera);
+                    this.composer.addPass(renderPass);
+                    
+                    const bloomPass = new THREE.UnrealBloomPass(
+                        new THREE.Vector2(window.innerWidth, window.innerHeight),
+                        1.5, 0.4, 0.85
+                    );
+                    this.composer.addPass(bloomPass);
+                    
+                    window.addEventListener('resize', () => {
+                        this.camera.aspect = window.innerWidth / window.innerHeight;
+                        this.camera.updateProjectionMatrix();
+                        this.renderer.setSize(window.innerWidth, window.innerHeight);
+                        this.composer.setSize(window.innerWidth, window.innerHeight);
+                    });
+                }
+            };
+        };
+        
+        // Configuration matching reference
+        const CONFIG = {
+            hexRadius: 30,
+            hexSpacing: 1.2,
+            districts: [
+                {
+                    id: 'central-core',
+                    name: 'Central Core',
+                    color: 0x9C27B0,
+                    scale: 1.5,
+                    importance: 3,
+                    position: { q: 0, r: 0 },
+                    nodes: [
+                        { id: 'cc-main', type: 'core', importance: 3 },
+                        { id: 'cc-ai', type: 'ai', importance: 3 },
+                        { id: 'cc-storage', type: 'storage', importance: 2 },
+                        { id: 'cc-processor', type: 'processor', importance: 2 }
+                    ]
+                },
+                {
+                    id: 'data-nexus',
+                    name: 'Data Nexus',
+                    color: 0x2196F3,
+                    scale: 1.2,
+                    importance: 2,
+                    position: { q: 1, r: -1 },
+                    nodes: [
+                        { id: 'dn-core', type: 'core', importance: 2 },
+                        { id: 'dn-storage1', type: 'storage', importance: 2 },
+                        { id: 'dn-storage2', type: 'storage', importance: 1 },
+                        { id: 'dn-transformer', type: 'transformer', importance: 2 }
+                    ]
+                },
+                {
+                    id: 'quantum-lab',
+                    name: 'Quantum Lab',
+                    color: 0x00BCD4,
+                    scale: 1.0,
+                    importance: 2,
+                    position: { q: 1, r: 0 },
+                    nodes: [
+                        { id: 'ql-processor', type: 'processor', importance: 3 },
+                        { id: 'ql-core', type: 'core', importance: 2 },
+                        { id: 'ql-storage', type: 'storage', importance: 1 }
+                    ]
+                },
+                {
+                    id: 'neural-net',
+                    name: 'Neural Network',
+                    color: 0xFF5722,
+                    scale: 1.1,
+                    importance: 2,
+                    position: { q: 0, r: 1 },
+                    nodes: [
+                        { id: 'nn-ai1', type: 'ai', importance: 2 },
+                        { id: 'nn-ai2', type: 'ai', importance: 2 },
+                        { id: 'nn-processor', type: 'processor', importance: 2 },
+                        { id: 'nn-transformer', type: 'transformer', importance: 1 }
+                    ]
+                },
+                {
+                    id: 'security-hub',
+                    name: 'Security Hub',
+                    color: 0xF44336,
+                    scale: 1.0,
+                    importance: 2,
+                    position: { q: -1, r: 1 },
+                    nodes: [
+                        { id: 'sh-core', type: 'core', importance: 2 },
+                        { id: 'sh-processor', type: 'processor', importance: 2 },
+                        { id: 'sh-storage', type: 'storage', importance: 1 }
+                    ]
+                },
+                {
+                    id: 'research-division',
+                    name: 'Research Division',
+                    color: 0x4CAF50,
+                    scale: 1.0,
+                    importance: 1,
+                    position: { q: -1, r: 0 },
+                    nodes: [
+                        { id: 'rd-ai', type: 'ai', importance: 2 },
+                        { id: 'rd-storage', type: 'storage', importance: 1 },
+                        { id: 'rd-processor', type: 'processor', importance: 1 }
+                    ]
+                },
+                {
+                    id: 'analytics-engine',
+                    name: 'Analytics Engine',
+                    color: 0xFFEB3B,
+                    scale: 1.0,
+                    importance: 1,
+                    position: { q: 0, r: -1 },
+                    nodes: [
+                        { id: 'ae-transformer', type: 'transformer', importance: 2 },
+                        { id: 'ae-processor', type: 'processor', importance: 2 },
+                        { id: 'ae-storage', type: 'storage', importance: 1 }
+                    ]
+                }
+            ]
+        };
+        
+        // Hex grid utilities
+        function axialToWorld(q, r, radius, spacing) {
+            const effectiveRadius = radius * spacing;
+            return {
+                x: effectiveRadius * Math.sqrt(3) * (q + r/2),
+                z: effectiveRadius * 3/2 * r
+            };
+        }
+        
+        // District class
+        class District {
+            constructor(app, data) {
+                this.app = app;
+                this.data = data;
+                this.group = new THREE.Group();
+                this.buildings = [];
+                this.nodes = [];
+                
+                // Calculate world position from hex coordinates
+                const worldPos = axialToWorld(
+                    data.position.q, 
+                    data.position.r, 
+                    CONFIG.hexRadius, 
+                    CONFIG.hexSpacing
+                );
+                this.group.position.set(worldPos.x, 0, worldPos.z);
+            }
+            
+            build() {
+                this.createHexagonalPlatform();
+                this.createBuildings();
+                this.addLighting();
+                this.createLabel();
+            }
+            
+            createHexagonalPlatform() {
+                const radius = CONFIG.hexRadius * this.data.scale;
+                const height = 3 * this.data.scale;
+                
+                // Create hexagon shape
+                const shape = new THREE.Shape();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2 + Math.PI / 6;
+                    const x = Math.cos(angle) * radius;
+                    const y = Math.sin(angle) * radius;
+                    if (i === 0) shape.moveTo(x, y);
+                    else shape.lineTo(x, y);
+                }
+                shape.closePath();
+                
+                // Extrude with bevel
+                const extrudeSettings = {
+                    depth: height,
+                    bevelEnabled: true,
+                    bevelThickness: 1,
+                    bevelSize: 1,
+                    bevelSegments: 3
+                };
+                
+                const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+                geometry.rotateX(-Math.PI / 2);
+                
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0x1a1a1a,
+                    metalness: 0.7,
+                    roughness: 0.3,
+                    emissive: this.data.color,
+                    emissiveIntensity: this.data.id === 'central-core' ? 0.15 : 0.08
+                });
+                
+                const platform = new THREE.Mesh(geometry, material);
+                platform.position.y = height / 2;
+                platform.castShadow = true;
+                platform.receiveShadow = true;
+                
+                this.group.add(platform);
+                
+                // Add edge glow
+                const edgeGeometry = new THREE.EdgesGeometry(geometry);
+                const edgeMaterial = new THREE.LineBasicMaterial({
+                    color: this.data.color,
+                    linewidth: 2,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                const edges = new THREE.LineSegments(edgeGeometry, edgeMaterial);
+                platform.add(edges);
+                
+                this.platform = platform;
+            }
+            
+            createBuildings() {
+                const positions = this.calculateBuildingPositions();
+                
+                this.data.nodes.forEach((nodeData, index) => {
+                    const position = positions[index];
+                    const building = new Building(this.app, nodeData, this.data, position);
+                    building.build();
+                    
+                    this.group.add(building.group);
+                    this.buildings.push(building);
+                    
+                    // Store node reference
+                    const worldPos = new THREE.Vector3();
+                    building.group.getWorldPosition(worldPos);
+                    
+                    this.nodes.push({
+                        id: nodeData.id,
+                        data: nodeData,
+                        building: building,
+                        worldPosition: worldPos.clone().add(new THREE.Vector3(0, 20, 0)),
+                        district: this.data
+                    });
+                });
+            }
+            
+            calculateBuildingPositions() {
+                const count = this.data.nodes.length;
+                const positions = [];
+                const radius = CONFIG.hexRadius * this.data.scale * 0.6;
+                
+                if (count === 1) {
+                    positions.push({ x: 0, z: 0 });
+                } else {
+                    const angleStep = (Math.PI * 2) / count;
+                    for (let i = 0; i < count; i++) {
+                        const angle = i * angleStep - Math.PI / 2;
+                        positions.push({
+                            x: Math.cos(angle) * radius,
+                            z: Math.sin(angle) * radius
+                        });
+                    }
+                }
+                
+                return positions;
+            }
+            
+            addLighting() {
+                if (this.data.importance >= 2) {
+                    const light = new THREE.PointLight(this.data.color, 0.5, 100);
+                    light.position.y = 30;
+                    this.group.add(light);
+                    this.light = light;
+                }
+            }
+            
+            createLabel() {
+                const label = document.createElement('div');
+                label.className = 'district-label';
+                label.textContent = this.data.name.toUpperCase();
+                label.style.color = `#${this.data.color.toString(16).padStart(6, '0')}`;
+                label.dataset.districtId = this.data.id;
+                document.getElementById('ui-layer').appendChild(label);
+                
+                this.labelElement = label;
+            }
+            
+            update(delta, elapsed) {
+                // Update buildings
+                this.buildings.forEach(building => {
+                    building.update(delta, elapsed);
+                });
+                
+                // Pulse effect for central core
+                if (this.data.id === 'central-core') {
+                    const scale = 1 + Math.sin(elapsed * 2) * 0.02;
+                    this.group.scale.set(scale, 1, scale);
+                }
+                
+                // Update label position
+                if (this.labelElement) {
+                    const screenPos = this.worldToScreen(this.group.position);
+                    if (screenPos) {
+                        this.labelElement.style.left = `${screenPos.x}px`;
+                        this.labelElement.style.top = `${screenPos.y - 50}px`;
+                        this.labelElement.classList.add('visible');
+                    } else {
+                        this.labelElement.classList.remove('visible');
+                    }
+                }
+            }
+            
+            worldToScreen(worldPos) {
+                const vector = worldPos.clone();
+                vector.project(this.app.camera);
+                
+                if (vector.z > 1) return null;
+                
+                const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+                
+                return { x, y };
+            }
+        }
+        
+        // Building class
+        class Building {
+            constructor(app, nodeData, districtData, position) {
+                this.app = app;
+                this.nodeData = nodeData;
+                this.districtData = districtData;
+                this.position = position;
+                this.group = new THREE.Group();
+                this.group.position.set(position.x, 0, position.z);
+            }
+            
+            build() {
+                const baseSize = CONFIG.hexRadius * 0.15;
+                const width = baseSize * (0.8 + Math.random() * 0.4);
+                const depth = baseSize * (0.8 + Math.random() * 0.4);
+                const height = (15 + this.nodeData.importance * 10) * (0.8 + Math.random() * 0.4);
+                
+                // Create geometry based on type
+                const geometry = this.createGeometryByType(width, height, depth);
+                
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0x2a2a2a,
+                    metalness: 0.8,
+                    roughness: 0.2,
+                    emissive: this.districtData.color,
+                    emissiveIntensity: 0.05 * this.nodeData.importance
+                });
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.y = height / 2;
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                
+                this.group.add(mesh);
+                this.mesh = mesh;
+                this.height = height;
+                
+                // Add details
+                this.addWindows(width, height, depth);
+                this.addBeacon(height);
+            }
+            
+            createGeometryByType(width, height, depth) {
+                switch (this.nodeData.type) {
+                    case 'core':
+                    case 'ai':
+                        // 8-sided cylinder with wider base
+                        return new THREE.CylinderGeometry(width/2, width/2 * 1.2, height, 8);
+                    
+                    case 'storage':
+                        // Larger box
+                        return new THREE.BoxGeometry(width * 1.2, height, depth * 1.2);
+                    
+                    case 'processor':
+                    case 'transformer':
+                        // 6-sided cylinder
+                        return new THREE.CylinderGeometry(width/2, width/2, height, 6);
+                    
+                    default:
+                        return new THREE.BoxGeometry(width, height, depth);
+                }
+            }
+            
+            addWindows(width, height, depth) {
+                const windowRows = Math.floor(height / 5);
+                const windowMaterial = new THREE.MeshBasicMaterial({
+                    color: this.districtData.color,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                
+                // Add windows based on geometry type
+                if (this.nodeData.type === 'storage' || !this.nodeData.type) {
+                    // Box-style windows
+                    for (let i = 0; i < windowRows; i++) {
+                        const windowGeometry = new THREE.PlaneGeometry(width * 0.8, 1);
+                        
+                        // Front
+                        const frontWindow = new THREE.Mesh(windowGeometry, windowMaterial);
+                        frontWindow.position.set(0, 5 + i * 5, depth/2 + 0.1);
+                        this.group.add(frontWindow);
+                        
+                        // Back
+                        const backWindow = new THREE.Mesh(windowGeometry, windowMaterial);
+                        backWindow.position.set(0, 5 + i * 5, -depth/2 - 0.1);
+                        backWindow.rotation.y = Math.PI;
+                        this.group.add(backWindow);
+                    }
+                } else {
+                    // Cylindrical windows
+                    const sides = this.mesh.geometry.parameters.radialSegments || 8;
+                    for (let i = 0; i < windowRows; i++) {
+                        for (let j = 0; j < sides; j++) {
+                            const angle = (j / sides) * Math.PI * 2;
+                            const windowGeometry = new THREE.PlaneGeometry(0.8, 1);
+                            const window = new THREE.Mesh(windowGeometry, windowMaterial);
+                            
+                            const radius = width/2 + 0.1;
+                            window.position.set(
+                                Math.cos(angle) * radius,
+                                5 + i * 5,
+                                Math.sin(angle) * radius
+                            );
+                            window.lookAt(0, window.position.y, 0);
+                            this.group.add(window);
+                        }
+                    }
+                }
+            }
+            
+            addBeacon(height) {
+                const beaconGeometry = new THREE.SphereGeometry(2, 8, 6);
+                const beaconMaterial = new THREE.MeshBasicMaterial({
+                    color: this.districtData.color,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const beacon = new THREE.Mesh(beaconGeometry, beaconMaterial);
+                beacon.position.y = height + 5;
+                this.group.add(beacon);
+                
+                this.beacon = beacon;
+            }
+            
+            update(delta, elapsed) {
+                // Pulse beacon
+                if (this.beacon) {
+                    const scale = 1 + Math.sin(elapsed * 3 + this.position.x) * 0.3;
+                    this.beacon.scale.setScalar(scale);
+                    this.beacon.material.opacity = 0.6 + Math.sin(elapsed * 3) * 0.2;
+                }
+                
+                // Building sway
+                if (this.mesh) {
+                    const sway = Math.sin(elapsed + this.position.z * 0.1) * 0.001;
+                    this.mesh.rotation.z = sway;
+                }
+            }
+        }
+        
+        // City Component
+        const CityComponent = compose(
+            withState({
+                districts: [],
+                nodes: new Map(),
+                particles: []
+            }),
+            withThree()
+        )(HTMLElement);
+        
+        customElements.define('city-component', CityComponent);
+        
+        // Create and initialize
+        const city = document.createElement('city-component');
+        
+        Object.assign(city, {
+            init() {
+                document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+                
+                // Setup scene
+                this.createEnvironment();
+                this.createDistricts();
+                this.createConnections();
+                this.setupLighting();
+                
+                // Start animation
+                this.animate();
+                
+                // Hide loading
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                }, 1000);
+            },
+            
+            createEnvironment() {
+                // Grid
+                const gridHelper = new THREE.GridHelper(300, 50, 0x444444, 0x222222);
+                this.scene.add(gridHelper);
+                
+                // Base platform
+                const platformGeometry = new THREE.CylinderGeometry(150, 150, 1, 64);
+                const platformMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x111111,
+                    metalness: 0.9,
+                    roughness: 0.1
+                });
+                const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+                platform.position.y = -0.5;
+                platform.receiveShadow = true;
+                this.scene.add(platform);
+            },
+            
+            createDistricts() {
+                CONFIG.districts.forEach(districtData => {
+                    const district = new District(this, districtData);
+                    district.build();
+                    this.scene.add(district.group);
+                    this.state.districts.push(district);
+                    
+                    // Store nodes globally
+                    district.nodes.forEach(node => {
+                        this.state.nodes.set(node.id, node);
+                    });
+                });
+            },
+            
+            createConnections() {
+                // Create tube connections between all districts
+                const districts = this.state.districts;
+                
+                for (let i = 0; i < districts.length; i++) {
+                    for (let j = i + 1; j < districts.length; j++) {
+                        const start = districts[i].group.position;
+                        const end = districts[j].group.position;
+                        
+                        const midPoint = new THREE.Vector3(
+                            (start.x + end.x) / 2,
+                            20 + Math.random() * 10,
+                            (start.z + end.z) / 2
+                        );
+                        
+                        const curve = new THREE.CatmullRomCurve3([
+                            new THREE.Vector3(start.x, 5, start.z),
+                            midPoint,
+                            new THREE.Vector3(end.x, 5, end.z)
+                        ]);
+                        
+                        const tubeGeometry = new THREE.TubeGeometry(curve, 32, 0.5, 8, false);
+                        const tubeMaterial = new THREE.MeshStandardMaterial({
+                            color: 0x666666,
+                            emissive: 0x8b5cf6,
+                            emissiveIntensity: 0.3,
+                            transparent: true,
+                            opacity: 0.6
+                        });
+                        
+                        const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+                        this.scene.add(tube);
+                        
+                        // Add particles
+                        this.createConnectionParticles(curve);
+                    }
+                }
+            },
+            
+            createConnectionParticles(curve) {
+                const particleCount = 5;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particleGeometry = new THREE.SphereGeometry(0.5, 8, 8);
+                    const particleMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x00ff88,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    
+                    const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+                    particle.userData = {
+                        curve: curve,
+                        progress: Math.random(),
+                        speed: 0.001 + Math.random() * 0.002
+                    };
+                    
+                    this.scene.add(particle);
+                    this.state.particles.push(particle);
+                }
+            },
+            
+            setupLighting() {
+                // Ambient
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+                this.scene.add(ambientLight);
+                
+                // Main directional
+                const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                dirLight.position.set(50, 100, 50);
+                dirLight.castShadow = true;
+                dirLight.shadow.camera.left = -150;
+                dirLight.shadow.camera.right = 150;
+                dirLight.shadow.camera.top = 150;
+                dirLight.shadow.camera.bottom = -150;
+                dirLight.shadow.mapSize.width = 4096;
+                dirLight.shadow.mapSize.height = 4096;
+                this.scene.add(dirLight);
+                
+                // Rim light
+                const rimLight = new THREE.DirectionalLight(0x8b5cf6, 0.3);
+                rimLight.position.set(-50, 50, -50);
+                this.scene.add(rimLight);
+            },
+            
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                const delta = this.clock.getDelta();
+                const elapsed = this.clock.getElapsedTime();
+                
+                // Update controls
+                this.controls.update();
+                
+                // Update districts
+                this.state.districts.forEach(district => {
+                    district.update(delta, elapsed);
+                });
+                
+                // Update particles
+                this.state.particles.forEach(particle => {
+                    if (particle.userData.curve) {
+                        particle.userData.progress += particle.userData.speed;
+                        if (particle.userData.progress > 1) {
+                            particle.userData.progress = 0;
+                        }
+                        
+                        const point = particle.userData.curve.getPoint(particle.userData.progress);
+                        particle.position.copy(point);
+                        particle.scale.setScalar(0.5 + Math.sin(elapsed * 10) * 0.2);
+                    }
+                });
+                
+                // Render
+                this.composer.render();
+            }
+        });
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            city.init();
+        });
+    </script>
+</body>
+</html>

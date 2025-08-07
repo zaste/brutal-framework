@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompanyCity - Built with BRUTAL V6</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: system-ui; 
+            overflow: hidden; 
+        }
+        canvas { display: block; }
+        
+        /* UI Layer */
+        #ui {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .panel {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            pointer-events: auto;
+        }
+        
+        #mode-selector {
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 1px;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .mode-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .mode-btn:hover { color: #8b5cf6; }
+        .mode-btn.active { 
+            color: #fff; 
+            background: #8b5cf6; 
+        }
+        
+        #performance {
+            top: 20px;
+            right: 20px;
+            min-width: 200px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+        }
+        
+        .stat-value { color: #00ff88; }
+        
+        #inspector {
+            right: 20px;
+            bottom: 20px;
+            width: 320px;
+            max-height: 400px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s;
+        }
+        
+        #inspector.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8b5cf6, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">COMPANYCITY</div>
+    <canvas id="canvas"></canvas>
+    
+    <div id="ui">
+        <div class="panel" id="mode-selector">
+            <button class="mode-btn active" data-mode="explorer">Explorer</button>
+            <button class="mode-btn" data-mode="architect">Architect</button>
+            <button class="mode-btn" data-mode="matrix">Matrix</button>
+        </div>
+        
+        <div class="panel" id="performance">
+            <div class="stat">
+                <span>FPS</span>
+                <span class="stat-value" id="fps">60</span>
+            </div>
+            <div class="stat">
+                <span>Objects</span>
+                <span class="stat-value" id="objects">0</span>
+            </div>
+            <div class="stat">
+                <span>Particles</span>
+                <span class="stat-value" id="particles">0</span>
+            </div>
+        </div>
+        
+        <div class="panel" id="inspector">
+            <h3 id="inspector-title">Select an element</h3>
+            <div id="inspector-content"></div>
+        </div>
+    </div>
+    
+    <!-- Import BRUTAL V6 -->
+    <script type="module">
+        // This would normally import from @brutal packages
+        // For demo, we'll implement a minimal version inline
+        
+        // BRUTAL Core - Composition Pattern
+        const compose = (...behaviors) => (element) => {
+            return behaviors.reduce((el, behavior) => behavior(el), element);
+        };
+        
+        // BRUTAL State
+        const withState = (initial) => (component) => {
+            const state = new Proxy(initial, {
+                set(target, prop, value) {
+                    target[prop] = value;
+                    component.render?.();
+                    return true;
+                }
+            });
+            component.state = state;
+            return component;
+        };
+        
+        // BRUTAL Events
+        const withEvents = (handlers) => (component) => {
+            Object.entries(handlers).forEach(([event, handler]) => {
+                component.addEventListener(event, handler.bind(component));
+            });
+            return component;
+        };
+        
+        // BRUTAL DOM
+        const html = (strings, ...values) => {
+            return strings.reduce((result, string, i) => {
+                return result + string + (values[i] || '');
+            }, '');
+        };
+        
+        // Three.js scene component using BRUTAL patterns
+        class SceneComponent extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+            }
+            
+            connectedCallback() {
+                this.initialize();
+            }
+            
+            async initialize() {
+                // Load Three.js dynamically
+                await this.loadThree();
+                
+                // Apply BRUTAL composition
+                const enhanced = compose(
+                    withState({
+                        mode: 'explorer',
+                        districts: this.getDistrictsData(),
+                        selected: null,
+                        stats: { fps: 60, objects: 0, particles: 0 }
+                    }),
+                    withEvents({
+                        'mode-change': function(e) {
+                            this.state.mode = e.detail;
+                            this.applyMode();
+                        },
+                        'object-select': function(e) {
+                            this.state.selected = e.detail;
+                            this.showInspector();
+                        }
+                    })
+                )(this);
+                
+                // Initialize Three.js scene
+                this.setupScene();
+                this.buildCity();
+                this.animate();
+                
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+            }
+            
+            async loadThree() {
+                return new Promise((resolve) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+                    script.onload = resolve;
+                    document.head.appendChild(script);
+                });
+            }
+            
+            setupScene() {
+                const canvas = document.getElementById('canvas');
+                
+                // Scene
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x000000);
+                this.scene.fog = new THREE.FogExp2(0x000000, 0.0015);
+                
+                // Camera
+                this.camera = new THREE.PerspectiveCamera(
+                    45,
+                    window.innerWidth / window.innerHeight,
+                    0.1,
+                    1000
+                );
+                this.camera.position.set(150, 100, 150);
+                this.camera.lookAt(0, 0, 0);
+                
+                // Renderer
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas,
+                    antialias: true 
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                
+                // Lights
+                const ambient = new THREE.AmbientLight(0x404040, 0.4);
+                this.scene.add(ambient);
+                
+                const directional = new THREE.DirectionalLight(0xffffff, 0.6);
+                directional.position.set(50, 100, 50);
+                this.scene.add(directional);
+                
+                // Controls
+                this.setupControls();
+            }
+            
+            setupControls() {
+                let mouseDown = false;
+                let mouseX = 0, mouseY = 0;
+                
+                const canvas = this.renderer.domElement;
+                
+                canvas.addEventListener('mousedown', (e) => {
+                    mouseDown = true;
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
+                
+                window.addEventListener('mousemove', (e) => {
+                    if (!mouseDown) return;
+                    
+                    const deltaX = e.clientX - mouseX;
+                    const deltaY = e.clientY - mouseY;
+                    
+                    this.camera.position.x = this.camera.position.x * Math.cos(deltaX * 0.01) - this.camera.position.z * Math.sin(deltaX * 0.01);
+                    this.camera.position.z = this.camera.position.x * Math.sin(deltaX * 0.01) + this.camera.position.z * Math.cos(deltaX * 0.01);
+                    
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    
+                    this.camera.lookAt(0, 0, 0);
+                });
+                
+                window.addEventListener('mouseup', () => {
+                    mouseDown = false;
+                });
+                
+                canvas.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const scale = 1 + e.deltaY * 0.001;
+                    this.camera.position.multiplyScalar(scale);
+                });
+                
+                // Raycasting for selection
+                canvas.addEventListener('click', (e) => {
+                    const mouse = new THREE.Vector2();
+                    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+                    
+                    const raycaster = new THREE.Raycaster();
+                    raycaster.setFromCamera(mouse, this.camera);
+                    
+                    const intersects = raycaster.intersectObjects(this.scene.children, true);
+                    if (intersects.length > 0) {
+                        const object = intersects[0].object;
+                        if (object.userData.selectable) {
+                            this.dispatchEvent(new CustomEvent('object-select', { 
+                                detail: object.userData 
+                            }));
+                        }
+                    }
+                });
+            }
+            
+            buildCity() {
+                // Platform
+                const platformGeometry = new THREE.CylinderGeometry(100, 100, 2, 32);
+                const platformMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x1a1a1a,
+                    metalness: 0.8,
+                    roughness: 0.2
+                });
+                const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+                this.scene.add(platform);
+                
+                // Grid
+                const grid = new THREE.GridHelper(200, 20, 0x2a2a3e, 0x1a1a2e);
+                grid.position.y = 1;
+                this.scene.add(grid);
+                
+                // Districts
+                this.districts = [];
+                this.state.districts.forEach(districtData => {
+                    const district = this.createDistrict(districtData);
+                    this.districts.push(district);
+                    this.scene.add(district);
+                });
+                
+                // Particles
+                this.createParticleSystem();
+                
+                // Update stats
+                this.updateStats();
+            }
+            
+            createDistrict(data) {
+                const group = new THREE.Group();
+                const hexRadius = 25;
+                
+                // Hexagon base
+                const shape = new THREE.Shape();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const x = Math.cos(angle) * hexRadius;
+                    const z = Math.sin(angle) * hexRadius;
+                    if (i === 0) shape.moveTo(x, z);
+                    else shape.lineTo(x, z);
+                }
+                shape.closePath();
+                
+                const geometry = new THREE.ExtrudeGeometry(shape, {
+                    depth: 3,
+                    bevelEnabled: true,
+                    bevelThickness: 1,
+                    bevelSize: 1
+                });
+                geometry.rotateX(-Math.PI / 2);
+                
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0x1a1a1a,
+                    emissive: data.color,
+                    emissiveIntensity: 0.1
+                });
+                
+                const base = new THREE.Mesh(geometry, material);
+                base.position.y = 1.5;
+                base.userData = { 
+                    type: 'district',
+                    selectable: true,
+                    ...data 
+                };
+                group.add(base);
+                
+                // Buildings
+                data.nodes.forEach((node, i) => {
+                    const building = this.createBuilding(node, data.color);
+                    const angle = (i / data.nodes.length) * Math.PI * 2;
+                    building.position.x = Math.cos(angle) * hexRadius * 0.6;
+                    building.position.z = Math.sin(angle) * hexRadius * 0.6;
+                    group.add(building);
+                });
+                
+                // Position district
+                group.position.x = data.position.x;
+                group.position.z = data.position.z;
+                
+                return group;
+            }
+            
+            createBuilding(nodeData, color) {
+                const height = 10 + nodeData.importance * 8;
+                const geometry = new THREE.BoxGeometry(8, height, 8);
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0x2a2a2a,
+                    emissive: color,
+                    emissiveIntensity: 0.05
+                });
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.y = height / 2 + 3;
+                mesh.userData = {
+                    type: 'building',
+                    selectable: true,
+                    ...nodeData
+                };
+                
+                return mesh;
+            }
+            
+            createParticleSystem() {
+                const particleCount = 200;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                
+                for (let i = 0; i < particleCount * 3; i++) {
+                    positions[i] = (Math.random() - 0.5) * 200;
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                
+                const material = new THREE.PointsMaterial({
+                    color: 0x8b5cf6,
+                    size: 2,
+                    transparent: true,
+                    opacity: 0.6,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                this.particles = new THREE.Points(geometry, material);
+                this.scene.add(this.particles);
+            }
+            
+            applyMode() {
+                switch (this.state.mode) {
+                    case 'architect':
+                        this.scene.fog.density = 0;
+                        break;
+                    case 'matrix':
+                        this.scene.fog.density = 0.003;
+                        this.particles.material.color.setHex(0x00ff00);
+                        break;
+                    default:
+                        this.scene.fog.density = 0.0015;
+                        this.particles.material.color.setHex(0x8b5cf6);
+                }
+            }
+            
+            showInspector() {
+                const inspector = document.getElementById('inspector');
+                const title = document.getElementById('inspector-title');
+                const content = document.getElementById('inspector-content');
+                
+                if (this.state.selected) {
+                    title.textContent = this.state.selected.name;
+                    content.innerHTML = html`
+                        <p>Type: ${this.state.selected.type}</p>
+                        <p>Importance: ${'★'.repeat(this.state.selected.importance || 1)}</p>
+                    `;
+                    inspector.classList.add('visible');
+                }
+            }
+            
+            updateStats() {
+                let objectCount = 0;
+                this.scene.traverse(() => objectCount++);
+                
+                this.state.stats = {
+                    fps: Math.round(1000 / 16.67), // Approximate
+                    objects: objectCount,
+                    particles: 200
+                };
+                
+                // Update UI
+                document.getElementById('fps').textContent = this.state.stats.fps;
+                document.getElementById('objects').textContent = this.state.stats.objects;
+                document.getElementById('particles').textContent = this.state.stats.particles;
+            }
+            
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                // Rotate particles
+                if (this.particles) {
+                    this.particles.rotation.y += 0.001;
+                    
+                    // Float effect
+                    const positions = this.particles.geometry.attributes.position.array;
+                    for (let i = 1; i < positions.length; i += 3) {
+                        positions[i] += Math.sin(Date.now() * 0.001 + i) * 0.01;
+                    }
+                    this.particles.geometry.attributes.position.needsUpdate = true;
+                }
+                
+                // Pulse districts
+                this.districts?.forEach((district, i) => {
+                    const scale = 1 + Math.sin(Date.now() * 0.001 + i) * 0.02;
+                    district.scale.set(scale, 1, scale);
+                });
+                
+                this.renderer.render(this.scene, this.camera);
+            }
+            
+            getDistrictsData() {
+                return [
+                    {
+                        id: 'central-core',
+                        name: 'Central Core',
+                        color: 0x8b5cf6,
+                        position: { x: 0, z: 0 },
+                        importance: 3,
+                        nodes: [
+                            { name: 'Event Bus', type: 'core', importance: 3 },
+                            { name: 'Cache Layer', type: 'storage', importance: 2 },
+                            { name: 'Queue Manager', type: 'processor', importance: 2 }
+                        ]
+                    },
+                    {
+                        id: 'data-processing',
+                        name: 'Data Processing',
+                        color: 0x00ff88,
+                        position: { x: 50, z: 0 },
+                        importance: 2,
+                        nodes: [
+                            { name: 'ETL Pipeline', type: 'processor', importance: 3 },
+                            { name: 'Data Lake', type: 'storage', importance: 2 }
+                        ]
+                    },
+                    {
+                        id: 'ai-intelligence',
+                        name: 'AI Intelligence',
+                        color: 0xff00aa,
+                        position: { x: -50, z: 0 },
+                        importance: 3,
+                        nodes: [
+                            { name: 'ML Models', type: 'ai', importance: 3 },
+                            { name: 'Decision Engine', type: 'processor', importance: 2 }
+                        ]
+                    }
+                ];
+            }
+        }
+        
+        // Register custom element
+        customElements.define('scene-component', SceneComponent);
+        
+        // UI Component using BRUTAL
+        const UIController = compose(
+            withState({ currentMode: 'explorer' }),
+            withEvents({
+                click(e) {
+                    const modeBtn = e.target.closest('.mode-btn');
+                    if (modeBtn) {
+                        const mode = modeBtn.dataset.mode;
+                        
+                        // Update active state
+                        document.querySelectorAll('.mode-btn').forEach(btn => {
+                            btn.classList.toggle('active', btn.dataset.mode === mode);
+                        });
+                        
+                        // Dispatch mode change
+                        const scene = document.querySelector('scene-component');
+                        scene.dispatchEvent(new CustomEvent('mode-change', { detail: mode }));
+                    }
+                }
+            })
+        )(document.getElementById('ui'));
+        
+        // Initialize scene
+        const scene = document.createElement('scene-component');
+        document.body.appendChild(scene);
+        
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            const sceneComponent = document.querySelector('scene-component');
+            if (sceneComponent.camera && sceneComponent.renderer) {
+                sceneComponent.camera.aspect = window.innerWidth / window.innerHeight;
+                sceneComponent.camera.updateProjectionMatrix();
+                sceneComponent.renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
+    </script>
+</body>
+</html>

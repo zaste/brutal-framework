@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompanyCity - BRUTAL V6 Matched</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #8b5cf6;
+            --secondary: #00ff88;
+            --accent: #ff0080;
+            --bg-dark: #0a0a0a;
+            --panel-bg: rgba(0, 0, 0, 0.5);
+            --border-color: rgba(139, 92, 246, 0.3);
+        }
+        
+        body { 
+            background: var(--bg-dark); 
+            color: #fff; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Advanced Glass Morphism Panels */
+        .glass-panel {
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.1), 
+                rgba(0, 255, 136, 0.05));
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.5),
+                rgba(0, 255, 136, 0.3),
+                rgba(255, 0, 128, 0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                         linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* Loading Screen */
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #1a0033, #000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 1s, transform 1s;
+        }
+        
+        #loadingScreen.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+        
+        .loading-content {
+            text-align: center;
+            transform: translateY(-50px);
+        }
+        
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .loading-hexagon {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            animation: rotate 3s linear infinite;
+        }
+        
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-title {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .loading-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+        
+        .loading-status {
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        
+        /* Main Canvas */
+        #canvas-container {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+        }
+        
+        /* UI Layer */
+        .ui-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .ui-layer > * {
+            pointer-events: auto;
+        }
+        
+        /* Mode Selector with Liquid Animation */
+        .mode-selector {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2px;
+            padding: 4px;
+            border-radius: 40px;
+        }
+        
+        .mode-selector::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 40px;
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.2),
+                rgba(0, 255, 136, 0.1));
+            backdrop-filter: blur(20px);
+        }
+        
+        .mode-liquid {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            height: calc(100% - 8px);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 36px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+        
+        .mode-btn {
+            position: relative;
+            z-index: 2;
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            border-radius: 36px;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .mode-btn:hover {
+            color: #fff;
+        }
+        
+        .mode-btn.active {
+            color: #fff;
+        }
+        
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .breadcrumb-item {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .breadcrumb-item:hover {
+            color: var(--primary);
+        }
+        
+        .breadcrumb-separator {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Stats Panel */
+        .stats-panel {
+            position: absolute;
+            top: 140px;
+            left: 30px;
+            width: 320px;
+            padding: 30px;
+        }
+        
+        .panel-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .panel-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .stat-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(4px);
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Inspector Panel */
+        .inspector-panel {
+            position: absolute;
+            top: 140px;
+            right: 30px;
+            width: 320px;
+            padding: 30px;
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .inspector-panel.active {
+            transform: translateX(0);
+        }
+        
+        .node-preview {
+            width: 100%;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .node-preview canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .node-details {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+        }
+        
+        .detail-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+        }
+        
+        /* Shader Controls */
+        .shader-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            width: 320px;
+            padding: 30px;
+            transform: translateY(400px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .shader-controls.active {
+            transform: translateY(0);
+        }
+        
+        .shader-slider {
+            margin-bottom: 20px;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .slider-track {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .slider-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            width: 50%;
+            position: relative;
+        }
+        
+        .slider-thumb {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            cursor: grab;
+        }
+        
+        /* Performance Monitor */
+        .performance-monitor {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 280px;
+            padding: 24px;
+        }
+        
+        .fps-display {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .performance-graph {
+            height: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .graph-line {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Export Panel */
+        .export-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 480px;
+            padding: 40px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+        
+        .export-panel.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+        
+        .export-formats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+        
+        .format-btn {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .format-btn:hover {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .format-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .format-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Command Center */
+        .command-center {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            z-index: 1000;
+            padding: 60px;
+        }
+        
+        .command-center.active {
+            display: block;
+        }
+        
+        .terminal {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border: 1px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            overflow-y: auto;
+        }
+        
+        .terminal-line {
+            margin-bottom: 4px;
+            color: var(--secondary);
+        }
+        
+        .terminal-prompt {
+            color: var(--primary);
+        }
+        
+        .terminal-input {
+            background: none;
+            border: none;
+            color: #fff;
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+            width: calc(100% - 20px);
+        }
+        
+        /* Notification System */
+        .notifications {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .notification {
+            padding: 16px 24px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            border: 1px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease-out;
+            transition: all 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .notification-message {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Matrix Mode Overlay */
+        .matrix-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 90;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .matrix-overlay.active {
+            opacity: 1;
+        }
+        
+        .matrix-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Controls Hint */
+        .controls-hint {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            gap: 20px;
+        }
+        
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .control-key {
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="loading-hexagon"></div>
+            </div>
+            <h1 class="loading-title">CompanyCity</h1>
+            <div class="loading-progress">
+                <div class="loading-progress-bar" id="loadingProgress"></div>
+            </div>
+            <div class="loading-status" id="loadingStatus">Initializing BRUTAL V6...</div>
+        </div>
+    </div>
+    
+    <!-- Main Canvas -->
+    <div id="canvas-container"></div>
+    
+    <!-- Matrix Mode Overlay -->
+    <div class="matrix-overlay" id="matrixOverlay">
+        <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
+    </div>
+    
+    <!-- UI Layer -->
+    <div class="ui-layer">
+        <!-- Mode Selector -->
+        <div class="mode-selector glass-panel">
+            <div class="mode-liquid" id="modeLiquid"></div>
+            <button class="mode-btn active" data-mode="explorer">Explorer</button>
+            <button class="mode-btn" data-mode="architect">Architect</button>
+            <button class="mode-btn" data-mode="matrix">Matrix</button>
+            <button class="mode-btn" data-mode="quantum">Quantum</button>
+            <button class="mode-btn" data-mode="command">Command</button>
+        </div>
+        
+        <!-- Breadcrumb -->
+        <div class="breadcrumb glass-panel">
+            <span class="breadcrumb-item">CompanyCity</span>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-item" id="currentDistrict">Overview</span>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-item" id="currentNode">All Nodes</span>
+        </div>
+        
+        <!-- Stats Panel -->
+        <div class="stats-panel glass-panel">
+            <div class="panel-header">
+                <span>System Overview</span>
+                <div class="panel-icon">📊</div>
+            </div>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Active Districts</span>
+                    <span class="stat-value" id="activeDistricts">7</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Nodes</span>
+                    <span class="stat-value" id="totalNodes">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Connections</span>
+                    <span class="stat-value" id="activeConnections">21</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Data Flow</span>
+                    <span class="stat-value" id="dataFlow">0 TB/s</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">System Load</span>
+                    <span class="stat-value" id="systemLoad">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Inspector Panel -->
+        <div class="inspector-panel glass-panel" id="inspectorPanel">
+            <div class="panel-header">
+                <span>Node Inspector</span>
+                <div class="panel-icon">🔍</div>
+            </div>
+            <div class="node-preview" id="nodePreview"></div>
+            <div class="node-details" id="nodeDetails">
+                <div class="detail-row">
+                    <span class="detail-label">Type</span>
+                    <span class="detail-value" id="nodeType">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status</span>
+                    <span class="detail-value" id="nodeStatus">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Performance</span>
+                    <span class="detail-value" id="nodePerformance">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Connections</span>
+                    <span class="detail-value" id="nodeConnections">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Shader Controls -->
+        <div class="shader-controls glass-panel" id="shaderControls">
+            <div class="panel-header">
+                <span>Visual Controls</span>
+                <div class="panel-icon">🎨</div>
+            </div>
+            <div class="shader-slider">
+                <div class="slider-label">
+                    <span>Glow Intensity</span>
+                    <span id="glowValue">50%</span>
+                </div>
+                <div class="slider-track" data-shader="glow">
+                    <div class="slider-fill" id="glowFill">
+                        <div class="slider-thumb"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="shader-slider">
+                <div class="slider-label">
+                    <span>Scan Lines</span>
+                    <span id="scanValue">30%</span>
+                </div>
+                <div class="slider-track" data-shader="scan">
+                    <div class="slider-fill" id="scanFill" style="width: 30%">
+                        <div class="slider-thumb"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="shader-slider">
+                <div class="slider-label">
+                    <span>Chromatic</span>
+                    <span id="chromaticValue">20%</span>
+                </div>
+                <div class="slider-track" data-shader="chromatic">
+                    <div class="slider-fill" id="chromaticFill" style="width: 20%">
+                        <div class="slider-thumb"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="shader-slider">
+                <div class="slider-label">
+                    <span>Holographic</span>
+                    <span id="holoValue">0%</span>
+                </div>
+                <div class="slider-track" data-shader="holo">
+                    <div class="slider-fill" id="holoFill" style="width: 0%">
+                        <div class="slider-thumb"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Monitor -->
+        <div class="performance-monitor glass-panel">
+            <div class="fps-display" id="fpsDisplay">60</div>
+            <div style="text-align: center; margin-bottom: 16px; font-size: 14px; color: rgba(255,255,255,0.6);">
+                Frames Per Second
+            </div>
+            <div class="performance-graph">
+                <svg class="graph-line" id="perfGraph"></svg>
+            </div>
+        </div>
+        
+        <!-- Export Panel -->
+        <div class="export-panel glass-panel" id="exportPanel">
+            <div class="panel-header">
+                <span>Export Scene</span>
+                <div class="panel-icon">📦</div>
+            </div>
+            <p style="margin: 20px 0; color: rgba(255,255,255,0.7);">
+                Choose export format for the current scene
+            </p>
+            <div class="export-formats">
+                <div class="format-btn" data-format="gltf">
+                    <div class="format-icon">🎨</div>
+                    <div class="format-name">GLTF</div>
+                </div>
+                <div class="format-btn" data-format="obj">
+                    <div class="format-icon">📐</div>
+                    <div class="format-name">OBJ</div>
+                </div>
+                <div class="format-btn" data-format="fbx">
+                    <div class="format-icon">🎮</div>
+                    <div class="format-name">FBX</div>
+                </div>
+                <div class="format-btn" data-format="json">
+                    <div class="format-icon">📋</div>
+                    <div class="format-name">JSON</div>
+                </div>
+                <div class="format-btn" data-format="png">
+                    <div class="format-icon">🖼️</div>
+                    <div class="format-name">PNG</div>
+                </div>
+                <div class="format-btn" data-format="mp4">
+                    <div class="format-icon">🎬</div>
+                    <div class="format-name">MP4</div>
+                </div>
+            </div>
+            <button class="btn" style="width: 100%; margin-top: 20px;" onclick="closeExport()">Cancel</button>
+        </div>
+        
+        <!-- Command Center -->
+        <div class="command-center" id="commandCenter">
+            <div class="terminal">
+                <div id="terminalOutput"></div>
+                <div style="display: flex; align-items: center;">
+                    <span class="terminal-prompt">companycity&gt; </span>
+                    <input type="text" class="terminal-input" id="terminalInput" autofocus>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notifications -->
+        <div class="notifications" id="notifications"></div>
+        
+        <!-- Controls Hint -->
+        <div class="controls-hint">
+            <div class="control-item">
+                <span class="control-key">LMB</span>
+                <span>Rotate</span>
+            </div>
+            <div class="control-item">
+                <span class="control-key">RMB</span>
+                <span>Pan</span>
+            </div>
+            <div class="control-item">
+                <span class="control-key">Scroll</span>
+                <span>Zoom</span>
+            </div>
+            <div class="control-item">
+                <span class="control-key">Click</span>
+                <span>Select</span>
+            </div>
+            <div class="control-item">
+                <span class="control-key">E</span>
+                <span>Export</span>
+            </div>
+            <div class="control-item">
+                <span class="control-key">S</span>
+                <span>Shaders</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Three.js and dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    
+    <script type="module">
+        // BRUTAL V6 Composition System
+        const compose = (...behaviors) => (Base = HTMLElement) => {
+            return behaviors.reduce((Acc, behavior) => behavior(Acc), Base);
+        };
+        
+        const withState = (initialState) => (Base) => {
+            return class extends Base {
+                constructor() {
+                    super();
+                    this.state = new Proxy({ ...initialState }, {
+                        set: (target, prop, value) => {
+                            const oldValue = target[prop];
+                            target[prop] = value;
+                            if (oldValue !== value) {
+                                this.stateChanged?.(prop, value, oldValue);
+                            }
+                            return true;
+                        }
+                    });
+                }
+            };
+        };
+        
+        const withEvents = (handlers) => (Base) => {
+            return class extends Base {
+                connectedCallback() {
+                    super.connectedCallback?.();
+                    Object.entries(handlers).forEach(([event, handler]) => {
+                        this.addEventListener(event, handler.bind(this));
+                    });
+                }
+            };
+        };
+        
+        const withThree = () => (Base) => {
+            return class extends Base {
+                constructor() {
+                    super();
+                    this.clock = new THREE.Clock();
+                    this.raycaster = new THREE.Raycaster();
+                    this.mouse = new THREE.Vector2();
+                    this.setupThree();
+                }
+                
+                setupThree() {
+                    // Scene
+                    this.scene = new THREE.Scene();
+                    this.scene.fog = new THREE.FogExp2(0x000000, 0.0015);
+                    
+                    // Camera with lower FOV for better perspective
+                    this.camera = new THREE.PerspectiveCamera(
+                        45, window.innerWidth / window.innerHeight, 0.1, 2000
+                    );
+                    this.camera.position.set(200, 150, 200);
+                    this.camera.lookAt(0, 0, 0);
+                    
+                    // Renderer
+                    this.renderer = new THREE.WebGLRenderer({ 
+                        antialias: true,
+                        powerPreference: "high-performance",
+                        alpha: true
+                    });
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                    this.renderer.shadowMap.enabled = true;
+                    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    this.renderer.toneMappingExposure = 1.2;
+                    
+                    // Controls with spherical coordinates
+                    this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                    this.controls.enableDamping = true;
+                    this.controls.dampingFactor = 0.05;
+                    this.controls.maxDistance = 800;
+                    this.controls.minDistance = 50;
+                    this.controls.maxPolarAngle = Math.PI / 2;
+                    
+                    // Camera state for smooth movement
+                    this.cameraState = {
+                        target: new THREE.Vector3(0, 0, 0),
+                        spherical: new THREE.Spherical(300, Math.PI / 3, 0)
+                    };
+                    
+                    // Post-processing
+                    this.setupPostProcessing();
+                    
+                    // Handle resize
+                    window.addEventListener('resize', () => this.handleResize());
+                }
+                
+                setupPostProcessing() {
+                    this.composer = new THREE.EffectComposer(this.renderer);
+                    
+                    const renderPass = new THREE.RenderPass(this.scene, this.camera);
+                    this.composer.addPass(renderPass);
+                    
+                    this.bloomPass = new THREE.UnrealBloomPass(
+                        new THREE.Vector2(window.innerWidth, window.innerHeight),
+                        1.5, 0.4, 0.85
+                    );
+                    this.composer.addPass(this.bloomPass);
+                }
+                
+                handleResize() {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                    this.composer.setSize(window.innerWidth, window.innerHeight);
+                }
+            };
+        };
+        
+        // Global scale configuration for perfect proportions
+        const SCALE_CONFIG = {
+            platformRadius: 100,
+            districtScale: 0.18,  // Districts are 18% of platform radius
+            buildingScale: 0.06,  // Buildings are 6% of platform radius for base
+            heightScale: 0.15,    // Height multiplier relative to platform
+            spacing: 1.2          // Spacing multiplier
+        };
+        
+        // District Configuration with relative heights
+        const DISTRICTS = [
+            { 
+                id: 'innovation',
+                name: 'Innovation Hub', 
+                color: 0x8b5cf6, 
+                position: [0, 0, 0],
+                scale: 1.2,  // 20% larger than base
+                nodes: [
+                    { type: 'core', name: 'Central Core', heightFactor: 2.5 },
+                    { type: 'storage', name: 'Data Lake', heightFactor: 1.2 },
+                    { type: 'processor', name: 'AI Engine', heightFactor: 1.8 },
+                    { type: 'network', name: 'Neural Net', heightFactor: 1.0 },
+                    { type: 'storage', name: 'Memory Bank', heightFactor: 1.1 }
+                ]
+            },
+            { 
+                id: 'data',
+                name: 'Data Center', 
+                color: 0x00ff88, 
+                position: [40, 0, 0],
+                scale: 1.0,
+                nodes: [
+                    { type: 'core', name: 'Data Core', heightFactor: 2.1 },
+                    { type: 'storage', name: 'Archive 1', heightFactor: 1.5 },
+                    { type: 'storage', name: 'Archive 2', heightFactor: 1.3 },
+                    { type: 'processor', name: 'ETL Pipeline', heightFactor: 1.7 },
+                    { type: 'network', name: 'Data Stream', heightFactor: 1.1 },
+                    { type: 'bridge', name: 'Gateway', heightFactor: 1.2 }
+                ]
+            },
+            { 
+                id: 'security',
+                name: 'Security Core', 
+                color: 0xff0080, 
+                position: [20, 0, 35], 
+                scale: 0.9,
+                nodes: [
+                    { type: 'core', name: 'Security Hub', heightFactor: 2.8 },
+                    { type: 'processor', name: 'Firewall', heightFactor: 1.8 },
+                    { type: 'processor', name: 'Scanner', heightFactor: 1.5 },
+                    { type: 'network', name: 'Monitor', heightFactor: 1.2 },
+                    { type: 'storage', name: 'Vault', heightFactor: 2.1 }
+                ]
+            },
+            { 
+                id: 'analytics',
+                name: 'Analytics Tower', 
+                color: 0x00bfff, 
+                position: [-20, 0, 35], 
+                nodes: [
+                    { type: 'core', name: 'Analytics Engine', height: 50 },
+                    { type: 'processor', name: 'ML Cluster', height: 35 },
+                    { type: 'processor', name: 'Visualizer', height: 30 },
+                    { type: 'storage', name: 'Data Mart', height: 25 },
+                    { type: 'network', name: 'Dashboard', height: 22 },
+                    { type: 'bridge', name: 'API Gateway', height: 28 }
+                ]
+            },
+            { 
+                id: 'cloud',
+                name: 'Cloud Platform', 
+                color: 0xffaa00, 
+                position: [-40, 0, 0], 
+                nodes: [
+                    { type: 'core', name: 'Cloud Core', height: 38 },
+                    { type: 'network', name: 'Load Balancer', height: 25 },
+                    { type: 'storage', name: 'Object Store', height: 30 },
+                    { type: 'processor', name: 'Compute Farm', height: 32 },
+                    { type: 'bridge', name: 'Edge Node', height: 20 }
+                ]
+            },
+            { 
+                id: 'ai',
+                name: 'AI Research', 
+                color: 0xff00ff, 
+                position: [-20, 0, -35], 
+                nodes: [
+                    { type: 'core', name: 'AI Core', height: 42 },
+                    { type: 'processor', name: 'GPU Cluster', height: 38 },
+                    { type: 'processor', name: 'Training Lab', height: 35 },
+                    { type: 'storage', name: 'Model Repo', height: 28 },
+                    { type: 'network', name: 'Inference API', height: 25 },
+                    { type: 'storage', name: 'Dataset Hub', height: 30 }
+                ]
+            },
+            { 
+                id: 'quantum',
+                name: 'Quantum Lab', 
+                color: 0x00ffff, 
+                position: [20, 0, -35], 
+                nodes: [
+                    { type: 'core', name: 'Quantum Core', height: 35 },
+                    { type: 'processor', name: 'Q-Processor', height: 40 },
+                    { type: 'network', name: 'Q-Network', height: 22 },
+                    { type: 'storage', name: 'Q-Memory', height: 28 },
+                    { type: 'bridge', name: 'Classical Bridge', height: 25 }
+                ]
+            }
+        ];
+        
+        // City Component with all behaviors
+        const CityComponent = compose(
+            withState({
+                mode: 'explorer',
+                districts: [],
+                nodes: [],
+                connections: [],
+                particles: [],
+                selectedNode: null,
+                shaderSettings: {
+                    glow: 0.5,
+                    scan: 0.3,
+                    chromatic: 0.2,
+                    holo: 0
+                },
+                fps: 60,
+                perfHistory: []
+            }),
+            withEvents({
+                'mode-change': function(e) {
+                    this.state.mode = e.detail;
+                    this.updateVisualizationMode();
+                },
+                'node-select': function(e) {
+                    this.state.selectedNode = e.detail;
+                    this.updateInspector();
+                },
+                'shader-update': function(e) {
+                    this.state.shaderSettings[e.detail.shader] = e.detail.value;
+                    this.updateShaders();
+                }
+            }),
+            withThree()
+        )(HTMLElement);
+        
+        // Define custom element
+        customElements.define('city-component', CityComponent);
+        
+        // Create city instance
+        const city = document.createElement('city-component');
+        
+        // Add methods
+        Object.assign(city, {
+            async init() {
+                // Show loading progress
+                const loadingSteps = [
+                    { progress: 10, status: 'Loading assets...' },
+                    { progress: 30, status: 'Creating districts...' },
+                    { progress: 50, status: 'Building node network...' },
+                    { progress: 70, status: 'Initializing particles...' },
+                    { progress: 90, status: 'Applying shaders...' },
+                    { progress: 100, status: 'Ready!' }
+                ];
+                
+                for (const step of loadingSteps) {
+                    document.getElementById('loadingProgress').style.width = step.progress + '%';
+                    document.getElementById('loadingStatus').textContent = step.status;
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+                
+                // Setup scene
+                document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+                this.createEnvironment();
+                this.createDistricts();
+                this.createConnections();
+                this.createParticles();
+                this.setupLighting();
+                this.setupInteractions();
+                this.initializeUI();
+                
+                // Start animation
+                this.animate();
+                
+                // Hide loading screen
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    this.showNotification('System Online', 'CompanyCity initialized successfully');
+                }, 500);
+            },
+            
+            createEnvironment() {
+                // Tech pattern platform
+                const platformGeometry = new THREE.CylinderGeometry(100, 100, 1, 64);
+                const platformMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x111111,
+                    metalness: 0.9,
+                    roughness: 0.1,
+                    emissive: 0x222222,
+                    emissiveIntensity: 0.2
+                });
+                const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+                platform.position.y = -0.5;
+                platform.receiveShadow = true;
+                this.scene.add(platform);
+                
+                // Grid overlay on platform (like reference)
+                const gridHelper = new THREE.GridHelper(200, 40, 0x2a2a3e, 0x1a1a2e);
+                gridHelper.position.y = 0.1; // Slightly above platform
+                this.scene.add(gridHelper);
+                
+                // Add circuit pattern texture
+                const canvas = document.createElement('canvas');
+                canvas.width = 512;
+                canvas.height = 512;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw circuit pattern
+                ctx.strokeStyle = '#8b5cf6';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 20; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(Math.random() * 512, Math.random() * 512);
+                    ctx.lineTo(Math.random() * 512, Math.random() * 512);
+                    ctx.stroke();
+                }
+                
+                const texture = new THREE.CanvasTexture(canvas);
+                platform.material.map = texture;
+                platform.material.needsUpdate = true;
+            },
+            
+            createDistricts() {
+                let totalNodes = 0;
+                
+                DISTRICTS.forEach((districtData, index) => {
+                    const district = new THREE.Group();
+                    district.userData = districtData;
+                    
+                    // Create hexagonal platform with proportional sizing
+                    const shape = new THREE.Shape();
+                    const districtScaleFactor = districtData.scale || 1.0;
+                    const hexRadius = SCALE_CONFIG.platformRadius * SCALE_CONFIG.districtScale * districtScaleFactor;
+                    
+                    for (let i = 0; i < 6; i++) {
+                        const angle = (i / 6) * Math.PI * 2 + Math.PI / 6;
+                        const x = Math.cos(angle) * hexRadius;
+                        const y = Math.sin(angle) * hexRadius;
+                        if (i === 0) shape.moveTo(x, y);
+                        else shape.lineTo(x, y);
+                    }
+                    shape.closePath();
+                    
+                    const platformDepth = hexRadius * 0.15; // Proportional depth
+                    const extrudeSettings = {
+                        depth: platformDepth,
+                        bevelEnabled: true,
+                        bevelThickness: platformDepth * 0.1,
+                        bevelSize: platformDepth * 0.1,
+                        bevelSegments: 3
+                    };
+                    
+                    const platformGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+                    platformGeometry.rotateX(-Math.PI / 2);
+                    
+                    const platformMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x1a1a1a,
+                        metalness: 0.7,
+                        roughness: 0.3,
+                        emissive: districtData.color,
+                        emissiveIntensity: districtData.name === 'Innovation Hub' ? 0.15 : 0.08
+                    });
+                    const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+                    platform.position.y = platformDepth / 2;
+                    platform.castShadow = true;
+                    platform.receiveShadow = true;
+                    district.add(platform);
+                    
+                    // Add tech pattern to platform
+                    const edgeGeometry = new THREE.EdgesGeometry(platformGeometry);
+                    const edgeMaterial = new THREE.LineBasicMaterial({ 
+                        color: districtData.color,
+                        linewidth: 2
+                    });
+                    const edges = new THREE.LineSegments(edgeGeometry, edgeMaterial);
+                    platform.add(edges);
+                    
+                    // Create nodes based on type
+                    districtData.nodes.forEach((nodeData, nodeIndex) => {
+                        const node = this.createNode(nodeData, districtData.color);
+                        
+                        // Position nodes proportionally within district
+                        const angle = (nodeIndex / districtData.nodes.length) * Math.PI * 2 - Math.PI / 2;
+                        const districtRadius = SCALE_CONFIG.platformRadius * SCALE_CONFIG.districtScale * (districtData.scale || 1.0);
+                        const nodeRadius = districtRadius * 0.6 + (nodeIndex % 2) * (districtRadius * 0.1);
+                        
+                        node.position.set(
+                            Math.cos(angle) * nodeRadius,
+                            node.geometry.parameters.height / 2 + platformDepth,
+                            Math.sin(angle) * nodeRadius
+                        );
+                        
+                        node.userData = {
+                            ...nodeData,
+                            district: districtData.name,
+                            id: `${districtData.id}-${nodeIndex}`
+                        };
+                        
+                        district.add(node);
+                        this.state.nodes.push(node);
+                        totalNodes++;
+                    });
+                    
+                    // Add district label
+                    const labelCanvas = document.createElement('canvas');
+                    const labelCtx = labelCanvas.getContext('2d');
+                    labelCanvas.width = 512;
+                    labelCanvas.height = 128;
+                    
+                    // Gradient background
+                    const gradient = labelCtx.createLinearGradient(0, 0, 512, 0);
+                    gradient.addColorStop(0, 'rgba(139, 92, 246, 0.2)');
+                    gradient.addColorStop(1, 'rgba(0, 255, 136, 0.2)');
+                    labelCtx.fillStyle = gradient;
+                    labelCtx.fillRect(0, 0, 512, 128);
+                    
+                    labelCtx.fillStyle = '#ffffff';
+                    labelCtx.font = 'bold 48px Arial';
+                    labelCtx.textAlign = 'center';
+                    labelCtx.fillText(districtData.name, 256, 80);
+                    
+                    const labelTexture = new THREE.CanvasTexture(labelCanvas);
+                    const labelMaterial = new THREE.SpriteMaterial({ 
+                        map: labelTexture, 
+                        transparent: true
+                    });
+                    const label = new THREE.Sprite(labelMaterial);
+                    label.scale.set(12, 3, 1);
+                    label.position.y = 25;
+                    district.add(label);
+                    
+                    // Position district
+                    // Position districts proportionally
+                    const districtSpacing = SCALE_CONFIG.platformRadius * 0.4 * SCALE_CONFIG.spacing;
+                    district.position.set(
+                        districtData.position[0] * districtSpacing,
+                        districtData.position[1],
+                        districtData.position[2] * districtSpacing
+                    );
+                    this.scene.add(district);
+                    this.state.districts.push(district);
+                });
+                
+                // Update total nodes count
+                document.getElementById('totalNodes').textContent = totalNodes;
+            },
+            
+            createNode(nodeData, districtColor) {
+                let geometry, material;
+                
+                // Calculate proportional dimensions
+                const baseHeight = SCALE_CONFIG.platformRadius * SCALE_CONFIG.heightScale;
+                const nodeHeight = baseHeight * (nodeData.heightFactor || 1.0);
+                const baseWidth = SCALE_CONFIG.platformRadius * SCALE_CONFIG.buildingScale;
+                
+                // Store calculated height for later use
+                nodeData.height = nodeHeight;
+                
+                // Create geometry based on node type
+                switch (nodeData.type) {
+                    case 'core':
+                    case 'ai':
+                        // Core/AI buildings - 8-sided cylinder with wider base
+                        const baseRadius = baseWidth;
+                        geometry = new THREE.CylinderGeometry(
+                            baseRadius, baseRadius * 1.2, nodeHeight, 8
+                        );
+                        break;
+                        
+                    case 'storage':
+                        // Storage buildings - larger boxes
+                        geometry = new THREE.BoxGeometry(
+                            baseWidth * 1.2, nodeHeight, baseWidth * 1.2
+                        );
+                        break;
+                        
+                    case 'processor':
+                    case 'transformer':
+                        // Processor/Transformer - 6-sided cylinders
+                        geometry = new THREE.CylinderGeometry(
+                            baseWidth * 0.8, baseWidth * 0.8, nodeHeight, 6
+                        );
+                        break;
+                        
+                    case 'network':
+                        // Network nodes - spheres positioned higher
+                        geometry = new THREE.SphereGeometry(
+                            baseWidth * 0.8, 16, 16
+                        );
+                        break;
+                        
+                    case 'bridge':
+                        // Bridge connectors - elongated boxes
+                        geometry = new THREE.BoxGeometry(
+                            baseWidth * 1.5, nodeHeight, baseWidth * 0.5
+                        );
+                        break;
+                        
+                    default:
+                        geometry = new THREE.BoxGeometry(
+                            baseWidth, nodeHeight, baseWidth
+                        );
+                }
+                
+                // Create material with emissive properties
+                material = new THREE.MeshStandardMaterial({
+                    color: districtColor,
+                    emissive: districtColor,
+                    emissiveIntensity: 0.2,
+                    metalness: 0.7,
+                    roughness: 0.3
+                });
+                
+                const node = new THREE.Mesh(geometry, material);
+                node.castShadow = true;
+                node.receiveShadow = true;
+                
+                // Add windows based on building type
+                const windowRows = Math.floor(nodeData.height / 5);
+                const windowMaterial = new THREE.MeshBasicMaterial({
+                    color: districtColor,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                
+                if (nodeData.type === 'storage' || nodeData.type === 'bridge' || !nodeData.type) {
+                    // Box-style windows on all 4 sides
+                    for (let row = 0; row < windowRows; row++) {
+                        const windowGeometry = new THREE.PlaneGeometry(geometry.parameters.width * 0.8, 1);
+                        const positions = [
+                            { x: 0, z: geometry.parameters.depth/2 + 0.1, ry: 0 },
+                            { x: 0, z: -geometry.parameters.depth/2 - 0.1, ry: Math.PI },
+                            { x: geometry.parameters.width/2 + 0.1, z: 0, ry: Math.PI/2 },
+                            { x: -geometry.parameters.width/2 - 0.1, z: 0, ry: -Math.PI/2 }
+                        ];
+                        
+                        positions.forEach(pos => {
+                            const window = new THREE.Mesh(windowGeometry, windowMaterial);
+                            window.position.set(pos.x, 5 + row * 5 - nodeData.height/2, pos.z);
+                            window.rotation.y = pos.ry;
+                            node.add(window);
+                        });
+                    }
+                } else if (nodeData.type !== 'network') {
+                    // Cylindrical windows around the perimeter
+                    const sides = geometry.parameters.radialSegments || 8;
+                    for (let row = 0; row < windowRows; row++) {
+                        for (let i = 0; i < sides; i++) {
+                            const angle = (i / sides) * Math.PI * 2;
+                            const windowGeometry = new THREE.PlaneGeometry(0.8, 1);
+                            const window = new THREE.Mesh(windowGeometry, windowMaterial);
+                            
+                            const radius = (geometry.parameters.radiusTop || geometry.parameters.radius) + 0.1;
+                            window.position.set(
+                                Math.cos(angle) * radius,
+                                5 + row * 5 - nodeData.height/2,
+                                Math.sin(angle) * radius
+                            );
+                            window.lookAt(0, window.position.y, 0);
+                            node.add(window);
+                        }
+                    }
+                }
+                
+                // Add edge glow
+                const edgeGeometry = new THREE.EdgesGeometry(geometry);
+                const edgeMaterial = new THREE.LineBasicMaterial({ 
+                    color: districtColor,
+                    linewidth: 2
+                });
+                const edges = new THREE.LineSegments(edgeGeometry, edgeMaterial);
+                node.add(edges);
+                
+                // Add beacon on top
+                const beaconGeometry = new THREE.SphereGeometry(1.5, 8, 6);
+                const beaconMaterial = new THREE.MeshBasicMaterial({
+                    color: districtColor,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const beacon = new THREE.Mesh(beaconGeometry, beaconMaterial);
+                beacon.position.y = nodeData.height / 2 + 3;
+                node.add(beacon);
+                node.userData.beacon = beacon;
+                
+                return node;
+            },
+            
+            createConnections() {
+                const connections = [];
+                
+                // Create connections between all districts
+                for (let i = 0; i < this.state.districts.length; i++) {
+                    for (let j = i + 1; j < this.state.districts.length; j++) {
+                        const start = this.state.districts[i].position;
+                        const end = this.state.districts[j].position;
+                        
+                        // Create curved tube connection
+                        const midPoint = new THREE.Vector3(
+                            (start.x + end.x) / 2,
+                            Math.max(start.y, end.y) + 15 + Math.random() * 10,
+                            (start.z + end.z) / 2
+                        );
+                        
+                        const curve = new THREE.CatmullRomCurve3([
+                            new THREE.Vector3(start.x, start.y + 2, start.z),
+                            midPoint,
+                            new THREE.Vector3(end.x, end.y + 2, end.z)
+                        ]);
+                        
+                        const tubeGeometry = new THREE.TubeGeometry(curve, 64, 0.3, 8, false);
+                        const tubeMaterial = new THREE.MeshStandardMaterial({
+                            color: 0x8b5cf6,
+                            emissive: 0x8b5cf6,
+                            emissiveIntensity: 0.5,
+                            transparent: true,
+                            opacity: 0.6
+                        });
+                        
+                        const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+                        this.scene.add(tube);
+                        
+                        // Add data packets
+                        const packetCount = 3 + Math.floor(Math.random() * 2);
+                        for (let k = 0; k < packetCount; k++) {
+                            const packetGeometry = new THREE.SphereGeometry(0.4, 8, 8);
+                            const packetMaterial = new THREE.MeshBasicMaterial({
+                                color: 0x00ff88,
+                                emissive: 0x00ff88,
+                                emissiveIntensity: 1
+                            });
+                            
+                            const packet = new THREE.Mesh(packetGeometry, packetMaterial);
+                            packet.userData = {
+                                curve: curve,
+                                progress: Math.random(),
+                                speed: 0.001 + Math.random() * 0.001,
+                                direction: Math.random() > 0.5 ? 1 : -1
+                            };
+                            
+                            this.scene.add(packet);
+                            this.state.particles.push(packet);
+                        }
+                        
+                        connections.push({ tube, curve });
+                    }
+                }
+                
+                this.state.connections = connections;
+            },
+            
+            createParticles() {
+                // Create large GPU particle system
+                const particleCount = 10000;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const sizes = new Float32Array(particleCount);
+                const velocities = new Float32Array(particleCount * 3);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    // Position
+                    positions[i * 3] = (Math.random() - 0.5) * 200;
+                    positions[i * 3 + 1] = Math.random() * 100;
+                    positions[i * 3 + 2] = (Math.random() - 0.5) * 200;
+                    
+                    // Color - match district colors
+                    const districtIndex = Math.floor(Math.random() * DISTRICTS.length);
+                    const color = new THREE.Color(DISTRICTS[districtIndex].color);
+                    colors[i * 3] = color.r;
+                    colors[i * 3 + 1] = color.g;
+                    colors[i * 3 + 2] = color.b;
+                    
+                    // Size
+                    sizes[i] = Math.random() * 2 + 0.5;
+                    
+                    // Velocity
+                    velocities[i * 3] = (Math.random() - 0.5) * 0.1;
+                    velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.1;
+                    velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+                geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+                
+                // Custom shader for particles
+                const particleMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        time: { value: 0 },
+                        pixelRatio: { value: this.renderer.getPixelRatio() }
+                    },
+                    vertexShader: `
+                        attribute float size;
+                        attribute vec3 color;
+                        attribute vec3 velocity;
+                        varying vec3 vColor;
+                        uniform float time;
+                        
+                        void main() {
+                            vColor = color;
+                            vec3 pos = position;
+                            
+                            // Apply velocity and wave motion
+                            pos += velocity * time * 10.0;
+                            pos.y += sin(time + position.x * 0.1) * 2.0;
+                            pos.x += cos(time * 0.5 + position.z * 0.1) * 1.0;
+                            
+                            // Wrap around
+                            pos.x = mod(pos.x + 100.0, 200.0) - 100.0;
+                            pos.y = mod(pos.y, 100.0);
+                            pos.z = mod(pos.z + 100.0, 200.0) - 100.0;
+                            
+                            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                            gl_PointSize = size * (300.0 / -mvPosition.z) * pixelRatio;
+                            gl_Position = projectionMatrix * mvPosition;
+                        }
+                    `,
+                    fragmentShader: `
+                        varying vec3 vColor;
+                        
+                        void main() {
+                            float dist = distance(gl_PointCoord, vec2(0.5));
+                            if (dist > 0.5) discard;
+                            
+                            float opacity = 1.0 - smoothstep(0.0, 0.5, dist);
+                            opacity *= 0.8;
+                            
+                            gl_FragColor = vec4(vColor, opacity);
+                        }
+                    `,
+                    transparent: true,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false,
+                    vertexColors: true
+                });
+                
+                this.particleSystem = new THREE.Points(geometry, particleMaterial);
+                this.scene.add(this.particleSystem);
+            },
+            
+            setupLighting() {
+                // Ambient light
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+                this.scene.add(ambientLight);
+                
+                // Main directional light with shadows
+                const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                dirLight.position.set(50, 100, 50);
+                dirLight.castShadow = true;
+                dirLight.shadow.camera.left = -100;
+                dirLight.shadow.camera.right = 100;
+                dirLight.shadow.camera.top = 100;
+                dirLight.shadow.camera.bottom = -100;
+                dirLight.shadow.camera.near = 0.1;
+                dirLight.shadow.camera.far = 200;
+                dirLight.shadow.mapSize.width = 4096;
+                dirLight.shadow.mapSize.height = 4096;
+                this.scene.add(dirLight);
+                
+                // Rim lighting
+                const rimLight = new THREE.DirectionalLight(0x8b5cf6, 0.3);
+                rimLight.position.set(-50, 50, -50);
+                this.scene.add(rimLight);
+                
+                // District lights with pulsing
+                this.districtLights = [];
+                this.state.districts.forEach((district) => {
+                    const light = new THREE.PointLight(
+                        district.userData.color, 
+                        2, 
+                        50
+                    );
+                    light.position.copy(district.position);
+                    light.position.y += 20;
+                    light.userData = { baseIntensity: 2 };
+                    this.scene.add(light);
+                    this.districtLights.push(light);
+                });
+            },
+            
+            setupInteractions() {
+                // Mouse events
+                this.renderer.domElement.addEventListener('mousemove', (e) => {
+                    this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+                    this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+                    
+                    // Check for hover
+                    this.raycaster.setFromCamera(this.mouse, this.camera);
+                    const intersects = this.raycaster.intersectObjects(this.state.nodes);
+                    
+                    // Reset all nodes
+                    this.state.nodes.forEach(node => {
+                        node.scale.setScalar(1);
+                    });
+                    
+                    if (intersects.length > 0) {
+                        const node = intersects[0].object;
+                        node.scale.setScalar(1.1);
+                        document.body.style.cursor = 'pointer';
+                    } else {
+                        document.body.style.cursor = 'default';
+                    }
+                });
+                
+                // Click events
+                this.renderer.domElement.addEventListener('click', (e) => {
+                    this.raycaster.setFromCamera(this.mouse, this.camera);
+                    const intersects = this.raycaster.intersectObjects(this.state.nodes);
+                    
+                    if (intersects.length > 0) {
+                        const node = intersects[0].object;
+                        this.dispatchEvent(new CustomEvent('node-select', { detail: node }));
+                    }
+                });
+                
+                // Keyboard shortcuts
+                window.addEventListener('keydown', (e) => {
+                    switch(e.key.toLowerCase()) {
+                        case 'e':
+                            document.getElementById('exportPanel').classList.toggle('active');
+                            break;
+                        case 's':
+                            document.getElementById('shaderControls').classList.toggle('active');
+                            break;
+                        case 'escape':
+                            if (this.state.mode === 'command') {
+                                this.setMode('explorer');
+                            }
+                            break;
+                    }
+                });
+            },
+            
+            initializeUI() {
+                // Mode selector
+                document.querySelectorAll('.mode-btn').forEach((btn, index) => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        // Animate liquid background
+                        const liquid = document.getElementById('modeLiquid');
+                        liquid.style.width = btn.offsetWidth + 'px';
+                        liquid.style.left = btn.offsetLeft + 'px';
+                        
+                        this.setMode(btn.dataset.mode);
+                    });
+                });
+                
+                // Shader controls
+                document.querySelectorAll('.slider-track').forEach(track => {
+                    let isDragging = false;
+                    const fill = track.querySelector('.slider-fill');
+                    const thumb = track.querySelector('.slider-thumb');
+                    const shader = track.dataset.shader;
+                    
+                    const updateSlider = (e) => {
+                        if (!isDragging) return;
+                        
+                        const rect = track.getBoundingClientRect();
+                        const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+                        fill.style.width = (percent * 100) + '%';
+                        
+                        const valueLabel = document.getElementById(shader + 'Value');
+                        valueLabel.textContent = Math.round(percent * 100) + '%';
+                        
+                        this.dispatchEvent(new CustomEvent('shader-update', {
+                            detail: { shader, value: percent }
+                        }));
+                    };
+                    
+                    track.addEventListener('mousedown', (e) => {
+                        isDragging = true;
+                        updateSlider(e);
+                    });
+                    
+                    window.addEventListener('mousemove', updateSlider);
+                    window.addEventListener('mouseup', () => isDragging = false);
+                });
+                
+                // Command center
+                const terminalInput = document.getElementById('terminalInput');
+                const terminalOutput = document.getElementById('terminalOutput');
+                
+                terminalInput?.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const command = terminalInput.value;
+                        this.executeCommand(command);
+                        terminalInput.value = '';
+                    }
+                });
+                
+                // Export buttons
+                document.querySelectorAll('.format-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.exportScene(btn.dataset.format);
+                    });
+                });
+            },
+            
+            setMode(mode) {
+                this.state.mode = mode;
+                this.updateVisualizationMode();
+                
+                if (mode === 'command') {
+                    document.getElementById('commandCenter').classList.add('active');
+                    document.getElementById('terminalInput')?.focus();
+                } else {
+                    document.getElementById('commandCenter').classList.remove('active');
+                }
+                
+                this.showNotification('Mode Changed', `Switched to ${mode} mode`);
+            },
+            
+            updateVisualizationMode() {
+                const matrixOverlay = document.getElementById('matrixOverlay');
+                
+                switch (this.state.mode) {
+                    case 'architect':
+                        // Blueprint mode
+                        this.state.nodes.forEach(node => {
+                            node.material.wireframe = true;
+                            node.material.emissiveIntensity = 0.5;
+                        });
+                        this.scene.fog.density = 0.0005;
+                        break;
+                        
+                    case 'matrix':
+                        // Matrix rain effect
+                        matrixOverlay.classList.add('active');
+                        this.startMatrixRain();
+                        this.state.nodes.forEach(node => {
+                            node.material.color.setHex(0x00ff00);
+                            node.material.emissive.setHex(0x00ff00);
+                        });
+                        break;
+                        
+                    case 'quantum':
+                        // Quantum visualization
+                        this.state.nodes.forEach(node => {
+                            node.material.wireframe = false;
+                            node.material.transparent = true;
+                            node.material.opacity = 0.7;
+                        });
+                        this.particleSystem.material.uniforms.time.value *= 2;
+                        break;
+                        
+                    default:
+                        // Explorer mode - reset
+                        matrixOverlay.classList.remove('active');
+                        this.state.nodes.forEach((node, i) => {
+                            const district = DISTRICTS[Math.floor(i / 6)];
+                            if (district) {
+                                node.material.color.setHex(district.color);
+                                node.material.emissive.setHex(district.color);
+                            }
+                            node.material.wireframe = false;
+                            node.material.transparent = false;
+                            node.material.opacity = 1;
+                            node.material.emissiveIntensity = 0.2;
+                        });
+                        this.scene.fog.density = 0.001;
+                }
+            },
+            
+            startMatrixRain() {
+                const canvas = document.getElementById('matrixCanvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                const columns = Math.floor(canvas.width / 20);
+                const drops = Array(columns).fill(0);
+                
+                const matrixRain = () => {
+                    if (this.state.mode !== 'matrix') return;
+                    
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    ctx.fillStyle = '#00ff00';
+                    ctx.font = '15px monospace';
+                    
+                    for (let i = 0; i < drops.length; i++) {
+                        const text = String.fromCharCode(Math.random() * 128);
+                        ctx.fillText(text, i * 20, drops[i] * 20);
+                        
+                        if (drops[i] * 20 > canvas.height && Math.random() > 0.95) {
+                            drops[i] = 0;
+                        }
+                        drops[i]++;
+                    }
+                    
+                    requestAnimationFrame(matrixRain);
+                };
+                
+                matrixRain();
+            },
+            
+            updateInspector() {
+                const panel = document.getElementById('inspectorPanel');
+                const node = this.state.selectedNode;
+                
+                if (!node) return;
+                
+                panel.classList.add('active');
+                
+                document.getElementById('nodeType').textContent = node.userData.type;
+                document.getElementById('nodeStatus').textContent = 'Active';
+                document.getElementById('nodePerformance').textContent = Math.round(50 + Math.random() * 50) + '%';
+                document.getElementById('nodeConnections').textContent = Math.floor(Math.random() * 10 + 5);
+                
+                // Update breadcrumb
+                document.getElementById('currentDistrict').textContent = node.userData.district;
+                document.getElementById('currentNode').textContent = node.userData.name;
+                
+                // Create node preview (would render actual 3D preview)
+                const preview = document.getElementById('nodePreview');
+                preview.style.background = `linear-gradient(135deg, #${node.material.color.getHexString()}, #000)`;
+            },
+            
+            updateShaders() {
+                // Update bloom intensity
+                this.bloomPass.strength = 1.5 + this.state.shaderSettings.glow;
+                
+                // Update other shader effects based on settings
+                this.renderer.toneMappingExposure = 1 + this.state.shaderSettings.glow * 0.5;
+                
+                // Would implement scan lines, chromatic aberration, holographic effects
+                // through custom shader passes
+            },
+            
+            executeCommand(command) {
+                const output = document.getElementById('terminalOutput');
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.innerHTML = `<span class="terminal-prompt">companycity&gt;</span> ${command}`;
+                output.appendChild(line);
+                
+                // Simple command parser
+                const [cmd, ...args] = command.toLowerCase().split(' ');
+                
+                switch (cmd) {
+                    case 'help':
+                        this.addTerminalOutput('Available commands: status, districts, nodes, export, clear');
+                        break;
+                    case 'status':
+                        this.addTerminalOutput(`System Status: Online\nDistricts: ${this.state.districts.length}\nNodes: ${this.state.nodes.length}\nFPS: ${this.state.fps}`);
+                        break;
+                    case 'districts':
+                        DISTRICTS.forEach(d => {
+                            this.addTerminalOutput(`${d.name} - ${d.nodes.length} nodes`);
+                        });
+                        break;
+                    case 'clear':
+                        output.innerHTML = '';
+                        break;
+                    default:
+                        this.addTerminalOutput(`Unknown command: ${cmd}`);
+                }
+                
+                output.scrollTop = output.scrollHeight;
+            },
+            
+            addTerminalOutput(text) {
+                const output = document.getElementById('terminalOutput');
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.textContent = text;
+                output.appendChild(line);
+            },
+            
+            exportScene(format) {
+                this.showNotification('Export Started', `Exporting scene as ${format.toUpperCase()}...`);
+                
+                // Close export panel
+                document.getElementById('exportPanel').classList.remove('active');
+                
+                // Simulate export
+                setTimeout(() => {
+                    this.showNotification('Export Complete', `Scene exported successfully as ${format.toUpperCase()}`);
+                }, 2000);
+            },
+            
+            showNotification(title, message) {
+                const notifications = document.getElementById('notifications');
+                const notification = document.createElement('div');
+                notification.className = 'notification fade-in';
+                notification.innerHTML = `
+                    <div class="notification-icon">✓</div>
+                    <div class="notification-content">
+                        <div class="notification-title">${title}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                `;
+                
+                notifications.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            },
+            
+            updateStats() {
+                // Update data flow
+                const dataFlow = 100 + Math.sin(Date.now() * 0.001) * 50;
+                document.getElementById('dataFlow').textContent = dataFlow.toFixed(0) + ' TB/s';
+                
+                // Update system load
+                const load = 30 + Math.sin(Date.now() * 0.0007) * 20;
+                document.getElementById('systemLoad').textContent = load.toFixed(0) + '%';
+            },
+            
+            updatePerformance() {
+                // Calculate FPS
+                const delta = this.clock.getDelta();
+                const fps = Math.round(1 / delta);
+                this.state.fps = fps;
+                
+                // Update display
+                document.getElementById('fpsDisplay').textContent = fps;
+                
+                // Update performance graph
+                this.state.perfHistory.push(fps);
+                if (this.state.perfHistory.length > 60) {
+                    this.state.perfHistory.shift();
+                }
+                
+                // Draw graph
+                const svg = document.getElementById('perfGraph');
+                const width = 280;
+                const height = 60;
+                const points = this.state.perfHistory.map((value, index) => {
+                    const x = (index / 60) * width;
+                    const y = height - (value / 120) * height;
+                    return `${x},${y}`;
+                }).join(' ');
+                
+                svg.innerHTML = `
+                    <polyline
+                        points="${points}"
+                        fill="none"
+                        stroke="url(#perfGradient)"
+                        stroke-width="2"
+                    />
+                    <defs>
+                        <linearGradient id="perfGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                `;
+            },
+            
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                const time = this.clock.getElapsedTime();
+                
+                // Update controls
+                this.controls.update();
+                
+                // Animate nodes
+                this.state.nodes.forEach((node, i) => {
+                    // Gentle floating motion
+                    node.position.y = node.userData.baseY || node.position.y;
+                    if (!node.userData.baseY) node.userData.baseY = node.position.y;
+                    
+                    node.position.y = node.userData.baseY + Math.sin(time + i * 0.5) * 0.5;
+                    
+                    // Rotate certain node types
+                    if (node.userData.type === 'processor' || node.userData.type === 'network') {
+                        node.rotation.y += 0.005;
+                    }
+                    
+                    // Building sway (very subtle)
+                    const sway = Math.sin(time + i * 0.3) * 0.001;
+                    node.rotation.z = sway;
+                    
+                    // Animate beacon
+                    if (node.userData.beacon) {
+                        const beacon = node.userData.beacon;
+                        const scale = 1 + Math.sin(time * 3 + i) * 0.3;
+                        beacon.scale.setScalar(scale);
+                        beacon.material.opacity = 0.6 + Math.sin(time * 3) * 0.2;
+                    }
+                });
+                
+                // Animate particles
+                if (this.particleSystem) {
+                    this.particleSystem.material.uniforms.time.value = time;
+                    this.particleSystem.rotation.y += 0.0001;
+                }
+                
+                // Animate data packets
+                this.state.particles.forEach(packet => {
+                    if (packet.userData.curve) {
+                        packet.userData.progress += packet.userData.speed * packet.userData.direction;
+                        
+                        if (packet.userData.progress > 1 || packet.userData.progress < 0) {
+                            packet.userData.direction *= -1;
+                            packet.userData.progress = Math.max(0, Math.min(1, packet.userData.progress));
+                        }
+                        
+                        const point = packet.userData.curve.getPoint(packet.userData.progress);
+                        packet.position.copy(point);
+                        
+                        // Pulse effect
+                        packet.scale.setScalar(0.8 + Math.sin(time * 10) * 0.2);
+                    }
+                });
+                
+                // Animate district lights
+                this.districtLights?.forEach((light, i) => {
+                    light.intensity = light.userData.baseIntensity + Math.sin(time * 2 + i) * 0.5;
+                });
+                
+                // Pulse central core district
+                if (this.state.districts[0] && this.state.districts[0].userData.name === 'Innovation Hub') {
+                    const scale = 1 + Math.sin(time * 2) * 0.02;
+                    this.state.districts[0].scale.set(scale, 1, scale);
+                }
+                
+                // Update stats
+                this.updateStats();
+                this.updatePerformance();
+                
+                // Render
+                this.composer.render();
+            }
+        });
+        
+        // Initialize when DOM is ready
+        window.addEventListener('DOMContentLoaded', () => {
+            city.init();
+        });
+        
+        // Close export panel
+        window.closeExport = () => {
+            document.getElementById('exportPanel').classList.remove('active');
+        };
+    </script>
+</body>
+</html>

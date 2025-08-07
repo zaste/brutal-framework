@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Comparison Tool - BRUTAL vs Reference</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0a0a0a; 
+            color: #fff; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow-x: auto;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            background: linear-gradient(135deg, #8b5cf6, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .comparison-container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .version-panel {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .version-header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .version-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .version-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        
+        .iframe-container {
+            width: 100%;
+            height: 800px;
+            position: relative;
+        }
+        
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .screenshot-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        
+        .screenshot-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+        }
+        
+        .analysis-section {
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .analysis-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .analysis-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #8b5cf6;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-icon.match {
+            background: #00ff88;
+            color: #000;
+        }
+        
+        .status-icon.partial {
+            background: #ffaa00;
+            color: #000;
+        }
+        
+        .status-icon.missing {
+            background: #ff0080;
+            color: #fff;
+        }
+        
+        .difference-meter {
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .meter-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .meter-bar {
+            width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0080, #ffaa00, #00ff88);
+            width: 0%;
+            transition: width 2s ease-out;
+        }
+        
+        .meter-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+        
+        .code-comparison {
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .code-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .stat-box {
+            padding: 20px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #8b5cf6;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visual Comparison: BRUTAL V6 vs Reference Implementation</h1>
+        <p style="color: rgba(255,255,255,0.6); margin-top: 10px;">
+            Analyzing the visual differences between our implementation and the target
+        </p>
+        <div class="controls">
+            <button class="btn" onclick="captureScreenshots()">📸 Capture Screenshots</button>
+            <button class="btn" onclick="toggleSideBySide()">🔄 Toggle View</button>
+            <button class="btn" onclick="showAnalysis()">📊 Show Analysis</button>
+            <button class="btn" onclick="exportComparison()">💾 Export Report</button>
+        </div>
+    </div>
+    
+    <div class="comparison-container" id="comparisonContainer">
+        <div class="version-panel">
+            <div class="version-header">
+                <div class="version-title">Reference Implementation</div>
+                <div class="version-subtitle">Target visual quality and features</div>
+            </div>
+            <div class="iframe-container">
+                <iframe src="referencia-visual-funcional.html" id="referenceFrame"></iframe>
+                <div class="screenshot-overlay" id="referenceScreenshot"></div>
+            </div>
+        </div>
+        
+        <div class="version-panel">
+            <div class="version-header">
+                <div class="version-title">BRUTAL V6 Ultimate</div>
+                <div class="version-subtitle">Our current implementation</div>
+            </div>
+            <div class="iframe-container">
+                <iframe src="ultimate-fixed.html" id="brutalFrame"></iframe>
+                <div class="screenshot-overlay" id="brutalScreenshot"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="analysis-section">
+        <h2 style="text-align: center; font-size: 32px; margin-bottom: 40px;">
+            Visual Feature Comparison
+        </h2>
+        
+        <div class="analysis-grid">
+            <div class="analysis-card">
+                <h3 class="analysis-title">🎨 UI/UX Design</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Advanced glass morphism with 30px blur</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Gradient border masks</span>
+                    </li>
+                    <li>
+                        <span class="status-icon partial">~</span>
+                        <span>Panel animations</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Liquid mode selector</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Breadcrumb navigation</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="analysis-card">
+                <h3 class="analysis-title">🏗️ 3D Architecture</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="status-icon match">✓</span>
+                        <span>7 Districts layout</span>
+                    </li>
+                    <li>
+                        <span class="status-icon partial">~</span>
+                        <span>Hexagonal platforms</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Multiple node types per district</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Detailed building variations</span>
+                    </li>
+                    <li>
+                        <span class="status-icon partial">~</span>
+                        <span>Connection network</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="analysis-card">
+                <h3 class="analysis-title">✨ Visual Effects</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Matrix mode shader</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Quantum visualization</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Holographic overlays</span>
+                    </li>
+                    <li>
+                        <span class="status-icon partial">~</span>
+                        <span>Particle systems</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Dynamic lighting pulses</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="analysis-card">
+                <h3 class="analysis-title">🎛️ Control Systems</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Shader controls panel</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Export functionality</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Command center</span>
+                    </li>
+                    <li>
+                        <span class="status-icon partial">~</span>
+                        <span>Performance monitoring</span>
+                    </li>
+                    <li>
+                        <span class="status-icon missing">✗</span>
+                        <span>Notification system</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="difference-meter">
+            <h3 class="meter-title">Overall Visual Parity</h3>
+            <div class="meter-bar">
+                <div class="meter-fill" id="parityMeter"></div>
+                <div class="meter-value" id="parityValue">0%</div>
+            </div>
+        </div>
+        
+        <div class="code-comparison">
+            <h3 style="text-align: center; font-size: 24px; margin-bottom: 30px;">
+                Implementation Metrics
+            </h3>
+            <div class="code-stats">
+                <div class="stat-box">
+                    <div class="stat-value">~5000</div>
+                    <div class="stat-label">Reference Lines</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">~1200</div>
+                    <div class="stat-label">BRUTAL Lines</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">76%</div>
+                    <div class="stat-label">Code Reduction</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Calculate visual parity based on features
+        function calculateParity() {
+            const features = {
+                matched: 2,  // 7 districts, basic layout
+                partial: 5,  // hexagons, connections, particles, etc
+                missing: 13  // glass morphism, node types, shaders, etc
+            };
+            
+            const total = features.matched + features.partial + features.missing;
+            const score = (features.matched * 1 + features.partial * 0.5) / total * 100;
+            
+            setTimeout(() => {
+                document.getElementById('parityMeter').style.width = score + '%';
+                document.getElementById('parityValue').textContent = Math.round(score) + '%';
+            }, 500);
+        }
+        
+        // Capture screenshots (simulated)
+        function captureScreenshots() {
+            alert('Screenshot capture would require server-side rendering. Visual differences are shown in the analysis below.');
+        }
+        
+        // Toggle side-by-side view
+        let sideBySide = true;
+        function toggleSideBySide() {
+            const container = document.getElementById('comparisonContainer');
+            sideBySide = !sideBySide;
+            container.style.flexDirection = sideBySide ? 'row' : 'column';
+        }
+        
+        // Show detailed analysis
+        function showAnalysis() {
+            document.querySelector('.analysis-section').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // Export comparison report
+        function exportComparison() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                visualParity: '22%',
+                missingFeatures: [
+                    'Advanced glass morphism effects',
+                    'Gradient border techniques',
+                    'Multiple node types per district',
+                    'Matrix/Quantum visualization modes',
+                    'Holographic overlays',
+                    'Dynamic lighting system',
+                    'Shader control panel',
+                    'Export functionality',
+                    'Command center interface',
+                    'Notification system'
+                ],
+                recommendations: [
+                    'Implement advanced CSS backdrop filters',
+                    'Add gradient border masks',
+                    'Create diverse building/node types',
+                    'Develop custom shader materials',
+                    'Add mode-specific visual effects',
+                    'Implement dynamic lighting system',
+                    'Build comprehensive UI panels'
+                ]
+            };
+            
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'brutal-v6-visual-comparison-report.json';
+            a.click();
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            calculateParity();
+        });
+    </script>
+</body>
+</html>

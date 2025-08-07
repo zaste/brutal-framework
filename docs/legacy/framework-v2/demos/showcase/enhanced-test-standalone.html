@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Components - Standalone Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+    }
+    
+    .controls {
+      background: white;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .variant-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    
+    .variant-btn {
+      padding: 0.5rem 1rem;
+      border: 2px solid #e5e7eb;
+      background: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .variant-btn:hover {
+      border-color: #3b82f6;
+      color: #3b82f6;
+    }
+    
+    .variant-btn.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+    
+    .demo-container {
+      min-height: 600px;
+    }
+    
+    .stats {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <h1>Enhanced Hero Component - Standalone Demo</h1>
+    <div class="variant-buttons">
+      <button class="variant-btn active" data-variant="default">Default</button>
+      <button class="variant-btn" data-variant="split">Split</button>
+      <button class="variant-btn" data-variant="fullscreen">Fullscreen</button>
+      <button class="variant-btn" data-variant="gradient">Gradient</button>
+      <button class="variant-btn" data-variant="minimal">Minimal</button>
+      <button class="variant-btn" data-variant="animated">Animated</button>
+    </div>
+  </div>
+  
+  <div class="demo-container">
+    <hero-section id="hero"></hero-section>
+  </div>
+  
+  <div class="stats">
+    <div>Render: <span id="render-time">0ms</span></div>
+    <div>Update: <span id="update-time">0ms</span></div>
+  </div>
+
+  <script>
+    // Base Component (simplified inline version)
+    class BaseComponent extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.state = {};
+      }
+      
+      connectedCallback() {
+        this.render();
+      }
+      
+      render() {
+        const template = this._render();
+        const styles = this._styles();
+        this.shadowRoot.innerHTML = `
+          <style>${styles}</style>
+          ${template}
+        `;
+      }
+      
+      requestUpdate() {
+        this.render();
+      }
+      
+      _render() {
+        return '';
+      }
+      
+      _styles() {
+        return '';
+      }
+    }
+    
+    // Enhanced Component
+    class EnhancedComponent extends BaseComponent {
+      static variants = {};
+      
+      constructor(config = {}) {
+        super();
+        this.config = {
+          variant: 'default',
+          ...config
+        };
+      }
+      
+      updateVariant(variantName) {
+        this.config.variant = variantName;
+        this.setAttribute('data-variant', variantName);
+        this.requestUpdate();
+      }
+      
+      updateContent(content) {
+        Object.assign(this.state, content);
+        this.requestUpdate();
+      }
+    }
+    
+    // Hero Section Component
+    class HeroSection extends EnhancedComponent {
+      constructor() {
+        super({
+          variant: 'default'
+        });
+        
+        this.state = {
+          title: 'Build Faster with Framework v2',
+          subtitle: 'Zero dependencies, maximum performance. Create stunning web experiences.',
+          primaryAction: { text: 'Get Started', href: '#' },
+          secondaryAction: { text: 'Learn More', href: '#' }
+        };
+      }
+      
+      _render() {
+        const variant = this.config.variant;
+        
+        switch(variant) {
+          case 'split':
+            return this.renderSplit();
+          case 'fullscreen':
+            return this.renderFullscreen();
+          case 'gradient':
+            return this.renderGradient();
+          case 'minimal':
+            return this.renderMinimal();
+          case 'animated':
+            return this.renderAnimated();
+          default:
+            return this.renderDefault();
+        }
+      }
+      
+      renderDefault() {
+        return `
+          <div class="hero-container">
+            <div class="hero-content">
+              <h1 class="hero-title">${this.state.title}</h1>
+              <p class="hero-subtitle">${this.state.subtitle}</p>
+              <div class="hero-actions">
+                <a href="${this.state.primaryAction.href}" class="hero-btn hero-btn-primary">
+                  ${this.state.primaryAction.text}
+                </a>
+                <a href="${this.state.secondaryAction.href}" class="hero-btn hero-btn-secondary">
+                  ${this.state.secondaryAction.text}
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      
+      renderSplit() {
+        return `
+          <div class="hero-container hero-split">
+            <div class="hero-content-section">
+              <h1 class="hero-title">${this.state.title}</h1>
+              <p class="hero-subtitle">${this.state.subtitle}</p>
+              <div class="hero-actions">
+                <a href="${this.state.primaryAction.href}" class="hero-btn hero-btn-primary">
+                  ${this.state.primaryAction.text}
+                </a>
+              </div>
+            </div>
+            <div class="hero-media-section">
+              <div class="hero-image-placeholder"></div>
+            </div>
+          </div>
+        `;
+      }
+      
+      renderFullscreen() {
+        return `
+          <div class="hero-container hero-fullscreen">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <h1 class="hero-title hero-title-large">${this.state.title}</h1>
+              <p class="hero-subtitle">${this.state.subtitle}</p>
+              <div class="hero-actions">
+                <a href="${this.state.primaryAction.href}" class="hero-btn hero-btn-primary">
+                  ${this.state.primaryAction.text}
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      
+      renderGradient() {
+        return `
+          <div class="hero-container hero-gradient">
+            <div class="hero-gradient-bg"></div>
+            <div class="hero-content">
+              <h1 class="hero-title">${this.state.title}</h1>
+              <p class="hero-subtitle">${this.state.subtitle}</p>
+              <div class="hero-actions">
+                <a href="${this.state.primaryAction.href}" class="hero-btn hero-btn-primary">
+                  ${this.state.primaryAction.text}
+                </a>
+                <a href="${this.state.secondaryAction.href}" class="hero-btn hero-btn-secondary">
+                  ${this.state.secondaryAction.text}
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      
+      renderMinimal() {
+        return `
+          <div class="hero-container hero-minimal">
+            <h1 class="hero-title hero-title-minimal">${this.state.title}</h1>
+            <p class="hero-subtitle hero-subtitle-minimal">${this.state.subtitle}</p>
+            <div class="hero-actions hero-actions-minimal">
+              <a href="${this.state.primaryAction.href}" class="hero-btn hero-btn-primary">
+                ${this.state.primaryAction.text}
+              </a>
+            </div>
+          </div>
+        `;
+      }
+      
+      renderAnimated() {
+        return `
+          <div class="hero-container hero-animated">
+            <div class="hero-content">
+              <h1 class="hero-title hero-animated-title">${this.state.title}</h1>
+              <p class="hero-subtitle hero-animated-subtitle">${this.state.subtitle}</p>
+              <div class="hero-actions hero-animated-actions">
+                <a href="${this.state.primaryAction.href}" class="hero-btn hero-btn-primary">
+                  ${this.state.primaryAction.text}
+                </a>
+              </div>
+            </div>
+            <div class="hero-shapes">
+              <div class="hero-shape hero-shape-1"></div>
+              <div class="hero-shape hero-shape-2"></div>
+            </div>
+          </div>
+        `;
+      }
+      
+      _styles() {
+        return `
+          :host {
+            display: block;
+            width: 100%;
+          }
+          
+          .hero-container {
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .hero-content {
+            text-align: center;
+            max-width: 800px;
+            z-index: 2;
+            position: relative;
+          }
+          
+          .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+          }
+          
+          .hero-subtitle {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: #666;
+          }
+          
+          .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+          }
+          
+          .hero-btn {
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+          }
+          
+          .hero-btn-primary {
+            background: #3b82f6;
+            color: white;
+          }
+          
+          .hero-btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+          }
+          
+          .hero-btn-secondary {
+            background: transparent;
+            color: #3b82f6;
+            border: 2px solid currentColor;
+          }
+          
+          .hero-btn-secondary:hover {
+            background: #3b82f6;
+            color: white;
+          }
+          
+          /* Split variant */
+          .hero-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+          }
+          
+          .hero-split .hero-content-section {
+            text-align: left;
+          }
+          
+          .hero-split .hero-actions {
+            justify-content: flex-start;
+          }
+          
+          .hero-image-placeholder {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+            border-radius: 1rem;
+          }
+          
+          /* Fullscreen variant */
+          .hero-fullscreen {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e293b, #334155);
+          }
+          
+          .hero-fullscreen .hero-title,
+          .hero-fullscreen .hero-subtitle {
+            color: white;
+          }
+          
+          .hero-title-large {
+            font-size: 4rem;
+          }
+          
+          /* Gradient variant */
+          .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          }
+          
+          .hero-gradient .hero-title,
+          .hero-gradient .hero-subtitle {
+            color: white;
+          }
+          
+          /* Minimal variant */
+          .hero-minimal {
+            min-height: 400px;
+            padding: 6rem 2rem;
+          }
+          
+          .hero-title-minimal {
+            font-size: 2.5rem;
+            font-weight: 400;
+          }
+          
+          /* Animated variant */
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .hero-animated-title {
+            animation: fadeInUp 0.8s ease-out;
+          }
+          
+          .hero-animated-subtitle {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+          }
+          
+          .hero-animated-actions {
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+          }
+          
+          .hero-shapes {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 1;
+          }
+          
+          .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.5;
+          }
+          
+          .hero-shape-1 {
+            width: 400px;
+            height: 400px;
+            background: #3b82f6;
+            top: -200px;
+            right: -100px;
+          }
+          
+          .hero-shape-2 {
+            width: 300px;
+            height: 300px;
+            background: #8b5cf6;
+            bottom: -150px;
+            left: -100px;
+          }
+          
+          @media (max-width: 768px) {
+            .hero-title {
+              font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+              font-size: 1.125rem;
+            }
+            
+            .hero-split {
+              grid-template-columns: 1fr;
+              text-align: center;
+            }
+            
+            .hero-split .hero-actions {
+              justify-content: center;
+            }
+          }
+        `;
+      }
+    }
+    
+    // Register component
+    customElements.define('hero-section', HeroSection);
+    
+    // Demo functionality
+    const hero = document.getElementById('hero');
+    const buttons = document.querySelectorAll('.variant-btn');
+    const renderTime = document.getElementById('render-time');
+    const updateTime = document.getElementById('update-time');
+    
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const start = performance.now();
+        hero.updateVariant(btn.dataset.variant);
+        requestAnimationFrame(() => {
+          const end = performance.now();
+          updateTime.textContent = `${(end - start).toFixed(2)}ms`;
+        });
+      });
+    });
+    
+    // Initial render time
+    const start = performance.now();
+    requestAnimationFrame(() => {
+      const end = performance.now();
+      renderTime.textContent = `${(end - start).toFixed(2)}ms`;
+    });
+    
+    // Demo content updates
+    const demoContent = {
+      default: {
+        title: 'Build Faster with Framework v2',
+        subtitle: 'Zero dependencies, maximum performance.'
+      },
+      split: {
+        title: 'Split Layout for Products',
+        subtitle: 'Perfect for showcasing features alongside visuals.'
+      },
+      fullscreen: {
+        title: 'Make a Bold Statement',
+        subtitle: 'Full viewport heroes that capture attention.'
+      },
+      gradient: {
+        title: 'Beautiful Gradients',
+        subtitle: 'Modern, colorful backgrounds that pop.'
+      },
+      minimal: {
+        title: 'Less is More',
+        subtitle: 'Clean, focused, impactful.'
+      },
+      animated: {
+        title: 'Smooth Animations',
+        subtitle: 'Delight users with polished motion.'
+      }
+    };
+    
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const variant = btn.dataset.variant;
+        if (demoContent[variant]) {
+          hero.updateContent(demoContent[variant]);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

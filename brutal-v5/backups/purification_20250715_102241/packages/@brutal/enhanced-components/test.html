@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Enhanced Components Test</title>
+</head>
+<body>
+  <div id="test-container"></div>
+  <div id="modal"></div>
+
+  <script type="module">
+    import * as BrutalEnhanced from './src/index.ts';
+    
+    // Make components available globally for tests
+    window.BrutalEnhanced = BrutalEnhanced;
+    
+    // Log what's available
+    console.log('BrutalEnhanced loaded:', BrutalEnhanced);
+  </script>
+</body>
+</html>

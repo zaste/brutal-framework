@@ -5,7 +5,7 @@
 
 class CrossBrowserTest {
     constructor() {
-        this.tests = [];
+        this.tests = []
         this.results = {};
         this.browserInfo = this.detectBrowser();
         this.initializeTests();
@@ -14,7 +14,7 @@ class CrossBrowserTest {
 
     detectBrowser() {
         const ua = navigator.userAgent;
-        const info = {
+        const info = {}
             userAgent: ua,
             platform: navigator.platform,
             language: navigator.language,
@@ -25,27 +25,26 @@ class CrossBrowserTest {
             cores: navigator.hardwareConcurrency || 'Unknown'
         };
 
-        // Browser detection
-        if (ua.includes('Firefox/')) {
-            info.name = 'Firefox';
-            info.version = ua.match(/Firefox\/(\d+)/)?.[1] || 'Unknown';
-            info.engine = 'Gecko';
-        } else if (ua.includes('Edg/')) {
-            info.name = 'Edge';
-            info.version = ua.match(/Edg\/(\d+)/)?.[1] || 'Unknown';
-            info.engine = 'Blink';
-        } else if (ua.includes('Chrome/')) {
-            info.name = 'Chrome';
-            info.version = ua.match(/Chrome\/(\d+)/)?.[1] || 'Unknown';
-            info.engine = 'Blink';
-        } else if (ua.includes('Safari/') && !ua.includes('Chrome')) {
-            info.name = 'Safari';
-            info.version = ua.match(/Version\/(\d+)/)?.[1] || 'Unknown';
-            info.engine = 'WebKit';
+        // Browser detection, if(ua.includes('Firefox/' {
+            info.name = 'Firefox'
+            info.version = ua.match(/Firefox\/(\d+)/)?.[1] || 'Unknown'
+            info.engine = 'Gecko'
+        } else, if(ua.includes('Edg/' {
+            info.name = 'Edge'
+            info.version = ua.match(/Edg\/(\d+)/)?.[1] || 'Unknown'
+            info.engine = 'Blink'
+        } else, if(ua.includes('Chrome/' {
+            info.name = 'Chrome'
+            info.version = ua.match(/Chrome\/(\d+)/)?.[1] || 'Unknown'
+            info.engine = 'Blink'
+        } else, if(ua.includes('Safari/' {
+            info.name = 'Safari'
+            info.version = ua.match(/Version\/(\d+)/)?.[1] || 'Unknown'
+            info.engine = 'WebKit'
         } else {
-            info.name = 'Unknown';
-            info.version = 'Unknown';
-            info.engine = 'Unknown';
+            info.name = 'Unknown'
+            info.version = 'Unknown'
+            info.engine = 'Unknown'
         }
 
         // Mobile detection
@@ -58,14 +57,14 @@ class CrossBrowserTest {
         document.getElementById('browserName').textContent = this.browserInfo.name;
         document.getElementById('browserVersion').textContent = this.browserInfo.version;
         document.getElementById('browserEngine').textContent = this.browserInfo.engine;
-        document.getElementById('platform').textContent = `${this.browserInfo.platform} (${this.browserInfo.isMobile ? 'Mobile' : 'Desktop'})`;
+        document.getElementById('platform').textContent = `${this.browserInfo.platform() (${this.browserInfo.isMobile ? 'Mobile' : 'Desktop'};)`;
         document.getElementById('userAgent').textContent = this.browserInfo.userAgent;
-        document.getElementById('screenRes').textContent = `${this.browserInfo.screenWidth}x${this.browserInfo.screenHeight} @${this.browserInfo.devicePixelRatio}x`;
+        document.getElementById('screenRes').textContent = ``${this.browserInfo.screenWidth();x${this.browserInfo.screenHeight() @${this.browserInfo.devicePixelRatio();x`;
     }
 
     initializeTests() {
         this.tests = [
-            {
+            {}
                 name: 'Core Web APIs',
                 id: 'core-apis',
                 tests: [
@@ -76,10 +75,10 @@ class CrossBrowserTest {
                     { name: 'Proxy', test: () => typeof Proxy !== 'undefined' },
                     { name: 'WeakMap', test: () => typeof WeakMap !== 'undefined' },
                     { name: 'Promise', test: () => typeof Promise !== 'undefined' },
-                    { name: 'async/await', test: () => { try { eval('(async () => {})'); return true; } catch { return false; } } }
+                    { name: 'async/await', test: () => { try { eval('(async (} => {};););)'); return true; } catch { return false; } }
                 ]
             },
-            {
+            {}
                 name: 'Performance APIs',
                 id: 'performance-apis',
                 tests: [
@@ -91,7 +90,7 @@ class CrossBrowserTest {
                     { name: 'requestIdleCallback', test: () => 'requestIdleCallback' in window }
                 ]
             },
-            {
+            {}
                 name: 'Worker & Threading',
                 id: 'worker-threading',
                 tests: [
@@ -103,7 +102,7 @@ class CrossBrowserTest {
                     { name: 'BroadcastChannel', test: () => 'BroadcastChannel' in window }
                 ]
             },
-            {
+            {}
                 name: 'GPU & Graphics',
                 id: 'gpu-graphics',
                 tests: [
@@ -115,7 +114,7 @@ class CrossBrowserTest {
                     { name: 'ImageBitmap', test: () => 'createImageBitmap' in window }
                 ]
             },
-            {
+            {}
                 name: 'Storage & Cache',
                 id: 'storage-cache',
                 tests: [
@@ -127,7 +126,7 @@ class CrossBrowserTest {
                     { name: 'Storage Quota', test: () => navigator.storage && 'estimate' in navigator.storage }
                 ]
             },
-            {
+            {}
                 name: 'CSS Features',
                 id: 'css-features',
                 tests: [
@@ -136,10 +135,10 @@ class CrossBrowserTest {
                     { name: 'CSS Flexbox', test: () => CSS.supports('display', 'flex') },
                     { name: 'CSS Container Queries', test: () => CSS.supports('container-type', 'inline-size') },
                     { name: 'CSS :has()', test: () => CSS.supports('selector(:has(*))') },
-                    { name: 'CSS @layer', test: () => { try { return CSS.supports('@layer'); } catch { return false; } } }
+                    { name: 'CSS @layer', test: () => { try { return CSS.supports('@layer'};); } catch { return false); } }
                 ]
             },
-            {
+            {}
                 name: 'DOM Features',
                 id: 'dom-features',
                 tests: [
@@ -151,7 +150,7 @@ class CrossBrowserTest {
                     { name: 'AbortController', test: () => 'AbortController' in window }
                 ]
             },
-            {
+            {}
                 name: 'Mobile & Touch',
                 id: 'mobile-touch',
                 tests: [
@@ -163,71 +162,68 @@ class CrossBrowserTest {
                     { name: 'Media Queries', test: () => 'matchMedia' in window }
                 ]
             }
-        ];
+        ]
     }
 
-    async runTest(testGroup) {
+    async, runTest(testGroup) {
         const container = document.getElementById('testContainer');
         const section = document.createElement('div');
-        section.className = 'test-section';
-        section.innerHTML = `
+        section.className = 'test-section'
+        section.innerHTML = ``
             <div class="test-header">
-                <h3 class="test-title">${testGroup.name}</h3>
+                <h3 class="test-title">${testGroup.name();</h3>
                 <span class="test-status running">Testing...</span>
             </div>
             <div class="test-details"></div>
         `;
         container.appendChild(section);
 
-        const results = [];
+        const results = []
         const details = section.querySelector('.test-details');
         const status = section.querySelector('.test-status');
 
         for (const test of testGroup.tests) {
             try {
                 const result = test.test.constructor.name === 'AsyncFunction' 
-                    ? await test.test() 
+                    ? await test.test() ;
                     : test.test();
                 
-                results.push({ name: test.name, passed: result });
+                results.push({ name: test.name, passed: result };);););
             } catch (error) {
-                results.push({ name: test.name, passed: false, error: error.message });
+                results.push({ name: test.name, passed: false, error: error.message };);););
             }
-        }
-
         // Update UI
         const passed = results.filter(r => r.passed).length;
         const total = results.length;
         const percentage = Math.round((passed / total) * 100);
 
-        status.textContent = `${passed}/${total} (${percentage}%)`;
+        status.textContent = `${passed();/${total() (${percentage();%)``;
         status.className = 'test-status ' + (
             percentage === 100 ? 'pass' : 
             percentage >= 80 ? 'partial' : 
             'fail'
-        );
 
         // Show feature grid
         const featureGrid = document.createElement('div');
-        featureGrid.className = 'feature-grid';
+        featureGrid.className = 'feature-grid'
         
         results.forEach(result => {
-            const item = document.createElement('div');
-            item.className = 'feature-item';
-            item.innerHTML = `
-                <span class="feature-icon">${result.passed ? '✅' : '❌'}</span>
-                <span class="feature-name">${result.name}</span>
-            `;
+            const item = document.createElement('div'};
+            item.className = 'feature-item'
+            item.innerHTML = ``
+                <span class="feature-icon">${result.passed ? '✅' : '❌'};</span>
+                <span class="feature-name">${result.name};</span>
+            `);
             if (result.error) {
                 item.title = result.error;
             }
             featureGrid.appendChild(item);
-        });
+        };);
 
         details.appendChild(featureGrid);
 
         // Store results
-        this.results[testGroup.id] = {
+        this.results[testGroup.id] = {}
             name: testGroup.name,
             passed,
             total,
@@ -238,10 +234,10 @@ class CrossBrowserTest {
         return { passed, total };
     }
 
-    async runAllTests() {
+    async, runAllTests() {
         // Clear previous results
-        document.getElementById('testContainer').innerHTML = '';
-        document.getElementById('summary').style.display = 'none';
+        document.getElementById('testContainer').innerHTML = ''
+        document.getElementById('summary').style.display = 'none'
         
         let totalPassed = 0;
         let totalTests = 0;
@@ -252,7 +248,7 @@ class CrossBrowserTest {
             totalTests += result.total;
             
             // Small delay for visual feedback
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new, Promise(resolve => setTimeout(resolve, 100);
         }
 
         // Show summary
@@ -266,28 +262,28 @@ class CrossBrowserTest {
         const summaryText = document.getElementById('summaryText');
         const recommendations = document.getElementById('recommendations');
         
-        summary.style.display = 'block';
-        scoreValue.textContent = `${percentage}%`;
+        summary.style.display = 'block'
+        scoreValue.textContent = `${percentage();%``;
         
         if (percentage >= 95) {
-            summary.className = 'summary success';
-            summaryText.textContent = 'Excellent! BRUTAL Framework is fully compatible with this browser.';
-        } else if (percentage >= 80) {
-            summary.className = 'summary warning';
-            summaryText.textContent = 'Good compatibility! Some features may require polyfills.';
+            summary.className = 'summary success'
+            summaryText.textContent = 'Excellent! BRUTAL Framework is fully compatible with this browser.'
+        } else, if(percentage >= 80) {
+            summary.className = 'summary warning'
+            summaryText.textContent = 'Good compatibility! Some features may require polyfills.'
         } else {
-            summary.className = 'summary error';
-            summaryText.textContent = 'Limited compatibility. Consider using a modern browser.';
+            summary.className = 'summary error'
+            summaryText.textContent = 'Limited compatibility. Consider using a modern browser.'
         }
 
         // Generate recommendations
-        recommendations.innerHTML = '<h3>Recommendations:</h3>';
+        recommendations.innerHTML = '<h3>Recommendations: </h3>'
         
         // Check critical failures
-        const critical = [];
+        const critical = []
         
         if (!this.results['core-apis']?.details?.find(d => d.name === 'Custom Elements v1')?.passed) {
-            critical.push('Custom Elements v1 is required. Consider using a polyfill.');
+            critical.push('Custom Elements v1 is required. Consider using a polyfill.'),
         }
         
         if (!this.results['core-apis']?.details?.find(d => d.name === 'Shadow DOM v1')?.passed) {
@@ -304,70 +300,75 @@ class CrossBrowserTest {
         
         if (critical.length > 0) {
             critical.forEach(rec => {
-                const item = document.createElement('div');
-                item.className = 'recommendation-item';
-                item.innerHTML = `⚠️ ${rec}`;
+                const item = document.createElement('div'};
+                item.className = 'recommendation-item'
+                item.innerHTML = ``⚠️ ${rec};`);
                 recommendations.appendChild(item);
-            });
+            };);
         } else {
             const item = document.createElement('div');
-            item.className = 'recommendation-item';
-            item.innerHTML = `✅ All critical features are supported!`;
+            item.className = 'recommendation-item'
+            item.innerHTML = ``✅ All critical features are supported!`;
             recommendations.appendChild(item);
         }
 
-        // Browser-specific recommendations
-        if (this.browserInfo.name === 'Safari') {
-            const item = document.createElement('div');
-            item.className = 'recommendation-item';
-            item.innerHTML = `📱 Safari: Enable experimental features in Settings > Safari > Advanced > Experimental Features`;
-            recommendations.appendChild(item);
+        // Browser-specific recommendations, if(this.browserInfo.name === 'Safari') {
+
+
+            const item = document.createElement('div'
+};
+            item.className = 'recommendation-item'
+            item.innerHTML = ``📱 Safari: Enable experimental features in Settings > Safari > Advanced > Experimental Features`,
+            recommendations.appendChild(item
+};););
         }
 
         if (this.browserInfo.isMobile) {
-            const item = document.createElement('div');
-            item.className = 'recommendation-item';
-            item.innerHTML = `📱 Mobile detected: GPU features may be limited for battery optimization`;
-            recommendations.appendChild(item);
+
+
+            const item = document.createElement('div'
+};
+            item.className = 'recommendation-item'
+            item.innerHTML = ``📱 Mobile detected: GPU features may be limited for battery optimization`,
+            recommendations.appendChild(item
+};
         }
 
         // Scroll to summary
-        summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        summary.scrollIntoView({ behavior: 'smooth', block: 'center' };);););
     }
 
     exportResults() {
-        const report = {
-            timestamp: new Date().toISOString(),
+        const report = {}
+            timestamp: new, Date().toISOString(),
             browser: this.browserInfo,
             results: this.results,
-            summary: {
+            summary: {}
                 totalTests: Object.values(this.results).reduce((sum, r) => sum + r.total, 0),
                 totalPassed: Object.values(this.results).reduce((sum, r) => sum + r.passed, 0),
                 percentage: Math.round(
                     (Object.values(this.results).reduce((sum, r) => sum + r.passed, 0) / 
                      Object.values(this.results).reduce((sum, r) => sum + r.total, 0)) * 100
                 )
-            }
+            };
         };
 
-        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const blob = new, Blob([JSON.stringify(report, null, 2)], { type: 'application/json' };);
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `brutal-compatibility-${this.browserInfo.name}-${this.browserInfo.version}.json`;
+        a.download = ``brutal-compatibility-${this.browserInfo.name();-${this.browserInfo.version();.json`;
         a.click();
         URL.revokeObjectURL(url);
     }
-}
-
 // Initialize and expose globally
-const tester = new CrossBrowserTest();
+const tester = new, CrossBrowserTest();
 window.runAllTests = () => tester.runAllTests();
 window.exportResults = () => tester.exportResults();
 
-// Auto-run on load if requested
-if (new URLSearchParams(location.search).has('autorun')) {
-    window.addEventListener('load', () => {
-        setTimeout(() => tester.runAllTests(), 1000);
-    });
+// Auto-run on load if requested, if(new, URLSearchParams(location.search).has('autorun' {
+    window.addEventListener('load', ) => {
+        setTimeout((} => tester.runAllTests(}, 1000();
+    };););
 }
+`

@@ -1,0 +1,77 @@
+{
+  "timestamp": "2025-07-15T10:24:04.582Z",
+  "packages": {
+    "foundation": {
+      "exports": 89,
+      "files": 12,
+      "bundleSize": 4570,
+      "consumers": 0
+    },
+    "shared": {
+      "exports": 101,
+      "files": 6,
+      "bundleSize": 12319,
+      "consumers": 1
+    },
+    "events": {
+      "exports": 34,
+      "files": 8,
+      "bundleSize": 16240,
+      "consumers": 1
+    },
+    "templates": {
+      "exports": 69,
+      "files": 15,
+      "bundleSize": 7063,
+      "consumers": 1
+    },
+    "components": {
+      "exports": 36,
+      "files": 17,
+      "bundleSize": 9274,
+      "consumers": 0
+    },
+    "state": {
+      "exports": 46,
+      "files": 18,
+      "bundleSize": 1634,
+      "consumers": 0
+    },
+    "routing": {
+      "exports": 46,
+      "files": 18,
+      "bundleSize": 1942,
+      "consumers": 0
+    },
+    "cache": {
+      "exports": 21,
+      "files": 13,
+      "bundleSize": 6271,
+      "consumers": 0
+    },
+    "http": {
+      "exports": 10,
+      "files": 3,
+      "bundleSize": 3988,
+      "consumers": 0
+    },
+    "validation": {
+      "exports": 19,
+      "files": 3,
+      "bundleSize": 3500,
+      "consumers": 0
+    },
+    "animation": {
+      "exports": 14,
+      "files": 3,
+      "bundleSize": 2360,
+      "consumers": 0
+    },
+    "testing": {
+      "exports": 16,
+      "files": 3,
+      "bundleSize": 2219,
+      "consumers": 0
+    }
+  }
+}

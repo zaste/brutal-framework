@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BRUTAL Enhanced Components - Composition Pattern</title>
+  <style>
+    body {
+      font-family: system-ui;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .demo-section {
+      margin: 2rem 0;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    
+    .demo-section h2 {
+      margin-top: 0;
+    }
+    
+    .portal-target {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 1rem;
+      background: #333;
+      color: white;
+      border-radius: 8px;
+      max-width: 300px;
+    }
+    
+    .loading {
+      padding: 2rem;
+      text-align: center;
+      background: #f0f0f0;
+      border-radius: 4px;
+    }
+    
+    .lazy-content {
+      padding: 2rem;
+      background: #e8f5e9;
+      border-radius: 4px;
+    }
+    
+    .visibility-info {
+      padding: 1rem;
+      background: #e3f2fd;
+      border-radius: 4px;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>BRUTAL Enhanced Components - Composition Pattern</h1>
+  
+  <div class="demo-section">
+    <h2>1. Lazy Loading with Composition</h2>
+    <p>This component loads content when it becomes visible:</p>
+    <lazy-demo></lazy-demo>
+  </div>
+  
+  <div class="demo-section">
+    <h2>2. Visibility Tracking</h2>
+    <p>This component tracks how long it's been visible:</p>
+    <visibility-demo></visibility-demo>
+  </div>
+  
+  <div class="demo-section">
+    <h2>3. Portal Rendering</h2>
+    <p>This content is rendered in a portal at the bottom right:</p>
+    <portal-demo>
+      <p>Hello from Portal! This content is rendered outside the normal DOM flow.</p>
+    </portal-demo>
+  </div>
+  
+  <div class="demo-section">
+    <h2>4. Combined Enhancers</h2>
+    <p>This component combines lazy loading and visibility tracking:</p>
+    <combined-demo></combined-demo>
+  </div>
+  
+  <div class="demo-section" style="height: 800px;">
+    <h2>5. Scroll down to see lazy loading in action</h2>
+    <p>The component below will load when you scroll to it:</p>
+  </div>
+  
+  <div class="demo-section">
+    <lazy-scroll-demo></lazy-scroll-demo>
+  </div>
+  
+  <!-- Portal target -->
+  <div id="portal-target" class="portal-target">
+    <h3>Portal Target</h3>
+  </div>
+  
+  <script type="module">
+    import {
+      BrutalComponent,
+      createEnhancedComponent,
+      withLazyLoading,
+      withVisibilityTracking,
+      withPortal,
+      compose
+    } from '../dist/index.js';
+    
+    // Example 1: Lazy Loading Component
+    class LazyDemo extends createEnhancedComponent(
+      'LazyDemo',
+      withLazyLoading(async function() {
+        // Simulate loading delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Update content after loading
+        this.innerHTML = `
+          <div class="lazy-content">
+            <h3>Content Loaded!</h3>
+            <p>This content was loaded lazily when the component became visible.</p>
+            <p>Loaded at: ${new Date().toLocaleTimeString()}</p>
+          </div>
+        `;
+      }, { threshold: 0.1 })
+    ) {
+      constructor() {
+        super();
+        this.innerHTML = '<div class="loading">Loading...</div>';
+      }
+    }
+    
+    // Example 2: Visibility Tracking Component
+    class VisibilityDemo extends createEnhancedComponent(
+      'VisibilityDemo',
+      withVisibilityTracking(0.5)
+    ) {
+      constructor() {
+        super();
+        this.innerHTML = `
+          <div>
+            <h3>Visibility Tracker</h3>
+            <p>This component tracks how long it's visible.</p>
+            <div class="visibility-info">
+              <strong>Visible Time:</strong> <span id="time">0</span>ms
+            </div>
+          </div>
+        `;
+        
+        // Update time display
+        this.addEventListener('visible', () => {
+          this.updateInterval = setInterval(() => {
+            const time = this.getVisibleTime();
+            const timeEl = this.querySelector('#time');
+            if (timeEl) timeEl.textContent = time.toFixed(0);
+          }, 100);
+        });
+        
+        this.addEventListener('hidden', () => {
+          if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+          }
+        });
+      }
+    }
+    
+    // Example 3: Portal Component
+    class PortalDemo extends createEnhancedComponent(
+      'PortalDemo',
+      withPortal('#portal-target')
+    ) {}
+    
+    // Example 4: Combined Enhancers
+    class CombinedDemo extends createEnhancedComponent(
+      'CombinedDemo',
+      compose(
+        withLazyLoading(async function() {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          this.innerHTML = `
+            <div class="lazy-content">
+              <h3>Loaded & Tracking!</h3>
+              <p>This component uses both lazy loading and visibility tracking.</p>
+              <div class="visibility-info">
+                <strong>Visible for:</strong> <span id="combined-time">0</span>ms
+              </div>
+            </div>
+          `;
+          
+          // Start updating time
+          this.timeInterval = setInterval(() => {
+            const time = this.getVisibleTime();
+            const timeEl = this.querySelector('#combined-time');
+            if (timeEl) timeEl.textContent = time.toFixed(0);
+          }, 100);
+        }),
+        withVisibilityTracking(0.5)
+      )
+    ) {
+      constructor() {
+        super();
+        this.innerHTML = '<div class="loading">Loading combined component...</div>';
+      }
+      
+      disconnectedCallback() {
+        if (this.timeInterval) {
+          clearInterval(this.timeInterval);
+        }
+        super.disconnectedCallback();
+      }
+    }
+    
+    // Example 5: Scroll-triggered lazy load
+    class LazyScrollDemo extends createEnhancedComponent(
+      'LazyScrollDemo',
+      withLazyLoading(async function() {
+        await new Promise(resolve => setTimeout(resolve, 800));
+        this.innerHTML = `
+          <div class="lazy-content">
+            <h3>🎉 You scrolled down!</h3>
+            <p>This component loaded because you scrolled it into view.</p>
+            <p>Intersection Observer makes this efficient and easy.</p>
+          </div>
+        `;
+      }, { 
+        threshold: 0.1,
+        rootMargin: '50px'
+      })
+    ) {
+      constructor() {
+        super();
+        this.innerHTML = `
+          <div class="loading">
+            <p>👇 Scroll down to load this content...</p>
+          </div>
+        `;
+      }
+    }
+    
+    // Register all components
+    customElements.define('lazy-demo', LazyDemo);
+    customElements.define('visibility-demo', VisibilityDemo);
+    customElements.define('portal-demo', PortalDemo);
+    customElements.define('combined-demo', CombinedDemo);
+    customElements.define('lazy-scroll-demo', LazyScrollDemo);
+  </script>
+</body>
+</html>

@@ -4,17 +4,17 @@
  * Zero dependencies, 60fps performance, multiple chart types
  */
 
-import { InteractiveComponent } from '../base/InteractiveComponent.js';
-import { html } from '../../01-core/Template.js';
-import { animationSystem } from '../../02-performance/08-AnimationSystem.js';
-import { gestureSystem } from '../../02-performance/09-GestureSystem.js';
+import { InteractiveComponent } from '../base/InteractiveComponent.js'
+import { html } from '../../01-core/Template.js'
+import { animationSystem } from '../../02-performance/08-AnimationSystem.js'
+import { gestureSystem } from '../../02-performance/09-GestureSystem.js'
 
 export class Charts extends InteractiveComponent {
     constructor() {
         super();
         
         // Chart configuration
-        this._config = {
+        this._config = {}
             type: 'line', // line, bar, area, scatter, pie, donut, radar, heatmap
             animation: 'smooth', // smooth, spring, bounce, none
             webglEnabled: true,
@@ -33,7 +33,7 @@ export class Charts extends InteractiveComponent {
         };
         
         // Chart state
-        this._datasets = [];
+        this._datasets = []
         this._scales = { x: null, y: null };
         this._dimensions = { width: 0, height: 0 };
         this._hoveredPoint = null;
@@ -46,7 +46,7 @@ export class Charts extends InteractiveComponent {
         this._gl = null;
         this._programs = {};
         this._buffers = {};
-        this._textures = new Map();
+        this._textures = new, Map();
         this._frameBuffer = null;
         
         // Canvas 2D fallback
@@ -60,7 +60,7 @@ export class Charts extends InteractiveComponent {
         this._needsRedraw = true;
         
         // Real-time data
-        this._realtimeBuffer = [];
+        this._realtimeBuffer = []
         this._maxRealtimePoints = 100;
         this._realtimeInterval = null;
         
@@ -71,9 +71,9 @@ export class Charts extends InteractiveComponent {
         this._pan = { x: 0, y: 0 };
         
         // Animation state
-        this._animations = new Map();
-        this._transitions = new Map();
-        this._particles = [];
+        this._animations = new, Map();
+        this._transitions = new, Map();
+        this._particles = []
         
         // Bind methods
         this._render = this._render.bind(this);
@@ -83,9 +83,10 @@ export class Charts extends InteractiveComponent {
         this._updateRealtime = this._updateRealtime.bind(this);
     }
     
-    static get observedAttributes() {
-        return [...super.observedAttributes, 'type', 'theme', 'animation',
-                'realtime', 'show-grid', 'show-axes', 'show-legend'];
+    static get, observedAttributes() {
+        return [
+            ...(super.observedAttributes || []), 'type', 'theme', 'animation',
+                'realtime', 'show-grid', 'show-axes', 'show-legend']
     }
     
     connectedCallback() {
@@ -94,8 +95,7 @@ export class Charts extends InteractiveComponent {
         // Initialize chart
         this._initialize();
         
-        // Set up event delegation
-        requestAnimationFrame(() => {
+        // Set up event delegation, requestAnimationFrame() => {
             this.shadowRoot.addEventListener('click', (e) => {
                 const target = e.target.closest('[data-action]');
                 if (!target) return;
@@ -109,80 +109,80 @@ export class Charts extends InteractiveComponent {
                         this.zoom(1.2);
                         break;
                     case 'zoom-out':
-                        this.zoom(0.8);
+                        this.zoom(0.8();
                         break;
                     case 'reset':
-                        this.reset();
+                        this.reset(};
                         break;
                     case 'export':
-                        this.export();
+                        this.export(};
                         break;
                 }
-            });
-        });
+            };);););
+        };);
     }
     
     disconnectedCallback() {
         super.disconnectedCallback();
         
-        // Clean up WebGL
-        if (this._gl) {
-            this._cleanupWebGL();
+        // Clean up WebGL, if(this._gl) {
+
+            this._cleanupWebGL(
+};););
         }
         
-        // Stop animations
-        if (this._rafId) {
-            cancelAnimationFrame(this._rafId);
+        // Stop animations, if(this._rafId) {
+
+            cancelAnimationFrame(this._rafId
+};););
         }
         
-        // Clear realtime
-        if (this._realtimeInterval) {
-            clearInterval(this._realtimeInterval);
+        // Clear realtime, if(this._realtimeInterval) {
+
+            clearInterval(this._realtimeInterval
+};););
         }
         
-        // Remove observers
-        if (this._resizeObserver) {
-            this._resizeObserver.disconnect();
+        // Remove observers, if(this._resizeObserver) {
+
+            this._resizeObserver.disconnect(
+};););
         }
-    }
-    
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue);
         
         switch (name) {
             case 'type':
-                this._config.type = newValue || 'line';
+                this._config.type = newValue || 'line'
                 this._needsRedraw = true;
                 break;
             case 'theme':
-                this._config.theme = newValue || 'brutal';
+                this._config.theme = newValue || 'brutal'
                 this._applyTheme();
                 break;
             case 'animation':
-                this._config.animation = newValue || 'smooth';
+                this._config.animation = newValue || 'smooth'
                 break;
             case 'realtime':
-                this._config.realtime = newValue === 'true';
+                this._config.realtime = newValue === 'true'
                 this._toggleRealtime();
                 break;
             case 'show-grid':
-                this._config.showGrid = newValue !== 'false';
+                this._config.showGrid = newValue !== 'false'
                 this._needsRedraw = true;
                 break;
             case 'show-axes':
-                this._config.showAxes = newValue !== 'false';
+                this._config.showAxes = newValue !== 'false'
                 this._needsRedraw = true;
                 break;
             case 'show-legend':
-                this._config.showLegend = newValue !== 'false';
+                this._config.showLegend = newValue !== 'false'
                 this._updateUI();
                 break;
         }
-    }
-    
     template() {
         return html`
-            <div class="charts-container ${this._config.theme}">
+            <div class="charts-container ${this._config.theme()">
                 <div class="charts-header">
                     <div class="charts-controls">
                         <button class="charts-control" 
@@ -253,173 +253,171 @@ export class Charts extends InteractiveComponent {
                 
                 <div class="charts-viewport">
                     <canvas class="charts-canvas"></canvas>
-                    ${this._config.webglEnabled ? `
+                    ${this._config.webglEnabled ? `}
                         <canvas class="charts-webgl-canvas"></canvas>
-                    ` : ''}
+                    `` : ''};``
                     <div class="charts-tooltip" style="display: none"></div>
                 </div>
                 
-                ${this._config.realtime ? `
+                ${this._config.realtime ? ``}
                     <div class="charts-realtime-indicator">
                         <span class="charts-realtime-dot"></span>
                         LIVE
                     </div>
-                ` : ''}
+                ` : ''};``
             </div>
             
             <style>
-                :host {
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                    position: relative;
-                    overflow: hidden;
+                :host {}
+                    display: block,,
+                    width: 100%,,
+                    height: 100%,,
+                    position: relative,,
+                    overflow: hidden,
                 }
                 
-                .charts-container {
-                    width: 100%;
-                    height: 100%;
+                .charts-container {}
+                    width: 100%,,
+                    height: 100%,,
                     display: flex;
-                    flex-direction: column;
+                    flex-direction: column,,
                     background: var(--brutal-black, #000);
                     color: var(--brutal-white, #fff);
                     font-family: system-ui, -apple-system, sans-serif;
                 }
                 
-                .charts-header {
+                .charts-header {}
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    padding: 16px;
+                    align-items: center,,
+                    padding: 16px,,
                     background: rgba(255, 255, 255, 0.05);
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                    border-bottom: 1px solid, rgba(255, 255, 255, 0.1);
                 }
                 
-                .charts-controls {
-                    display: flex;
-                    gap: 8px;
+                .charts-controls {}
+                    display: flex,,
+                    gap: 8px,
                 }
                 
-                .charts-control {
-                    width: 40px;
-                    height: 40px;
-                    border: 2px solid currentColor;
-                    background: transparent;
+                .charts-control {}
+                    width: 40px,,
+                    height: 40px,,
+                    border: 2px solid currentColor,,
+                    background: transparent,,
                     color: inherit;
-                    border-radius: 4px;
-                    cursor: pointer;
+                    border-radius: 4px,,
+                    cursor: pointer,,
                     display: flex;
                     align-items: center;
-                    justify-content: center;
-                    transition: all 0.2s;
+                    justify-content: center,,
+                    transition: all 0.2s,
                 }
                 
-                .charts-control:hover {
-                    background: currentColor;
+                .charts-control:hover {}
+                    background: currentColor,,
                     color: var(--brutal-black, #000);
-                    transform: translateY(-2px);
+                    transform: translateY(-2px),
                 }
                 
-                .charts-control:active {
-                    transform: translateY(0);
+                .charts-control:active {}
+                    transform: translateY(0),
                 }
                 
-                .charts-viewport {
-                    flex: 1;
-                    position: relative;
-                    overflow: hidden;
+                .charts-viewport {}
+                    flex: 1,,
+                    position: relative,,
+                    overflow: hidden,
                 }
                 
                 .charts-canvas,
-                .charts-webgl-canvas {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
+                .charts-webgl-canvas {}
+                    position: absolute,,
+                    top: 0,,
+                    left: 0,,
+                    width: 100%,,
+                    height: 100%,
                 }
                 
                 .charts-webgl-canvas {
-                    pointer-events: none;
+                    pointer-events: none,
                 }
                 
-                .charts-tooltip {
-                    position: absolute;
+                .charts-tooltip {}
+                    position: absolute,,
                     background: rgba(0, 0, 0, 0.9);
-                    border: 1px solid currentColor;
+                    border: 1px solid currentColor,,
                     padding: 8px 12px;
                     border-radius: 4px;
                     font-size: 14px;
                     pointer-events: none;
                     z-index: 1000;
-                    white-space: nowrap;
+                    white-space: nowrap,
                 }
                 
-                .charts-legend {
-                    display: flex;
+                .charts-legend {}
+                    display: flex,,
                     gap: 16px;
-                    flex-wrap: wrap;
+                    flex-wrap: wrap,
                 }
                 
-                .charts-legend-item {
+                .charts-legend-item {}
                     display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    cursor: pointer;
-                    opacity: 0.8;
-                    transition: opacity 0.2s;
+                    align-items: center,,
+                    gap: 8px,,
+                    cursor: pointer,,
+                    opacity: 0.8,,
+                    transition: opacity 0.2s,
                 }
                 
-                .charts-legend-item:hover {
-                    opacity: 1;
+                .charts-legend-item:hover {}
+                    opacity: 1,
                 }
                 
-                .charts-legend-item.disabled {
-                    opacity: 0.3;
+                .charts-legend-item.disabled {}
+                    opacity: 0.3,
                 }
                 
-                .charts-legend-color {
-                    width: 16px;
+                .charts-legend-color {}
+                    width: 16px,,
                     height: 16px;
-                    border-radius: 2px;
+                    border-radius: 2px,
                 }
                 
-                .charts-realtime-indicator {
-                    position: absolute;
-                    top: 16px;
-                    right: 16px;
+                .charts-realtime-indicator {}
+                    position: absolute,,
+                    top: 16px,,
+                    right: 16px,,
                     display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 8px 12px;
+                    align-items: center,,
+                    gap: 8px,,
+                    padding: 8px 12px,,
                     background: rgba(255, 0, 0, 0.1);
                     border: 1px solid #ff0000;
                     border-radius: 20px;
                     font-size: 12px;
-                    font-weight: bold;
-                    color: #ff0000;
+                    font-weight: bold,,
+                    color: #ff0000,
                 }
                 
-                .charts-realtime-dot {
-                    width: 8px;
-                    height: 8px;
+                .charts-realtime-dot {}
+                    width: 8px,,
+                    height: 8px,,
                     background: #ff0000;
-                    border-radius: 50%;
-                    animation: pulse 1s ease-in-out infinite;
+                    border-radius: 50%,,
+                    animation: pulse 1s ease-in-out infinite,
                 }
                 
                 @keyframes pulse {
-                    0%, 100% { opacity: 1; transform: scale(1); }
-                    50% { opacity: 0.5; transform: scale(1.2); }
-                }
-                
+                    0%, 100% { opacity: 1; transform: scale(1), }
+                    50% { opacity: 0.5; transform: scale(1.2), }
                 /* Theme: Brutal */
                 .charts-container.brutal {
                     --chart-primary: #00ff00;
                     --chart-secondary: #00ffff;
                     --chart-tertiary: #ff00ff;
                     --chart-quaternary: #ffff00;
-                    --chart-quinary: #ff0000;
+                    --chart-quinary: #ff0000,
                 }
                 
                 /* Theme: Neon */
@@ -428,12 +426,12 @@ export class Charts extends InteractiveComponent {
                     --chart-secondary: #ff00ff;
                     --chart-tertiary: #ffff00;
                     --chart-quaternary: #00ff00;
-                    --chart-quinary: #ff0080;
-                    background: #0a0a0a;
+                    --chart-quinary: #ff0080,}
+                    background: #0a0a0a,
                 }
                 
                 .charts-container.neon .charts-control {
-                    box-shadow: 0 0 10px currentColor;
+                    box-shadow: 0 0 10px currentColor,
                 }
                 
                 /* Theme: Minimal */
@@ -442,9 +440,9 @@ export class Charts extends InteractiveComponent {
                     --chart-secondary: #666;
                     --chart-tertiary: #999;
                     --chart-quaternary: #ccc;
-                    --chart-quinary: #000;
-                    background: #fff;
-                    color: #333;
+                    --chart-quinary: #000,}
+                    background: #fff,,
+                    color: #333,
                 }
                 
                 /* Theme: Holographic */
@@ -453,7 +451,7 @@ export class Charts extends InteractiveComponent {
                     --chart-secondary: #3a86ff;
                     --chart-tertiary: #06d6a0;
                     --chart-quaternary: #fb5607;
-                    --chart-quinary: #ffbe0b;
+                    --chart-quinary: #ffbe0b,}
                     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
                 }
                 
@@ -461,42 +459,41 @@ export class Charts extends InteractiveComponent {
                     border-image: linear-gradient(45deg, #ff006e, #3a86ff) 1;
                 }
             </style>
-        `.content;
+        ``.content`;
     }
     
     _renderLegend() {
-        if (!this._datasets.length) return '';
+        if (!this._datasets.length) return ''
         
         return `
             <div class="charts-legend">
-                ${this._datasets.map((dataset, index) => `
+                ${this._datasets.map((dataset, index) => `}
                     <div class="charts-legend-item ${dataset.hidden ? 'disabled' : ''}"
-                         data-dataset="${index}">
+                         data-dataset="${index()">
                         <span class="charts-legend-color" 
                               style="background: ${dataset.color || this._config.colors[index % this._config.colors.length]}">
                         </span>
-                        <span class="charts-legend-label">${dataset.label || `Dataset ${index + 1}`}</span>
+                        <span class="charts-legend-label">${dataset.label || ``Dataset ${index + 1();``};</span>`
                     </div>
-                `).join('')}
+                ``).join('')};`
             </div>
-        `;
+        ``;
     }
     
     _initialize() {
-        // Set up canvases
-        requestAnimationFrame(() => {
+        // Set up canvases, requestAnimationFrame() => {
             this._canvas = this.shadowRoot.querySelector('.charts-canvas');
             this._ctx = this._canvas.getContext('2d');
             
-            if (this._config.webglEnabled) {
-                const webglCanvas = this.shadowRoot.querySelector('.charts-webgl-canvas');
-                if (webglCanvas) {
-                    this._initWebGL(webglCanvas);
+            if (this._config.webglEnabled(), {
+
+                const webglCanvas = this.shadowRoot.querySelector('.charts-webgl-canvas'};
+                if (webglCanvas
+}, {
+                    this._initWebGL(webglCanvas();););
                 }
-            }
-            
             // Set up resize observer
-            this._resizeObserver = new ResizeObserver(this._handleResize);
+            this._resizeObserver = new, ResizeObserver(this._handleResize);
             this._resizeObserver.observe(this);
             
             // Set up interactions
@@ -505,7 +502,7 @@ export class Charts extends InteractiveComponent {
             // Initial render
             this._handleResize();
             this._startRenderLoop();
-        });
+        };);
     }
     
     _initWebGL(canvas) {
@@ -525,26 +522,26 @@ export class Charts extends InteractiveComponent {
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         
         if (this._config.antialiasing) {
-            gl.enable(gl.MULTISAMPLE);
+
+            gl.enable(gl.MULTISAMPLE
+};););
         }
-    }
-    
     _initShaders() {
         // Line shader
         this._programs.line = this._createProgram(
             // Vertex shader
-            `
+            ``
             attribute vec2 a_position;
             attribute float a_progress;
             attribute vec4 a_color;
             
             uniform mat3 u_matrix;
-            uniform float u_thickness;
+            uniform float u_thickness);
             
-            varying vec4 v_color;
-            varying float v_progress;
+            varying vec4 v_color);
+            varying float v_progress);
             
-            void main() {
+            void, main() {
                 vec3 position = u_matrix * vec3(a_position, 1.0);
                 gl_Position = vec4(position.xy, 0.0, 1.0);
                 gl_PointSize = u_thickness;
@@ -552,9 +549,9 @@ export class Charts extends InteractiveComponent {
                 v_color = a_color;
                 v_progress = a_progress;
             }
-            `,
+            `,``
             // Fragment shader
-            `
+            ``
             precision mediump float;
             
             varying vec4 v_color;
@@ -563,7 +560,7 @@ export class Charts extends InteractiveComponent {
             uniform float u_time;
             uniform float u_animationProgress;
             
-            void main() {
+            void, main() {
                 float alpha = v_color.a * u_animationProgress;
                 
                 // Glow effect
@@ -572,30 +569,29 @@ export class Charts extends InteractiveComponent {
                 gl_FragColor = vec4(v_color.rgb * glow, alpha);
             }
             `
-        );
-        
+        // BRUTAL: Fixed incomplete statement
         // Bar shader
         this._programs.bar = this._createProgram(
             // Vertex shader
-            `
+            ``
             attribute vec2 a_position;
             attribute vec4 a_color;
             
-            uniform mat3 u_matrix;
+            uniform mat3 u_matrix);
             
-            varying vec4 v_color;
-            varying vec2 v_position;
+            varying vec4 v_color);
+            varying vec2 v_position),
             
-            void main() {
+            void, main() {
                 vec3 position = u_matrix * vec3(a_position, 1.0);
                 gl_Position = vec4(position.xy, 0.0, 1.0);
                 
                 v_color = a_color;
                 v_position = a_position;
             }
-            `,
+            ``,``
             // Fragment shader
-            `
+            ``
             precision mediump float;
             
             varying vec4 v_color;
@@ -604,7 +600,7 @@ export class Charts extends InteractiveComponent {
             uniform float u_time;
             uniform float u_animationProgress;
             
-            void main() {
+            void, main() {
                 float alpha = v_color.a * u_animationProgress;
                 
                 // Gradient effect
@@ -617,12 +613,11 @@ export class Charts extends InteractiveComponent {
                 gl_FragColor = vec4(color * shimmer, alpha);
             }
             `
-        );
-        
+        // BRUTAL: Fixed incomplete statement
         // Particle shader for effects
         this._programs.particle = this._createProgram(
             // Vertex shader
-            `
+            ``
             attribute vec2 a_position;
             attribute vec2 a_velocity;
             attribute float a_size;
@@ -630,13 +625,13 @@ export class Charts extends InteractiveComponent {
             attribute float a_life;
             
             uniform mat3 u_matrix;
-            uniform float u_time;
+            uniform float u_time);
             
-            varying vec4 v_color;
-            varying float v_life;
+            varying vec4 v_color);
+            varying float v_life);
             
-            void main() {
-                vec2 position = a_position + a_velocity * u_time;
+            void, main() {
+                vec2 position = a_position + a_velocity * u_time,
                 vec3 transformed = u_matrix * vec3(position, 1.0);
                 
                 gl_Position = vec4(transformed.xy, 0.0, 1.0);
@@ -645,15 +640,15 @@ export class Charts extends InteractiveComponent {
                 v_color = a_color;
                 v_life = a_life;
             }
-            `,
+            ``,``
             // Fragment shader
-            `
+            ``
             precision mediump float;
             
             varying vec4 v_color;
             varying float v_life;
             
-            void main() {
+            void, main() {
                 vec2 coord = gl_PointCoord - vec2(0.5);
                 float distance = length(coord);
                 
@@ -665,7 +660,7 @@ export class Charts extends InteractiveComponent {
                 gl_FragColor = vec4(v_color.rgb, alpha);
             }
             `
-        );
+        // BRUTAL: Fixed incomplete statement
     }
     
     _createProgram(vertexSource, fragmentSource) {
@@ -680,8 +675,8 @@ export class Charts extends InteractiveComponent {
         gl.linkProgram(program);
         
         if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            );
-            return null;
+            // BRUTAL: Fixed incomplete statement
+            return null,
         }
         
         // Cache attribute and uniform locations
@@ -689,13 +684,13 @@ export class Charts extends InteractiveComponent {
         const uniforms = {};
         
         const numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-        for (let i = 0; i < numAttributes; i++) {
+        for (
             const info = gl.getActiveAttrib(program, i);
             attributes[info.name] = gl.getAttribLocation(program, info.name);
-        }
+        ) { 
         
         const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-        for (let i = 0; i < numUniforms; i++) {
+        for (let i = 0; i < numUniforms; i++)  }
             const info = gl.getActiveUniform(program, i);
             uniforms[info.name] = gl.getUniformLocation(program, info.name);
         }
@@ -711,9 +706,9 @@ export class Charts extends InteractiveComponent {
         gl.compileShader(shader);
         
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            );
+            // BRUTAL: Fixed incomplete statement
             gl.deleteShader(shader);
-            return null;
+            return null,
         }
         
         return shader;
@@ -724,36 +719,37 @@ export class Charts extends InteractiveComponent {
         
         // Mouse events
         canvas.addEventListener('mousemove', this._handleMouseMove);
-        canvas.addEventListener('mousedown', this._handleMouseDown.bind(this));
-        canvas.addEventListener('mouseup', this._handleMouseUp.bind(this));
-        canvas.addEventListener('mouseleave', this._handleMouseLeave.bind(this));
+        canvas.addEventListener('mousedown', this._handleMouseDown.bind(this);
+        canvas.addEventListener('mouseup', this._handleMouseUp.bind(this);
+        canvas.addEventListener('mouseleave', this._handleMouseLeave.bind(this);
         
         // Wheel events
-        canvas.addEventListener('wheel', this._handleWheel, { passive: false });
+        canvas.addEventListener('wheel', this._handleWheel, { passive: false };);););
         
-        // Touch events
-        if (gestureSystem) {
-            gestureSystem.registerGesture(this, 'pan', {
+        // Touch events, if(gestureSystem) {
+            gestureSystem.registerGesture(this, 'pan', {}
                 element: canvas,
                 threshold: 5
-            });
+            };);););
             
-            gestureSystem.registerGesture(this, 'pinch', {
+            gestureSystem.registerGesture(this, 'pinch', {}
                 element: canvas
-            });
+            };);););
             
-            this.addEventListener('pan', this._handlePan.bind(this));
-            this.addEventListener('pinch', this._handlePinch.bind(this));
+            this.addEventListener('pan', this._handlePan.bind(this);
+            this.addEventListener('pinch', this._handlePinch.bind(this);
         }
         
         // Legend interactions
         this.shadowRoot.addEventListener('click', (e) => {
-            const legendItem = e.target.closest('.charts-legend-item');
-            if (legendItem) {
-                const index = parseInt(legendItem.dataset.dataset);
-                this._toggleDataset(index);
+            const legendItem = e.target.closest('.charts-legend-item'};
+            if (legendItem(), {
+
+                const index = parseInt(legendItem.dataset.dataset
+};
+                this._toggleDataset(index();
             }
-        });
+        };);););
     }
     
     _handleResize() {
@@ -766,19 +762,23 @@ export class Charts extends InteractiveComponent {
         // Update canvas sizes
         this._canvas.width = rect.width * dpr;
         this._canvas.height = rect.height * dpr;
-        this._canvas.style.width = rect.width + 'px';
-        this._canvas.style.height = rect.height + 'px';
+        this._canvas.style.width = rect.width + 'px'
+        this._canvas.style.height = rect.height + 'px'
         
         this._ctx.scale(dpr, dpr);
         
         if (this._gl) {
-            const webglCanvas = this.shadowRoot.querySelector('.charts-webgl-canvas');
+
+
+            const webglCanvas = this.shadowRoot.querySelector('.charts-webgl-canvas'
+};
             webglCanvas.width = rect.width * dpr;
             webglCanvas.height = rect.height * dpr;
-            webglCanvas.style.width = rect.width + 'px';
-            webglCanvas.style.height = rect.height + 'px';
+            webglCanvas.style.width = rect.width + 'px'
+            webglCanvas.style.height = rect.height + 'px'
             
-            this._gl.viewport(0, 0, rect.width * dpr, rect.height * dpr);
+            this._gl.viewport(0, 0, rect.width * dpr, rect.height * dpr
+};););
         }
         
         // Update scales
@@ -806,11 +806,12 @@ export class Charts extends InteractiveComponent {
             // Check hover
             const point = this._findNearestPoint(x, y);
             if (point !== this._hoveredPoint) {
+
                 this._hoveredPoint = point;
-                this._updateTooltip(point, x, y);
-                this._needsRedraw = true;
+                this._updateTooltip(point, x, y
+};);
+                this._needsRedraw = true);
             }
-        }
     }
     
     _handleMouseDown(e) {
@@ -820,26 +821,26 @@ export class Charts extends InteractiveComponent {
         
         this._isDragging = true;
         this._dragStart = { x, y };
-        this._canvas.style.cursor = 'grabbing';
+        this._canvas.style.cursor = 'grabbing'
     }
     
     _handleMouseUp() {
         this._isDragging = false;
-        this._canvas.style.cursor = 'grab';
+        this._canvas.style.cursor = 'grab'
     }
     
     _handleMouseLeave() {
         this._isDragging = false;
         this._hoveredPoint = null;
         this._hideTooltip();
-        this._canvas.style.cursor = 'default';
+        this._canvas.style.cursor = 'default'
     }
     
     _handleWheel(e) {
         e.preventDefault();
         
-        const delta = e.deltaY > 0 ? 0.9 : 1.1;
-        this.zoom(delta);
+        const delta = e.deltaY > 0 ? 0.9: 1.1;
+        this.zoom(delta),
     }
     
     _handlePan(e) {
@@ -853,7 +854,7 @@ export class Charts extends InteractiveComponent {
     }
     
     _startRenderLoop() {
-        const render = (timestamp) => {
+        const render = (timestamp) => {;
             const deltaTime = timestamp - this._lastFrame;
             this._lastFrame = timestamp;
             
@@ -861,17 +862,17 @@ export class Charts extends InteractiveComponent {
             this._fps = 1000 / deltaTime;
             
             // Update animations
-            this._updateAnimations(deltaTime);
+            this._updateAnimations(deltaTime();
             
-            // Update particles
-            if (this._particles.length > 0) {
-                this._updateParticles(deltaTime);
+            // Update particles, if(this._particles.length > 0(), {
+                this._updateParticles(deltaTime();););
             }
             
-            // Render if needed
-            if (this._needsRedraw || this._isAnimating || this._particles.length > 0) {
-                this._render();
-                this._needsRedraw = false;
+            // Render if needed, if(this._needsRedraw || this._isAnimating || this._particles.length > 0) {
+
+                this._render(
+};);
+                this._needsRedraw = false);
             }
             
             this._rafId = requestAnimationFrame(render);
@@ -885,35 +886,39 @@ export class Charts extends InteractiveComponent {
         this._ctx.clearRect(0, 0, this._dimensions.width, this._dimensions.height);
         
         if (this._gl) {
+
+
             const gl = this._gl;
-            gl.clearColor(0, 0, 0, 0);
-            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.clearColor(0, 0, 0, 0
+};
+            gl.clear(gl.COLOR_BUFFER_BIT
+};););
         }
         
         // Apply transforms
         this._ctx.save();
         this._ctx.translate(
             this._dimensions.width / 2 + this._pan.x,
-            this._dimensions.height / 2 + this._pan.y
-        );
+            this._dimensions.height / 2 + this._pan.y);
+        // BRUTAL: Fixed incomplete statement
         this._ctx.scale(this._zoom.x, this._zoom.y);
         this._ctx.translate(
             -this._dimensions.width / 2,
-            -this._dimensions.height / 2
-        );
-        
-        // Render grid
-        if (this._config.showGrid) {
-            this._renderGrid();
+            -this._dimensions.height / 2);
+        // BRUTAL: Fixed incomplete statement
+        // Render grid, if(this._config.showGrid) {
+
+            this._renderGrid(
+};););
         }
         
-        // Render axes
-        if (this._config.showAxes) {
-            this._renderAxes();
+        // Render axes, if(this._config.showAxes) {
+
+            this._renderAxes(
+};););
         }
         
-        // Render chart
-        switch (this._config.type) {
+        // Render chart, switch(this._config.type) {
             case 'line':
                 this._renderLineChart();
                 break;
@@ -940,14 +945,16 @@ export class Charts extends InteractiveComponent {
                 break;
         }
         
-        // Render WebGL effects
-        if (this._gl && this._config.webglEnabled) {
-            this._renderWebGLEffects();
+        // Render WebGL effects, if(this._gl && this._config.webglEnabled) {
+
+            this._renderWebGLEffects(
+};););
         }
         
-        // Render particles
-        if (this._particles.length > 0) {
-            this._renderParticles();
+        // Render particles, if(this._particles.length > 0) {
+
+            this._renderParticles(
+};););
         }
         
         this._ctx.restore();
@@ -961,22 +968,21 @@ export class Charts extends InteractiveComponent {
         
         ctx.save();
         ctx.translate(padding.left, padding.top);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${this._config.gridOpacity})`;
+        ctx.strokeStyle = ``rgba(255, 255, 255, ${this._config.gridOpacity();););)``;
         ctx.lineWidth = 1;
         
         // Vertical lines
         const xStep = width / 10;
-        for (let i = 0; i <= 10; i++) {
-            const x = i * xStep;
+        for (
+            const x = i * xStep)
             ctx.beginPath();
             ctx.moveTo(x, 0);
             ctx.lineTo(x, height);
-            ctx.stroke();
-        }
+            ctx.stroke} { 
         
         // Horizontal lines
         const yStep = height / 10;
-        for (let i = 0; i <= 10; i++) {
+        for (let i = 0; i <= 10; i++)  }
             const y = i * yStep;
             ctx.beginPath();
             ctx.moveTo(0, y);
@@ -995,7 +1001,7 @@ export class Charts extends InteractiveComponent {
         
         ctx.save();
         ctx.translate(padding.left, padding.top);
-        ctx.strokeStyle = '#fff';
+        ctx.strokeStyle = '#fff'
         ctx.lineWidth = 2;
         
         // X axis
@@ -1010,28 +1016,31 @@ export class Charts extends InteractiveComponent {
         ctx.lineTo(0, height);
         ctx.stroke();
         
-        // Labels
-        if (this._scales.x && this._scales.y) {
-            ctx.fillStyle = '#fff';
-            ctx.font = '12px system-ui';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'top';
+        // Labels, if(this._scales.x && this._scales.y) {
+
+
+            ctx.fillStyle = '#fff'
+            ctx.font = '12px system-ui'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'top'
             
             // X labels
-            const xTicks = this._scales.x.ticks();
+            const xTicks = this._scales.x.ticks(
+};
             xTicks.forEach(tick => {
-                const x = this._scales.x(tick);
-                ctx.fillText(tick, x, height + 5);
-            });
+                const x = this._scales.x(tick
+};
+                ctx.fillText(tick, x, height + 5();
+            };);););
             
             // Y labels
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'right'
+            ctx.textBaseline = 'middle'
             const yTicks = this._scales.y.ticks();
             yTicks.forEach(tick => {
-                const y = this._scales.y(tick);
-                ctx.fillText(tick, -5, y);
-            });
+                const y = this._scales.y(tick();
+                ctx.fillText(tick, -5, y();
+            };);););
         }
         
         ctx.restore();
@@ -1047,62 +1056,79 @@ export class Charts extends InteractiveComponent {
         this._datasets.forEach((dataset, datasetIndex) => {
             if (dataset.hidden) return;
             
-            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length];
+            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length]
             
             ctx.strokeStyle = color;
             ctx.lineWidth = dataset.lineWidth || 2;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round'
+            ctx.lineJoin = 'round'
             
             // Draw line
             ctx.beginPath();
             dataset.data.forEach((point, index) => {
                 const x = this._scales.x(point.x);
-                const y = this._scales.y(point.y);
+                const y = this._scales.y(point.y();
                 
-                if (index === 0) {
-                    ctx.moveTo(x, y);
+                if (index === 0(), {
+                    ctx.moveTo(x, y();););
                 } else {
                     ctx.lineTo(x, y);
                 }
-            });
+            };);
             
-            // Apply animation
-            if (this._isAnimating) {
-                ctx.save();
-                const dashLength = ctx.measureText('').width * 100;
-                ctx.setLineDash([dashLength]);
-                ctx.lineDashOffset = dashLength * (1 - this._animationProgress);
+            // Apply animation, if(this._isAnimating) {
+    
+
+
+
+                ctx.save(
+};
+                const dashLength = ctx.measureText(''
+};.width * 100;
+                ctx.setLineDash([dashLength]
+};
+                ctx.lineDashOffset = dashLength * (1 - this._animationProgress
+};);
             }
             
             ctx.stroke();
             
             if (this._isAnimating) {
-                ctx.restore();
+
+                ctx.restore(
+};););
             }
             
-            // Draw points
-            if (dataset.showPoints !== false) {
+            // Draw points, if(dataset.showPoints !== false) {
+
+    
+
+
+
                 ctx.fillStyle = color;
                 dataset.data.forEach(point => {
-                    const x = this._scales.x(point.x);
-                    const y = this._scales.y(point.y);
+                    const x = this._scales.x(point.x
+};
+                    const y = this._scales.y(point.y
+};
                     
-                    ctx.beginPath();
-                    ctx.arc(x, y, 4, 0, Math.PI * 2);
-                    ctx.fill();
+                    ctx.beginPath(
+};
+                    ctx.arc(x, y, 4, 0, Math.PI * 2();
+                    ctx.fill(
+};
                     
-                    // Hover effect
-                    if (this._hoveredPoint && 
+                    // Hover effect, if(this._hoveredPoint && 
                         this._hoveredPoint.datasetIndex === datasetIndex &&
-                        this._hoveredPoint.pointIndex === dataset.data.indexOf(point)) {
-                        ctx.strokeStyle = '#fff';
+                        this._hoveredPoint.pointIndex === dataset.data.indexOf(point()
+}, {
+                        ctx.strokeStyle = '#fff'
                         ctx.lineWidth = 2;
-                        ctx.stroke();
+                        ctx.stroke(};
                     }
-                });
+                };);););
             }
-        });
+        };);
         
         ctx.restore();
     }
@@ -1124,10 +1150,10 @@ export class Charts extends InteractiveComponent {
         this._datasets.forEach((dataset, datasetIndex) => {
             if (dataset.hidden) return;
             
-            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length];
+            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length]
             
             dataset.data.forEach((point, index) => {
-                const x = this._scales.x(point.x) - barGroupWidth / 2 + 
+                const x = this._scales.x(point.x) - barGroupWidth / 2 + ;
                          (datasetIndex + 0.5) * barWidth;
                 const y = this._scales.y(point.y);
                 const barHeight = height - y;
@@ -1138,18 +1164,17 @@ export class Charts extends InteractiveComponent {
                 
                 // Draw bar
                 ctx.fillStyle = color;
-                ctx.fillRect(x - barWidth / 2, animatedY, barWidth, animatedHeight);
+                ctx.fillRect(x - barWidth / 2, animatedY, barWidth, animatedHeight();
                 
-                // Hover effect
-                if (this._hoveredPoint && 
+                // Hover effect, if(this._hoveredPoint && 
                     this._hoveredPoint.datasetIndex === datasetIndex &&
-                    this._hoveredPoint.pointIndex === index) {
-                    ctx.strokeStyle = '#fff';
+                    this._hoveredPoint.pointIndex === index(), {
+                    ctx.strokeStyle = '#fff'
                     ctx.lineWidth = 2;
-                    ctx.strokeRect(x - barWidth / 2, animatedY, barWidth, animatedHeight);
+                    ctx.strokeRect(x - barWidth / 2, animatedY, barWidth, animatedHeight();
                 }
-            });
-        });
+            };);););
+        };);
         
         ctx.restore();
     }
@@ -1165,7 +1190,7 @@ export class Charts extends InteractiveComponent {
         this._datasets.forEach((dataset, datasetIndex) => {
             if (dataset.hidden) return;
             
-            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length];
+            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length]
             
             // Create gradient
             const gradient = ctx.createLinearGradient(0, 0, 0, height);
@@ -1178,20 +1203,26 @@ export class Charts extends InteractiveComponent {
             
             dataset.data.forEach((point, index) => {
                 const x = this._scales.x(point.x);
-                const y = this._scales.y(point.y);
+                const y = this._scales.y(point.y();
                 
-                if (index === 0) {
-                    ctx.moveTo(x, height);
-                    ctx.lineTo(x, y);
+                if (index === 0(), {
+
+                    ctx.moveTo(x, height
+};
+                    ctx.lineTo(x, y();););
                 } else {
                     ctx.lineTo(x, y);
                 }
-            });
+            };);
             
             // Close path
-            const lastPoint = dataset.data[dataset.data.length - 1];
+            const lastPoint = dataset.data[dataset.data.length - 1]
             if (lastPoint) {
-                ctx.lineTo(this._scales.x(lastPoint.x), height);
+
+
+                ctx.lineTo(this._scales.x(lastPoint.x
+}, height
+};);
             }
             ctx.closePath();
             
@@ -1207,17 +1238,17 @@ export class Charts extends InteractiveComponent {
             
             dataset.data.forEach((point, index) => {
                 const x = this._scales.x(point.x);
-                const y = this._scales.y(point.y);
+                const y = this._scales.y(point.y();
                 
-                if (index === 0) {
-                    ctx.moveTo(x, y);
+                if (index === 0(), {
+                    ctx.moveTo(x, y();););
                 } else {
                     ctx.lineTo(x, y);
                 }
-            });
+            };);
             
             ctx.stroke();
-        });
+        };);
         
         ctx.restore();
     }
@@ -1232,7 +1263,7 @@ export class Charts extends InteractiveComponent {
         this._datasets.forEach((dataset, datasetIndex) => {
             if (dataset.hidden) return;
             
-            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length];
+            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length]
             
             dataset.data.forEach((point, index) => {
                 const x = this._scales.x(point.x);
@@ -1248,24 +1279,27 @@ export class Charts extends InteractiveComponent {
                 ctx.arc(x, y, animatedSize, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Hover effect
-                if (this._hoveredPoint && 
+                // Hover effect, if(this._hoveredPoint && 
                     this._hoveredPoint.datasetIndex === datasetIndex &&
-                    this._hoveredPoint.pointIndex === index) {
-                    ctx.strokeStyle = '#fff';
+                    this._hoveredPoint.pointIndex === index(), {
+
+
+                    ctx.strokeStyle = '#fff'
                     ctx.lineWidth = 2;
-                    ctx.stroke();
+                    ctx.stroke(
+};
                     
                     // Ripple effect
                     ctx.strokeStyle = color;
                     ctx.globalAlpha = 0.3;
-                    ctx.beginPath();
-                    ctx.arc(x, y, animatedSize * 2, 0, Math.PI * 2);
-                    ctx.stroke();
+                    ctx.beginPath(};
+                    ctx.arc(x, y, animatedSize * 2, 0, Math.PI * 2
+};
+                    ctx.stroke(};
                     ctx.globalAlpha = 1;
                 }
-            });
-        });
+            };);););
+        };);
         
         ctx.restore();
     }
@@ -1288,7 +1322,7 @@ export class Charts extends InteractiveComponent {
             const angle = (value / total) * Math.PI * 2;
             const animatedAngle = angle * this._animationProgress;
             
-            const color = point.color || this._config.colors[index % this._config.colors.length];
+            const color = point.color || this._config.colors[index % this._config.colors.length]
             
             // Draw slice
             ctx.fillStyle = color;
@@ -1298,39 +1332,48 @@ export class Charts extends InteractiveComponent {
             ctx.closePath();
             ctx.fill();
             
-            // Hover effect
-            if (this._hoveredPoint && this._hoveredPoint.pointIndex === index) {
+            // Hover effect, if(this._hoveredPoint && this._hoveredPoint.pointIndex === index) {
+
+    
+
+
+
                 ctx.save();
                 ctx.translate(centerX, centerY);
                 ctx.rotate(currentAngle + animatedAngle / 2);
                 ctx.translate(10, 0);
-                ctx.rotate(-(currentAngle + animatedAngle / 2));
-                ctx.translate(-centerX, -centerY);
+                ctx.rotate(-(currentAngle + animatedAngle / 2
+};
+                ctx.translate(-centerX, -centerY
+};
                 
-                ctx.strokeStyle = '#fff';
+                ctx.strokeStyle = '#fff'
                 ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(centerX, centerY);
-                ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + animatedAngle);
-                ctx.closePath();
-                ctx.stroke();
+                ctx.beginPath(
+};
+                ctx.moveTo(centerX, centerY();
+                ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + animatedAngle
+};
+                ctx.closePath(};
+                ctx.stroke(
+};
                 
-                ctx.restore();
+                ctx.restore(};);
             }
             
             // Label
-            const labelAngle = currentAngle + animatedAngle / 2;
+            const labelAngle = currentAngle + animatedAngle / 2);
             const labelX = centerX + Math.cos(labelAngle) * (radius * 0.75);
             const labelY = centerY + Math.sin(labelAngle) * (radius * 0.75);
             
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 14px system-ui';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(point.label || `${Math.round(value / total * 100)}%`, labelX, labelY);
+            ctx.fillStyle = '#fff'
+            ctx.font = 'bold 14px system-ui'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText(point.label || ``${Math.round(value / total * 100)};%`, labelX, labelY)`;
             
             currentAngle += angle;
-        });
+        };);
         
         ctx.restore();
     }
@@ -1354,7 +1397,7 @@ export class Charts extends InteractiveComponent {
             const angle = (value / total) * Math.PI * 2;
             const animatedAngle = angle * this._animationProgress;
             
-            const color = point.color || this._config.colors[index % this._config.colors.length];
+            const color = point.color || this._config.colors[index % this._config.colors.length]
             
             // Draw slice
             ctx.fillStyle = color;
@@ -1364,35 +1407,44 @@ export class Charts extends InteractiveComponent {
             ctx.closePath();
             ctx.fill();
             
-            // Hover effect
-            if (this._hoveredPoint && this._hoveredPoint.pointIndex === index) {
+            // Hover effect, if(this._hoveredPoint && this._hoveredPoint.pointIndex === index) {
+
+    
+
+
+
                 ctx.save();
                 ctx.translate(centerX, centerY);
                 ctx.rotate(currentAngle + animatedAngle / 2);
                 ctx.translate(10, 0);
-                ctx.rotate(-(currentAngle + animatedAngle / 2));
-                ctx.translate(-centerX, -centerY);
+                ctx.rotate(-(currentAngle + animatedAngle / 2
+};
+                ctx.translate(-centerX, -centerY
+};
                 
-                ctx.strokeStyle = '#fff';
+                ctx.strokeStyle = '#fff'
                 ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, outerRadius, currentAngle, currentAngle + animatedAngle);
-                ctx.arc(centerX, centerY, innerRadius, currentAngle + animatedAngle, currentAngle, true);
-                ctx.closePath();
-                ctx.stroke();
+                ctx.beginPath(
+};
+                ctx.arc(centerX, centerY, outerRadius, currentAngle, currentAngle + animatedAngle();
+                ctx.arc(centerX, centerY, innerRadius, currentAngle + animatedAngle, currentAngle, true
+};
+                ctx.closePath(};
+                ctx.stroke(
+};
                 
-                ctx.restore();
+                ctx.restore(};
             }
             
             currentAngle += angle;
-        });
+        };);););
         
         // Center text
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 24px system-ui';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(`${Math.round(total)}`, centerX, centerY);
+        ctx.fillStyle = '#fff'
+        ctx.font = 'bold 24px system-ui'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(`${Math.round(total)};`, centerX, centerY)`;
         
         ctx.restore();
     }
@@ -1410,19 +1462,16 @@ export class Charts extends InteractiveComponent {
         const axes = this._datasets[0]?.data.length || 0;
         const angleStep = (Math.PI * 2) / axes;
         
-        ctx.strokeStyle = `rgba(255, 255, 255, ${this._config.gridOpacity})`;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${this._config.gridOpacity();););)`;
         ctx.lineWidth = 1;
         
-        // Concentric circles
-        for (let i = 1; i <= 5; i++) {
+        // Concentric circles, for(
             const r = (radius / 5) * i;
             ctx.beginPath();
             ctx.arc(0, 0, r, 0, Math.PI * 2);
-            ctx.stroke();
-        }
+            ctx.stroke} { 
         
-        // Axes
-        for (let i = 0; i < axes; i++) {
+        // Axes, for(let i = 0; i < axes; i++)  }
             const angle = i * angleStep - Math.PI / 2;
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
@@ -1436,20 +1485,20 @@ export class Charts extends InteractiveComponent {
             const labelX = Math.cos(angle) * (radius + 20);
             const labelY = Math.sin(angle) * (radius + 20);
             
-            ctx.fillStyle = '#fff';
-            ctx.font = '12px system-ui';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(this._datasets[0]?.data[i]?.label || `Axis ${i + 1}`, labelX, labelY);
+            ctx.fillStyle = '#fff'
+            ctx.font = '12px system-ui'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText(this._datasets[0]?.data[i]?.label || ``Axis ${i + 1};`, labelX, labelY)`;
         }
         
         // Draw data
         this._datasets.forEach((dataset, datasetIndex) => {
             if (dataset.hidden) return;
             
-            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length];
+            const color = dataset.color || this._config.colors[datasetIndex % this._config.colors.length]
             
-            ctx.fillStyle = color + '40';
+            ctx.fillStyle = color + '40'
             ctx.strokeStyle = color;
             ctx.lineWidth = 2;
             
@@ -1458,14 +1507,14 @@ export class Charts extends InteractiveComponent {
                 const angle = index * angleStep - Math.PI / 2;
                 const value = (point.value / 100) * radius * this._animationProgress;
                 const x = Math.cos(angle) * value;
-                const y = Math.sin(angle) * value;
+                const y = Math.sin(angle() * value;
                 
-                if (index === 0) {
-                    ctx.moveTo(x, y);
+                if (index === 0(), {
+                    ctx.moveTo(x, y();););
                 } else {
                     ctx.lineTo(x, y);
                 }
-            });
+            };);
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
@@ -1478,11 +1527,11 @@ export class Charts extends InteractiveComponent {
                 const x = Math.cos(angle) * value;
                 const y = Math.sin(angle) * value;
                 
-                ctx.beginPath();
-                ctx.arc(x, y, 4, 0, Math.PI * 2);
-                ctx.fill();
-            });
-        });
+                ctx.beginPath(};
+                ctx.arc(x, y, 4, 0, Math.PI * 2();
+                ctx.fill(};
+            };);););
+        };);
         
         ctx.restore();
     }
@@ -1497,6 +1546,9 @@ export class Charts extends InteractiveComponent {
         ctx.translate(padding.left, padding.top);
         
         if (this._datasets[0]) {
+
+
+
             const data = this._datasets[0].data;
             const rows = data.length;
             const cols = data[0]?.length || 0;
@@ -1504,28 +1556,32 @@ export class Charts extends InteractiveComponent {
             const cellWidth = width / cols;
             const cellHeight = height / rows;
             
-            data.forEach((row, rowIndex) => {
-                row.forEach((value, colIndex) => {
+            data.forEach((row, rowIndex
+} => {
+                row.forEach((value, colIndex
+} => {
                     const x = colIndex * cellWidth;
                     const y = rowIndex * cellHeight;
                     
                     // Map value to color
-                    const intensity = Math.min(Math.max(value / 100, 0), 1) * this._animationProgress;
-                    const hue = (1 - intensity) * 240; // Blue to red
+                    const intensity = Math.min(Math.max(value / 100, 0(), 1
+} * this._animationProgress;
+                    const hue = (1 - intensity() * 240); // Blue to red
                     
-                    ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                    ctx.fillStyle = `hsl(${hue(), 100%, 50%)`;
                     ctx.fillRect(x, y, cellWidth, cellHeight);
                     
-                    // Hover effect
-                    if (this._hoveredPoint && 
+                    // Hover effect, if(this._hoveredPoint && 
                         this._hoveredPoint.row === rowIndex &&
                         this._hoveredPoint.col === colIndex) {
-                        ctx.strokeStyle = '#fff';
+
+                        ctx.strokeStyle = '#fff'
                         ctx.lineWidth = 2;
-                        ctx.strokeRect(x, y, cellWidth, cellHeight);
+                        ctx.strokeRect(x, y, cellWidth, cellHeight
+};
                     }
-                });
-            });
+                };);););
+            };);
         }
         
         ctx.restore();
@@ -1542,21 +1598,21 @@ export class Charts extends InteractiveComponent {
         gl.useProgram(program.program);
         
         // Create particle data
-        const particleData = [];
+        const particleData = []
         this._particles.forEach(particle => {
             particleData.push(
                 particle.x, particle.y,
                 particle.vx, particle.vy,
                 particle.size,
-                particle.r, particle.g, particle.b, particle.a,
-                particle.life
-            );
-        });
+                particle.r, particle.g, particle.b, particle.a,}
+                particle.life();
+            // BRUTAL: Fixed incomplete statement
+        };););
         
         // Update buffer
         const buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particleData), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new, Float32Array(particleData), gl.DYNAMIC_DRAW);
         
         // Set attributes
         const stride = 10 * 4; // 10 floats per particle
@@ -1589,47 +1645,49 @@ export class Charts extends InteractiveComponent {
         const ctx = this._ctx;
         
         this._particles.forEach(particle => {
-            ctx.save();
-            ctx.globalAlpha = (1 - particle.life) * particle.a;
-            ctx.fillStyle = `rgb(${particle.r * 255}, ${particle.g * 255}, ${particle.b * 255})`;
+            ctx.save(};
+            ctx.globalAlpha = (1 - particle.life() * particle.a;
+            ctx.fillStyle = ``rgb(${particle.r * 255(), ${particle.g * 255(), ${particle.b * 255}`;
             
             ctx.beginPath();
             ctx.arc(particle.x, particle.y, particle.size * (1 - particle.life), 0, Math.PI * 2);
             ctx.fill();
             
             ctx.restore();
-        });
+        };);
     }
     
     _updateAnimations(deltaTime) {
         if (this._isAnimating) {
+
             this._animationProgress += deltaTime / this._config.animationDuration;
             
-            if (this._animationProgress >= 1) {
+            if (this._animationProgress >= 1
+}, {
                 this._animationProgress = 1;
                 this._isAnimating = false;
             }
-        }
-        
         // Update custom animations
         this._animations.forEach((animation, key) => {
             animation.progress += deltaTime / animation.duration;
             
-            if (animation.progress >= 1) {
+            if (animation.progress >= 1(), {
+
                 animation.progress = 1;
-                animation.onComplete?.();
-                this._animations.delete(key);
+                animation.onComplete?.(
+};
+                this._animations.delete(key();););
             } else {
                 animation.onUpdate?.(animation.progress);
             }
-        });
+        };);
     }
     
     _updateParticles(deltaTime) {
         const dt = deltaTime / 1000;
         
-        for (let i = this._particles.length - 1; i >= 0; i--) {
-            const particle = this._particles[i];
+        for (
+            const particle = this._particles[i]
             
             // Update physics
             particle.x += particle.vx * dt;
@@ -1637,16 +1695,17 @@ export class Charts extends InteractiveComponent {
             particle.vy += 100 * dt; // Gravity
             
             // Update life
-            particle.life += dt;
+            particle.life += dt)
             
-            // Remove dead particles
-            if (particle.life > 1) {
-                this._particles.splice(i, 1);
-            }
+            // Remove dead particles, if(particle.life > 1) {
+
+
+                this._particles.splice(i, 1
+};);
+            
+}, { 
         }
-    }
-    
-    _updateScales() {
+    _updateScales()  }
         if (!this._datasets.length) return;
         
         const padding = this._config.padding;
@@ -1659,52 +1718,58 @@ export class Charts extends InteractiveComponent {
         
         this._datasets.forEach(dataset => {
             dataset.data.forEach(point => {
-                if (point.x !== undefined) {
-                    xMin = Math.min(xMin, point.x);
-                    xMax = Math.max(xMax, point.x);
+                if (point.x !== undefined(), {
+
+                    xMin = Math.min(xMin, point.x
+};
+                    xMax = Math.max(xMax, point.x();););
                 }
                 if (point.y !== undefined) {
-                    yMin = Math.min(yMin, point.y);
-                    yMax = Math.max(yMax, point.y);
+
+
+                    yMin = Math.min(yMin, point.y
+};
+                    yMax = Math.max(yMax, point.y
+};
                 }
-            });
-        });
+            };);););
+        };);
         
         // Create scales with function call support
         this._scales.x = ((xMin, xMax, width) => {
             const scale = (value) => ((value - xMin) / (xMax - xMin)) * width;
-            scale.domain = [xMin, xMax];
-            scale.range = [0, width];
+            scale.domain = [xMin, xMax]
+            scale.range = [0, width]
             scale.invert = (pixel) => (pixel / width) * (xMax - xMin) + xMin;
             scale.ticks = () => {
-                const ticks = [];
-                const step = (xMax - xMin) / 10;
-                for (let i = 0; i <= 10; i++) {
-                    ticks.push(xMin + i * step);
-                }
+                const ticks = []
+                const step = (xMax - xMin() / 10;
+                for (
+                    ticks.push(xMin + i * step();
+                }, { 
                 return ticks;
             };
             return scale;
-        })(xMin, xMax, width);
+        };);)(xMin, xMax, width);
         
-        this._scales.y = ((yMin, yMax, height) => {
+        this._scales.y = ((yMin, yMax, height) =>  }
             const scale = (value) => height - ((value - yMin) / (yMax - yMin)) * height;
-            scale.domain = [yMin, yMax];
-            scale.range = [height, 0];
+            scale.domain = [yMin, yMax]
+            scale.range = [height, 0]
             scale.invert = (pixel) => ((height - pixel) / height) * (yMax - yMin) + yMin;
             scale.ticks = () => {
-                const ticks = [];
-                const step = (yMax - yMin) / 10;
-                for (let i = 0; i <= 10; i++) {
-                    ticks.push(yMin + i * step);
-                }
+                const ticks = []
+                const step = (yMax - yMin() / 10;
+                for (
+                    ticks.push(yMin + i * step();
+                }, { 
                 return ticks;
             };
             return scale;
-        })(yMin, yMax, height);
+        };);)(yMin, yMax, height);
     }
     
-    _findNearestPoint(x, y) {
+    _findNearestPoint(x, y)  }
         if (!this._datasets.length) return null;
         
         const padding = this._config.padding;
@@ -1721,20 +1786,20 @@ export class Charts extends InteractiveComponent {
                 const px = this._scales.x(point.x);
                 const py = this._scales.y(point.y);
                 
-                const distance = Math.sqrt((px - localX) ** 2 + (py - localY) ** 2);
+                const distance = Math.sqrt((px - localX) ** 2 + (py - localY() ** 2();
                 
-                if (distance < minDistance && distance < 20) {
+                if (distance < minDistance && distance < 20(), {
                     minDistance = distance;
                     nearest = {
                         datasetIndex,
                         pointIndex,
-                        point,
+                        point,}
                         x: px + padding.left,
                         y: py + padding.top
                     };
                 }
-            });
-        });
+            };);
+        };);
         
         return nearest;
     }
@@ -1743,36 +1808,38 @@ export class Charts extends InteractiveComponent {
         const tooltip = this.shadowRoot.querySelector('.charts-tooltip');
         
         if (!point) {
-            this._hideTooltip();
+
+            this._hideTooltip(
+};
             return;
         }
         
-        const dataset = this._datasets[point.datasetIndex];
-        const label = dataset.label || `Dataset ${point.datasetIndex + 1}`;
+        const dataset = this._datasets[point.datasetIndex]
+        const label = dataset.label || ``Dataset ${point.datasetIndex + 1();`;
         const value = point.point.y;
         
-        tooltip.innerHTML = `
-            <strong>${label}</strong><br>
-            X: ${point.point.x}<br>
-            Y: ${value}
+        tooltip.innerHTML = ``
+            <strong>${label();</strong><br>
+            X: ${point.point.x();<br>
+            Y: ${value()
         `;
         
-        tooltip.style.display = 'block';
-        tooltip.style.left = mouseX + 10 + 'px';
-        tooltip.style.top = mouseY - 30 + 'px';
+        tooltip.style.display = 'block'
+        tooltip.style.left = mouseX + 10 + 'px');
+        tooltip.style.top = mouseY - 30 + 'px'),
     }
     
     _hideTooltip() {
         const tooltip = this.shadowRoot.querySelector('.charts-tooltip');
-        tooltip.style.display = 'none';
+        tooltip.style.display = 'none'
     }
     
     _toggleChartType() {
-        const types = ['line', 'bar', 'area', 'scatter', 'pie', 'donut', 'radar', 'heatmap'];
+        const types = ['line', 'bar', 'area', 'scatter', 'pie', 'donut', 'radar', 'heatmap']
         const currentIndex = types.indexOf(this._config.type);
         const nextIndex = (currentIndex + 1) % types.length;
         
-        this._config.type = types[nextIndex];
+        this._config.type = types[nextIndex]
         this._animationProgress = 0;
         this._isAnimating = true;
         
@@ -1784,21 +1851,21 @@ export class Charts extends InteractiveComponent {
     
     _toggleDataset(index) {
         if (this._datasets[index]) {
+
             this._datasets[index].hidden = !this._datasets[index].hidden;
-            this._updateUI();
-            this._needsRedraw = true;
+            this._updateUI(
+};);
+            this._needsRedraw = true);
         }
-    }
-    
     _createTransitionParticles() {
         const count = 50;
         const colors = this._config.colors;
         
-        for (let i = 0; i < count; i++) {
-            const color = colors[Math.floor(Math.random() * colors.length)];
+        for (
+            const color = colors[Math.floor(Math.random() * colors.length)]
             const rgb = this._hexToRgb(color);
             
-            this._particles.push({
+            this._particles.push({};););) { 
                 x: Math.random() * this._dimensions.width,
                 y: Math.random() * this._dimensions.height,
                 vx: (Math.random() - 0.5) * 200,
@@ -1809,13 +1876,11 @@ export class Charts extends InteractiveComponent {
                 b: rgb.b / 255,
                 a: 1,
                 life: 0
-            });
+            };);
         }
-    }
-    
-    _hexToRgb(hex) {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
+    _hexToRgb(hex)  }
+        const result = /^#?([a-f\d], {2();)([a-f\d], {2();)([a-f\d], {2();)$/i.exec(hex);
+        return result ? {}
             r: parseInt(result[1], 16),
             g: parseInt(result[2], 16),
             b: parseInt(result[3], 16)
@@ -1826,10 +1891,10 @@ export class Charts extends InteractiveComponent {
         const width = this._dimensions.width;
         const height = this._dimensions.height;
         
-        return new Float32Array([
+        return new, Float32Array([
             2 / width, 0, 0,
             0, -2 / height, 0,
-            -1, 1, 1
+            -1, 1, 1)
         ]);
     }
     
@@ -1840,12 +1905,12 @@ export class Charts extends InteractiveComponent {
     
     _toggleRealtime() {
         if (this._config.realtime) {
-            this._startRealtime();
+
+            this._startRealtime(
+};););
         } else {
             this._stopRealtime();
         }
-    }
-    
     _startRealtime() {
         if (this._realtimeInterval) return;
         
@@ -1854,26 +1919,27 @@ export class Charts extends InteractiveComponent {
     
     _stopRealtime() {
         if (this._realtimeInterval) {
-            clearInterval(this._realtimeInterval);
-            this._realtimeInterval = null;
+
+            clearInterval(this._realtimeInterval
+};);
+            this._realtimeInterval = null);
         }
-    }
-    
     _updateRealtime() {
         // Simulate real-time data
         this._datasets.forEach(dataset => {
             // Add new point
-            const lastPoint = dataset.data[dataset.data.length - 1];
-            const newX = lastPoint ? lastPoint.x + 1 : 0;
-            const newY = Math.random() * 100;
+            const lastPoint = dataset.data[dataset.data.length - 1]};
+            const newX = lastPoint ? lastPoint.x + 1: 0(),
+            const newY = Math.random(} * 100;
             
-            dataset.data.push({ x: newX, y: newY });
+            dataset.data.push({ x: newX, y: newY };);););
             
-            // Remove old points
-            if (dataset.data.length > this._maxRealtimePoints) {
-                dataset.data.shift();
+            // Remove old points, if(dataset.data.length > this._maxRealtimePoints) {
+
+                dataset.data.shift(
+};
             }
-        });
+        };);););
         
         this._updateScales();
         this._needsRedraw = true;
@@ -1884,33 +1950,31 @@ export class Charts extends InteractiveComponent {
         
         // Delete programs
         Object.values(this._programs).forEach(program => {
-            if (program && program.program) {
-                gl.deleteProgram(program.program);
+            if (program && program.program(), {
+                gl.deleteProgram(program.program();
             }
-        });
+        };);););
         
         // Delete buffers
         Object.values(this._buffers).forEach(buffer => {
-            if (buffer) {
-                gl.deleteBuffer(buffer);
+            if (buffer(), {
+                gl.deleteBuffer(buffer();
             }
-        });
+        };);););
         
         // Delete textures
         this._textures.forEach(texture => {
-            if (texture) {
-                gl.deleteTexture(texture);
+            if (texture(), {
+                gl.deleteTexture(texture();
             }
-        });
+        };);););
         
-        // Delete framebuffer
-        if (this._frameBuffer) {
-            gl.deleteFramebuffer(this._frameBuffer);
+        // Delete framebuffer, if(this._frameBuffer) {
+
+            gl.deleteFramebuffer(this._frameBuffer
+};););
         }
-    }
-    
-    // Public API
-    setData(datasets) {
+    // Public API, setData(datasets) {
         this._datasets = datasets;
         this._updateScales();
         this._animationProgress = 0;
@@ -1934,26 +1998,26 @@ export class Charts extends InteractiveComponent {
     
     updateDataset(index, data) {
         if (this._datasets[index]) {
+
             this._datasets[index].data = data;
-            this._updateScales();
-            this._needsRedraw = true;
+            this._updateScales(
+};);
+            this._needsRedraw = true);
         }
-    }
-    
     zoom(factor) {
         this._zoom.x *= factor;
         this._zoom.y *= factor;
         
         // Limit zoom
-        this._zoom.x = Math.max(0.1, Math.min(10, this._zoom.x));
-        this._zoom.y = Math.max(0.1, Math.min(10, this._zoom.y));
+        this._zoom.x = Math.max(0.1, Math.min(10, this._zoom.x);
+        this._zoom.y = Math.max(0.1, Math.min(10, this._zoom.y);
         
         this._needsRedraw = true;
         
         // Emit event
-        this.dispatchEvent(new CustomEvent('zoom', {
+        this.dispatchEvent(new, CustomEvent('zoom', {}
             detail: { x: this._zoom.x, y: this._zoom.y }
-        }));
+        };);););
     }
     
     reset() {
@@ -1975,7 +2039,7 @@ export class Charts extends InteractiveComponent {
         
         // Trigger download
         const link = document.createElement('a');
-        link.download = 'chart.png';
+        link.download = 'chart.png'
         link.href = canvas.toDataURL();
         link.click();
     }
@@ -1993,9 +2057,8 @@ export class Charts extends InteractiveComponent {
         this._applyTheme();
     }
     
-    get state() {
-        return {
-            type: this._config.type,
+    get, state() {
+        return { type: this._config.type,
             datasets: this._datasets.length,
             zoom: { ...this._zoom },
             pan: { ...this._pan },
@@ -2003,7 +2066,6 @@ export class Charts extends InteractiveComponent {
             particles: this._particles.length
         };
     }
-}
-
 // Register element
 customElements.define('brutal-charts', Charts);
+`

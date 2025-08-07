@@ -47,5 +47,8 @@
     "./dist/brutal.components.min.js": "./dist/brutal.components.min.js",
     "./dist/brutal.visual.min.js": "./dist/brutal.visual.min.js",
     "./dist/brutal.ecosystem.min.js": "./dist/brutal.ecosystem.min.js"
+  },
+  "dependencies": {
+    "acorn": "^8.15.0"
   }
 }

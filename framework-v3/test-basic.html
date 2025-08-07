@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Basic Test</title>
+</head>
+<body>
+    <h1>BRUTAL Framework V3 - Basic Test</h1>
+    <div id="status">Loading framework...</div>
+    
+    <script type="module">
+        // Test basic framework loading
+        import * as BRUTAL from './index.js';
+        
+        const status = document.getElementById('status');
+        
+        try {
+            status.innerHTML = `
+                <h2>✅ Framework loaded successfully!</h2>
+                <p>Version: ${BRUTAL.VERSION}</p>
+                <p>Build: ${BRUTAL.BUILD}</p>
+                <p>Exports: ${Object.keys(BRUTAL).length} items</p>
+                <details>
+                    <summary>All exports:</summary>
+                    <pre>${JSON.stringify(Object.keys(BRUTAL).sort(), null, 2)}</pre>
+                </details>
+            `;
+            
+            // Check if window.__BRUTAL__ is available
+            if (window.__BRUTAL__) {
+                status.innerHTML += `
+                    <h3>✅ Global BRUTAL object available</h3>
+                    <pre>${JSON.stringify(window.__BRUTAL__, null, 2)}</pre>
+                `;
+            } else {
+                status.innerHTML += '<h3>❌ Global BRUTAL object NOT available</h3>';
+            }
+            
+        } catch (error) {
+            status.innerHTML = `
+                <h2>❌ Error loading framework</h2>
+                <p>Error: ${error.message}</p>
+                <pre>${error.stack}</pre>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@brutal/validation - Basic Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #0a0a0a;
+      color: #fff;
+    }
+    .demo-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+    .form-group {
+      margin: 1rem 0;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #333;
+      border-radius: 4px;
+      background: #111;
+      color: #fff;
+      font-size: 1rem;
+    }
+    button {
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    button:hover {
+      background: #ddd;
+    }
+    .error {
+      color: #ff6b6b;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    .success {
+      color: #51cf66;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    .result {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #111;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: #888;
+      margin-bottom: 2rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: #333;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      margin: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>@brutal/validation</h1>
+  <p class="subtitle">Ultra-lightweight validation library with schema builder and async support</p>
+
+  <div class="demo-section">
+    <h2>User Registration Form</h2>
+    <form id="registration-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="3-20 characters">
+        <div class="error" id="username-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="user@example.com">
+        <div class="error" id="email-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Min 8 characters">
+        <div class="error" id="password-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Must match password">
+        <div class="error" id="confirmPassword-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" placeholder="18-120">
+        <div class="error" id="age-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select id="role" name="role">
+          <option value="">Select a role</option>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+          <option value="guest">Guest</option>
+        </select>
+        <div class="error" id="role-error"></div>
+      </div>
+
+      <button type="submit">Register</button>
+      <div id="form-result" class="result" style="display: none;"></div>
+    </form>
+  </div>
+
+  <div class="demo-section">
+    <h2>Product Form</h2>
+    <form id="product-form">
+      <div class="form-group">
+        <label for="name">Product Name</label>
+        <input type="text" id="name" name="name" placeholder="Required">
+        <div class="error" id="name-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" id="price" name="price" step="0.01" placeholder="Positive number">
+        <div class="error" id="price-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="tags">Tags (comma separated)</label>
+        <input type="text" id="tags" name="tags" placeholder="electronics, gadget">
+        <div class="error" id="tags-error"></div>
+        <div id="tag-display"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="3" placeholder="Optional, max 500 chars"></textarea>
+        <div class="error" id="description-error"></div>
+      </div>
+
+      <button type="submit">Create Product</button>
+      <div id="product-result" class="result" style="display: none;"></div>
+    </form>
+  </div>
+
+  <div class="demo-section">
+    <h2>Async Validation Example</h2>
+    <form id="async-form">
+      <div class="form-group">
+        <label for="checkUsername">Check Username Availability</label>
+        <input type="text" id="checkUsername" name="checkUsername" placeholder="Type to check availability">
+        <div class="error" id="checkUsername-error"></div>
+        <div class="success" id="checkUsername-success"></div>
+      </div>
+    </form>
+  </div>
+
+  <script type="module">
+    import { string, number, array, object, schema, validate } from '../dist/index.js';
+
+    // Registration form schema
+    const registrationSchema = schema({
+      username: string({ 
+        required: true, 
+        min: 3, 
+        max: 20,
+        pattern: /^[a-zA-Z0-9_]+$/,
+        message: 'Username must be 3-20 alphanumeric characters'
+      }),
+      email: string({ 
+        required: true, 
+        email: true 
+      }),
+      password: string({ 
+        required: true, 
+        min: 8,
+        pattern: /(?=.*[A-Z])(?=.*\d)/,
+        message: 'Password must be at least 8 characters with 1 uppercase and 1 number'
+      }),
+      confirmPassword: string({
+        required: true,
+        custom: (value, data) => value === data?.password || 'Passwords must match'
+      }),
+      age: number({ 
+        required: true,
+        min: 18, 
+        max: 120,
+        integer: true
+      }),
+      role: string({
+        required: true,
+        enum: ['user', 'admin', 'guest']
+      })
+    });
+
+    // Product form schema
+    const productSchema = schema({
+      name: string({ required: true }),
+      price: number({ 
+        required: true,
+        min: 0,
+        message: 'Price must be a positive number'
+      }),
+      tags: array(string({ min: 1 }), { 
+        min: 1, 
+        max: 5,
+        message: 'Add 1-5 tags'
+      }),
+      description: string({ max: 500 })
+    });
+
+    // Async username checker
+    const usernameChecker = string({
+      required: true,
+      min: 3,
+      async: async (value) => {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const taken = ['admin', 'user', 'test'].includes(value.toLowerCase());
+        return !taken || 'Username is already taken';
+      }
+    });
+
+    // Helper functions
+    function clearErrors(form) {
+      form.querySelectorAll('.error').forEach(el => el.textContent = '');
+      form.querySelectorAll('.success').forEach(el => el.textContent = '');
+    }
+
+    function showErrors(form, errors) {
+      clearErrors(form);
+      Object.entries(errors).forEach(([field, error]) => {
+        const errorEl = form.querySelector(`#${field}-error`);
+        if (errorEl) errorEl.textContent = error;
+      });
+    }
+
+    function getFormData(form) {
+      const formData = new FormData(form);
+      const data = {};
+      for (const [key, value] of formData.entries()) {
+        if (key === 'tags') {
+          data[key] = value ? value.split(',').map(t => t.trim()).filter(Boolean) : [];
+        } else if (key === 'age' || key === 'price') {
+          data[key] = value ? Number(value) : null;
+        } else {
+          data[key] = value || null;
+        }
+      }
+      return data;
+    }
+
+    // Registration form handler
+    document.getElementById('registration-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = getFormData(form);
+      
+      const result = await validate(registrationSchema, data);
+      
+      if (result.valid) {
+        clearErrors(form);
+        document.getElementById('form-result').style.display = 'block';
+        document.getElementById('form-result').textContent = 
+          '✅ Registration successful!\n\n' + JSON.stringify(result.data, null, 2);
+      } else {
+        showErrors(form, result.errors);
+        document.getElementById('form-result').style.display = 'none';
+      }
+    });
+
+    // Product form handler
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = getFormData(form);
+      
+      const result = await validate(productSchema, data);
+      
+      if (result.valid) {
+        clearErrors(form);
+        document.getElementById('product-result').style.display = 'block';
+        document.getElementById('product-result').textContent = 
+          '✅ Product created!\n\n' + JSON.stringify(result.data, null, 2);
+      } else {
+        showErrors(form, result.errors);
+        document.getElementById('product-result').style.display = 'none';
+      }
+    });
+
+    // Tags preview
+    document.getElementById('tags').addEventListener('input', (e) => {
+      const tags = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
+      const display = document.getElementById('tag-display');
+      display.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+    });
+
+    // Async username checker
+    let checkTimeout;
+    document.getElementById('checkUsername').addEventListener('input', async (e) => {
+      clearTimeout(checkTimeout);
+      const value = e.target.value;
+      const errorEl = document.getElementById('checkUsername-error');
+      const successEl = document.getElementById('checkUsername-success');
+      
+      errorEl.textContent = '';
+      successEl.textContent = '';
+      
+      if (!value) return;
+      
+      checkTimeout = setTimeout(async () => {
+        successEl.textContent = 'Checking...';
+        
+        const result = await validate(usernameChecker, value);
+        
+        if (result.valid) {
+          errorEl.textContent = '';
+          successEl.textContent = '✅ Username is available!';
+        } else {
+          successEl.textContent = '';
+          errorEl.textContent = result.errors[''];
+        }
+      }, 300);
+    });
+
+    // Real-time validation example
+    document.getElementById('username').addEventListener('blur', async (e) => {
+      const result = await validate(
+        string({ 
+          required: true, 
+          min: 3, 
+          max: 20,
+          pattern: /^[a-zA-Z0-9_]+$/
+        }), 
+        e.target.value
+      );
+      
+      const errorEl = document.getElementById('username-error');
+      if (!result.valid) {
+        errorEl.textContent = result.errors[''];
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+  </script>
+</body>
+</html>

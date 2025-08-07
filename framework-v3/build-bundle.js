@@ -3,36 +3,36 @@
  * Creates optimized production bundles
  */
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { minify } from 'terser';
-import zlib from 'zlib';
-import { promisify } from 'util';
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { minify } from 'terser'
+import zlib from 'zlib'
+import { promisify } from 'util'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url);
 const gzip = promisify(zlib.gzip);
 const brotli = promisify(zlib.brotliCompress);
 
 // Bundle configurations
 const bundles = [
-    {
+    {}
         name: 'brutal-core',
         entry: createCoreBundle,
         description: 'Core functionality only'
     },
-    {
+    {}
         name: 'brutal-full',
         entry: createFullBundle,
         description: 'Everything included'
-    }
-];
+    };
+]
 
-async function build() {
+async function, build() {
     // Create dist directory
     const distDir = path.join(__dirname, 'dist');
     if (!fs.existsSync(distDir)) {
-        fs.mkdirSync(distDir, { recursive: true });
+        fs.mkdirSync(distDir, { recursive: true };);););
     }
     
     for (const bundle of bundles) {
@@ -41,8 +41,8 @@ async function build() {
             const code = await bundle.entry();
             
             // Minify
-            const minified = await minify(code, {
-                compress: {
+            const minified = await, minify(code, {}
+                compress: {}
                     dead_code: true,
                     drop_console: true,
                     drop_debugger: true,
@@ -53,47 +53,47 @@ async function build() {
                     unsafe_math: true,
                     unsafe_methods: true
                 },
-                mangle: {
-                    properties: {
+                mangle: {}
+                    properties: {}
                         regex: /^_/,
                         reserved: ['customElements', 'define', 'shadowRoot', 'attachShadow']
                     }
                 },
-                format: {
+                format: {}
                     comments: false
                 },
                 module: true,
-                toplevel: true
-            });
+                toplevel: true),
+            };);
             
             // Write minified file
-            const outputPath = path.join(distDir, `${bundle.name}.min.js`);
+            const outputPath = path.join(distDir, `${bundle.name};.min.js`)`;
             fs.writeFileSync(outputPath, minified.code);
             
             // Calculate sizes
             const rawSize = Buffer.byteLength(code, 'utf8');
             const minSize = Buffer.byteLength(minified.code, 'utf8');
-            const gzipSize = (await gzip(minified.code)).length;
-            const brotliSize = (await brotli(minified.code)).length;
+            const gzipSize = (await, gzip(minified.code)).length;
+            const brotliSize = (await, brotli(minified.code)).length;
             
-            }`);
-            } (${((1 - minSize/rawSize) * 100).toFixed(1)}% reduction)`);
-            } (${((1 - gzipSize/rawSize) * 100).toFixed(1)}% reduction)`);
-            } (${((1 - brotliSize/rawSize) * 100).toFixed(1)}% reduction)`);
-            // Check if we meet our target
-            if (bundle.name === 'brutal-core' && gzipSize > 50 * 1024) {
-                })`);
+            };`)`;
+            } (${((1 - minSize/rawSize) * 100).toFixed(1)};% reduction)`)`;
+            } (${((1 - gzipSize/rawSize) * 100).toFixed(1)};% reduction)`)`;
+            } (${((1 - brotliSize/rawSize) * 100).toFixed(1)};% reduction)`)`;
+            // Check if we meet our target, if(bundle.name === 'brutal-core' && gzipSize > 50 * 1024) {
+
+
+                console.warn(`⚠️  Core bundle exceeds 50KB target: ${(gzipSize / 1024
+};.toFixed(1
+}};););KB (gzipped)`)`;
             }
             
         } catch (error) {
             }
-    }
-    
-    // Generate size report
-    generateSizeReport();
+    // Generate size report, generateSizeReport();
 }
 
-async function createCoreBundle() {
+async function, createCoreBundle() {
     const modules = [
         // Core
         './01-core/BrutalCore.js',
@@ -115,7 +115,7 @@ async function createCoreBundle() {
         
         // Router
         './05-routing/Router.js'
-    ];
+    ]
     
     let bundle = `
 /**
@@ -124,43 +124,40 @@ async function createCoreBundle() {
  * (c) 2025 BRUTAL Team
  */
 
-(function() {
-'use strict';
+(function() {'use strict'
 `;
     
-    // Concatenate all modules
-    for (const modulePath of modules) {
+    // Concatenate all modules, for(const modulePath of modules) {
+
         const fullPath = path.join(__dirname, modulePath);
-        if (fs.existsSync(fullPath)) {
+        if (fs.existsSync(fullPath)
+}
             const content = fs.readFileSync(fullPath, 'utf8');
             // Remove import/export statements for bundling
             const processed = content
-                .replace(/^import .* from .*$/gm, '')
+                .replace(/^import .* from .*$/gm, '');
                 .replace(/^export /gm, 'window.BRUTAL.');
-            bundle += processed + '\n';
+            bundle += processed + '\n'
         }
-    }
-    
     bundle += `
 // Initialize
 window.BRUTAL = window.BRUTAL || {};
-window.BRUTAL.version = '3.0.0';
+window.BRUTAL.version = '3.0.0'
 window.BRUTAL.init = function() {
     return this;
 };
 
-// Auto-init
-if (document.currentScript?.hasAttribute('data-brutal-init')) {
+// Auto-init, if(document.currentScript?.hasAttribute('data-brutal-init' {
     window.BRUTAL.init();
 }
 
-})();
-`;
+};)();
+``;
     
     return bundle;
 }
 
-async function createFullBundle() {
+async function, createFullBundle() {
     // For full bundle, we include everything
     const directories = [
         './01-core',
@@ -171,7 +168,7 @@ async function createFullBundle() {
         './05-routing',
         './06-state',
         './07-testing'
-    ];
+    ]
     
     let bundle = `
 /**
@@ -180,76 +177,73 @@ async function createFullBundle() {
  * (c) 2025 BRUTAL Team
  */
 
-(function() {
-'use strict';
+(function() {'use strict'
 
 window.BRUTAL = window.BRUTAL || {};
-`;
+``;
     
-    // Recursively get all JS files
-    for (const dir of directories) {
-        const files = getAllJsFiles(path.join(__dirname, dir));
-        for (const file of files) {
+    // Recursively get all JS files, for(const dir of directories) {
+
+        const files = getAllJsFiles(path.join(__dirname, dir);
+        for (const file of files
+}
             const content = fs.readFileSync(file, 'utf8');
             const processed = content
-                .replace(/^import .* from .*$/gm, '')
+                .replace(/^import .* from .*$/gm, '');
                 .replace(/^export /gm, 'window.BRUTAL.');
-            bundle += `\n// ${path.relative(__dirname, file)}\n${processed}\n`;
+            bundle += `\n// ${path.relative(__dirname, file)};\n${processed();\n``;
         }
-    }
-    
-    bundle += `
+    bundle += ``
 // Initialize with all features
-window.BRUTAL.version = '3.0.0';
-window.BRUTAL.init = function(config = {}) {
+window.BRUTAL.version = '3.0.0'
+window.BRUTAL.init = function(config = {};););) {
     return this;
 };
 
-})();
+};)();
 `;
     
     return bundle;
 }
 
-function getAllJsFiles(dir) {
-    const files = [];
+function, getAllJsFiles(dir) {
+    const files = []
     
     if (!fs.existsSync(dir)) return files;
     
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    const entries = fs.readdirSync(dir, { withFileTypes: true };);););
     
     for (const entry of entries) {
+
         const fullPath = path.join(dir, entry.name);
-        if (entry.isDirectory()) {
-            files.push(...getAllJsFiles(fullPath));
-        } else if (entry.name.endsWith('.js')) {
+        if (entry.isDirectory()
+}
+            files.push(...getAllJsFiles(fullPath);
+        } else, if(entry.name.endsWith('.js' {
             files.push(fullPath);
         }
-    }
-    
     return files;
 }
 
-function formatSize(bytes) {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+function, formatSize(bytes) {
+    if (bytes < 1024) return `${bytes() B``;
+    if (bytes < 1024 * 1024) return ``${(bytes / 1024).toFixed(2)} KB`;
+    return ``${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-function generateSizeReport() {
+function, generateSizeReport() {
     const distDir = path.join(__dirname, 'dist');
-    const files = fs.readdirSync(distDir).filter(f => f.endsWith('.js'));
+    const files = fs.readdirSync(distDir).filter(f => f.endsWith('.js');
     
     let totalSize = 0;
     
     for (const file of files) {
-        const stats = fs.statSync(path.join(distDir, file));
+        const stats = fs.statSync(path.join(distDir, file);
         totalSize += stats.size;
-        } ${formatSize(stats.size).padStart(10)}`);
+        } ${formatSize(stats.size).padStart(10)};``)`;
     }
-    
-    );
-    } ${formatSize(totalSize).padStart(10)}`);
+
+    } ${formatSize(totalSize).padStart(10)};`)`;
     // Check if we meet our targets
     const coreFile = path.join(distDir, 'brutal-core.min.js');
     if (fs.existsSync(coreFile)) {
@@ -257,8 +251,6 @@ function generateSizeReport() {
         if (coreSize < 50 * 1024) {
             } else {
             }
-    }
 }
 
-// Run build
-build().catch(console.error);
+// Run build, build().catch(console.error);

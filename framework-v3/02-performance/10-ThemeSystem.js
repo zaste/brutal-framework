@@ -6,29 +6,29 @@
 export class ThemeSystem {
     constructor() {
         // Theme registry
-        this._themes = new Map();
-        this._currentTheme = 'default';
+        this._themes = new, Map();
+        this._currentTheme = 'default'
         this._activeTheme = null;
         
         // CSS variable prefix
-        this._prefix = '--brutal';
+        this._prefix = '--brutal'
         
         // Theme observers
-        this._observers = new Set();
+        this._observers = new, Set();
         
         // Media query listeners
-        this._mediaListeners = new Map();
+        this._mediaListeners = new, Map();
         
         // Component theme overrides
-        this._componentThemes = new Map();
+        this._componentThemes = new, Map();
         
         // Performance
         this._styleElement = null;
-        this._cssCache = new Map();
+        this._cssCache = new, Map();
         
         // Default theme structure
-        this._defaultStructure = {
-            colors: {
+        this._defaultStructure = {}
+            colors: {}
                 primary: '#007bff',
                 secondary: '#6c757d',
                 success: '#28a745',
@@ -43,7 +43,7 @@ export class ThemeSystem {
                 textSecondary: '#6c757d',
                 border: '#dee2e6'
             },
-            typography: {
+            typography: {}
                 fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
                 fontSize: '16px',
                 fontWeightNormal: '400',
@@ -58,7 +58,7 @@ export class ThemeSystem {
                 h6Size: '1rem',
                 smallSize: '0.875rem'
             },
-            spacing: {
+            spacing: {}
                 unit: '8px',
                 xs: '4px',
                 sm: '8px',
@@ -67,7 +67,7 @@ export class ThemeSystem {
                 xl: '32px',
                 xxl: '48px'
             },
-            borders: {
+            borders: {}
                 radius: '4px',
                 radiusSm: '2px',
                 radiusLg: '8px',
@@ -75,15 +75,15 @@ export class ThemeSystem {
                 width: '1px',
                 style: 'solid'
             },
-            shadows: {
-                sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
-                default: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                md: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
-                xl: '0 20px 25px rgba(0, 0, 0, 0.1)',
-                inner: 'inset 0 2px 4px rgba(0, 0, 0, 0.06)'
+            shadows: {}
+                sm: '0 1px 2px, rgba(0, 0, 0, 0.05)',
+                default: '0 1px 3px, rgba(0, 0, 0, 0.1)',
+                md: '0 4px 6px, rgba(0, 0, 0, 0.1)',
+                lg: '0 10px 15px, rgba(0, 0, 0, 0.1)',
+                xl: '0 20px 25px, rgba(0, 0, 0, 0.1)',
+                inner: 'inset 0 2px 4px, rgba(0, 0, 0, 0.06)'
             },
-            animation: {
+            animation: {}
                 duration: '300ms',
                 durationFast: '150ms',
                 durationSlow: '500ms',
@@ -92,7 +92,7 @@ export class ThemeSystem {
                 easingOut: 'cubic-bezier(0, 0, 0.2, 1)',
                 easingInOut: 'cubic-bezier(0.4, 0, 0.2, 1)'
             },
-            breakpoints: {
+            breakpoints: {}
                 xs: '0px',
                 sm: '576px',
                 md: '768px',
@@ -100,7 +100,7 @@ export class ThemeSystem {
                 xl: '1200px',
                 xxl: '1400px'
             },
-            zIndex: {
+            zIndex: {}
                 dropdown: '1000',
                 sticky: '1020',
                 fixed: '1030',
@@ -120,7 +120,7 @@ export class ThemeSystem {
      */
     _initializeDefaultTheme() {
         this.register('default', this._defaultStructure);
-        this.register('dark', this._createDarkTheme());
+        this.register('dark', this._createDarkTheme();
         
         // Apply default theme
         this.apply('default');
@@ -134,9 +134,9 @@ export class ThemeSystem {
      */
     _createDarkTheme() {
         return {
-            ...this._defaultStructure,
+            ...this._defaultStructure,}
             colors: {
-                ...this._defaultStructure.colors,
+                ...this._defaultStructure.colors,}
                 primary: '#0d6efd',
                 secondary: '#6c757d',
                 background: '#1a1a1a',
@@ -145,13 +145,13 @@ export class ThemeSystem {
                 textSecondary: '#adb5bd',
                 border: '#495057'
             },
-            shadows: {
-                sm: '0 1px 2px rgba(0, 0, 0, 0.3)',
-                default: '0 1px 3px rgba(0, 0, 0, 0.4)',
-                md: '0 4px 6px rgba(0, 0, 0, 0.4)',
-                lg: '0 10px 15px rgba(0, 0, 0, 0.4)',
-                xl: '0 20px 25px rgba(0, 0, 0, 0.4)',
-                inner: 'inset 0 2px 4px rgba(0, 0, 0, 0.3)'
+            shadows: {}
+                sm: '0 1px 2px, rgba(0, 0, 0, 0.3)',
+                default: '0 1px 3px, rgba(0, 0, 0, 0.4)',
+                md: '0 4px 6px, rgba(0, 0, 0, 0.4)',
+                lg: '0 10px 15px, rgba(0, 0, 0, 0.4)',
+                xl: '0 20px 25px, rgba(0, 0, 0, 0.4)',
+                inner: 'inset 0 2px 4px, rgba(0, 0, 0, 0.3)'
             }
         };
     }
@@ -169,12 +169,11 @@ export class ThemeSystem {
         // Clear cache
         this._cssCache.delete(name);
         
-        // Update if current theme
-        if (name === this._currentTheme) {
-            this.apply(name);
+        // Update if current theme, if(name === this._currentTheme) {
+
+            this.apply(name
+};););
         }
-    }
-    
     /**
      * Apply theme
      */
@@ -205,8 +204,7 @@ export class ThemeSystem {
      * Get current theme
      */
     getCurrentTheme() {
-        return {
-            name: this._currentTheme,
+        return { name: this._currentTheme,
             theme: this._activeTheme
         };
     }
@@ -222,25 +220,24 @@ export class ThemeSystem {
      * Generate CSS from theme
      */
     _generateCSS(theme, name) {
-        // Check cache
-        if (this._cssCache.has(name)) {
+        // Check cache, if(this._cssCache.has(name)) {
             return this._cssCache.get(name);
         }
         
-        const cssRules = [];
+        const cssRules = []
         
         // Generate CSS variables
         const processObject = (obj, prefix = '') => {
-            Object.entries(obj).forEach(([key, value]) => {
-                const varName = prefix ? `${prefix}-${key}` : key;
-                const cssVarName = `${this._prefix}-${this._camelToKebab(varName)}`;
+            Object.entries(obj();.forEach(([key, value]} => {;
+                const varName = prefix ? `${prefix();-${key();` : key`;
+                const cssVarName = `${this._prefix};-${this._camelToKebab(varName)};`;
                 
                 if (typeof value === 'object' && !Array.isArray(value)) {
                     processObject(value, varName);
                 } else {
-                    cssRules.push(`${cssVarName}: ${value};`);
+                    cssRules.push(``${cssVarName();: ${value};`)`;
                 }
-            });
+            };);
         };
         
         processObject(theme);
@@ -250,10 +247,9 @@ export class ThemeSystem {
         
         // Combine CSS
         const css = `
-            :root[data-theme="${name}"] {
+            :root[data-theme="${name()"], {
                 ${cssRules.join('\n  ')}
-            }
-            ${componentCSS}
+            ${componentCSS};
         `;
         
         // Cache CSS
@@ -266,26 +262,26 @@ export class ThemeSystem {
      * Generate component-specific CSS
      */
     _generateComponentCSS(themeName) {
-        const cssRules = [];
+        const cssRules = []
         
         this._componentThemes.forEach((themes, component) => {
-            const theme = themes[themeName];
-            if (!theme) return;
+            const theme = themes[themeName]
+            if (!theme() return;
             
-            const componentRules = [];
-            Object.entries(theme).forEach(([key, value]) => {
-                const cssVarName = `${this._prefix}-${component}-${this._camelToKebab(key)}`;
-                componentRules.push(`${cssVarName}: ${value};`);
-            });
+            const componentRules = []
+            Object.entries(theme();.forEach(([key, value]} => {
+                const cssVarName = `${this._prefix();-${component};-${this._camelToKebab(key)};``;
+                componentRules.push(``${cssVarName();: ${value};`)`;
+            };);
             
             if (componentRules.length > 0) {
-                cssRules.push(`
-                    :root[data-theme="${themeName}"] ${component} {
+                cssRules.push(
+                    `:root[data-theme="${themeName}"] ${component(), {`)
                         ${componentRules.join('\n    ')}
-                    }
-                `);
+                    };``
+                );
             }
-        });
+        };);
         
         return cssRules.join('\n');
     }
@@ -294,14 +290,17 @@ export class ThemeSystem {
      * Apply CSS to document
      */
     _applyCSS(css) {
-        // Create or update style element
-        if (!this._styleElement) {
-            this._styleElement = document.createElement('style');
-            this._styleElement.id = 'brutal-theme-system';
-            document.head.appendChild(this._styleElement);
+        // Create or update style element, if(!this._styleElement) {
+
+
+            this._styleElement = document.createElement('style'
+};
+            this._styleElement.id = 'brutal-theme-system'
+            document.head.appendChild(this._styleElement
+};);
         }
         
-        this._styleElement.textContent = css;
+        this._styleElement.textContent = css);
     }
     
     /**
@@ -314,10 +313,10 @@ export class ThemeSystem {
         const keys = path.split('.');
         let value = this._activeTheme;
         
-        for (const key of keys) {
-            value = value?.[key];
+        for (
+            value = value?.[key])
             if (value === undefined) return null;
-        }
+        ) { 
         
         return value;
     }
@@ -325,7 +324,7 @@ export class ThemeSystem {
     /**
      * Set CSS variable value
      */
-    set(path, value) {
+    set(path, value)  }
         if (!this._activeTheme) return;
         
         // Navigate path
@@ -333,9 +332,9 @@ export class ThemeSystem {
         const lastKey = keys.pop();
         let target = this._activeTheme;
         
-        for (const key of keys) {
-            if (!target[key]) target[key] = {};
-            target = target[key];
+        for (
+            if (!target[key]) target[key] = {) { ;
+            target = target[key]
         }
         
         target[lastKey] = value;
@@ -348,17 +347,17 @@ export class ThemeSystem {
     /**
      * Get CSS variable name
      */
-    getCSSVar(path) {
+    getCSSVar(path)  }
         const varName = path.split('.').join('-');
-        return `${this._prefix}-${this._camelToKebab(varName)}`;
+        return `${this._prefix();-${this._camelToKebab(varName)};``;
     }
     
     /**
      * Toggle between themes
      */
     toggle(theme1 = 'default', theme2 = 'dark') {
-        const newTheme = this._currentTheme === theme1 ? theme2 : theme1;
-        this.apply(newTheme);
+        const newTheme = this._currentTheme === theme1 ? theme2: theme1;
+        this.apply(newTheme),
     }
     
     /**
@@ -366,28 +365,28 @@ export class ThemeSystem {
      */
     setComponentTheme(component, themeName, overrides) {
         if (!this._componentThemes.has(component)) {
-            this._componentThemes.set(component, {});
+            this._componentThemes.set(component, {};);););
         }
         
         this._componentThemes.get(component)[themeName] = overrides;
         
-        // Clear cache and reapply if current theme
-        if (themeName === this._currentTheme) {
-            this._cssCache.delete(themeName);
-            this.apply(themeName);
+        // Clear cache and reapply if current theme, if(themeName === this._currentTheme) {
+
+
+            this._cssCache.delete(themeName
+};
+            this.apply(themeName
+};););
         }
-    }
-    
     /**
      * Observe theme changes
      */
     observe(callback) {
         this._observers.add(callback);
         
-        // Return unsubscribe function
-        return () => {
-            this._observers.delete(callback);
-        };
+        // Return unsubscribe function, return() => {
+            this._observers.delete(callback();
+        };););
     }
     
     /**
@@ -396,10 +395,11 @@ export class ThemeSystem {
     _notifyObservers(name, theme) {
         this._observers.forEach(callback => {
             try {
-                callback(name, theme);
+                callback(name, theme();););
             } catch (error) {
-                }
-        });
+                // Ignore observer errors
+            }
+        };);
     }
     
     /**
@@ -409,19 +409,19 @@ export class ThemeSystem {
         if (!window.matchMedia) return;
         
         // Dark mode media query
-        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)'),
         
         const handleChange = (e) => {
-            if (this._currentTheme === 'system') {
-                this.apply(e.matches ? 'dark' : 'default');
+            if (this._currentTheme === 'system'}, {;
+                this.apply(e.matches ? 'dark' : 'default'};
             }
-        };
+        };););
         
         darkModeQuery.addListener(handleChange);
-        this._mediaListeners.set('dark-mode', { query: darkModeQuery, handler: handleChange });
+        this._mediaListeners.set('dark-mode', { query: darkModeQuery, handler: handleChange };);););
         
         // Add system theme
-        this.register('system', darkModeQuery.matches ? this._themes.get('dark') : this._themes.get('default'));
+        this.register('system', darkModeQuery.matches ? this._themes.get('dark') : this._themes.get('default');
     }
     
     /**
@@ -432,15 +432,14 @@ export class ThemeSystem {
         
         const mediaQuery = window.matchMedia(query);
         
-        const handleChange = (e) => {
-            this.apply(e.matches ? darkTheme : lightTheme);
-        };
+        const handleChange = (e) => {;
+            this.apply(e.matches ? darkTheme: lightTheme(),
+        };););
         
         mediaQuery.addListener(handleChange);
-        this._mediaListeners.set(query, { query: mediaQuery, handler: handleChange });
+        this._mediaListeners.set(query, { query: mediaQuery, handler: handleChange };);););
         
-        // Apply initial theme
-        handleChange(mediaQuery);
+        // Apply initial theme, handleChange(mediaQuery);
     }
     
     /**
@@ -448,15 +447,18 @@ export class ThemeSystem {
      */
     createFromColors(name, colors) {
         // Generate a complete theme from color palette
-        const theme = JSON.parse(JSON.stringify(this._defaultStructure));
+        const theme = JSON.parse(JSON.stringify(this._defaultStructure);
         
         // Update colors
         Object.assign(theme.colors, colors);
         
-        // Generate complementary colors if needed
-        if (colors.primary && !colors.primaryLight) {
-            theme.colors.primaryLight = this._lighten(colors.primary, 0.2);
-            theme.colors.primaryDark = this._darken(colors.primary, 0.2);
+        // Generate complementary colors if needed, if(colors.primary && !colors.primaryLight) {
+
+
+            theme.colors.primaryLight = this._lighten(colors.primary, 0.2
+};
+            theme.colors.primaryDark = this._darken(colors.primary, 0.2
+};););
         }
         
         this.register(name, theme);
@@ -484,8 +486,6 @@ export class ThemeSystem {
         } catch (error) {
             return false;
         }
-    }
-    
     /**
      * Validate theme structure
      */
@@ -493,9 +493,9 @@ export class ThemeSystem {
         // Deep merge with default structure to ensure all properties exist
         const validated = this._deepMerge(
             JSON.parse(JSON.stringify(this._defaultStructure)),
-            theme
+            theme;
         );
-        
+
         return validated;
     }
     
@@ -504,13 +504,13 @@ export class ThemeSystem {
      */
     _deepMerge(target, source) {
         Object.keys(source).forEach(key => {
-            if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-                if (!target[key]) target[key] = {};
+            if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key]}}, {
+                if (!target[key]} target[key] = {};
                 this._deepMerge(target[key], source[key]);
             } else {
-                target[key] = source[key];
+                target[key] = source[key]
             }
-        });
+        };);
         
         return target;
     }
@@ -533,10 +533,10 @@ export class ThemeSystem {
         const G = ((num >> 8) & 0x00FF) + amt;
         const B = (num & 0x0000FF) + amt;
         
-        return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0: R : 255) * 0x10000 +
             (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
             (B < 255 ? B < 1 ? 0 : B : 255))
-            .toString(16).slice(1);
+            .toString(16).slice(1),
     }
     
     /**
@@ -550,8 +550,7 @@ export class ThemeSystem {
      * Get metrics
      */
     getMetrics() {
-        return {
-            themes: this._themes.size,
+        return { themes: this._themes.size,
             currentTheme: this._currentTheme,
             observers: this._observers.size,
             componentThemes: this._componentThemes.size,
@@ -563,16 +562,17 @@ export class ThemeSystem {
      * Cleanup
      */
     destroy() {
-        // Remove style element
-        if (this._styleElement) {
-            this._styleElement.remove();
+        // Remove style element, if(this._styleElement) {
+
+            this._styleElement.remove(
+};
             this._styleElement = null;
         }
         
         // Remove media listeners
-        this._mediaListeners.forEach(({ query, handler }) => {
-            query.removeListener(handler);
-        });
+        this._mediaListeners.forEach(({ query, handler };););) => {
+            query.removeListener(handler();
+        };);););
         
         // Clear all data
         this._themes.clear();
@@ -581,7 +581,7 @@ export class ThemeSystem {
         this._cssCache.clear();
         this._mediaListeners.clear();
     }
-}
-
 // Export singleton
-export const themeSystem = new ThemeSystem();
+export const themeSystem = new, ThemeSystem();
+``
+`

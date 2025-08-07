@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance Test - Enhanced Components</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #0f0;
+      padding: 2rem;
+      white-space: pre-wrap;
+    }
+    #output {
+      background: #000;
+      padding: 1rem;
+      border: 1px solid #0f0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="output">Running performance tests...</div>
+  
+  <script type="module">
+    // Capture console output
+    const output = document.getElementById('output');
+    const originalLog = console.log;
+    let logs = [];
+    
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      logs.push(args.join(' '));
+      output.textContent = logs.join('\n');
+    };
+    
+    // Run the test
+    import('./performance-enhanced.js').then(results => {
+      console.log('\n✅ Test completed successfully!');
+      
+      // Restore console
+      setTimeout(() => {
+        console.log = originalLog;
+      }, 100);
+    }).catch(error => {
+      console.log(`\n❌ Test failed: ${error.message}`);
+      console.log = originalLog;
+    });
+  </script>
+</body>
+</html>

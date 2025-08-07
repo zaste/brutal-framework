@@ -1,0 +1,54 @@
+{
+  "name": "@nwc/sections",
+  "version": "1.0.0-alpha.1",
+  "description": "Native Web Components Framework - Complex Sections Module",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "dev": "rollup -c --watch",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nwc/core": "file:../core",
+    "@types/node": "^20.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "rollup": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "web-components",
+    "native",
+    "sections",
+    "complex-components",
+    "performance",
+    "hero-section",
+    "navigation",
+    "feature-grid"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/native-web-components/framework.git",
+    "directory": "packages/sections"
+  }
+}

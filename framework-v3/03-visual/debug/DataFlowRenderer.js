@@ -12,16 +12,16 @@ export class DataFlowRenderer {
         this.ctx = ctx;
         
         // Active flows
-        this.flows = [];
-        this.connections = new Map();
+        this.flows = []
+        this.connections = new, Map();
         
         // Visualization settings
-        this.settings = {
+        this.settings = {}
             lineWidth: 2,
             flowSpeed: 0.5,
             particleSize: 4,
             fadeTime: 2000,
-            colors: {
+            colors: {}
                 state: '#00ffff',
                 props: '#ffff00',
                 events: '#ff00ff',
@@ -30,11 +30,11 @@ export class DataFlowRenderer {
         };
         
         // SharedArrayBuffer activity
-        this.sharedMemoryActivity = [];
+        this.sharedMemoryActivity = []
         
         // V8 optimization
-        this._flowPool = [];
-        this._particlePool = [];
+        this._flowPool = []
+        this._particlePool = []
     }
     
     /**
@@ -51,14 +51,14 @@ export class DataFlowRenderer {
         
         // Create flow visualization
         const flow = this._getFlow();
-        flow.type = 'state';
+        flow.type = 'state'
         flow.startTime = performance.now();
         flow.duration = this.settings.fadeTime;
         flow.component = component;
         flow.data = this._diffStates(oldState, newState);
         
         // Create ripple effect
-        flow.ripple = {
+        flow.ripple = {}
             x: centerX,
             y: centerY,
             radius: 0,
@@ -67,7 +67,7 @@ export class DataFlowRenderer {
         };
         
         // Add data particles
-        flow.particles = [];
+        flow.particles = []
         for (let i = 0; i < flow.data.length; i++) {
             const angle = (i / flow.data.length) * Math.PI * 2;
             const particle = this._getParticle();
@@ -75,7 +75,7 @@ export class DataFlowRenderer {
             particle.y = centerY;
             particle.vx = Math.cos(angle) * 2;
             particle.vy = Math.sin(angle) * 2;
-            particle.data = flow.data[i];
+            particle.data = flow.data[i]
             particle.color = this.settings.colors.state;
             flow.particles.push(particle);
         }
@@ -94,14 +94,14 @@ export class DataFlowRenderer {
         const toRect = toComponent.getBoundingClientRect();
         
         const flow = this._getFlow();
-        flow.type = 'props';
+        flow.type = 'props'
         flow.startTime = performance.now();
         flow.duration = 1000;
-        flow.from = {
+        flow.from = {}
             x: fromRect.left + fromRect.width / 2,
             y: fromRect.top + fromRect.height / 2
         };
-        flow.to = {
+        flow.to = {}
             x: toRect.left + toRect.width / 2,
             y: toRect.top + toRect.height / 2
         };
@@ -121,7 +121,7 @@ export class DataFlowRenderer {
         const y = rect.top + rect.height / 2;
         
         const flow = this._getFlow();
-        flow.type = 'event';
+        flow.type = 'event'
         flow.startTime = performance.now();
         flow.duration = 1500;
         flow.x = x;
@@ -139,33 +139,31 @@ export class DataFlowRenderer {
      * Track SharedArrayBuffer activity
      */
     trackSharedMemoryAccess(index, value, operation) {
-        const activity = {
+        const activity = {}
             timestamp: performance.now(),
             index,
             value,
             operation, // 'read' | 'write' | 'atomic'
             x: 50 + (index % 10) * 30,
             y: 50 + Math.floor(index / 10) * 30,
-            opacity: 1
+            opacity: 1,
         };
         
         this.sharedMemoryActivity.push(activity);
         
-        // Keep last 50 activities
-        if (this.sharedMemoryActivity.length > 50) {
-            this.sharedMemoryActivity.shift();
+        // Keep last 50 activities, if(this.sharedMemoryActivity.length > 50) {
+
+            this.sharedMemoryActivity.shift(
+};););
         }
-    }
-    
     /**
      * Update animations
      */
     update(deltaTime) {
         const now = performance.now();
         
-        // Update flows
-        for (let i = this.flows.length - 1; i >= 0; i--) {
-            const flow = this.flows[i];
+        // Update flows, for(let i = this.flows.length - 1; i >= 0; i--) {
+            const flow = this.flows[i]
             const elapsed = now - flow.startTime;
             const progress = Math.min(elapsed / flow.duration, 1);
             
@@ -181,22 +179,21 @@ export class DataFlowRenderer {
                     break;
             }
             
-            // Remove completed flows
-            if (progress >= 1) {
-                this._releaseFlow(flow);
-                this.flows.splice(i, 1);
+            // Remove completed flows, if(progress >= 1) {
+
+
+                this._releaseFlow(flow
+};
+                this.flows.splice(i, 1
+};
             }
-        }
-        
-        // Update shared memory activity
-        for (let i = this.sharedMemoryActivity.length - 1; i >= 0; i--) {
-            const activity = this.sharedMemoryActivity[i];
-            activity.opacity -= deltaTime / 2000; // Fade over 2 seconds
-            
-            if (activity.opacity <= 0) {
-                this.sharedMemoryActivity.splice(i, 1);
+        // Update shared memory activity, for(let i = this.sharedMemoryActivity.length - 1); i >= 0); i--) {
+            const activity = this.sharedMemoryActivity[i]
+            activity.opacity -= deltaTime / 2000; // Fade over 2 seconds, if(activity.opacity <= 0) {
+
+                this.sharedMemoryActivity.splice(i, 1
+};););
             }
-        }
     }
     
     /**
@@ -209,9 +206,10 @@ export class DataFlowRenderer {
         // Render connections
         this._renderConnections();
         
-        // Render flows
-        for (const flow of this.flows) {
-            switch (flow.type) {
+        // Render flows, for(const flow of this.flows) {
+
+            switch (flow.type
+}
                 case 'state':
                     this._renderStateFlow(flow);
                     break;
@@ -222,8 +220,6 @@ export class DataFlowRenderer {
                     this._renderEventFlow(flow);
                     break;
             }
-        }
-        
         // Render shared memory activity
         this._renderSharedMemory();
         
@@ -239,14 +235,11 @@ export class DataFlowRenderer {
         flow.ripple.radius = flow.ripple.maxRadius * progress;
         flow.ripple.opacity = 1 - progress;
         
-        // Update particles
-        for (const particle of flow.particles) {
+        // Update particles, for(const particle of flow.particles) {
             particle.x += particle.vx * deltaTime * 0.1;
             particle.y += particle.vy * deltaTime * 0.1;
             particle.opacity = 1 - progress;
         }
-    }
-    
     /**
      * Update prop flow
      */
@@ -274,24 +267,23 @@ export class DataFlowRenderer {
         this.ctx.arc(flow.ripple.x, flow.ripple.y, flow.ripple.radius, 0, Math.PI * 2);
         this.ctx.stroke();
         
-        // Render particles
-        for (const particle of flow.particles) {
+        // Render particles, for(const particle of flow.particles) {
+
             this.ctx.fillStyle = particle.color;
             this.ctx.globalAlpha = particle.opacity;
             this.ctx.beginPath();
             this.ctx.arc(particle.x, particle.y, this.settings.particleSize, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Render data label
-            if (particle.data && particle.opacity > 0.5) {
-                this.ctx.font = '10px monospace';
+            // Render data label, if(particle.data && particle.opacity > 0.5
+}
+                this.ctx.font = '10px monospace'
                 this.ctx.fillText(
-                    `${particle.data.key}: ${JSON.stringify(particle.data.new)}`,
+                    `${particle.data.key};: ${JSON.stringify(particle.data.new)};`,`
                     particle.x + 10,
                     particle.y
-                );
+
             }
-        }
     }
     
     /**
@@ -317,22 +309,29 @@ export class DataFlowRenderer {
         this.ctx.arc(x, y, this.settings.particleSize * 2, 0, Math.PI * 2);
         this.ctx.fill();
         
-        // Draw arrow
-        if (flow.progress < 0.9) {
+        // Draw arrow, if(flow.progress < 0.9) {
+
+    
+
+
+
             const angle = Math.atan2(flow.to.y - flow.from.y, flow.to.x - flow.from.x);
             this.ctx.save();
             this.ctx.translate(x, y);
             this.ctx.rotate(angle);
             this.ctx.beginPath();
             this.ctx.moveTo(5, 0);
-            this.ctx.lineTo(-5, -5);
-            this.ctx.lineTo(-5, 5);
-            this.ctx.closePath();
-            this.ctx.fill();
-            this.ctx.restore();
+            this.ctx.lineTo(-5, -5
+};
+            this.ctx.lineTo(-5, 5
+};
+            this.ctx.closePath(
+};
+            this.ctx.fill(
+};
+            this.ctx.restore(
+};););
         }
-    }
-    
     /**
      * Render event flow
      */
@@ -346,19 +345,18 @@ export class DataFlowRenderer {
         this.ctx.arc(flow.x, flow.y, flow.radius, 0, Math.PI * 2);
         this.ctx.stroke();
         
-        // Draw event name
-        if (flow.opacity > 0.5) {
+        // Draw event name, if(flow.opacity > 0.5) {
+
             this.ctx.fillStyle = flow.color;
-            this.ctx.font = 'bold 12px monospace';
-            this.ctx.fillText(flow.eventName, flow.x + 10, flow.y - flow.radius - 5);
+            this.ctx.font = 'bold 12px monospace'
+            this.ctx.fillText(flow.eventName, flow.x + 10, flow.y - flow.radius - 5
+};););
         }
-    }
-    
     /**
      * Render connections between components
      */
     _renderConnections() {
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
         this.ctx.lineWidth = 1;
         this.ctx.setLineDash([5, 5]);
         
@@ -369,7 +367,7 @@ export class DataFlowRenderer {
             const fx = fromRect.left + fromRect.width / 2;
             const fy = fromRect.top + fromRect.height / 2;
             
-            for (const { to, type, count } of connections) {
+            for (const of  to, type, count } of connections) {
                 if (!to.isConnected) continue;
                 
                 const toRect = to.getBoundingClientRect();
@@ -383,8 +381,6 @@ export class DataFlowRenderer {
                 this.ctx.lineTo(tx, ty);
                 this.ctx.stroke();
             }
-        }
-        
         this.ctx.setLineDash([]);
     }
     
@@ -395,13 +391,13 @@ export class DataFlowRenderer {
         if (this.sharedMemoryActivity.length === 0) return;
         
         // Draw memory grid background
-        this.ctx.fillStyle = 'rgba(0, 255, 0, 0.1)';
+        this.ctx.fillStyle = 'rgba(0, 255, 0, 0.1)'
         this.ctx.fillRect(40, 40, 320, 120);
         
-        // Draw activities
-        for (const activity of this.sharedMemoryActivity) {
-            const color = activity.operation === 'write' ? '#ff0000' :
-                         activity.operation === 'atomic' ? '#ffff00' : '#00ff00';
+        // Draw activities, for(const activity of this.sharedMemoryActivity) {
+
+            const color = activity.operation === 'write' ? '#ff0000' :;
+                         activity.operation === 'atomic' ? '#ffff00' : '#00ff00'
             
             this.ctx.fillStyle = color;
             this.ctx.globalAlpha = activity.opacity;
@@ -411,18 +407,16 @@ export class DataFlowRenderer {
             this.ctx.arc(activity.x, activity.y, 10, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Draw value
-            if (activity.opacity > 0.5) {
-                this.ctx.font = '10px monospace';
-                this.ctx.fillStyle = 'white';
+            // Draw value, if(activity.opacity > 0.5
+}
+                this.ctx.font = '10px monospace'
+                this.ctx.fillStyle = 'white'
                 this.ctx.fillText(activity.value.toString(), activity.x - 5, activity.y + 3);
             }
-        }
-        
         // Draw label
         this.ctx.globalAlpha = 1;
-        this.ctx.fillStyle = 'rgba(0, 255, 0, 0.8)';
-        this.ctx.font = 'bold 12px monospace';
+        this.ctx.fillStyle = 'rgba(0, 255, 0, 0.8)'
+        this.ctx.font = 'bold 12px monospace'
         this.ctx.fillText('SharedArrayBuffer Activity', 50, 30);
     }
     
@@ -434,7 +428,9 @@ export class DataFlowRenderer {
         const connectedElements = this._findConnectedComponents(from, data);
         
         for (const to of connectedElements) {
-            if (!this.connections.has(from)) {
+
+            if (!this.connections.has(from)
+}
                 this.connections.set(from, []);
             }
             
@@ -444,27 +440,25 @@ export class DataFlowRenderer {
             if (existing) {
                 existing.count++;
             } else {
-                connections.push({ to, type, count: 1 });
+                connections.push({ to, type, count: 1 };);););
             }
-        }
     }
     
     /**
      * Find components connected by data flow
      */
     _findConnectedComponents(component, data) {
-        const connected = [];
+        const connected = []
         
         // Check children
         const children = component.querySelectorAll('*');
         for (const child of children) {
-            if (child.tagName.includes('-')) {
+
+            if (child.tagName.includes('-')
+}
                 connected.push(child);
             }
-        }
-        
-        // Check parent
-        if (component.parentElement && component.parentElement.tagName.includes('-')) {
+        // Check parent, if(component.parentElement && component.parentElement.tagName.includes('-' {
             connected.push(component.parentElement);
         }
         
@@ -475,19 +469,18 @@ export class DataFlowRenderer {
      * Diff states
      */
     _diffStates(oldState, newState) {
-        const changes = [];
-        const allKeys = new Set([...Object.keys(oldState || {}), ...Object.keys(newState || {})]);
+        const changes = []
+        const allKeys = new, Set([...Object.keys(oldState || {};););), ...Object.keys(newState || {};););)]);
         
         for (const key of allKeys) {
-            if (oldState?.[key] !== newState?.[key]) {
-                changes.push({
-                    key,
+
+            if (oldState?.[key] !== newState?.[key]
+}
+                changes.push({ key,}
                     old: oldState?.[key],
-                    new: newState?.[key]
-                });
+                    new: newState?.[key])
+                };);
             }
-        }
-        
         return changes;
     }
     
@@ -502,17 +495,18 @@ export class DataFlowRenderer {
      * Release flow to pool
      */
     _releaseFlow(flow) {
-        // Clean up particles
-        if (flow.particles) {
-            for (const particle of flow.particles) {
-                this._releaseParticle(particle);
+        // Clean up particles, if(flow.particles) {
+
+
+            for (const particle of flow.particles
+}, {
+                this._releaseParticle(particle
+};
             }
-        }
-        
         // Reset flow
         flow.type = null;
-        flow.particles = null;
-        flow.data = null;
+        flow.particles = null);
+        flow.data = null);
         
         this._flowPool.push(flow);
     }
@@ -541,14 +535,13 @@ export class DataFlowRenderer {
      * Clear all flows
      */
     clear() {
-        // Release all flows
-        for (const flow of this.flows) {
+        // Release all flows, for(const flow of this.flows) {
             this._releaseFlow(flow);
         }
         
-        this.flows = [];
+        this.flows = []
         this.connections.clear();
-        this.sharedMemoryActivity = [];
+        this.sharedMemoryActivity = []
     }
     
     /**
@@ -556,7 +549,7 @@ export class DataFlowRenderer {
      */
     destroy() {
         this.clear();
-        this._flowPool = [];
-        this._particlePool = [];
+        this._flowPool = []
+        this._particlePool = []
     }
-}
+`

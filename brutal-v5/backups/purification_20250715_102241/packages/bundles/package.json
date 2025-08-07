@@ -1,0 +1,27 @@
+{
+  "name": "@brutal/bundles",
+  "version": "0.0.0",
+  "private": true,
+  "description": "BRUTAL V5 Bundle Configurations",
+  "type": "module",
+  "scripts": {
+    "build": "node build-bundles-esbuild.js",
+    "build:lite": "node build-bundles-esbuild.js lite",
+    "build:core": "node build-bundles-esbuild.js core",
+    "size": "node check-sizes.js",
+    "benchmark": "node benchmark.js",
+    "test:integration": "node test-integration.js",
+    "test:node": "node test-bundles-node.js",
+    "serve": "node serve.js"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "brotli-size": "^4.0.0",
+    "esbuild": "^0.19.12",
+    "gzip-size": "^7.0.0",
+    "kleur": "^4.1.5",
+    "rollup": "^4.0.0"
+  }
+}

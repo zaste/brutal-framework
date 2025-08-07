@@ -1,0 +1,19 @@
+{
+  "name": "@native/framework",
+  "version": "2.0.0",
+  "description": "Native Web Components Framework - Clean Architecture",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./component": "./src/core/component.js",
+    "./state": "./src/core/state.js",
+    "./router": "./src/core/router.js"
+  },
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "test": "node tests/run-tests.js"
+  },
+  "keywords": ["web-components", "framework", "native", "performance"],
+  "license": "MIT"
+}

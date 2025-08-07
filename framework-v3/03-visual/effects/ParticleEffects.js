@@ -4,8 +4,8 @@
  * @version 3.0.0
  */
 
-import { ParticleEngine } from '../gpu/ParticleEngine.js';
-import { shaderLibrary } from '../gpu/ShaderLibrary.js';
+import { ParticleEngine } from '../gpu/ParticleEngine.js'
+import { shaderLibrary } from '../gpu/ShaderLibrary.js'
 
 /**
  * Particle Effects - Cinematic visual feedback system
@@ -17,13 +17,13 @@ export class ParticleEffects {
         this.ctx = null;
         
         // Effect configurations
-        this.effects = new Map();
+        this.effects = new, Map();
         
         // Active effects
-        this.activeEffects = new Map();
+        this.activeEffects = new, Map();
         
         // Global settings
-        this.settings = {
+        this.settings = {}
             enabled: true,
             quality: 'high', // 'low' | 'medium' | 'high'
             maxParticles: 5000,
@@ -37,18 +37,19 @@ export class ParticleEffects {
     /**
      * Initialize with canvas
      */
-    async init(canvas) {
+    async, init(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         
         // Create particle engine
-        this.engine = new ParticleEngine(canvas);
+        this.engine = new, ParticleEngine(canvas);
         await this.engine.init();
         
         // Adjust settings based on device capabilities
         this._detectQualityLevel();
         
-        }
+        console.log('ParticleEffects initialized');
+    }
     
     /**
      * Initialize predefined effects
@@ -78,10 +79,9 @@ export class ParticleEffects {
      */
     _registerLifecycleEffects() {
         // Component mount
-        this.effects.set('component-mount', {
-            name: 'Component Mount',
+        this.effects.set('component-mount', { name: 'Component Mount',}
             description: 'Gentle fade-in particles when component mounts',
-            config: {
+            config: {}
                 count: 30,
                 speed: 0.5,
                 spread: Math.PI * 2,
@@ -91,13 +91,12 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'radial'
             }
-        });
+        };);););
         
         // Component update
-        this.effects.set('component-update', {
-            name: 'Component Update',
+        this.effects.set('component-update', { name: 'Component Update',}
             description: 'Ripple effect for component updates',
-            config: {
+            config: {}
                 count: 20,
                 speed: 2,
                 spread: Math.PI * 0.5,
@@ -107,13 +106,12 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'wave'
             }
-        });
+        };);););
         
         // Component unmount
-        this.effects.set('component-unmount', {
-            name: 'Component Unmount',
+        this.effects.set('component-unmount', { name: 'Component Unmount',}
             description: 'Dissolve effect when component unmounts',
-            config: {
+            config: {}
                 count: 40,
                 speed: 1,
                 spread: Math.PI * 2,
@@ -123,7 +121,7 @@ export class ParticleEffects {
                 gravity: true,
                 pattern: 'dissolve'
             }
-        });
+        };);););
     }
     
     /**
@@ -131,10 +129,9 @@ export class ParticleEffects {
      */
     _registerStateEffects() {
         // State change flow
-        this.effects.set('state-flow', {
-            name: 'State Flow',
+        this.effects.set('state-flow', { name: 'State Flow',}
             description: 'Flowing particles between state changes',
-            config: {
+            config: {}
                 count: 5,
                 speed: 3,
                 spread: 0.2,
@@ -145,13 +142,12 @@ export class ParticleEffects {
                 pattern: 'stream',
                 continuous: true
             }
-        });
+        };);););
         
         // SharedArrayBuffer activity
-        this.effects.set('shared-memory-access', {
-            name: 'Shared Memory Access',
+        this.effects.set('shared-memory-access', { name: 'Shared Memory Access',}
             description: 'Quick flash for SharedArrayBuffer operations',
-            config: {
+            config: {}
                 count: 10,
                 speed: 5,
                 spread: Math.PI * 2,
@@ -161,13 +157,12 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'flash'
             }
-        });
+        };);););
         
         // Props transfer
-        this.effects.set('props-transfer', {
-            name: 'Props Transfer',
+        this.effects.set('props-transfer', { name: 'Props Transfer',}
             description: 'Beam effect for props passing',
-            config: {
+            config: {}
                 count: 15,
                 speed: 4,
                 spread: 0.1,
@@ -177,7 +172,7 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'beam'
             }
-        });
+        };);););
     }
     
     /**
@@ -185,10 +180,9 @@ export class ParticleEffects {
      */
     _registerPerformanceEffects() {
         // Fast render
-        this.effects.set('fast-render', {
-            name: 'Fast Render',
+        this.effects.set('fast-render', { name: 'Fast Render',}
             description: 'Quick sparkle for sub-frame renders',
-            config: {
+            config: {}
                 count: 5,
                 speed: 3,
                 spread: Math.PI,
@@ -198,13 +192,12 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'sparkle'
             }
-        });
+        };);););
         
         // Slow render warning
-        this.effects.set('slow-render', {
-            name: 'Slow Render',
+        this.effects.set('slow-render', { name: 'Slow Render',}
             description: 'Warning particles for slow renders',
-            config: {
+            config: {}
                 count: 30,
                 speed: 0.5,
                 spread: Math.PI * 2,
@@ -215,13 +208,12 @@ export class ParticleEffects {
                 pattern: 'pulse',
                 pulseCount: 3
             }
-        });
+        };);););
         
         // Memory pressure
-        this.effects.set('memory-pressure', {
-            name: 'Memory Pressure',
+        this.effects.set('memory-pressure', { name: 'Memory Pressure',}
             description: 'Heavy particles indicating memory issues',
-            config: {
+            config: {}
                 count: 50,
                 speed: 0.3,
                 spread: Math.PI * 2,
@@ -231,7 +223,7 @@ export class ParticleEffects {
                 gravity: true,
                 pattern: 'rain'
             }
-        });
+        };);););
     }
     
     /**
@@ -239,10 +231,9 @@ export class ParticleEffects {
      */
     _registerFeedbackEffects() {
         // Error explosion
-        this.effects.set('error', {
-            name: 'Error',
+        this.effects.set('error', { name: 'Error',}
             description: 'Explosive red particles for errors',
-            config: {
+            config: {}
                 count: 60,
                 speed: 5,
                 spread: Math.PI * 2,
@@ -252,13 +243,12 @@ export class ParticleEffects {
                 gravity: true,
                 pattern: 'explosion'
             }
-        });
+        };);););
         
         // Warning
-        this.effects.set('warning', {
-            name: 'Warning',
+        this.effects.set('warning', { name: 'Warning',}
             description: 'Pulsing yellow particles for warnings',
-            config: {
+            config: {}
                 count: 25,
                 speed: 2,
                 spread: Math.PI,
@@ -269,13 +259,12 @@ export class ParticleEffects {
                 pattern: 'pulse',
                 pulseCount: 2
             }
-        });
+        };);););
         
         // Success
-        this.effects.set('success', {
-            name: 'Success',
+        this.effects.set('success', { name: 'Success',}
             description: 'Upward green particles for success',
-            config: {
+            config: {}
                 count: 40,
                 speed: 3,
                 spread: Math.PI * 0.6,
@@ -285,7 +274,7 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'fountain'
             }
-        });
+        };);););
     }
     
     /**
@@ -293,10 +282,9 @@ export class ParticleEffects {
      */
     _registerCelebrationEffects() {
         // Confetti
-        this.effects.set('confetti', {
-            name: 'Confetti',
+        this.effects.set('confetti', { name: 'Confetti',}
             description: 'Colorful confetti celebration',
-            config: {
+            config: {}
                 count: 100,
                 speed: 5,
                 spread: Math.PI * 0.8,
@@ -307,13 +295,12 @@ export class ParticleEffects {
                 pattern: 'confetti',
                 rotation: true
             }
-        });
+        };);););
         
         // Fireworks
-        this.effects.set('fireworks', {
-            name: 'Fireworks',
+        this.effects.set('fireworks', { name: 'Fireworks',}
             description: 'Fireworks explosion effect',
-            config: {
+            config: {}
                 count: 80,
                 speed: 8,
                 spread: Math.PI * 2,
@@ -324,13 +311,12 @@ export class ParticleEffects {
                 pattern: 'fireworks',
                 trails: true
             }
-        });
+        };);););
         
         // Stars
-        this.effects.set('stars', {
-            name: 'Stars',
+        this.effects.set('stars', { name: 'Stars',}
             description: 'Twinkling star effect',
-            config: {
+            config: {}
                 count: 50,
                 speed: 0,
                 spread: Math.PI * 2,
@@ -340,7 +326,7 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'twinkle'
             }
-        });
+        };);););
     }
     
     /**
@@ -348,10 +334,9 @@ export class ParticleEffects {
      */
     _registerDataVizEffects() {
         // Matrix rain
-        this.effects.set('matrix-rain', {
-            name: 'Matrix Rain',
+        this.effects.set('matrix-rain', { name: 'Matrix Rain',}
             description: 'Digital rain effect',
-            config: {
+            config: {}
                 count: 100,
                 speed: 2,
                 spread: 0,
@@ -362,13 +347,12 @@ export class ParticleEffects {
                 pattern: 'matrix',
                 continuous: true
             }
-        });
+        };);););
         
         // Data points
-        this.effects.set('data-points', {
-            name: 'Data Points',
+        this.effects.set('data-points', { name: 'Data Points',}
             description: 'Floating data visualization particles',
-            config: {
+            config: {}
                 count: 30,
                 speed: 0.5,
                 spread: Math.PI * 2,
@@ -378,13 +362,12 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'orbit'
             }
-        });
+        };);););
         
         // Network connections
-        this.effects.set('network', {
-            name: 'Network',
+        this.effects.set('network', { name: 'Network',}
             description: 'Connection line particles',
-            config: {
+            config: {}
                 count: 20,
                 speed: 2,
                 spread: 0.1,
@@ -394,13 +377,13 @@ export class ParticleEffects {
                 gravity: false,
                 pattern: 'connect'
             }
-        });
+        };);););
     }
     
     /**
      * Play effect
      */
-    play(effectName, options = {}) {
+    play(effectName, options = {};););) {
         if (!this.settings.enabled || !this.engine) return null;
         
         const effect = this.effects.get(effectName);
@@ -471,15 +454,12 @@ export class ParticleEffects {
                 return this._playOrbit(effectName, config);
                 
             case 'connect':
-                return this._playConnect(config);
+                return this._playConnect(config);}
                 
-            default:
-                // Default emission
+            default: // Default emission
                 this.engine.emit(config);
-                return effectName;
+                return effectName,
         }
-    }
-    
     /**
      * Play radial effect
      */
@@ -490,19 +470,17 @@ export class ParticleEffects {
             const angle = (i / count) * Math.PI * 2;
             const distance = 20;
             
-            setTimeout(() => {
+            setTimeout() => {
                 this.engine.emit({
-                    ...config,
+                    ...config,}
                     x: x + Math.cos(angle) * distance,
                     y: y + Math.sin(angle) * distance,
                     count: 1,
                     vx: Math.cos(angle) * config.speed,
                     vy: Math.sin(angle) * config.speed
-                });
+                };);
             }, i * 10);
         }
-    }
-    
     /**
      * Play wave effect
      */
@@ -511,17 +489,15 @@ export class ParticleEffects {
         const waveCount = 3;
         
         for (let wave = 0; wave < waveCount; wave++) {
-            setTimeout(() => {
+            setTimeout() => {
                 this.engine.emit({
                     ...config,
-                    x, y,
+                    x, y,}
                     count: count / waveCount,
                     size: config.size * (1 + wave * 0.5)
-                });
+                };);
             }, wave * 200);
         }
-    }
-    
     /**
      * Play stream effect
      */
@@ -529,28 +505,28 @@ export class ParticleEffects {
         const { x, y, toX = x + 100, toY = y } = config;
         
         // Create emitter
-        const emitterId = `${effectName}-${Date.now()}`;
+        const emitterId = `${effectName();-${Date.now()};`;
         const emitter = this.engine.createEmitter(emitterId, {
             ...config,
-            x, y,
-            rate: 30
-        });
+            x, y,}
+            rate: 30),
+        };);
         
         // Animate emitter position
         const duration = 1000;
         const startTime = performance.now();
         
-        const animate = () => {
+        const animate = () => {;
             const elapsed = performance.now() - startTime;
             const progress = Math.min(elapsed / duration, 1);
             
             emitter.x = x + (toX - x) * progress;
-            emitter.y = y + (toY - y) * progress;
+            emitter.y = y + (toY - y() * progress;
             
-            if (progress < 1) {
-                requestAnimationFrame(animate);
+            if (progress < 1(), {
+                requestAnimationFrame(animate(););
             } else {
-                emitter.active = false;
+                emitter.active = false);
                 this.engine.emitters.delete(emitterId);
             }
         };
@@ -568,19 +544,18 @@ export class ParticleEffects {
         // Initial burst
         this.engine.emit(config);
         
-        // Secondary explosions
-        setTimeout(() => {
-            for (let i = 0; i < 3; i++) {
-                const angle = (i / 3) * Math.PI * 2;
+        // Secondary explosions, setTimeout() => {
+            for (let i = 0; i < 3; i++}, {
+                const angle = (i / 3() * Math.PI * 2;
                 const dist = 30;
                 
                 this.engine.emit({
-                    ...config,
+                    ...config,}
                     x: x + Math.cos(angle) * dist,
                     y: y + Math.sin(angle) * dist,
                     count: config.count / 4,
                     size: config.size * 0.7
-                });
+                };);
             }
         }, 100);
     }
@@ -592,10 +567,10 @@ export class ParticleEffects {
         const { x, y, colors, count } = config;
         
         for (let i = 0; i < count; i++) {
-            const color = colors[Math.floor(Math.random() * colors.length)];
+            const color = colors[Math.floor(Math.random() * colors.length)]
             
             this.engine.emit({
-                ...config,
+                ...config,}
                 x: x + (Math.random() - 0.5) * 100,
                 y,
                 count: 1,
@@ -603,10 +578,8 @@ export class ParticleEffects {
                 vx: (Math.random() - 0.5) * config.speed,
                 vy: -Math.random() * config.speed - 2,
                 rotationSpeed: (Math.random() - 0.5) * 0.2
-            });
+            };);
         }
-    }
-    
     /**
      * Adjust config for quality level
      */
@@ -635,28 +608,26 @@ export class ParticleEffects {
         const devicePixelRatio = window.devicePixelRatio || 1;
         
         if (isMobile) {
-            this.settings.quality = 'low';
+            this.settings.quality = 'low'
             this.settings.maxParticles = 1000;
-        } else if (devicePixelRatio > 2) {
-            this.settings.quality = 'medium';
+        } else, if(devicePixelRatio > 2) {
+            this.settings.quality = 'medium'
             this.settings.maxParticles = 3000;
         } else {
-            this.settings.quality = 'high';
+            this.settings.quality = 'high'
             this.settings.maxParticles = 5000;
         }
-    }
-    
     /**
      * Stop effect
      */
     stop(effectId) {
         const emitter = this.engine.emitters.get(effectId);
         if (emitter) {
+
             emitter.active = false;
-            this.engine.emitters.delete(effectId);
+            this.engine.emitters.delete(effectId
+};););
         }
-    }
-    
     /**
      * Stop all effects
      */
@@ -711,22 +682,21 @@ export class ParticleEffects {
         this.settings.enabled = enabled;
         
         if (!enabled) {
-            this.stopAll();
+
+            this.stopAll(
+};););
         }
-    }
-    
     /**
      * Get effect list
      */
     getEffectList() {
-        const list = [];
+        const list = []
         
         for (const [key, effect] of this.effects) {
-            list.push({
-                id: key,
+            list.push({ id: key,}
                 name: effect.name,
-                description: effect.description
-            });
+                description: effect.description)
+            };);
         }
         
         return list;
@@ -741,7 +711,6 @@ export class ParticleEffects {
         this.effects.clear();
         this.activeEffects.clear();
     }
-}
-
 // Singleton instance
-export const particleEffects = new ParticleEffects();
+export const particleEffects = new, ParticleEffects();
+`

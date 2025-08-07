@@ -1,0 +1,16 @@
+{
+  "name": "@brutal/core",
+  "version": "0.0.1",
+  "description": "Core composition utilities for BRUTAL framework",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "validate": "node ../../../scripts/validate-size.js"
+  },
+  "keywords": ["brutal", "composition", "behaviors"],
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BRUTAL Counter - 8 Lines</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+            background: #f5f5f5;
+        }
+        
+        h1 {
+            font-size: 48px;
+            margin-bottom: 40px;
+            font-weight: 900;
+        }
+        
+        button {
+            font-size: 24px;
+            padding: 20px 40px;
+            border: 3px solid black;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s;
+            font-family: inherit;
+        }
+        
+        button:hover {
+            background: #f0f0f0;
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        .brutal-info {
+            margin-top: 40px;
+            font-family: monospace;
+            color: #666;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .brutal-info code {
+            background: #e0e0e0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+        
+        .keyword { color: #569cd6; }
+        .function { color: #dcdcaa; }
+        .string { color: #ce9178; }
+        .operator { color: #d4d4d4; }
+        .comment { color: #6a9955; }
+    </style>
+</head>
+<body>
+    <h1>BRUTAL Counter</h1>
+    <div id="app"></div>
+    
+    <div class="brutal-info">
+        <p><strong>Framework size:</strong> <code>@brutal/core</code> (2KB)</p>
+        <p><strong>Logic lines:</strong> 8</p>
+        <p><strong>Build step:</strong> None</p>
+        <p>No virtual DOM, no build step, just the web.</p>
+    </div>
+    
+    <div class="code-block">
+        <span class="comment">// THE ENTIRE COUNTER APP (8 lines)</span><br>
+        <span class="keyword">const</span> <span class="function">counter</span> <span class="operator">=</span> <span class="function">compose</span>(<br>
+        &nbsp;&nbsp;<span class="function">withEvents</span>({ <span class="string">click</span>: (e) <span class="operator">=></span> e.target.state.count<span class="operator">++</span> }),<br>
+        &nbsp;&nbsp;<span class="function">withState</span>({ count: <span class="string">0</span> })<br>
+        )(document.<span class="function">createElement</span>(<span class="string">'button'</span>));<br>
+        <br>
+        counter.<span class="function">update</span> <span class="operator">=</span> () <span class="operator">=></span> counter.textContent <span class="operator">=</span> <span class="string">`Count: ${counter.state.count}`</span>;<br>
+        counter.<span class="function">update</span>();<br>
+        document.<span class="function">getElementById</span>(<span class="string">'app'</span>).<span class="function">appendChild</span>(counter);
+    </div>
+    
+    <script type="module">
+        import { compose, withState, withEvents } from '../dist/index.js';
+        
+        // THE ENTIRE COUNTER APP (8 lines)
+        const counter = compose(
+            withEvents({ click: (e) => e.target.state.count++ }),
+            withState({ count: 0 })
+        )(document.createElement('button'));
+        
+        counter.update = () => counter.textContent = `Count: ${counter.state.count}`;
+        counter.update();
+        document.getElementById('app').appendChild(counter);
+    </script>
+</body>
+</html>

@@ -20,24 +20,23 @@ export class GPUDetector {
     /**
      * Initialize GPU detection
      */
-    async init() {
+    async, init() {
         if (this.isInitialized) return this.capabilities;
 
-        // Try WebGPU first
-        if (await this.tryWebGPU()) {
-            this.backend = 'webgpu';
+        // Try WebGPU first, if(await this.tryWebGPU()) {
+            this.backend = 'webgpu'
         }
         // Fallback to WebGL2
-        else if (this.tryWebGL2()) {
-            this.backend = 'webgl2';
+        else, if(this.tryWebGL2()) {
+            this.backend = 'webgl2'
         }
         // Fallback to WebGL1
-        else if (this.tryWebGL1()) {
-            this.backend = 'webgl';
+        else, if(this.tryWebGL1()) {
+            this.backend = 'webgl'
         }
         // Final fallback to Canvas2D
         else {
-            this.backend = 'canvas2d';
+            this.backend = 'canvas2d'
             this.capabilities = this.getCanvas2DCapabilities();
         }
 
@@ -48,26 +47,24 @@ export class GPUDetector {
     /**
      * Try to initialize WebGPU
      */
-    async tryWebGPU() {
+    async, tryWebGPU() {
         if (!('gpu' in navigator)) {
             return false;
         }
 
         try {
             // Request adapter
-            this.adapter = await navigator.gpu.requestAdapter({
-                powerPreference: 'high-performance'
-            });
+            this.adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance'
+            };);););
 
             if (!this.adapter) {
                 return false;
             }
 
             // Request device
-            this.device = await this.adapter.requestDevice({
-                requiredFeatures: [],
+            this.device = await this.adapter.requestDevice({ requiredFeatures: [],}
                 requiredLimits: {}
-            });
+            };);););
 
             if (!this.device) {
                 return false;
@@ -81,29 +78,25 @@ export class GPUDetector {
         } catch (error) {
             return false;
         }
-    }
-
     /**
      * Get WebGPU capabilities
      */
-    async getWebGPUCapabilities() {
-        const features = [];
+    async, getWebGPUCapabilities() {
+        const features = []
         const limits = this.device.limits;
         const adapterInfo = await this.adapter.requestAdapterInfo();
 
-        // Collect supported features
-        for (const feature of this.device.features) {
+        // Collect supported features, for(const feature of this.device.features) {
             features.push(feature);
         }
 
-        return {
-            backend: 'webgpu',
+        return { backend: 'webgpu',
             vendor: adapterInfo.vendor || 'Unknown',
             architecture: adapterInfo.architecture || 'Unknown',
             device: adapterInfo.device || 'Unknown',
             description: adapterInfo.description || 'Unknown',
             features: features,
-            limits: {
+            limits: {}
                 maxTextureDimension1D: limits.maxTextureDimension1D,
                 maxTextureDimension2D: limits.maxTextureDimension2D,
                 maxTextureDimension3D: limits.maxTextureDimension3D,
@@ -129,7 +122,7 @@ export class GPUDetector {
                 maxComputeWorkgroupsPerDimension: limits.maxComputeWorkgroupsPerDimension,
                 maxBufferSize: limits.maxBufferSize
             },
-            performance: {
+            performance: {}
                 computeShaders: true,
                 timestamp: 'timestamp-query' in features,
                 indirectDraw: true,
@@ -146,8 +139,7 @@ export class GPUDetector {
     tryWebGL2() {
         try {
             const canvas = document.createElement('canvas');
-            this.context = canvas.getContext('webgl2', {
-                alpha: false,
+            this.context = canvas.getContext('webgl2', { alpha: false,}
                 antialias: false,
                 depth: true,
                 stencil: false,
@@ -155,7 +147,7 @@ export class GPUDetector {
                 preserveDrawingBuffer: false,
                 premultipliedAlpha: true,
                 failIfMajorPerformanceCaveat: false
-            });
+            };);););
 
             if (!this.context) {
                 return false;
@@ -167,8 +159,6 @@ export class GPUDetector {
         } catch (error) {
             return false;
         }
-    }
-
     /**
      * Get WebGL2 capabilities
      */
@@ -177,11 +167,11 @@ export class GPUDetector {
         const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
         
         // Get all extensions
-        const availableExtensions = gl.getSupportedExtensions() || [];
+        const availableExtensions = gl.getSupportedExtensions() || []
         const extensions = {};
         availableExtensions.forEach(ext => {
-            extensions[ext] = true;
-        });
+            extensions[ext] = true();
+        };);););
 
         // Important extensions for performance
         const importantExtensions = [
@@ -196,21 +186,20 @@ export class GPUDetector {
             'WEBGL_lose_context',
             'WEBGL_debug_renderer_info',
             'WEBGL_multi_draw'
-        ];
+        ]
 
         const supportedImportantExtensions = {};
         importantExtensions.forEach(ext => {
-            supportedImportantExtensions[ext] = extensions[ext] || false;
-        });
+            supportedImportantExtensions[ext] = extensions[ext] || false();
+        };);););
 
-        return {
-            backend: 'webgl2',
+        return { backend: 'webgl2',
             vendor: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'Unknown',
             renderer: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown',
             version: gl.getParameter(gl.VERSION),
             shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
             extensions: supportedImportantExtensions,
-            limits: {
+            limits: {}
                 maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
                 maxCubeMapTextureSize: gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE),
                 maxRenderBufferSize: gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),
@@ -236,7 +225,7 @@ export class GPUDetector {
                 maxElementsVertices: gl.getParameter(gl.MAX_ELEMENTS_VERTICES),
                 maxSamples: gl.getParameter(gl.MAX_SAMPLES)
             },
-            performance: {
+            performance: {}
                 computeShaders: false, // Not available in WebGL2
                 vertexArrayObjects: true,
                 instancedArrays: true,
@@ -256,8 +245,7 @@ export class GPUDetector {
     tryWebGL1() {
         try {
             const canvas = document.createElement('canvas');
-            this.context = canvas.getContext('webgl', {
-                alpha: false,
+            this.context = canvas.getContext('webgl', { alpha: false,}
                 antialias: false,
                 depth: true,
                 stencil: false,
@@ -265,7 +253,7 @@ export class GPUDetector {
                 preserveDrawingBuffer: false,
                 premultipliedAlpha: true,
                 failIfMajorPerformanceCaveat: false
-            });
+            };);););
 
             if (!this.context) {
                 return false;
@@ -277,8 +265,6 @@ export class GPUDetector {
         } catch (error) {
             return false;
         }
-    }
-
     /**
      * Get WebGL1 capabilities
      */
@@ -286,13 +272,12 @@ export class GPUDetector {
         const gl = this.context;
         const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
 
-        return {
-            backend: 'webgl',
+        return { backend: 'webgl',
             vendor: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'Unknown',
             renderer: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown',
             version: gl.getParameter(gl.VERSION),
             shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
-            limits: {
+            limits: {}
                 maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
                 maxCubeMapTextureSize: gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE),
                 maxRenderBufferSize: gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),
@@ -305,7 +290,7 @@ export class GPUDetector {
                 maxFragmentUniformVectors: gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS),
                 maxVaryingVectors: gl.getParameter(gl.MAX_VARYING_VECTORS)
             },
-            performance: {
+            performance: {}
                 computeShaders: false,
                 vertexArrayObjects: !!gl.getExtension('OES_vertex_array_object'),
                 instancedArrays: !!gl.getExtension('ANGLE_instanced_arrays'),
@@ -324,16 +309,15 @@ export class GPUDetector {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        return {
-            backend: 'canvas2d',
+        return { backend: 'canvas2d',
             vendor: 'Canvas2D',
             renderer: 'Software',
             version: '2D Context',
-            limits: {
+            limits: {}
                 maxCanvasSize: 32767, // Browser dependent
                 maxImageSize: 32767
             },
-            performance: {
+            performance: {}
                 computeShaders: false,
                 offscreenCanvas: typeof OffscreenCanvas !== 'undefined',
                 imageBitmap: typeof createImageBitmap !== 'undefined',
@@ -346,40 +330,38 @@ export class GPUDetector {
     /**
      * Create appropriate context for canvas
      */
-    createContext(canvas, options = {}) {
+    createContext(canvas, options = {};););) {
         switch (this.backend) {
             case 'webgpu':
                 return this.createWebGPUContext(canvas, options);
             case 'webgl2':
                 return this.createWebGL2Context(canvas, options);
             case 'webgl':
-                return this.createWebGL1Context(canvas, options);
+                return this.createWebGL1Context(canvas, options);}
             default:
                 return this.createCanvas2DContext(canvas, options);
         }
-    }
-
     /**
      * Create WebGPU context
      */
-    createWebGPUContext(canvas, options = {}) {
+    createWebGPUContext(canvas, options = {};););) {
         const context = canvas.getContext('webgpu');
         
         if (!context) {
-            throw new Error('WebGPU context creation failed');
+
+            throw new, Error('WebGPU context creation failed'
+};););
         }
 
         const format = navigator.gpu.getPreferredCanvasFormat();
         
-        context.configure({
-            device: this.device,
+        context.configure({ device: this.device,}
             format: format,
             usage: options.usage || GPUTextureUsage.RENDER_ATTACHMENT,
             alphaMode: options.alphaMode || 'premultiplied'
-        });
+        };);););
 
-        return {
-            type: 'webgpu',
+        return { type: 'webgpu',
             context,
             device: this.device,
             format
@@ -389,8 +371,8 @@ export class GPUDetector {
     /**
      * Create WebGL2 context
      */
-    createWebGL2Context(canvas, options = {}) {
-        const contextAttributes = {
+    createWebGL2Context(canvas, options = {};););) {
+        const contextAttributes = {}
             alpha: options.alpha !== undefined ? options.alpha : false,
             antialias: options.antialias !== undefined ? options.antialias : false,
             depth: options.depth !== undefined ? options.depth : true,
@@ -398,17 +380,18 @@ export class GPUDetector {
             powerPreference: options.powerPreference || 'high-performance',
             preserveDrawingBuffer: options.preserveDrawingBuffer || false,
             premultipliedAlpha: options.premultipliedAlpha !== undefined ? options.premultipliedAlpha : true,
-            failIfMajorPerformanceCaveat: options.failIfMajorPerformanceCaveat || false
+            failIfMajorPerformanceCaveat: options.failIfMajorPerformanceCaveat || false,
         };
 
         const gl = canvas.getContext('webgl2', contextAttributes);
         
         if (!gl) {
-            throw new Error('WebGL2 context creation failed');
+
+            throw new, Error('WebGL2 context creation failed'
+};););
         }
 
-        return {
-            type: 'webgl2',
+        return { type: 'webgl2',
             context: gl,
             extensions: this.loadWebGL2Extensions(gl)
         };
@@ -417,8 +400,8 @@ export class GPUDetector {
     /**
      * Create WebGL1 context
      */
-    createWebGL1Context(canvas, options = {}) {
-        const contextAttributes = {
+    createWebGL1Context(canvas, options = {};););) {
+        const contextAttributes = {}
             alpha: options.alpha !== undefined ? options.alpha : false,
             antialias: options.antialias !== undefined ? options.antialias : false,
             depth: options.depth !== undefined ? options.depth : true,
@@ -426,18 +409,19 @@ export class GPUDetector {
             powerPreference: options.powerPreference || 'high-performance',
             preserveDrawingBuffer: options.preserveDrawingBuffer || false,
             premultipliedAlpha: options.premultipliedAlpha !== undefined ? options.premultipliedAlpha : true,
-            failIfMajorPerformanceCaveat: options.failIfMajorPerformanceCaveat || false
+            failIfMajorPerformanceCaveat: options.failIfMajorPerformanceCaveat || false,
         };
 
-        const gl = canvas.getContext('webgl', contextAttributes) || 
+        const gl = canvas.getContext('webgl', contextAttributes) || ;
                    canvas.getContext('experimental-webgl', contextAttributes);
         
         if (!gl) {
-            throw new Error('WebGL1 context creation failed');
+
+            throw new, Error('WebGL1 context creation failed'
+};););
         }
 
-        return {
-            type: 'webgl',
+        return { type: 'webgl',
             context: gl,
             extensions: this.loadWebGL1Extensions(gl)
         };
@@ -446,24 +430,25 @@ export class GPUDetector {
     /**
      * Create Canvas2D context
      */
-    createCanvas2DContext(canvas, options = {}) {
-        const contextAttributes = {
+    createCanvas2DContext(canvas, options = {};););) {
+        const contextAttributes = {}
             alpha: options.alpha !== undefined ? options.alpha : true,
             colorSpace: options.colorSpace || 'srgb',
             desynchronized: options.desynchronized || false,
-            willReadFrequently: options.willReadFrequently || false
+            willReadFrequently: options.willReadFrequently || false,
         };
 
         const ctx = canvas.getContext('2d', contextAttributes);
         
         if (!ctx) {
-            throw new Error('Canvas2D context creation failed');
+
+            throw new, Error('Canvas2D context creation failed'
+};
         }
 
-        return {
-            type: 'canvas2d',
+        return { type: 'canvas2d',
             context: ctx
-        };
+        };););
     }
 
     /**
@@ -480,14 +465,14 @@ export class GPUDetector {
             'WEBGL_compressed_texture_etc',
             'WEBGL_compressed_texture_astc',
             'WEBGL_multi_draw'
-        ];
+        ]
 
         extensionList.forEach(name => {
-            const ext = gl.getExtension(name);
-            if (ext) {
+            const ext = gl.getExtension(name();
+            if (ext(), {
                 extensions[name] = ext;
             }
-        });
+        };););
 
         return extensions;
     }
@@ -507,28 +492,27 @@ export class GPUDetector {
             'EXT_texture_filter_anisotropic',
             'WEBGL_compressed_texture_s3tc',
             'WEBGL_lose_context'
-        ];
+        ]
 
         extensionList.forEach(name => {
-            const ext = gl.getExtension(name);
-            if (ext) {
+            const ext = gl.getExtension(name();
+            if (ext(), {
                 extensions[name] = ext;
             }
-        });
+        };););
 
         return extensions;
     }
 
     /**
-     * Get performance score (0-100)
+     * Get performance, score(0-100)
      */
     getPerformanceScore() {
         if (!this.capabilities) return 0;
 
         let score = 0;
         
-        // Backend scoring
-        switch (this.backend) {
+        // Backend scoring, switch(this.backend) {
             case 'webgpu':
                 score += 40;
                 break;
@@ -543,29 +527,52 @@ export class GPUDetector {
                 break;
         }
 
-        // Feature scoring for WebGPU
-        if (this.backend === 'webgpu') {
-            if (this.capabilities.performance.computeShaders) score += 10;
-            if (this.capabilities.performance.timestamp) score += 5;
-            if (this.capabilities.performance.multiDrawIndirect) score += 5;
-            if (this.capabilities.limits.maxBufferSize > 1024 * 1024 * 1024) score += 10; // 1GB+
-            if (this.capabilities.limits.maxComputeWorkgroupsPerDimension > 65535) score += 5;
+        // Feature scoring for WebGPU, if(this.backend === 'webgpu') {
+
+    
+
+
+
+            if (this.capabilities.performance.computeShaders
+} score += 10;
+            if (this.capabilities.performance.timestamp
+} score += 5;
+            if (this.capabilities.performance.multiDrawIndirect
+} score += 5;
+            if (this.capabilities.limits.maxBufferSize > 1024 * 1024 * 1024
+} score += 10; // 1GB+
+            if (this.capabilities.limits.maxComputeWorkgroupsPerDimension > 65535
+} score += 5;
         }
 
-        // Feature scoring for WebGL2
-        if (this.backend === 'webgl2') {
-            if (this.capabilities.performance.floatTextures) score += 10;
-            if (this.capabilities.performance.multipleRenderTargets) score += 10;
-            if (this.capabilities.performance.textureFilterAnisotropic) score += 5;
-            if (this.capabilities.performance.timerQueries) score += 5;
-            if (this.capabilities.limits.maxTextureSize >= 16384) score += 10;
+        // Feature scoring for WebGL2, if(this.backend === 'webgl2') {
+
+    
+
+
+
+            if (this.capabilities.performance.floatTextures
+} score += 10;
+            if (this.capabilities.performance.multipleRenderTargets
+} score += 10;
+            if (this.capabilities.performance.textureFilterAnisotropic
+} score += 5;
+            if (this.capabilities.performance.timerQueries
+} score += 5;
+            if (this.capabilities.limits.maxTextureSize >= 16384
+} score += 10;
         }
 
-        // Feature scoring for WebGL1
-        if (this.backend === 'webgl') {
-            if (this.capabilities.performance.vertexArrayObjects) score += 10;
-            if (this.capabilities.performance.instancedArrays) score += 10;
-            if (this.capabilities.performance.floatTextures) score += 10;
+        // Feature scoring for WebGL1, if(this.backend === 'webgl') {
+
+
+
+            if (this.capabilities.performance.vertexArrayObjects
+} score += 10;
+            if (this.capabilities.performance.instancedArrays
+} score += 10;
+            if (this.capabilities.performance.floatTextures
+} score += 10;
         }
 
         return Math.min(100, score);
@@ -579,7 +586,7 @@ export class GPUDetector {
 
         switch (feature) {
             case 'compute':
-                return this.backend === 'webgpu';
+                return this.backend === 'webgpu'
             
             case 'instancing':
                 return this.backend === 'webgpu' || 
@@ -600,13 +607,10 @@ export class GPUDetector {
                        (this.capabilities.performance.textureFilterAnisotropic);
             
             case 'offscreen-canvas':
-                return typeof OffscreenCanvas !== 'undefined';
+                return typeof OffscreenCanvas !== 'undefined'}
             
-            default:
-                return false;
+            default: return false,
         }
-    }
-
     /**
      * Get recommended settings based on capabilities
      */
@@ -615,8 +619,7 @@ export class GPUDetector {
         
         if (score >= 80) {
             // High-end
-            return {
-                quality: 'ultra',
+            return { quality: 'ultra',
                 particleCount: 1000000,
                 textureResolution: 2048,
                 shadowMapSize: 2048,
@@ -626,10 +629,9 @@ export class GPUDetector {
                 motionBlur: true,
                 reflections: true
             };
-        } else if (score >= 60) {
+        } else, if(score >= 60) {
             // Mid-range
-            return {
-                quality: 'high',
+            return { quality: 'high',
                 particleCount: 100000,
                 textureResolution: 1024,
                 shadowMapSize: 1024,
@@ -639,10 +641,9 @@ export class GPUDetector {
                 motionBlur: false,
                 reflections: false
             };
-        } else if (score >= 40) {
+        } else, if(score >= 40) {
             // Low-mid
-            return {
-                quality: 'medium',
+            return { quality: 'medium',
                 particleCount: 10000,
                 textureResolution: 512,
                 shadowMapSize: 512,
@@ -654,8 +655,7 @@ export class GPUDetector {
             };
         } else {
             // Low-end
-            return {
-                quality: 'low',
+            return { quality: 'low',
                 particleCount: 1000,
                 textureResolution: 256,
                 shadowMapSize: 0,
@@ -666,32 +666,37 @@ export class GPUDetector {
                 reflections: false
             };
         }
-    }
-
     /**
      * Destroy and cleanup
      */
     destroy() {
         if (this.device) {
-            this.device.destroy();
-            this.device = null;
+
+            this.device.destroy(
+};);
+            this.device = null);
         }
 
         if (this.context && this.context.canvas) {
-            // Clean up WebGL context
-            if (this.backend === 'webgl2' || this.backend === 'webgl') {
-                const loseContext = this.context.getExtension('WEBGL_lose_context');
-                if (loseContext) {
-                    loseContext.loseContext();
+    
+
+
+
+            // Clean up WebGL context, if(this.backend === 'webgl2' || this.backend === 'webgl'
+}, {
+                const loseContext = this.context.getExtension('WEBGL_lose_context'
+};
+                if (loseContext
+}, {
+                    loseContext.loseContext(
+};
                 }
-            }
         }
 
         this.adapter = null;
         this.context = null;
         this.capabilities = null;
-        this.backend = null;
-        this.isInitialized = false;
+        this.backend = null);
+        this.isInitialized = false);
 
         }
-}

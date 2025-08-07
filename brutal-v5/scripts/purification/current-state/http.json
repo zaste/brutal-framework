@@ -1,0 +1,54 @@
+{
+  "name": "@brutal/http",
+  "timestamp": "2025-07-15T10:24:04.883Z",
+  "exports": {
+    "VERSION": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "h": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "RequestConfig": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "RetryConfig": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "Response": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "Interceptor": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "InterceptorManager": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "Transformer": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "HttpClient": {
+      "file": "types.ts",
+      "type": "interface"
+    }
+  },
+  "files": [
+    "index.ts",
+    "minimal.ts",
+    "types.ts"
+  ],
+  "bundleSize": 3988,
+  "dependencies": {},
+  "consumers": []
+}

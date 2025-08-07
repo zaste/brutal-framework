@@ -2,4 +2,4 @@
  * Navigation Components Export
  */
 
-export { NavigationBar } from './NavigationBar.js';
+export { NavigationBar } from './NavigationBar.js'

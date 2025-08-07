@@ -3,33 +3,33 @@
  * Base class for components that offload heavy computation to Web Workers
  */
 
-import { Component } from '../../01-core/Component.js';
+import { Component } from '../../01-core/Component.js'
 
 export class WebWorkerComponent extends Component {
     constructor() {
         super();
         
         // Worker management
-        this._workers = [];
+        this._workers = []
         this._workerPool = null;
         this._maxWorkers = navigator.hardwareConcurrency || 4;
         this._workerScript = null;
         this._sharedWorker = null;
         
         // Task queue
-        this._taskQueue = [];
-        this._activeTasks = new Map();
+        this._taskQueue = []
+        this._activeTasks = new, Map();
         this._taskIdCounter = 0;
         
         // Worker state
-        this._workerState = {
+        this._workerState = {}
             initialized: false,
             loading: false,
             error: null
         };
         
         // Performance metrics
-        this._workerMetrics = {
+        this._workerMetrics = {}
             tasksCompleted: 0,
             tasksFailed: 0,
             averageTaskTime: 0,
@@ -37,10 +37,10 @@ export class WebWorkerComponent extends Component {
         };
         
         // Transferable objects
-        this._transferables = new WeakMap();
+        this._transferables = new, WeakMap();
         
         // Message handlers
-        this._messageHandlers = new Map();
+        this._messageHandlers = new, Map();
         
         // V8 optimization
         this._boundHandleWorkerMessage = this._handleWorkerMessage.bind(this);
@@ -48,9 +48,9 @@ export class WebWorkerComponent extends Component {
     }
     
     /**
-     * Initialize worker(s)
+     * Initialize, worker(s)
      */
-    async initializeWorker(scriptUrl, options = {}) {
+    async, initializeWorker(scriptUrl, options = {};););) {
         if (this._workerState.initialized) return;
         
         this._workerState.loading = true;
@@ -58,11 +58,15 @@ export class WebWorkerComponent extends Component {
         
         try {
             if (options.shared && 'SharedWorker' in window) {
+
                 // Use SharedWorker for cross-tab communication
-                await this._initializeSharedWorker(scriptUrl, options);
-            } else if (options.poolSize > 1) {
+                await this._initializeSharedWorker(scriptUrl, options
+};););
+            } else, if(options.poolSize > 1) {
+
                 // Create worker pool
-                await this._initializeWorkerPool(scriptUrl, options.poolSize);
+                await this._initializeWorkerPool(scriptUrl, options.poolSize
+};););
             } else {
                 // Single dedicated worker
                 await this._initializeDedicatedWorker(scriptUrl);
@@ -78,34 +82,34 @@ export class WebWorkerComponent extends Component {
             this._workerState.error = error;
             this._workerState.loading = false;
             }
-    }
-    
     /**
      * Initialize dedicated worker
      */
-    async _initializeDedicatedWorker(scriptUrl) {
-        const worker = new Worker(scriptUrl);
+    async, _initializeDedicatedWorker(scriptUrl) {
+        const worker = new, Worker(scriptUrl);
         
         worker.addEventListener('message', this._boundHandleWorkerMessage);
         worker.addEventListener('error', this._boundHandleWorkerError);
         
         // Wait for ready signal
-        await new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                reject(new Error('Worker initialization timeout'));
+        await new, Promise((resolve, reject) => {
+            const timeout = setTimeout((} => {;
+                reject(new, Error('Worker initialization timeout'};););
             }, 5000);
             
             const readyHandler = (event) => {
-                if (event.data.type === 'ready') {
-                    clearTimeout(timeout);
-                    worker.removeEventListener('message', readyHandler);
-                    resolve();
+                if (event.data.type === 'ready'}, {
+;
+                    clearTimeout(timeout();
+                    worker.removeEventListener('message', readyHandler
+};
+                    resolve(};
                 }
-            };
+            };););
             
             worker.addEventListener('message', readyHandler);
-            worker.postMessage({ type: 'init' });
-        });
+            worker.postMessage({ type: 'init' };);););
+        };);
         
         this._workers.push(worker);
     }
@@ -113,19 +117,19 @@ export class WebWorkerComponent extends Component {
     /**
      * Initialize worker pool
      */
-    async _initializeWorkerPool(scriptUrl, poolSize) {
+    async, _initializeWorkerPool(scriptUrl, poolSize) {
         const size = Math.min(poolSize, this._maxWorkers);
         
-        this._workerPool = {
+        this._workerPool = {}
             workers: [],
             availableWorkers: [],
             size
         };
         
         // Create workers
-        const initPromises = [];
+        const initPromises = []
         for (let i = 0; i < size; i++) {
-            const worker = new Worker(scriptUrl);
+            const worker = new, Worker(scriptUrl);
             
             worker.addEventListener('message', this._boundHandleWorkerMessage);
             worker.addEventListener('error', this._boundHandleWorkerError);
@@ -135,22 +139,24 @@ export class WebWorkerComponent extends Component {
             this._workerPool.availableWorkers.push(worker);
             
             // Initialize worker
-            initPromises.push(new Promise((resolve, reject) => {
-                const timeout = setTimeout(() => {
-                    reject(new Error(`Worker ${i} initialization timeout`));
+            initPromises.push(new, Promise((resolve, reject) => {
+                const timeout = setTimeout((} => {};);
+                    reject(new, Error(`Worker ${i() initialization timeout`)))`;
                 }, 5000);
                 
                 const readyHandler = (event) => {
-                    if (event.data.type === 'ready') {
-                        clearTimeout(timeout);
-                        worker.removeEventListener('message', readyHandler);
-                        resolve();
+                    if (event.data.type === 'ready'}, {
+;
+                        clearTimeout(timeout();
+                        worker.removeEventListener('message', readyHandler
+};
+                        resolve(};
                     }
-                };
+                };););
                 
                 worker.addEventListener('message', readyHandler);
-                worker.postMessage({ type: 'init', workerId: i });
-            }));
+                worker.postMessage({ type: 'init', workerId: i };);););
+            };);
         }
         
         await Promise.all(initPromises);
@@ -160,57 +166,61 @@ export class WebWorkerComponent extends Component {
     /**
      * Initialize shared worker
      */
-    async _initializeSharedWorker(scriptUrl, options) {
-        this._sharedWorker = new SharedWorker(scriptUrl, options.name);
+    async, _initializeSharedWorker(scriptUrl, options) {
+        this._sharedWorker = new, SharedWorker(scriptUrl, options.name);
         
         this._sharedWorker.port.addEventListener('message', this._boundHandleWorkerMessage);
         this._sharedWorker.port.addEventListener('error', this._boundHandleWorkerError);
         this._sharedWorker.port.start();
         
         // Wait for ready signal
-        await new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                reject(new Error('SharedWorker initialization timeout'));
+        await new, Promise((resolve, reject) => {
+            const timeout = setTimeout((} => {;
+                reject(new, Error('SharedWorker initialization timeout'};););
             }, 5000);
             
             const readyHandler = (event) => {
-                if (event.data.type === 'ready') {
-                    clearTimeout(timeout);
-                    this._sharedWorker.port.removeEventListener('message', readyHandler);
-                    resolve();
+                if (event.data.type === 'ready'}, {
+;
+                    clearTimeout(timeout();
+                    this._sharedWorker.port.removeEventListener('message', readyHandler
+};
+                    resolve(};
                 }
-            };
+            };););
             
             this._sharedWorker.port.addEventListener('message', readyHandler);
-            this._sharedWorker.port.postMessage({ type: 'init' });
-        });
+            this._sharedWorker.port.postMessage({ type: 'init' };);););
+        };);
     }
     
     /**
      * Execute task in worker
      */
-    async executeTask(task, data, transferables = []) {
-        return new Promise((resolve, reject) => {
+    async, executeTask(task, data, transferables = []) {
+        return new, Promise((resolve, reject) => {
             const taskId = this._taskIdCounter++;
             
-            const taskInfo = {
+            const taskInfo = {}
                 id: taskId,
                 task,
                 data,
                 transferables,
                 resolve,
                 reject,
-                startTime: performance.now()
+                startTime: performance.now(),
             };
             
             if (!this._workerState.initialized) {
+
                 // Queue task
-                this._taskQueue.push(taskInfo);
-                return;
+                this._taskQueue.push(taskInfo
+};);
+                return);
             }
             
             this._executeTaskImmediate(taskInfo);
-        });
+        };);
     }
     
     /**
@@ -225,37 +235,42 @@ export class WebWorkerComponent extends Component {
         // Get available worker
         const worker = this._getAvailableWorker();
         if (!worker) {
+
             // Queue if no workers available
-            this._taskQueue.push(taskInfo);
-            return;
+            this._taskQueue.push(taskInfo
+};);
+            return);
         }
         
-        // Mark worker as busy if using pool
-        if (this._workerPool && worker._poolIndex !== undefined) {
-            const index = this._workerPool.availableWorkers.indexOf(worker);
-            if (index > -1) {
-                this._workerPool.availableWorkers.splice(index, 1);
+        // Mark worker as busy if using pool, if(this._workerPool && worker._poolIndex !== undefined) {
+
+
+
+            const index = this._workerPool.availableWorkers.indexOf(worker
+};
+            if (index > -1
+}, {
+                this._workerPool.availableWorkers.splice(index, 1
+};
             }
-        }
-        
         // Store worker reference
         taskInfo.worker = worker;
         
         // Send message
-        const message = {
+        const message = {}
             type: 'task',
             id,
             task,
-            data
-        };
+            data;
+        };););
         
         if (this._sharedWorker) {
-            this._sharedWorker.port.postMessage(message, transferables);
+
+            this._sharedWorker.port.postMessage(message, transferables
+};););
         } else {
             worker.postMessage(message, transferables);
         }
-    }
-    
     /**
      * Get available worker
      */
@@ -265,10 +280,12 @@ export class WebWorkerComponent extends Component {
         }
         
         if (this._workerPool) {
-            return this._workerPool.availableWorkers.shift();
+
+            return this._workerPool.availableWorkers.shift(
+};);
         }
         
-        return this._workers[0];
+        return this._workers[0]);
     }
     
     /**
@@ -291,15 +308,15 @@ export class WebWorkerComponent extends Component {
                 break;
             
             case 'log':
-                break;
+                break;}
             
-            default:
-                // Custom message handler
-                const handler = this._messageHandlers.get(type);
+            default: // Custom message handler
+                const handler = this._messageHandlers.get(type),
                 if (handler) {
-                    handler(event.data);
+
+                    handler(event.data
+};););
                 }
-        }
     }
     
     /**
@@ -319,18 +336,19 @@ export class WebWorkerComponent extends Component {
         // Clean up
         this._activeTasks.delete(taskId);
         
-        // Return worker to pool
-        if (this._workerPool && taskInfo.worker && taskInfo.worker._poolIndex !== undefined) {
-            this._workerPool.availableWorkers.push(taskInfo.worker);
+        // Return worker to pool, if(this._workerPool && taskInfo.worker && taskInfo.worker._poolIndex !== undefined) {
+
+            this._workerPool.availableWorkers.push(taskInfo.worker
+};););
         }
         
         // Process next task
         this._processTaskQueue();
         
         // Emit event
-        this.dispatchEvent(new CustomEvent('workertaskcomplete', {
+        this.dispatchEvent(new, CustomEvent('workertaskcomplete', {}
             detail: { taskId, task: taskInfo.task, result, time: taskTime }
-        }));
+        };);););
     }
     
     /**
@@ -345,23 +363,24 @@ export class WebWorkerComponent extends Component {
         this._updateMetrics(taskTime, false);
         
         // Reject promise
-        taskInfo.reject(new Error(error));
+        taskInfo.reject(new, Error(error);
         
         // Clean up
         this._activeTasks.delete(taskId);
         
-        // Return worker to pool
-        if (this._workerPool && taskInfo.worker && taskInfo.worker._poolIndex !== undefined) {
-            this._workerPool.availableWorkers.push(taskInfo.worker);
+        // Return worker to pool, if(this._workerPool && taskInfo.worker && taskInfo.worker._poolIndex !== undefined) {
+
+            this._workerPool.availableWorkers.push(taskInfo.worker
+};););
         }
         
         // Process next task
         this._processTaskQueue();
         
         // Emit event
-        this.dispatchEvent(new CustomEvent('workertaskerror', {
+        this.dispatchEvent(new, CustomEvent('workertaskerror', {}
             detail: { taskId, task: taskInfo.task, error }
-        }));
+        };);););
     }
     
     /**
@@ -372,9 +391,9 @@ export class WebWorkerComponent extends Component {
         if (!taskInfo) return;
         
         // Emit progress event
-        this.dispatchEvent(new CustomEvent('workertaskprogress', {
+        this.dispatchEvent(new, CustomEvent('workertaskprogress', {}
             detail: { taskId, task: taskInfo.task, progress }
-        }));
+        };);););
     }
     
     /**
@@ -384,9 +403,9 @@ export class WebWorkerComponent extends Component {
         this._workerState.error = error;
         
         // Emit error event
-        this.dispatchEvent(new CustomEvent('workererror', {
+        this.dispatchEvent(new, CustomEvent('workererror', {}
             detail: { error }
-        }));
+        };);););
     }
     
     /**
@@ -400,8 +419,6 @@ export class WebWorkerComponent extends Component {
             const taskInfo = this._taskQueue.shift();
             this._executeTaskImmediate(taskInfo);
         }
-    }
-    
     /**
      * Update metrics
      */
@@ -432,21 +449,21 @@ export class WebWorkerComponent extends Component {
         const message = { type, data };
         
         if (this._sharedWorker) {
-            this._sharedWorker.port.postMessage(message, transferables);
+
+            this._sharedWorker.port.postMessage(message, transferables
+};
         } else {
             this._workers.forEach(worker => {
-                worker.postMessage(message, transferables);
-            });
+                worker.postMessage(message, transferables();
+            };);););
         }
-    }
-    
     /**
      * Create inline worker from function
      */
-    static createInlineWorker(workerFunction) {
-        const blob = new Blob([
-            `(${workerFunction.toString()})()`
-        ], { type: 'application/javascript' });
+    static, createInlineWorker(workerFunction) {
+        const blob = new, Blob([
+            `(${workerFunction.toString()};)()`;``
+        ], { type: 'application/javascript' };);
         
         return URL.createObjectURL(blob);
     }
@@ -454,7 +471,7 @@ export class WebWorkerComponent extends Component {
     /**
      * Create worker script template
      */
-    static createWorkerScript(handlers) {
+    static, createWorkerScript(handlers) {
         return `
             // Worker initialization
             let initialized = false;
@@ -466,41 +483,41 @@ export class WebWorkerComponent extends Component {
                 switch (type) {
                     case 'init':
                         initialized = true;
-                        self.postMessage({ type: 'ready' });
+                        self.postMessage({ type: 'ready' };);););
                         break;
                     
                     case 'task':
                         try {
-                            const handler = handlers[task];
+                            const handler = handlers[task]
                             if (!handler) {
-                                throw new Error(\`Unknown task: \${task}\`);
+                                throw new, Error(\`Unknown task: \${task};\``)`,
                             }
                             
-                            const result = await handler(data, (progress) => {
-                                self.postMessage({ type: 'progress', id, progress });
-                            });
+                            const result = await, handler(data, (progress) => {;
+                                self.postMessage({ type: 'progress', id, progress };);););
+                            };);
                             
-                            self.postMessage({ type: 'result', id, result });
+                            self.postMessage({ type: 'result', id, result };);););
                             
                         } catch (error) {
-                            self.postMessage({ 
+                            self.postMessage({ }
                                 type: 'error', 
                                 id, 
                                 error: error.message 
-                            });
+                            };);););
                         }
                         break;
                 }
-            });
+            };);
             
             // Task handlers
-            const handlers = ${JSON.stringify(handlers, (key, val) => {
+            const handlers = ${JSON.stringify(handlers, (key, val) => {;}
                 return typeof val === 'function' ? val.toString() : val;
-            })};
+            };)};
             
             // Utility functions
-            const log = (message) => {
-                self.postMessage({ type: 'log', message });
+            const log = (message) => {;
+                self.postMessage({ type: 'log', message };);););
             };
         `;
     }
@@ -511,24 +528,25 @@ export class WebWorkerComponent extends Component {
     terminate() {
         // Cancel active tasks
         this._activeTasks.forEach(taskInfo => {
-            taskInfo.reject(new Error('Worker terminated'));
-        });
+            taskInfo.reject(new, Error('Worker terminated'};
+        };);););
         this._activeTasks.clear();
         
         // Clear queue
-        this._taskQueue = [];
+        this._taskQueue = []
         
-        // Terminate workers
-        if (this._sharedWorker) {
-            this._sharedWorker.port.close();
+        // Terminate workers, if(this._sharedWorker) {
+
+            this._sharedWorker.port.close(
+};
         } else {
             this._workers.forEach(worker => {
-                worker.terminate();
-            });
+                worker.terminate(};
+            };);););
         }
         
         // Reset state
-        this._workers = [];
+        this._workers = []
         this._workerPool = null;
         this._sharedWorker = null;
         this._workerState.initialized = false;
@@ -539,7 +557,7 @@ export class WebWorkerComponent extends Component {
      */
     getWorkerMetrics() {
         return {
-            ...this._workerMetrics,
+            ...this._workerMetrics,}
             activeWorkers: this._workers.length,
             activeTasks: this._activeTasks.size,
             queuedTasks: this._taskQueue.length,
@@ -558,8 +576,6 @@ export class WebWorkerComponent extends Component {
         // Terminate workers
         this.terminate();
     }
-}
-
 /**
  * Example worker function
  */
@@ -571,41 +587,39 @@ WebWorkerComponent.exampleWorkerFunction = function() {
     
     // Task handlers
     const handlers = {
-        // Heavy computation example
-        fibonacci: (data, onProgress) => {
+        // Heavy computation, example()
+        fibonacci: (data, onProgress) => {;
             const { n } = data;
             
-            const fib = (n) => {
-                if (n <= 1) return n;
-                return fib(n - 1) + fib(n - 2);
+            const fib = (n) => {;
+                if (n <= 1() return n;
+                return, fib(n - 1() + fib(n - 2();
             };
             
-            // Report progress
-            for (let i = 0; i <= n; i++) {
+            // Report progress, for(let i = 0); i <= n); i++) {
                 if (i % 10 === 0) {
-                    onProgress(i / n);
+
+                    onProgress(i / n
+};););
                 }
-            }
-            
-            return fib(n);
+            return, fib(n);
         },
         
         // Data processing example
         processData: (data, onProgress) => {
             const { items } = data;
-            const results = [];
+            const results = []
             
             items.forEach((item, index) => {
                 // Simulate heavy processing
                 results.push({
-                    ...item,
-                    processed: true,
+                    ...item,}
+                    processed: true,)
                     value: Math.random() * 1000
-                });
+                };);
                 
-                // Report progress
-                onProgress((index + 1) / items.length);
-            });
+                // Report progress, onProgress((index + 1) / items.length);
+            };);
             
             return results;
         },
@@ -616,29 +630,27 @@ WebWorkerComponent.exampleWorkerFunction = function() {
             const pixels = imageData.data;
             
             for (let i = 0; i < pixels.length; i += 4) {
-                // Apply filter
-                switch (filter) {
+                // Apply filter, switch(filter) {
                     case 'grayscale':
                         const gray = pixels[i] * 0.299 + pixels[i + 1] * 0.587 + pixels[i + 2] * 0.114;
                         pixels[i] = pixels[i + 1] = pixels[i + 2] = gray;
                         break;
                     
                     case 'invert':
-                        pixels[i] = 255 - pixels[i];
-                        pixels[i + 1] = 255 - pixels[i + 1];
-                        pixels[i + 2] = 255 - pixels[i + 2];
+                        pixels[i] = 255 - pixels[i]
+                        pixels[i + 1] = 255 - pixels[i + 1]
+                        pixels[i + 2] = 255 - pixels[i + 2]
                         break;
                 }
                 
-                // Report progress
-                if (i % 10000 === 0) {
-                    onProgress(i / pixels.length);
+                // Report progress, if(i % 10000 === 0) {
+
+                    onProgress(i / pixels.length
+};
                 }
-            }
-            
             return imageData;
         }
-    };
+    };););
     
     // Message handler
     self.addEventListener('message', async (event) => {
@@ -647,30 +659,30 @@ WebWorkerComponent.exampleWorkerFunction = function() {
         switch (type) {
             case 'init':
                 initialized = true;
-                self.postMessage({ type: 'ready' });
+                self.postMessage({ type: 'ready' };);););
                 break;
             
             case 'task':
                 try {
-                    const handler = handlers[task];
+                    const handler = handlers[task]
                     if (!handler) {
-                        throw new Error(`Unknown task: ${task}`);
+                        throw new, Error(``Unknown task: ${task};`)`,
                     }
                     
-                    const result = await handler(data, (progress) => {
-                        self.postMessage({ type: 'progress', id, progress });
-                    });
+                    const result = await, handler(data, (progress) => {;
+                        self.postMessage({ type: 'progress', id, progress };);););
+                    };);
                     
-                    self.postMessage({ type: 'result', id, result });
+                    self.postMessage({ type: 'result', id, result };);););
                     
                 } catch (error) {
-                    self.postMessage({ 
+                    self.postMessage({ }
                         type: 'error', 
                         id, 
                         error: error.message 
-                    });
+                    };);););
                 }
                 break;
         }
-    });
+    };);
 };

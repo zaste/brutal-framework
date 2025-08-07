@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Modal Test (Framework)</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui;
+            background: #000;
+            color: #0f0;
+            min-height: 100vh;
+        }
+        
+        #status {
+            background: #111;
+            padding: 20px;
+            border: 1px solid #0f0;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+        
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: #0ff;
+        }
+        
+        .test-results {
+            background: #111;
+            padding: 20px;
+            border: 1px solid #0f0;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 BRUTAL Modal Test - Zero Mercy Mode</h1>
+    
+    <div id="status">Loading BRUTAL Framework...</div>
+    
+    <div id="controls" style="display: none;">
+        <h2>Test Controls</h2>
+        <button onclick="testBasicModal()">Test Basic Modal</button>
+        <button onclick="testAllAnimations()">Test All Animations</button>
+        <button onclick="testPerformance()">Test Performance (100 opens/closes)</button>
+        <button onclick="testMemoryLeaks()">Test Memory Leaks</button>
+        <button onclick="testEdgeCases()">Test Edge Cases</button>
+    </div>
+    
+    <div id="test-results" class="test-results" style="display: none;"></div>
+    
+    <!-- Test Modal -->
+    <brutal-modal id="testModal" title="BRUTAL Test Modal">
+        <p>This is a test modal for BRUTAL Framework V3.</p>
+        <p>Features:</p>
+        <ul>
+            <li>GPU-accelerated animations</li>
+            <li>Spring physics</li>
+            <li>WebGL backdrop effects</li>
+            <li>60fps performance</li>
+        </ul>
+    </brutal-modal>
+    
+    <script type="module">
+        const status = document.getElementById('status');
+        const controls = document.getElementById('controls');
+        const results = document.getElementById('test-results');
+        let BRUTAL = null;
+        let testResults = [];
+        
+        // Error tracking
+        window.addEventListener('error', (e) => {
+            console.error('Global error:', e);
+            testResults.push(`❌ ERROR: ${e.message} at ${e.filename}:${e.lineno}:${e.colno}`);
+        });
+        
+        window.addEventListener('unhandledrejection', (e) => {
+            console.error('Unhandled rejection:', e);
+            testResults.push(`❌ PROMISE REJECTION: ${e.reason}`);
+        });
+        
+        // Import and test framework
+        import('./index.js')
+            .then(module => {
+                BRUTAL = module;
+                status.innerHTML = `✅ BRUTAL Framework loaded successfully!
+Version: ${BRUTAL.VERSION}
+Build: ${BRUTAL.BUILD}
+Exports: ${Object.keys(BRUTAL).length}
+Global: ${window.__BRUTAL__ ? 'Available' : 'Not available'}`;
+                
+                // Show controls
+                controls.style.display = 'block';
+                results.style.display = 'block';
+                
+                // Initialize framework if needed
+                if (BRUTAL.init) {
+                    BRUTAL.init({ debug: true });
+                }
+                
+                return testModalComponent();
+            })
+            .catch(error => {
+                status.innerHTML = `❌ Failed to load framework: ${error.message}`;
+                console.error(error);
+            });
+        
+        async function testModalComponent() {
+            testResults = [];
+            
+            // Test 1: Check if Modal is registered
+            const modal = document.getElementById('testModal');
+            if (!modal) {
+                testResults.push('❌ Modal element not found');
+                return;
+            }
+            
+            // Test 2: Check if custom element is defined
+            if (customElements.get('brutal-modal')) {
+                testResults.push('✅ brutal-modal custom element is defined');
+            } else {
+                testResults.push('❌ brutal-modal custom element NOT defined');
+                
+                // Try to manually import and register
+                try {
+                    const { Modal } = await import('./04-components/ui/Modal.js');
+                    customElements.define('brutal-modal', Modal);
+                    testResults.push('✅ Modal manually registered');
+                } catch (e) {
+                    testResults.push(`❌ Failed to manually register Modal: ${e.message}`);
+                }
+            }
+            
+            // Test 3: Check modal methods
+            if (modal.open && modal.close) {
+                testResults.push('✅ Modal has open/close methods');
+            } else {
+                testResults.push('❌ Modal missing methods');
+            }
+            
+            updateResults();
+        }
+        
+        window.testBasicModal = async function() {
+            testResults.push('\n=== Testing Basic Modal ===');
+            const modal = document.getElementById('testModal');
+            
+            try {
+                // Test open
+                testResults.push('Opening modal...');
+                await modal.open();
+                testResults.push('✅ Modal opened');
+                
+                // Wait a bit
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Test close
+                testResults.push('Closing modal...');
+                await modal.close();
+                testResults.push('✅ Modal closed');
+                
+            } catch (e) {
+                testResults.push(`❌ Error: ${e.message}`);
+            }
+            
+            updateResults();
+        };
+        
+        window.testAllAnimations = async function() {
+            testResults.push('\n=== Testing All Animations ===');
+            const modal = document.getElementById('testModal');
+            const animations = ['scale', 'slide', 'fade', 'flip', 'rotate'];
+            
+            for (const animation of animations) {
+                try {
+                    modal.setAttribute('animation', animation);
+                    testResults.push(`Testing ${animation}...`);
+                    await modal.open();
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    await modal.close();
+                    testResults.push(`✅ ${animation} animation works`);
+                } catch (e) {
+                    testResults.push(`❌ ${animation} failed: ${e.message}`);
+                }
+            }
+            
+            updateResults();
+        };
+        
+        window.testPerformance = async function() {
+            testResults.push('\n=== Testing Performance ===');
+            const modal = document.getElementById('testModal');
+            const iterations = 100;
+            const startTime = performance.now();
+            
+            try {
+                for (let i = 0; i < iterations; i++) {
+                    await modal.open();
+                    await modal.close();
+                }
+                
+                const endTime = performance.now();
+                const totalTime = endTime - startTime;
+                const avgTime = totalTime / iterations;
+                
+                testResults.push(`✅ Completed ${iterations} open/close cycles`);
+                testResults.push(`Total time: ${totalTime.toFixed(2)}ms`);
+                testResults.push(`Average time per cycle: ${avgTime.toFixed(2)}ms`);
+                testResults.push(`Operations per second: ${(1000 / avgTime).toFixed(0)}`);
+                
+            } catch (e) {
+                testResults.push(`❌ Performance test failed: ${e.message}`);
+            }
+            
+            updateResults();
+        };
+        
+        window.testMemoryLeaks = async function() {
+            testResults.push('\n=== Testing Memory Leaks ===');
+            const modal = document.getElementById('testModal');
+            
+            // Get initial memory
+            if (performance.memory) {
+                const initialMemory = performance.memory.usedJSHeapSize;
+                
+                // Create and destroy many modals
+                for (let i = 0; i < 50; i++) {
+                    const testModal = document.createElement('brutal-modal');
+                    testModal.innerHTML = '<p>Test content</p>';
+                    document.body.appendChild(testModal);
+                    await testModal.open();
+                    await testModal.close();
+                    document.body.removeChild(testModal);
+                }
+                
+                // Force garbage collection if available
+                if (window.gc) {
+                    window.gc();
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                const finalMemory = performance.memory.usedJSHeapSize;
+                const memoryGrowth = finalMemory - initialMemory;
+                
+                testResults.push(`Initial memory: ${(initialMemory / 1024 / 1024).toFixed(2)}MB`);
+                testResults.push(`Final memory: ${(finalMemory / 1024 / 1024).toFixed(2)}MB`);
+                testResults.push(`Memory growth: ${(memoryGrowth / 1024 / 1024).toFixed(2)}MB`);
+                
+                if (memoryGrowth < 5 * 1024 * 1024) { // Less than 5MB growth
+                    testResults.push('✅ No significant memory leaks detected');
+                } else {
+                    testResults.push('⚠️ Possible memory leak detected');
+                }
+            } else {
+                testResults.push('⚠️ performance.memory not available');
+            }
+            
+            updateResults();
+        };
+        
+        window.testEdgeCases = async function() {
+            testResults.push('\n=== Testing Edge Cases ===');
+            const modal = document.getElementById('testModal');
+            
+            // Test rapid open/close
+            try {
+                testResults.push('Testing rapid open/close...');
+                modal.open();
+                modal.close();
+                modal.open();
+                modal.close();
+                testResults.push('✅ Rapid open/close handled');
+            } catch (e) {
+                testResults.push(`❌ Rapid open/close failed: ${e.message}`);
+            }
+            
+            // Test multiple opens
+            try {
+                testResults.push('Testing multiple opens...');
+                modal.open();
+                modal.open();
+                modal.open();
+                await modal.close();
+                testResults.push('✅ Multiple opens handled');
+            } catch (e) {
+                testResults.push(`❌ Multiple opens failed: ${e.message}`);
+            }
+            
+            // Test invalid attributes
+            try {
+                testResults.push('Testing invalid attributes...');
+                modal.setAttribute('size', 'invalid');
+                modal.setAttribute('animation', 'invalid');
+                await modal.open();
+                await modal.close();
+                testResults.push('✅ Invalid attributes handled gracefully');
+            } catch (e) {
+                testResults.push(`❌ Invalid attributes caused error: ${e.message}`);
+            }
+            
+            updateResults();
+        };
+        
+        function updateResults() {
+            results.textContent = testResults.join('\n');
+        }
+    </script>
+</body>
+</html>

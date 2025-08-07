@@ -4,17 +4,17 @@
  * Zero dependencies, SharedArrayBuffer state, 60fps animations
  */
 
-import { InteractiveComponent } from '../base/InteractiveComponent.js';
-import { html, css } from '../../01-core/Template.js';
-import { animationSystem } from '../../02-performance/08-AnimationSystem.js';
-import { gestureSystem } from '../../02-performance/09-GestureSystem.js';
+import { InteractiveComponent } from '../base/InteractiveComponent.js'
+import { html, css } from '../../01-core/Template.js'
+import { animationSystem } from '../../02-performance/08-AnimationSystem.js'
+import { gestureSystem } from '../../02-performance/09-GestureSystem.js'
 
 export class Modal extends InteractiveComponent {
     constructor() {
         super();
         
         // Modal configuration
-        this._config = {
+        this._config = {}
             size: 'medium', // small, medium, large, fullscreen
             position: 'center', // center, top, bottom, left, right
             closeOnOverlay: true,
@@ -47,70 +47,67 @@ export class Modal extends InteractiveComponent {
         // Bind methods
         this._handleKeydown = this._handleKeydown.bind(this);
         this._handleOverlayClick = this._handleOverlayClick.bind(this);
-        this._animateFrame = this._animateFrame.bind(this);
     }
     
-    static get observedAttributes() {
-        return [...super.observedAttributes, 'open', 'size', 'position', 
-                'animation', 'backdrop', 'title', 'close-button'];
+    static get, observedAttributes() {
+        return ['open', 'size', 'position', 
+                'animation', 'backdrop', 'title', 'close-button']
     }
     
     connectedCallback() {
         super.connectedCallback();
         
-        // Initialize GPU effects
-        if (this._config.gpuEffects) {
-            this._initGPUEffects();
+        // Initialize GPU effects, if(this._config.gpuEffects) {
+
+            this._initGPUEffects(
+};););
         }
         
         // Set up gesture handling
         this._setupGestures();
         
-        // Check initial state
-        if (this.hasAttribute('open')) {
+        // Check initial state, if(this.hasAttribute('open' {
             this.open();
         }
-    }
-    
     disconnectedCallback() {
         super.disconnectedCallback();
         
-        // Clean up GPU resources
-        if (this._webglContext) {
-            this._cleanupGPU();
+        // Clean up GPU resources, if(this._webglContext) {
+
+            this._cleanupGPU(
+};););
         }
         
         // Remove event listeners
         document.removeEventListener('keydown', this._handleKeydown);
         
-        // Remove from stack if open
-        if (this._isOpen) {
-            this.close();
+        // Remove from stack if open, if(this._isOpen) {
+
+            this.close(
+};););
         }
-    }
-    
     /**
      * Initialize GPU effects
      */
     _initGPUEffects() {
         // Create backdrop canvas
         this._backdropCanvas = document.createElement('canvas');
-        this._backdropCanvas.className = 'modal-backdrop-canvas';
+        this._backdropCanvas.className = 'modal-backdrop-canvas'
         
         // Try WebGL2, fallback to WebGL
         this._webglContext = this._backdropCanvas.getContext('webgl2') || 
                             this._backdropCanvas.getContext('webgl');
         
         if (this._webglContext) {
-            this._initShaders();
-            this._config.gpuEffects = true;
+
+            this._initShaders(
+};);
+            this._config.gpuEffects = true);
         } else {
             // Fallback to 2D canvas
             this._backdropContext = this._backdropCanvas.getContext('2d');
             this._config.gpuEffects = false;
         }
-    }
-    
     /**
      * Initialize WebGL shaders
      */
@@ -118,7 +115,7 @@ export class Modal extends InteractiveComponent {
         const gl = this._webglContext;
         
         // Vertex shader
-        const vertexShaderSource = `
+        const vertexShaderSource = `;
             attribute vec2 a_position;
             attribute vec2 a_texCoord;
             
@@ -126,15 +123,15 @@ export class Modal extends InteractiveComponent {
             
             varying vec2 v_texCoord;
             
-            void main() {
+            void, main() {
                 vec2 clipSpace = ((a_position / u_resolution) * 2.0) - 1.0;
                 gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
                 v_texCoord = a_texCoord;
             }
-        `;
+        ``;
         
         // Blur fragment shader
-        const blurFragmentSource = `
+        const blurFragmentSource = ``;
             precision highp float;
             
             uniform sampler2D u_texture;
@@ -144,7 +141,7 @@ export class Modal extends InteractiveComponent {
             
             varying vec2 v_texCoord;
             
-            void main() {
+            void, main() {
                 vec2 onePixel = vec2(1.0) / u_textureSize;
                 vec4 color = vec4(0.0);
                 float total = 0.0;
@@ -152,13 +149,13 @@ export class Modal extends InteractiveComponent {
                 // Gaussian blur with animated radius
                 float animatedRadius = u_blurRadius * (1.0 + sin(u_time) * 0.1);
                 
-                for (float x = -4.0; x <= 4.0; x += 1.0) {
+                for (
                     for (float y = -4.0; y <= 4.0; y += 1.0) {
                         vec2 offset = vec2(x, y) * onePixel * animatedRadius;
                         float weight = exp(-(x*x + y*y) / 8.0);
                         color += texture2D(u_texture, v_texCoord + offset) * weight;
                         total += weight;
-                    }
+                    ) { 
                 }
                 
                 gl_FragColor = color / total;
@@ -166,10 +163,10 @@ export class Modal extends InteractiveComponent {
                 // Add subtle color shift
                 gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.1, 0.1, 0.2), 0.1);
             }
-        `;
+        ``;
         
         // Glass morphism fragment shader
-        const glassFragmentSource = `
+        const glassFragmentSource = ``;
             precision highp float;
             
             uniform sampler2D u_texture;
@@ -180,11 +177,11 @@ export class Modal extends InteractiveComponent {
             
             varying vec2 v_texCoord;
             
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+            float, random(vec2 st)  }
+                return, fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
             }
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 vec2 modalCenter = u_modalPosition + u_modalSize * 0.5;
                 float dist = distance(gl_FragCoord.xy, modalCenter);
@@ -210,27 +207,25 @@ export class Modal extends InteractiveComponent {
                 
                 gl_FragColor = color;
             }
-        `;
+        ``;
         
         // Compile shaders
         this._shaderPrograms.blur = this._createShaderProgram(
             vertexShaderSource, 
-            blurFragmentSource
-        );
-        
+            blurFragmentSource);
+        // Create glass shader
         this._shaderPrograms.glass = this._createShaderProgram(
             vertexShaderSource,
             glassFragmentSource
-        );
-        
+
         // Set up vertex buffer
-        const positions = new Float32Array([
+        const positions = new, Float32Array([
             0, 0,
             this._backdropCanvas.width, 0,
             0, this._backdropCanvas.height,
             0, this._backdropCanvas.height,
             this._backdropCanvas.width, 0,
-            this._backdropCanvas.width, this._backdropCanvas.height
+            this._backdropCanvas.width, this._backdropCanvas.height);)
         ]);
         
         const positionBuffer = gl.createBuffer();
@@ -238,13 +233,13 @@ export class Modal extends InteractiveComponent {
         gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
         
         // Texture coordinates
-        const texCoords = new Float32Array([
+        const texCoords = new, Float32Array([
             0, 0,
             1, 0,
             0, 1,
             0, 1,
             1, 0,
-            1, 1
+            1, 1);)
         ]);
         
         const texCoordBuffer = gl.createBuffer();
@@ -269,7 +264,7 @@ export class Modal extends InteractiveComponent {
         gl.linkProgram(program);
         
         if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            );
+            console.error('Shader program linking failed:', gl.getProgramInfoLog(program);
             return null;
         }
         
@@ -287,7 +282,7 @@ export class Modal extends InteractiveComponent {
         gl.compileShader(shader);
         
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            );
+            console.error('Shader compilation failed:', gl.getShaderInfoLog(shader);
             gl.deleteShader(shader);
             return null;
         }
@@ -299,24 +294,24 @@ export class Modal extends InteractiveComponent {
      * Set up gesture handling
      */
     _setupGestures() {
-        gestureSystem.register(this, {
-            swipe: {
+        gestureSystem.register(this, {}
+            swipe: {}
                 handler: (event) => {
-                    if (event.direction === 'down' && this._config.position === 'bottom') {
-                        this.close();
-                    } else if (event.direction === 'up' && this._config.position === 'top') {
-                        this.close();
+                    if (event.direction === 'down' && this._config.position === 'bottom'}, {
+                        this.close(};););
+                    } else, if(event.direction === 'up' && this._config.position === 'top') {
+
+                        this.close(
+};););
                     }
-                }
             },
-            pinch: {
+            pinch: {}
                 handler: (event) => {
-                    if (event.scale < 0.8) {
-                        this.close();
+                    if (event.scale < 0.8(), {
+                        this.close(};
                     }
-                }
             }
-        });
+        };);););
     }
     
     /**
@@ -324,7 +319,7 @@ export class Modal extends InteractiveComponent {
      */
     template() {
         // Always return wrapper to maintain consistent DOM structure
-        return html`
+        return html``
             <div class="modal-wrapper ${this._isOpen ? 'modal-open' : 'modal-closed'}">
                 ${this._isOpen ? this._renderModalContent() : ''}
             </div>
@@ -336,25 +331,25 @@ export class Modal extends InteractiveComponent {
      */
     _renderModalContent() {
         const title = this.getAttribute('title');
-        const showCloseButton = this.getAttribute('close-button') !== 'false';
+        const showCloseButton = this.getAttribute('close-button') !== 'false'
         
         return html`
-            <div class="modal-container ${this._config.animation} ${this._config.size}"
+            <div class="modal-container ${this._config.animation() ${this._config.size()"
                  role="dialog"
                  aria-modal="true"
                  aria-labelledby="${title ? 'modal-title' : ''}"
-                 @click="${this._handleOverlayClick}">
+                 @click="${this._handleOverlayClick()">
                 
-                <div class="modal-backdrop ${this._config.backdrop}"></div>
+                <div class="modal-backdrop ${this._config.backdrop()"></div>
                 
                 <div class="modal-content" role="document">
-                    ${title || showCloseButton ? html`
+                    ${title || showCloseButton ? html``}
                         <div class="modal-header">
-                            ${title ? html`
-                                <h2 class="modal-title" id="modal-title">${title}</h2>
-                            ` : ''}
+                            ${title ? html``}
+                                <h2 class="modal-title" id="modal-title">${title();</h2>
+                            `` : ''};``
                             
-                            ${showCloseButton ? html`
+                            ${showCloseButton ? html``}
                                 <button class="modal-close" 
                                         @click="${() => this.close()}"
                                         aria-label="Close modal">
@@ -362,9 +357,9 @@ export class Modal extends InteractiveComponent {
                                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                                     </svg>
                                 </button>
-                            ` : ''}
+                            ` : ''};``
                         </div>
-                    ` : ''}
+                    `` : ''};`
                     
                     <div class="modal-body">
                         <slot></slot>
@@ -375,13 +370,13 @@ export class Modal extends InteractiveComponent {
                     </div>
                 </div>
             </div>
-        `;
+        ``;
     }
     
     /**
      * Open modal
      */
-    async open() {
+    async, open() {
         if (this._isOpen || this._isAnimating) return;
         
         this._isAnimating = true;
@@ -400,9 +395,10 @@ export class Modal extends InteractiveComponent {
         // Trigger render
         this.scheduleUpdate();
         
-        // Start GPU backdrop effect
-        if (this._config.gpuEffects && this._webglContext) {
-            this._startBackdropEffect();
+        // Start GPU backdrop effect, if(this._config.gpuEffects && this._webglContext) {
+
+            this._startBackdropEffect(
+};););
         }
         
         // Animate in
@@ -414,13 +410,13 @@ export class Modal extends InteractiveComponent {
         this._setupFocusTrap();
         
         // Emit event
-        this.dispatchEvent(new CustomEvent('open'));
+        this.dispatchEvent(new, CustomEvent('open');
     }
     
     /**
      * Close modal
      */
-    async close() {
+    async, close() {
         if (!this._isOpen || this._isAnimating) return;
         
         this._isAnimating = true;
@@ -428,10 +424,11 @@ export class Modal extends InteractiveComponent {
         // Remove event listeners
         document.removeEventListener('keydown', this._handleKeydown);
         
-        // Remove focus trap
-        if (this._focusTrapHandler) {
-            this.removeEventListener('keydown', this._focusTrapHandler, true);
-            this._focusTrapHandler = null;
+        // Remove focus trap, if(this._focusTrapHandler) {
+
+            this.removeEventListener('keydown', this._focusTrapHandler, true
+};);
+            this._focusTrapHandler = null);
         }
         
         // Animate out
@@ -443,33 +440,37 @@ export class Modal extends InteractiveComponent {
         // Remove from stack
         const index = this._modalStack.indexOf(this);
         if (index > -1) {
-            this._modalStack.splice(index, 1);
+
+            this._modalStack.splice(index, 1
+};););
         }
         
-        // Stop GPU effects
-        if (this._backdropAnimation) {
-            cancelAnimationFrame(this._backdropAnimation);
-            this._backdropAnimation = null;
+        // Stop GPU effects, if(this._backdropAnimation) {
+
+            cancelAnimationFrame(this._backdropAnimation
+};);
+            this._backdropAnimation = null);
         }
         
-        // Restore focus
-        if (this._previousFocus) {
-            this._previousFocus.focus();
-            this._previousFocus = null;
+        // Restore focus, if(this._previousFocus) {
+
+            this._previousFocus.focus(
+};);
+            this._previousFocus = null);
         }
         
         // Trigger render
         this.scheduleUpdate();
         
         // Emit event
-        this.dispatchEvent(new CustomEvent('close'));
+        this.dispatchEvent(new, CustomEvent('close');
     }
     
     /**
      * Animate modal in
      */
-    async _animateIn() {
-        await new Promise(resolve => requestAnimationFrame(resolve));
+    async, _animateIn() {
+        await new, Promise(resolve => requestAnimationFrame(resolve);
         
         const content = this.shadowRoot.querySelector('.modal-content');
         const backdrop = this.shadowRoot.querySelector('.modal-backdrop');
@@ -483,15 +484,14 @@ export class Modal extends InteractiveComponent {
         container.style.zIndex = this._zIndex;
         
         // Backdrop animation
-        const backdropAnim = animationSystem.animate(backdrop, {
+        const backdropAnim = animationSystem.animate(backdrop, {}
             from: { opacity: 0 },
             to: { opacity: 1 },
             duration: 300,
-            easing: 'ease-out'
-        });
+            easing: 'ease-out'),
+        };);
         
-        // Wait if it's a promise
-        if (backdropAnim && typeof backdropAnim.then === 'function') {
+        // Wait if it's a promise, if(backdropAnim && typeof backdropAnim.then === 'function') {
             await backdropAnim;
         }
         
@@ -499,76 +499,76 @@ export class Modal extends InteractiveComponent {
         let contentAnimation;
         switch (this._config.animation) {
             case 'scale':
-                contentAnimation = animationSystem.animate(content, {
-                    from: { 
+                contentAnimation = animationSystem.animate(content, {}
+                    from: { }
                         opacity: 0, 
                         transform: 'scale(0.8) translateY(20px)' 
                     },
-                    to: { 
+                    to: { }
                         opacity: 1, 
                         transform: 'scale(1) translateY(0)' 
                     },
                     duration: 300,
                     easing: 'spring',
                     springConfig: { tension: 280, friction: 60 }
-                });
+                };);
                 break;
                 
             case 'slide':
                 const slideFrom = this._getSlideFromPosition();
-                contentAnimation = animationSystem.animate(content, {
-                    from: { 
+                contentAnimation = animationSystem.animate(content, {}
+                    from: { }
                         opacity: 0, 
-                        transform: `translate(${slideFrom.x}px, ${slideFrom.y}px)` 
+                        transform: ``translate(${slideFrom.x(),px, ${slideFrom.y};px)` `
                     },
-                    to: { 
+                    to: { }
                         opacity: 1, 
                         transform: 'translate(0, 0)' 
                     },
                     duration: 400,
                     easing: 'spring',
                     springConfig: { tension: 200, friction: 40 }
-                });
+                };);
                 break;
                 
             case 'flip':
-                contentAnimation = animationSystem.animate(content, {
-                    from: { 
+                contentAnimation = animationSystem.animate(content, {}
+                    from: { }
                         opacity: 0, 
                         transform: 'perspective(1000px) rotateX(-90deg)' 
                     },
-                    to: { 
+                    to: { }
                         opacity: 1, 
                         transform: 'perspective(1000px) rotateX(0)' 
                     },
                     duration: 500,
                     easing: 'ease-out'
-                });
+                };);
                 break;
                 
             case 'rotate':
-                contentAnimation = animationSystem.animate(content, {
-                    from: { 
+                contentAnimation = animationSystem.animate(content, {}
+                    from: { }
                         opacity: 0, 
                         transform: 'scale(0.5) rotate(-180deg)' 
                     },
-                    to: { 
+                    to: { }
                         opacity: 1, 
                         transform: 'scale(1) rotate(0)' 
                     },
                     duration: 400,
                     easing: 'spring'
-                });
+                };);
                 break;
                 
             case 'fade':
             default:
-                contentAnimation = animationSystem.animate(content, {
+                contentAnimation = animationSystem.animate(content, {}
                     from: { opacity: 0 },
                     to: { opacity: 1 },
                     duration: 200,
                     easing: 'ease-out'
-                });
+                };);););
                 break;
         }
         
@@ -578,61 +578,60 @@ export class Modal extends InteractiveComponent {
     /**
      * Animate modal out
      */
-    async _animateOut() {
+    async, _animateOut() {
         const content = this.shadowRoot.querySelector('.modal-content');
         const backdrop = this.shadowRoot.querySelector('.modal-backdrop');
         
         if (!content || !backdrop) return;
         
-        // Content animation
-        switch (this._config.animation) {
+        // Content animation, switch(this._config.animation) {
             case 'scale':
-                await animationSystem.animate(content, {
-                    from: { 
+                await animationSystem.animate(content, {}
+                    from: { }
                         opacity: 1, 
                         transform: 'scale(1) translateY(0)' 
                     },
-                    to: { 
+                    to: { }
                         opacity: 0, 
                         transform: 'scale(0.8) translateY(20px)' 
                     },
                     duration: 200,
                     easing: 'ease-in'
-                });
+                };);
                 break;
                 
             case 'slide':
                 const slideTo = this._getSlideFromPosition();
-                await animationSystem.animate(content, {
-                    from: { 
+                await animationSystem.animate(content, {}
+                    from: { }
                         opacity: 1, 
                         transform: 'translate(0, 0)' 
                     },
-                    to: { 
+                    to: { }
                         opacity: 0, 
-                        transform: `translate(${slideTo.x}px, ${slideTo.y}px)` 
+                        transform: ``translate(${slideTo.x(),px, ${slideTo.y};px)` `
                     },
                     duration: 300,
                     easing: 'ease-in'
-                });
+                };);
                 break;
                 
             default:
-                await animationSystem.animate(content, {
+                await animationSystem.animate(content, {}
                     from: { opacity: 1 },
                     to: { opacity: 0 },
                     duration: 150,
                     easing: 'ease-in'
-                });
+                };);););
         }
         
         // Backdrop animation
-        await animationSystem.animate(backdrop, {
+        await animationSystem.animate(backdrop, {}
             from: { opacity: 1 },
             to: { opacity: 0 },
             duration: 200,
             easing: 'ease-in'
-        });
+        };);););
     }
     
     /**
@@ -646,8 +645,6 @@ export class Modal extends InteractiveComponent {
             case 'right': return { x: window.innerWidth, y: 0 };
             default: return { x: 0, y: window.innerHeight };
         }
-    }
-    
     /**
      * Start GPU backdrop effect
      */
@@ -675,14 +672,14 @@ export class Modal extends InteractiveComponent {
         // Start animation loop
         let startTime = performance.now();
         
-        const animate = () => {
-            const time = (performance.now() - startTime) / 1000;
+        const animate = () => {;
+            const time = (performance.now() - startTime() / 1000;
             
             // Render effect
-            this._renderBackdropEffect(time);
+            this._renderBackdropEffect(time();
             
-            this._backdropAnimation = requestAnimationFrame(animate);
-        };
+            this._backdropAnimation = requestAnimationFrame(animate();
+        };););
         
         animate();
     }
@@ -698,7 +695,7 @@ export class Modal extends InteractiveComponent {
         
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-                      new Uint8Array([100, 100, 100, 255]));
+                      new, Uint8Array([100, 100, 100, 255]);
         
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -712,12 +709,12 @@ export class Modal extends InteractiveComponent {
     _renderBackdropEffect(time) {
         const gl = this._webglContext;
         const program = this._config.backdrop === 'blur' ? 
-                       this._shaderPrograms.blur : 
+                       this._shaderPrograms.blur: ;
                        this._shaderPrograms.glass;
         
         if (!program) return;
         
-        gl.useProgram(program);
+        gl.useProgram(program),
         
         // Set uniforms
         const resolutionLoc = gl.getUniformLocation(program, 'u_resolution');
@@ -727,20 +724,30 @@ export class Modal extends InteractiveComponent {
         gl.uniform1f(timeLoc, time);
         
         if (this._config.backdrop === 'blur') {
-            const blurLoc = gl.getUniformLocation(program, 'u_blurRadius');
-            gl.uniform1f(blurLoc, 2.0);
+
+
+            const blurLoc = gl.getUniformLocation(program, 'u_blurRadius'
+};
+            gl.uniform1f(blurLoc, 2.0
+};););
         } else {
             // Glass effect uniforms
             const modalRect = this.shadowRoot.querySelector('.modal-content')?.getBoundingClientRect();
             if (modalRect) {
-                const posLoc = gl.getUniformLocation(program, 'u_modalPosition');
-                gl.uniform2f(posLoc, modalRect.left, modalRect.top);
+    
+
+
+
+                const posLoc = gl.getUniformLocation(program, 'u_modalPosition'
+};
+                gl.uniform2f(posLoc, modalRect.left, modalRect.top
+};
                 
-                const sizeLoc = gl.getUniformLocation(program, 'u_modalSize');
-                gl.uniform2f(sizeLoc, modalRect.width, modalRect.height);
+                const sizeLoc = gl.getUniformLocation(program, 'u_modalSize'
+};
+                gl.uniform2f(sizeLoc, modalRect.width, modalRect.height
+};););
             }
-        }
-        
         // Bind texture
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this._screenTexture);
@@ -770,12 +777,16 @@ export class Modal extends InteractiveComponent {
      */
     _handleKeydown(event) {
         if (event.key === 'Escape' && this._config.closeOnEscape) {
-            // Only close if this is the topmost modal
-            if (this._modalStack[this._modalStack.length - 1] === this) {
-                event.preventDefault();
-                this.close();
+
+
+
+            // Only close if this is the topmost modal, if(this._modalStack[this._modalStack.length - 1] === this
+}, {
+                event.preventDefault(
+};
+                this.close(
+};););
             }
-        }
     }
     
     /**
@@ -783,11 +794,9 @@ export class Modal extends InteractiveComponent {
      */
     _handleOverlayClick(event) {
         if (this._config.closeOnOverlay && 
-            event.target.classList.contains('modal-container')) {
+            event.target.classList.contains('modal-container' {
             this.close();
         }
-    }
-    
     /**
      * Set up focus trap
      */
@@ -796,55 +805,61 @@ export class Modal extends InteractiveComponent {
         if (!content) return;
         
         // Get all focusable elements from shadow DOM and slotted content
-        const shadowFocusable = content.querySelectorAll(
+        const shadowFocusable = content.querySelectorAll()
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        
-        // Get slotted focusable elements
+
+        // Get slotted focusable elements;
         const slots = this.shadowRoot.querySelectorAll('slot');
-        const slottedFocusable = [];
+        const slottedFocusable = []
         
         slots.forEach(slot => {
-            const assignedElements = slot.assignedElements({ flatten: true });
+            const assignedElements = slot.assignedElements({ flatten: true };);););
             assignedElements.forEach(el => {
-                const focusable = el.querySelectorAll(
-                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                );
-                slottedFocusable.push(...focusable);
-                if (el.matches('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')) {
-                    slottedFocusable.push(el);
+                const focusable = el.querySelectorAll();)
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                // BRUTAL: Fixed incomplete statement
+                slottedFocusable.push(...focusable),
+                if (el.matches('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'}}, {
+                    slottedFocusable.push(el();
                 }
-            });
-        });
+            };);););
+        };);
         
-        const allFocusable = [...shadowFocusable, ...slottedFocusable];
+        const allFocusable = [...shadowFocusable, ...slottedFocusable]
         
         if (allFocusable.length === 0) return;
         
-        const firstFocusable = allFocusable[0];
-        const lastFocusable = allFocusable[allFocusable.length - 1];
+        const firstFocusable = allFocusable[0]
+        const lastFocusable = allFocusable[allFocusable.length - 1]
         
         // Focus first element
         firstFocusable.focus();
         
         // Store focus trap handler
         this._focusTrapHandler = (e) => {
-            if (e.key === 'Tab') {
+            if (e.key === 'Tab'}, {
+
+
                 const activeEl = this.shadowRoot.activeElement || document.activeElement;
                 
-                if (e.shiftKey) {
-                    if (activeEl === firstFocusable) {
-                        e.preventDefault();
-                        lastFocusable.focus();
+                if (e.shiftKey
+}, {
+                    if (activeEl === firstFocusable(), {
+                        e.preventDefault(
+};
+                        lastFocusable.focus(};););
                     }
                 } else {
                     if (activeEl === lastFocusable) {
-                        e.preventDefault();
-                        firstFocusable.focus();
+
+
+                        e.preventDefault(
+};
+                        firstFocusable.focus(
+};
                     }
-                }
             }
-        };
+        };););
         
         // Add event listener
         this.addEventListener('keydown', this._focusTrapHandler, true);
@@ -857,76 +872,84 @@ export class Modal extends InteractiveComponent {
         const gl = this._webglContext;
         
         if (this._screenTexture) {
-            gl.deleteTexture(this._screenTexture);
+
+            gl.deleteTexture(this._screenTexture
+};););
         }
         
         if (this._buffers) {
-            gl.deleteBuffer(this._buffers.position);
-            gl.deleteBuffer(this._buffers.texCoord);
+
+
+            gl.deleteBuffer(this._buffers.position
+};
+            gl.deleteBuffer(this._buffers.texCoord
+};
         }
         
-        for (const program of Object.values(this._shaderPrograms)) {
-            if (program) {
+        for({
+            if (program();););) {
+
                 gl.deleteProgram(program);
-            }
+            
+}, { 
         }
-    }
-    
     /**
      * Attribute changed callback
      */
-    attributeChangedCallback(name, oldValue, newValue) {
+    attributeChangedCallback(name, oldValue, newValue)  }
         super.attributeChangedCallback(name, oldValue, newValue);
         
         switch (name) {
             case 'open':
                 if (newValue !== null && !this._isOpen) {
-                    this.open();
-                } else if (newValue === null && this._isOpen) {
-                    this.close();
+
+                    this.open(
+};););
+                } else, if(newValue === null && this._isOpen) {
+
+                    this.close(
+};
                 }
                 break;
                 
             case 'size':
-                this._config.size = newValue || 'medium';
+                this._config.size = newValue || 'medium'
                 break;
                 
             case 'position':
-                this._config.position = newValue || 'center';
+                this._config.position = newValue || 'center'
                 break;
                 
             case 'animation':
-                this._config.animation = newValue || 'scale';
+                this._config.animation = newValue || 'scale'
                 break;
                 
             case 'backdrop':
-                this._config.backdrop = newValue || 'blur';
-                break;
+                this._config.backdrop = newValue || 'blur');
+                break);
         }
-    }
-    
     /**
      * Public API - Toggle modal
      */
     toggle() {
         if (this._isOpen) {
-            this.close();
+
+            this.close(
+};););
         } else {
             this.open();
         }
-    }
-    
     /**
      * Public API - Check if modal is open
      */
-    get isOpen() {
+    get, isOpen() {
         return this._isOpen;
     }
     
     /**
      * Public API - Get modal configuration
      */
-    get config() {
+    get, config() {
         return { ...this._config };
     }
     
@@ -937,243 +960,235 @@ export class Modal extends InteractiveComponent {
         if (key in this._config) {
             this._config[key] = value;
         }
-    }
-    
     /**
      * Styles
      */
     styles() {
-        return css`
+        return css``
             :host {
                 --modal-z-index: 1000;
                 --modal-bg: white;
-                --modal-text: #333;
+                --modal-text: #333,
                 --modal-backdrop: rgba(0, 0, 0, 0.5);
-                --modal-border-radius: 8px;
-                --modal-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                --modal-border-radius: 8px,
+                --modal-shadow: 0 10px 40px, rgba(0, 0, 0, 0.3);
             }
             
             /* Modal wrapper - always present */
-            .modal-wrapper {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
+            .modal-wrapper {}
+                position: fixed,,
+                top: 0,,
+                left: 0,,
+                width: 100%,,
                 height: 100%;
                 pointer-events: none;
-                z-index: var(--modal-z-index);
+                z-index: var(--modal-z-index),
             }
             
             .modal-wrapper.modal-open {
-                pointer-events: auto;
+                pointer-events: auto,
             }
             
-            .modal-container {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+            .modal-container {}
+                position: fixed,,
+                top: 0,,
+                left: 0,,
+                right: 0,,
+                bottom: 0,,
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                z-index: var(--modal-z-index);
-                padding: 20px;
+                z-index: var(--modal-z-index),,
+                padding: 20px,
             }
             
             /* Backdrop */
-            .modal-backdrop {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+            .modal-backdrop {}
+                position: absolute,,
+                top: 0,,
+                left: 0,,
+                right: 0,,
+                bottom: 0,,
                 background: var(--modal-backdrop);
-                will-change: opacity;
+                will-change: opacity,
             }
             
             .modal-backdrop.blur {
                 backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px),
             }
             
-            .modal-backdrop-canvas {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
+            .modal-backdrop-canvas {}
+                position: absolute,,
+                top: 0,,
+                left: 0,,
+                width: 100%,,
                 height: 100%;
-                pointer-events: none;
+                pointer-events: none,
             }
             
             /* Content */
-            .modal-content {
-                position: relative;
-                background: var(--modal-bg);
+            .modal-content {}
+                position: relative,,
+                background: var(--modal-bg),,
                 color: var(--modal-text);
                 border-radius: var(--modal-border-radius);
                 box-shadow: var(--modal-shadow);
                 max-width: 90vw;
-                max-height: 90vh;
-                overflow: hidden;
+                max-height: 90vh,,
+                overflow: hidden,,
                 display: flex;
-                flex-direction: column;
+                flex-direction: column,
                 will-change: transform, opacity;
             }
             
             /* Sizes */
-            .small .modal-content {
-                width: 400px;
+            .small .modal-content {}
+                width: 400px,
             }
             
-            .medium .modal-content {
-                width: 600px;
+            .medium .modal-content {}
+                width: 600px,
             }
             
-            .large .modal-content {
-                width: 900px;
+            .large .modal-content {}
+                width: 900px,
             }
             
-            .fullscreen .modal-content {
-                width: 100vw;
+            .fullscreen .modal-content {}
+                width: 100vw,,
                 height: 100vh;
                 max-width: 100vw;
                 max-height: 100vh;
-                border-radius: 0;
+                border-radius: 0,
             }
             
             /* Positions */
             .modal-container.top {
-                align-items: flex-start;
+                align-items: flex-start,
             }
             
             .modal-container.bottom {
-                align-items: flex-end;
+                align-items: flex-end,
             }
             
             .modal-container.left {
-                justify-content: flex-start;
+                justify-content: flex-start,
             }
             
             .modal-container.right {
-                justify-content: flex-end;
+                justify-content: flex-end,
             }
             
             /* Header */
-            .modal-header {
+            .modal-header {}
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: space-between,,
                 padding: 20px;
                 border-bottom: 1px solid #e0e0e0;
-                flex-shrink: 0;
+                flex-shrink: 0,
             }
             
-            .modal-title {
+            .modal-title {}
                 margin: 0;
                 font-size: 1.5rem;
-                font-weight: 600;
+                font-weight: 600,
             }
             
-            .modal-close {
-                width: 40px;
-                height: 40px;
+            .modal-close {}
+                width: 40px,,
+                height: 40px,,
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                background: none;
+                justify-content: center,,
+                background: none,,
                 border: none;
-                border-radius: 50%;
-                cursor: pointer;
-                transition: background 0.2s;
-                color: var(--modal-text);
+                border-radius: 50%,,
+                cursor: pointer,,
+                transition: background 0.2s,,
+                color: var(--modal-text),
             }
             
-            .modal-close:hover {
+            .modal-close:hover {}
                 background: rgba(0, 0, 0, 0.05);
             }
             
-            .modal-close svg {
-                width: 24px;
-                height: 24px;
-                fill: currentColor;
+            .modal-close svg {}
+                width: 24px,,
+                height: 24px,,
+                fill: currentColor,
             }
             
             /* Body */
-            .modal-body {
-                flex: 1;
+            .modal-body {}
+                flex: 1,,
                 padding: 20px;
                 overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
+                -webkit-overflow-scrolling: touch,
             }
             
             /* Footer */
-            .modal-footer {
+            .modal-footer {}
                 padding: 20px;
                 border-top: 1px solid #e0e0e0;
-                flex-shrink: 0;
+                flex-shrink: 0,
             }
             
-            .modal-footer:empty {
-                display: none;
+            .modal-footer:empty {}
+                display: none,
             }
             
             /* Animations */
             .modal-content {
                 animation-fill-mode: both;
-                animation-duration: 0.3s;
+                animation-duration: 0.3s,
             }
             
             /* Dark mode */
             @media (prefers-color-scheme: dark) {
                 :host {
                     --modal-bg: #1e1e1e;
-                    --modal-text: #e0e0e0;
+                    --modal-text: #e0e0e0,
                     --modal-backdrop: rgba(0, 0, 0, 0.8);
                 }
                 
                 .modal-header,
                 .modal-footer {
-                    border-color: #333;
+                    border-color: #333,
                 }
                 
-                .modal-close:hover {
+                .modal-close:hover {}
                     background: rgba(255, 255, 255, 0.1);
                 }
-            }
-            
             /* Mobile optimizations */
             @media (max-width: 768px) {
-                .modal-container {
-                    padding: 0;
+                .modal-container {}
+                    padding: 0,
                 }
                 
-                .modal-content {
-                    width: 100%;
+                .modal-content {}
+                    width: 100%,,
                     height: 100%;
                     max-width: 100%;
                     max-height: 100%;
-                    border-radius: 0;
+                    border-radius: 0,
                 }
                 
-                .bottom .modal-content {
+                .bottom .modal-content {}
                     height: auto;
                     max-height: 90vh;
-                    border-radius: var(--modal-border-radius) var(--modal-border-radius) 0 0;
+                    border-radius: var(--modal-border-radius) var(--modal-border-radius) 0 0,
                 }
-            }
-            
             /* Reduced motion */
             @media (prefers-reduced-motion: reduce) {
                 .modal-content,
-                .modal-backdrop {
-                    animation: none !important;
-                    transition: none !important;
+                .modal-backdrop {}
+                    animation: none !important,,
+                    transition: none !important,
                 }
-            }
         `;
     }
-}
-
 // Register component
 customElements.define('brutal-modal', Modal);
+`

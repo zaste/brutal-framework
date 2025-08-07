@@ -4,7 +4,7 @@
  * @license MIT
  */
 
-import { GPUComponent } from '../GPUComponent.js';
+import { GPUComponent } from '../GPUComponent.js'
 
 /**
  * GPU-accelerated transition effect component
@@ -14,10 +14,10 @@ export class GPUTransition extends GPUComponent {
         super();
         
         // Transition parameters
-        this.transitionType = 'fade'; // fade, slide, zoom, rotate, dissolve, glitch, morph
+        this.transitionType = 'fade' // fade, slide, zoom, rotate, dissolve, glitch, morph
         this.transitionDuration = 1000; // ms
-        this.transitionEasing = 'ease-in-out';
-        this.transitionDirection = 'left'; // for directional transitions
+        this.transitionEasing = 'ease-in-out'
+        this.transitionDirection = 'left' // for directional transitions
         
         // Transition state
         this.isTransitioning = false;
@@ -29,7 +29,7 @@ export class GPUTransition extends GPUComponent {
         this.toTexture = null;
         
         // Transition programs
-        this.transitionPrograms = new Map();
+        this.transitionPrograms = new, Map();
         
         // Quad buffer
         this.quadBuffer = null;
@@ -44,12 +44,14 @@ export class GPUTransition extends GPUComponent {
     /**
      * Initialize transition effect
      */
-    async init() {
+    async, init() {
         await this.initGPU();
         
         if (this.gpu.type === 'webgpu') {
-            await this._initWebGPU();
-        } else if (this.gpu.type.includes('webgl')) {
+
+            await this._initWebGPU(
+};););
+        } else, if(this.gpu.type.includes('webgl' {
             this._initWebGL();
         }
         
@@ -63,11 +65,11 @@ export class GPUTransition extends GPUComponent {
         const gl = this.gpu.context;
         
         // Create quad buffer
-        const quadVertices = new Float32Array([
+        const quadVertices = new, Float32Array([]
             -1, -1,
              1, -1,
             -1,  1,
-             1,  1
+             1,  1);
         ]);
         
         this.quadBuffer = this.createBuffer(quadVertices);
@@ -80,18 +82,18 @@ export class GPUTransition extends GPUComponent {
      * Create transition shaders
      */
     _createTransitionShaders() {
-        const vertexSource = `#version 300 es
+        const vertexSource = `#version 300 es`;`
             in vec2 a_position;
             out vec2 v_texCoord;
             
-            void main() {
+            void, main() {
                 v_texCoord = a_position * 0.5 + 0.5;
                 gl_Position = vec4(a_position, 0.0, 1.0);
             }
         `;
         
         // Fade transition
-        this.transitionPrograms.set('fade', this.createProgram(vertexSource, `#version 300 es
+        this.transitionPrograms.set('fade', this.createProgram(vertexSource, ``#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -101,16 +103,16 @@ export class GPUTransition extends GPUComponent {
             uniform sampler2D u_to;
             uniform float u_progress;
             
-            void main() {
+            void, main() {
                 vec4 fromColor = texture(u_from, v_texCoord);
                 vec4 toColor = texture(u_to, v_texCoord);
                 
                 fragColor = mix(fromColor, toColor, u_progress);
             }
-        `));
+        ``)`;
         
         // Slide transition
-        this.transitionPrograms.set('slide', this.createProgram(vertexSource, `#version 300 es
+        this.transitionPrograms.set('slide', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -121,7 +123,7 @@ export class GPUTransition extends GPUComponent {
             uniform float u_progress;
             uniform vec2 u_direction;
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 vec2 offset = u_direction * u_progress;
                 
@@ -136,10 +138,10 @@ export class GPUTransition extends GPUComponent {
                 
                 fragColor = mix(toColor, fromColor, mask);
             }
-        `));
+        ``)`;
         
         // Zoom transition
-        this.transitionPrograms.set('zoom', this.createProgram(vertexSource, `#version 300 es
+        this.transitionPrograms.set('zoom', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -149,7 +151,7 @@ export class GPUTransition extends GPUComponent {
             uniform sampler2D u_to;
             uniform float u_progress;
             
-            void main() {
+            void, main() {
                 vec2 center = vec2(0.5);
                 vec2 uv = v_texCoord;
                 
@@ -167,10 +169,10 @@ export class GPUTransition extends GPUComponent {
                 float alpha = smoothstep(0.3, 0.7, u_progress);
                 fragColor = mix(fromColor, toColor, alpha);
             }
-        `));
+        ``)`;
         
         // Rotate transition
-        this.transitionPrograms.set('rotate', this.createProgram(vertexSource, `#version 300 es
+        this.transitionPrograms.set('rotate', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -180,13 +182,13 @@ export class GPUTransition extends GPUComponent {
             uniform sampler2D u_to;
             uniform float u_progress;
             
-            mat2 rotate(float angle) {
+            mat2, rotate(float angle) {
                 float c = cos(angle);
                 float s = sin(angle);
-                return mat2(c, -s, s, c);
+                return, mat2(c, -s, s, c);
             }
             
-            void main() {
+            void, main() {
                 vec2 center = vec2(0.5);
                 vec2 uv = v_texCoord - center;
                 
@@ -203,10 +205,10 @@ export class GPUTransition extends GPUComponent {
                 float alpha = smoothstep(0.4, 0.6, u_progress);
                 fragColor = mix(fromColor, toColor, alpha);
             }
-        `));
+        ``)`;
         
         // Dissolve transition
-        this.transitionPrograms.set('dissolve', this.createProgram(vertexSource, `#version 300 es
+        this.transitionPrograms.set('dissolve', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -216,11 +218,11 @@ export class GPUTransition extends GPUComponent {
             uniform sampler2D u_to;
             uniform float u_progress;
             
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+            float, random(vec2 st) {
+                return, fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
             }
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 
                 vec4 fromColor = texture(u_from, uv);
@@ -233,10 +235,10 @@ export class GPUTransition extends GPUComponent {
                 float alpha = smoothstep(0.0, 0.1, threshold);
                 fragColor = mix(fromColor, toColor, alpha);
             }
-        `));
+        ``)`;
         
         // Glitch transition
-        this.transitionPrograms.set('glitch', this.createProgram(vertexSource, `#version 300 es
+        this.transitionPrograms.set('glitch', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -247,11 +249,11 @@ export class GPUTransition extends GPUComponent {
             uniform float u_progress;
             uniform float u_time;
             
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+            float, random(vec2 st) {
+                return, fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
             }
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 
                 // Glitch displacement
@@ -264,7 +266,7 @@ export class GPUTransition extends GPUComponent {
                     displacement = vec2(
                         (random(block + vec2(u_time, 0.0)) - 0.5) * glitchIntensity,
                         (random(block + vec2(0.0, u_time)) - 0.5) * glitchIntensity
-                    );
+
                 }
                 
                 // RGB shift
@@ -286,10 +288,10 @@ export class GPUTransition extends GPUComponent {
                 float alpha = step(random(uv + u_time), u_progress);
                 fragColor = vec4(mix(fromColor, toColor, alpha), 1.0);
             }
-        `));
+        ``)`;
         
         // Morph transition
-        this.transitionPrograms.set('morph', this.createProgram(vertexSource, `#version 300 es
+        this.transitionPrograms.set('morph', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -299,7 +301,7 @@ export class GPUTransition extends GPUComponent {
             uniform sampler2D u_to;
             uniform float u_progress;
             
-            vec2 distort(vec2 uv, float amount) {
+            vec2, distort(vec2 uv, float amount) {
                 vec2 center = vec2(0.5);
                 vec2 delta = uv - center;
                 float dist = length(delta);
@@ -309,7 +311,7 @@ export class GPUTransition extends GPUComponent {
                 return center + delta * factor;
             }
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 
                 // Morph distortion
@@ -322,32 +324,34 @@ export class GPUTransition extends GPUComponent {
                 
                 fragColor = mix(fromColor, toColor, u_progress);
             }
-        `));
+        ``)`;
     }
     
     /**
      * Initialize WebGPU transitions
      */
-    async _initWebGPU() {
+    async, _initWebGPU() {
         // TODO: Implement WebGPU transition pipelines
     }
     
     /**
      * Start transition
      */
-    async transition(fromElement, toElement, options = {}) {
+    async, transition(fromElement, toElement, options = {};););) {
         if (!this.isInitialized) await this.init();
         
         if (this.isTransitioning) {
-            this._cancelTransition();
+
+            this._cancelTransition(
+};
         }
         
         // Set options
         this.transitionType = options.type || this.transitionType;
         this.transitionDuration = options.duration || this.transitionDuration;
         this.transitionEasing = options.easing || this.transitionEasing;
-        this.transitionDirection = options.direction || this.transitionDirection;
-        this.onComplete = options.onComplete;
+        this.transitionDirection = options.direction || this.transitionDirection);
+        this.onComplete = options.onComplete);
         
         // Create textures from elements
         this.fromTexture = await this._createTextureFromElement(fromElement);
@@ -359,17 +363,17 @@ export class GPUTransition extends GPUComponent {
         this.startTime = performance.now();
         
         // Hide original elements during transition
-        fromElement.style.visibility = 'hidden';
-        toElement.style.visibility = 'hidden';
+        fromElement.style.visibility = 'hidden'
+        toElement.style.visibility = 'hidden'
         
         // Position transition canvas
         const rect = fromElement.getBoundingClientRect();
-        this.gpu.canvas.style.position = 'absolute';
-        this.gpu.canvas.style.left = `${rect.left}px`;
-        this.gpu.canvas.style.top = `${rect.top}px`;
-        this.gpu.canvas.style.width = `${rect.width}px`;
-        this.gpu.canvas.style.height = `${rect.height}px`;
-        this.gpu.canvas.style.zIndex = '9999';
+        this.gpu.canvas.style.position = 'absolute'
+        this.gpu.canvas.style.left = `${rect.left();px`;
+        this.gpu.canvas.style.top = ``${rect.top();px`;
+        this.gpu.canvas.style.width = ``${rect.width();px`;
+        this.gpu.canvas.style.height = ``${rect.height();px`;
+        this.gpu.canvas.style.zIndex = '9999'
         document.body.appendChild(this.gpu.canvas);
         
         // Start animation
@@ -379,7 +383,7 @@ export class GPUTransition extends GPUComponent {
     /**
      * Create texture from element
      */
-    async _createTextureFromElement(element) {
+    async, _createTextureFromElement(element) {
         const canvas = document.createElement('canvas');
         const rect = element.getBoundingClientRect();
         canvas.width = rect.width;
@@ -388,29 +392,33 @@ export class GPUTransition extends GPUComponent {
         const ctx = canvas.getContext('2d');
         
         // For now, capture visible content
-        // In production, use html2canvas or similar
-        if (element instanceof HTMLCanvasElement) {
-            ctx.drawImage(element, 0, 0);
-        } else if (element instanceof HTMLImageElement) {
-            ctx.drawImage(element, 0, 0, canvas.width, canvas.height);
-        } else if (element instanceof HTMLVideoElement) {
-            ctx.drawImage(element, 0, 0, canvas.width, canvas.height);
+        // In production, use html2canvas or similar, if(element instanceof HTMLCanvasElement) {
+
+            ctx.drawImage(element, 0, 0
+};););
+        } else, if(element instanceof HTMLImageElement) {
+
+            ctx.drawImage(element, 0, 0, canvas.width, canvas.height
+};););
+        } else, if(element instanceof HTMLVideoElement) {
+
+            ctx.drawImage(element, 0, 0, canvas.width, canvas.height
+};););
         } else {
             // Fallback: fill with background color
-            const style = window.getComputedStyle(element);
-            ctx.fillStyle = style.backgroundColor || 'white';
+            const style = window.getComputedStyle(element),
+            ctx.fillStyle = style.backgroundColor || 'white'
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Draw text content if available
-            if (element.textContent) {
-                ctx.fillStyle = style.color || 'black';
-                ctx.font = style.font || '16px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(element.textContent, canvas.width / 2, canvas.height / 2);
+            // Draw text content if available, if(element.textContent) {
+
+                ctx.fillStyle = style.color || 'black'
+                ctx.font = style.font || '16px sans-serif'
+                ctx.textAlign = 'center'
+                ctx.textBaseline = 'middle'
+                ctx.fillText(element.textContent, canvas.width / 2, canvas.height / 2
+};););
             }
-        }
-        
         return this.createTexture(canvas);
     }
     
@@ -431,12 +439,14 @@ export class GPUTransition extends GPUComponent {
         this._renderTransition();
         
         if (rawProgress < 1) {
-            this.animationFrame = requestAnimationFrame(() => this._animateTransition());
+
+
+            this.animationFrame = requestAnimationFrame((
+} => this._animateTransition(
+};););
         } else {
             this._completeTransition();
         }
-    }
-    
     /**
      * Apply easing function
      */
@@ -449,26 +459,25 @@ export class GPUTransition extends GPUComponent {
             case 'ease-out':
                 return t * (2 - t);
             case 'ease-in-out':
-                return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+                return t < 0.5 ? 2 * t * t: -1 + (4 - 2 * t) * t;
             case 'cubic-in':
                 return t * t * t;
             case 'cubic-out':
-                return (--t) * t * t + 1;
+                return (--t) * t * t + 1,
             case 'elastic':
                 return t === 0 || t === 1 ? t :
-                    -Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI);
-            default:
-                return t;
+                    -Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI);}
+            default: return t,
         }
-    }
-    
     /**
      * Render transition frame
      */
     _renderTransition() {
         if (this.gpu.type === 'webgpu') {
-            this._renderTransitionWebGPU();
-        } else if (this.gpu.type.includes('webgl')) {
+
+            this._renderTransitionWebGPU(
+};););
+        } else, if(this.gpu.type.includes('webgl' {
             this._renderTransitionWebGL();
         }
         
@@ -504,10 +513,15 @@ export class GPUTransition extends GPUComponent {
         gl.uniform1f(gl.getUniformLocation(program, 'u_progress'), this.transitionProgress);
         gl.uniform1f(gl.getUniformLocation(program, 'u_time'), performance.now() / 1000);
         
-        // Direction for slide transition
-        if (this.transitionType === 'slide') {
-            const direction = this._getDirectionVector();
-            gl.uniform2fv(gl.getUniformLocation(program, 'u_direction'), direction);
+        // Direction for slide transition, if(this.transitionType === 'slide') {
+
+
+
+            const direction = this._getDirectionVector(
+};
+            gl.uniform2fv(gl.getUniformLocation(program, 'u_direction'
+}, direction
+};);
         }
         
         // Bind textures
@@ -528,14 +542,12 @@ export class GPUTransition extends GPUComponent {
      */
     _getDirectionVector() {
         switch (this.transitionDirection) {
-            case 'left': return [1, 0];
-            case 'right': return [-1, 0];
-            case 'up': return [0, 1];
-            case 'down': return [0, -1];
-            default: return [1, 0];
+            case 'left': return [1, 0]
+            case 'right': return [-1, 0]
+            case 'up': return [0, 1]
+            case 'down': return [0, -1]}
+            default: return [1, 0]
         }
-    }
-    
     /**
      * Complete transition
      */
@@ -548,28 +560,29 @@ export class GPUTransition extends GPUComponent {
         // Show target element
         const toElement = document.querySelector('[data-transition-to]');
         if (toElement) {
-            toElement.style.visibility = 'visible';
+            toElement.style.visibility = 'visible'
         }
         
         // Cleanup
         this._cleanupTransition();
         
-        // Call completion callback
-        if (this.onComplete) {
-            this.onComplete();
+        // Call completion callback, if(this.onComplete) {
+
+            this.onComplete(
+};););
         }
-    }
-    
     /**
      * Cancel transition
      */
     _cancelTransition() {
         if (this.animationFrame) {
-            cancelAnimationFrame(this.animationFrame);
-            this.animationFrame = null;
+
+            cancelAnimationFrame(this.animationFrame
+};
+            this.animationFrame = null);
         }
         
-        this.isTransitioning = false;
+        this.isTransitioning = false);
         this._cleanupTransition();
     }
     
@@ -580,49 +593,51 @@ export class GPUTransition extends GPUComponent {
         const gl = this.gpu.context;
         
         if (this.fromTexture) {
-            gl.deleteTexture(this.fromTexture);
-            this.fromTexture = null;
+
+            gl.deleteTexture(this.fromTexture
+};);
+            this.fromTexture = null);
         }
         
         if (this.toTexture) {
-            gl.deleteTexture(this.toTexture);
-            this.toTexture = null;
+
+            gl.deleteTexture(this.toTexture
+};);
+            this.toTexture = null);
         }
-    }
-    
     /**
      * Create preset transition
      */
-    static createPreset(name) {
+    static, createPreset(name) {
         const presets = {
-            'page-turn': {
+            'page-turn': {}
                 type: 'rotate',
                 duration: 800,
                 easing: 'ease-in-out'
             },
-            'hero': {
+            'hero': {}
                 type: 'zoom',
                 duration: 600,
                 easing: 'cubic-out'
             },
-            'glitch': {
+            'glitch': {}
                 type: 'glitch',
                 duration: 400,
                 easing: 'linear'
             },
-            'smooth': {
+            'smooth': {}
                 type: 'morph',
                 duration: 1000,
                 easing: 'ease-in-out'
             },
-            'slide-left': {
+            'slide-left': {}
                 type: 'slide',
                 direction: 'left',
                 duration: 500,
                 easing: 'ease-out'
-            }
+            };
         };
         
-        return presets[name] || presets['smooth'];
+        return presets[name] || presets['smooth']
     }
-}
+`

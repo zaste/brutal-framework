@@ -1,0 +1,423 @@
+{
+  "name": "@brutal/shared",
+  "timestamp": "2025-07-15T10:24:04.620Z",
+  "exports": {
+    "VERSION": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "DEFAULT_CONFIG": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "EVENTS": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "DOM_EVENTS": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "ATTRS": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "SYMBOLS": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "RESERVED_PROPS": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "ERROR_CODES": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "DOMElement": {
+      "file": "dom/index.ts",
+      "type": "interface"
+    },
+    "QueryOptions": {
+      "file": "dom/index.ts",
+      "type": "interface"
+    },
+    "createElement": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "on": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "delegate": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "toggleClass": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "addClass": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "removeClass": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "matches": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "attr": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "data": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "empty": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "html": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "text": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "show": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "hide": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "dimensions": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "isInViewport": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "ready": {
+      "file": "dom/index.ts",
+      "type": "function"
+    },
+    "dom": {
+      "file": "dom/index.ts",
+      "type": "const"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "LifecycleHooks": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "ComponentOptions": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "EventHandler": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "EventOptions": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "TemplateContext": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "RouteDefinition": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "RouteGuard": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "Route": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "StateListener": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "StateOptions": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "Plugin": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "BrutalConfig": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "VNode": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "RenderFunction": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "AsyncComponent": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "ComponentInstance": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "DirectiveDefinition": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "DirectiveBinding": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "TransitionHooks": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "StoreDefinition": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "Middleware": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "ErrorHandler": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "isString": {
+      "file": "types/index.ts",
+      "type": "const"
+    },
+    "isNumber": {
+      "file": "types/index.ts",
+      "type": "const"
+    },
+    "isBoolean": {
+      "file": "types/index.ts",
+      "type": "const"
+    },
+    "isFunction": {
+      "file": "types/index.ts",
+      "type": "const"
+    },
+    "isObject": {
+      "file": "types/index.ts",
+      "type": "const"
+    },
+    "isArray": {
+      "file": "types/index.ts",
+      "type": "const"
+    },
+    "isPromise": {
+      "file": "types/index.ts",
+      "type": "const"
+    },
+    "Nullable": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "Optional": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "Maybe": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "DeepPartial": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "DeepReadonly": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "Writable": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "isBrowser": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isNode": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isDeno": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isWebWorker": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isChrome": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isFirefox": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isSafari": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isEdge": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isIE": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "supportsPassive": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "supportsCustomElements": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "supportsShadowDOM": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "supportsIntersectionObserver": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "supportsResizeObserver": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "supportsMutationObserver": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "now": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "raf": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "caf": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "uniqueId": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "debounce": {
+      "file": "utils/index.ts",
+      "type": "function"
+    },
+    "throttle": {
+      "file": "utils/index.ts",
+      "type": "function"
+    },
+    "deepClone": {
+      "file": "utils/index.ts",
+      "type": "function"
+    },
+    "deepMerge": {
+      "file": "utils/index.ts",
+      "type": "function"
+    },
+    "getPath": {
+      "file": "utils/index.ts",
+      "type": "function"
+    },
+    "setPath": {
+      "file": "utils/index.ts",
+      "type": "function"
+    },
+    "camelCase": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "kebabCase": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "capitalize": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "last": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "chunk": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "shuffle": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "sleep": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "nextTick": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "timeout": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "parseQuery": {
+      "file": "utils/index.ts",
+      "type": "function"
+    },
+    "stringifyQuery": {
+      "file": "utils/index.ts",
+      "type": "function"
+    },
+    "utils": {
+      "file": "utils/index.ts",
+      "type": "const"
+    }
+  },
+  "files": [
+    "constants.ts",
+    "dom/index.ts",
+    "index.ts",
+    "types/index.ts",
+    "types.ts",
+    "utils/index.ts"
+  ],
+  "bundleSize": 12319,
+  "dependencies": {},
+  "consumers": [
+    "@brutal/events"
+  ]
+}

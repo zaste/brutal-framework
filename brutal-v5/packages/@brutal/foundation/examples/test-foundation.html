@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@brutal/foundation - Test</title>
+</head>
+<body>
+    <h1>@brutal/foundation Test</h1>
+    <div id="output"></div>
+    
+    <script type="module">
+        import { foundation, registry, config, polyfills, errors, env, utils } from '../dist/index.js';
+        
+        const output = document.getElementById('output');
+        const log = (msg) => {
+            output.innerHTML += `<pre>${msg}</pre>`;
+        };
+        
+        // Test 1: Initialize foundation
+        foundation.init({ debug: true });
+        log(`✅ Foundation initialized - version: ${foundation.version}`);
+        
+        // Test 2: Registry
+        registry.r('@brutal/test', '1.0.0');
+        log(`✅ Registry: ${JSON.stringify(registry.a())}`);
+        
+        // Test 3: Config
+        config.s('app.name', 'Test App');
+        config.s('app.features.darkMode', true);
+        log(`✅ Config: app.name = ${config.g('app.name')}`);
+        log(`✅ Config: app.features.darkMode = ${config.g('app.features.darkMode')}`);
+        
+        // Test 4: Environment profiles
+        log(`✅ Dev profile: ${JSON.stringify(env.g('development'))}`);
+        
+        // Test 5: Utils
+        const obj = { a: 1, b: { c: 2 } };
+        const cloned = utils.c(obj);
+        cloned.b.c = 3;
+        log(`✅ Utils clone: original = ${obj.b.c}, cloned = ${cloned.b.c}`);
+        
+        const merged = utils.m({}, { a: 1 }, { b: 2 }, { a: 3 });
+        log(`✅ Utils merge: ${JSON.stringify(merged)}`);
+        
+        // Test 6: Error handling
+        errors.o((e, info) => log(`⚠️ Error caught: ${e.message}`));
+        errors.e(new Error('Test error'), { context: 'testing' });
+        
+        // Test 7: Polyfills
+        polyfills.r('fetch', () => typeof window.fetch !== 'undefined');
+        log(`✅ Polyfills: fetch needed = ${!polyfills.c('fetch')}`);
+        
+        log('\n🎉 All tests passed!');
+    </script>
+</body>
+</html>

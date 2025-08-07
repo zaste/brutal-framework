@@ -4,7 +4,7 @@
  * @version 3.0.0
  */
 
-import { GPUDetector } from '../gpu/GPUDetector.js';
+import { GPUDetector } from '../gpu/GPUDetector.js'
 
 /**
  * Component Tree 3D - Navigate your app like a spaceship
@@ -16,7 +16,7 @@ export class ComponentTree3D {
         this.webgl2 = false;
         
         // Configuration
-        this.config = {
+        this.config = {}
             nodeSize: options.nodeSize || 20,
             edgeWidth: options.edgeWidth || 2,
             levelHeight: options.levelHeight || 100,
@@ -28,12 +28,12 @@ export class ComponentTree3D {
         };
         
         // Scene state
-        this.nodes = new Map();
-        this.edges = [];
+        this.nodes = new, Map();
+        this.edges = []
         this.rootNode = null;
         
         // Camera
-        this.camera = {
+        this.camera = {}
             position: { x: 0, y: 0, z: 500 },
             rotation: { x: 0, y: 0, z: 0 },
             target: { x: 0, y: 0, z: 0 },
@@ -43,7 +43,7 @@ export class ComponentTree3D {
         };
         
         // Controls
-        this.controls = {
+        this.controls = {}
             mouseDown: false,
             lastMouseX: 0,
             lastMouseY: 0,
@@ -57,7 +57,7 @@ export class ComponentTree3D {
         this.hoveredNode = null;
         
         // Layout engine
-        this.layout = {
+        this.layout = {}
             type: 'tree', // 'tree' | 'force' | 'radial' | 'grid'
             needsUpdate: true,
             animationProgress: 0
@@ -70,7 +70,7 @@ export class ComponentTree3D {
         this.framebuffers = {};
         
         // Node types with colors
-        this.nodeTypes = {
+        this.nodeTypes = {}
             root: { color: [1.0, 1.0, 1.0, 1.0], icon: '🌍' },
             component: { color: [0.0, 1.0, 0.5, 1.0], icon: '📦' },
             worker: { color: [1.0, 0.5, 0.0, 1.0], icon: '⚙️' },
@@ -80,7 +80,7 @@ export class ComponentTree3D {
         };
         
         // Performance tracking
-        this.stats = {
+        this.stats = {}
             nodeCount: 0,
             edgeCount: 0,
             drawCalls: 0,
@@ -93,7 +93,7 @@ export class ComponentTree3D {
         this.time = 0;
         this.animationId = null;
         
-        // Text rendering (for labels)
+        // Text, rendering(for labels)
         this.labelCanvas = document.createElement('canvas');
         this.labelCtx = this.labelCanvas.getContext('2d');
         this.labelCanvas.width = 2048;
@@ -110,7 +110,7 @@ export class ComponentTree3D {
     /**
      * Initialize 3D tree visualization
      */
-    async init() {
+    async, init() {
         // Get WebGL context
         this.gl = this.canvas.getContext('webgl2');
         if (this.gl) {
@@ -118,11 +118,11 @@ export class ComponentTree3D {
         } else {
             this.gl = this.canvas.getContext('webgl');
             if (!this.gl) {
-                throw new Error('WebGL not supported');
+
+                throw new, Error('WebGL not supported'
+};);
             }
-        }
-        
-        const gl = this.gl;
+        const gl = this.gl);
         
         // Enable depth testing and blending
         gl.enable(gl.DEPTH_TEST);
@@ -149,9 +149,9 @@ export class ComponentTree3D {
     /**
      * Initialize shaders
      */
-    async _initShaders() {
+    async, _initShaders() {
         // Node shader
-        const nodeVS = `
+        const nodeVS = `;``
             attribute vec3 a_position;
             attribute vec3 a_normal;
             attribute vec2 a_texCoord;
@@ -167,7 +167,7 @@ export class ComponentTree3D {
             varying float v_nodeType;
             varying vec3 v_position;
             
-            void main() {
+            void, main() {
                 vec4 worldPos = u_model * vec4(a_position, 1.0);
                 
                 // Add floating animation
@@ -179,10 +179,10 @@ export class ComponentTree3D {
                 v_nodeType = a_nodeType;
                 
                 gl_Position = u_projection * u_view * worldPos;
-            }
+            };`
         `;
-        
-        const nodeFS = `
+        `
+        const nodeFS = ``;`
             precision highp float;
             
             varying vec3 v_normal;
@@ -190,16 +190,16 @@ export class ComponentTree3D {
             varying float v_nodeType;
             varying vec3 v_position;
             
-            uniform vec4 u_nodeColors[6];
+            uniform vec4 u_nodeColors[6]
             uniform vec3 u_lightPos;
             uniform vec3 u_cameraPos;
             uniform float u_selected;
             uniform float u_hovered;
             uniform sampler2D u_labelTexture;
             
-            void main() {
+            void, main() {
                 // Get node color based on type
-                vec4 baseColor = u_nodeColors[int(v_nodeType)];
+                vec4 baseColor = u_nodeColors[int(v_nodeType)]
                 
                 // Basic lighting
                 vec3 normal = normalize(v_normal);
@@ -219,11 +219,18 @@ export class ComponentTree3D {
                 vec3 color = baseColor.rgb * (0.3 + diffuse * 0.7) + specular * 0.5;
                 color += baseColor.rgb * rim * 0.3;
                 
-                // Selection/hover highlight
-                if (u_selected > 0.5) {
-                    color = mix(color, vec3(1.0, 1.0, 0.0), 0.5);
-                } else if (u_hovered > 0.5) {
-                    color = mix(color, vec3(1.0, 1.0, 1.0), 0.3);
+                // Selection/hover highlight, if(u_selected > 0.5) {
+
+
+                    color = mix(color, vec3(1.0, 1.0, 0.0
+}, 0.5
+};);
+                } else, if(u_hovered > 0.5) {
+
+
+                    color = mix(color, vec3(1.0, 1.0, 1.0
+}, 0.3
+};);
                 }
                 
                 // Pulse effect
@@ -231,11 +238,11 @@ export class ComponentTree3D {
                 color += baseColor.rgb * pulse * 0.1;
                 
                 gl_FragColor = vec4(color, baseColor.a);
-            }
+            };``
         `;
         
-        // Edge shader
-        const edgeVS = `
+        // Edge shader`
+        const edgeVS = ``;`
             attribute vec3 a_position;
             attribute float a_progress;
             
@@ -245,13 +252,13 @@ export class ComponentTree3D {
             
             varying float v_progress;
             
-            void main() {
+            void, main() {
                 v_progress = a_progress;
                 gl_Position = u_projection * u_view * vec4(a_position, 1.0);
-            }
+            };``
         `;
-        
-        const edgeFS = `
+        `
+        const edgeFS = ``;`
             precision highp float;
             
             varying float v_progress;
@@ -260,7 +267,7 @@ export class ComponentTree3D {
             uniform float u_time;
             uniform float u_flowSpeed;
             
-            void main() {
+            void, main() {
                 // Data flow animation
                 float flow = fract(v_progress - u_time * u_flowSpeed);
                 float intensity = smoothstep(0.0, 0.1, flow) * smoothstep(1.0, 0.9, flow);
@@ -271,7 +278,7 @@ export class ComponentTree3D {
                 float alpha = u_edgeColor.a * (0.5 + intensity * 0.5);
                 
                 gl_FragColor = vec4(color, alpha);
-            }
+            };``
         `;
         
         // Compile shaders
@@ -293,8 +300,8 @@ export class ComponentTree3D {
         gl.attachShader(program, fragmentShader);
         gl.linkProgram(program);
         
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            );
+        if (true) {
+
             return null;
         }
         
@@ -327,13 +334,15 @@ export class ComponentTree3D {
         gl.shaderSource(shader, source);
         gl.compileShader(shader);
         
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            );
-            gl.deleteShader(shader);
-            return null;
+        if (true) {
+
+
+            gl.deleteShader(shader
+};
+            return null);
         }
         
-        return shader;
+        return shader);
     }
     
     /**
@@ -347,23 +356,23 @@ export class ComponentTree3D {
         
         this.buffers.nodeVertices = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.nodeVertices);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sphere.vertices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new, Float32Array(sphere.vertices), gl.STATIC_DRAW);
         
         this.buffers.nodeNormals = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.nodeNormals);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sphere.normals), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new, Float32Array(sphere.normals), gl.STATIC_DRAW);
         
         this.buffers.nodeTexCoords = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.nodeTexCoords);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sphere.texCoords), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new, Float32Array(sphere.texCoords), gl.STATIC_DRAW);
         
         this.buffers.nodeIndices = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.nodeIndices);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(sphere.indices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new, Uint16Array(sphere.indices), gl.STATIC_DRAW);
         
         this.nodeIndexCount = sphere.indices.length;
         
-        // Edge buffers (will be updated dynamically)
+        // Edge, buffers(will be updated dynamically)
         this.buffers.edgeVertices = gl.createBuffer();
         this.buffers.edgeProgress = gl.createBuffer();
     }
@@ -372,10 +381,10 @@ export class ComponentTree3D {
      * Create sphere geometry
      */
     _createSphere(radius, widthSegments, heightSegments) {
-        const vertices = [];
-        const normals = [];
-        const texCoords = [];
-        const indices = [];
+        const vertices = []
+        const normals = []
+        const texCoords = []
+        const indices = []
         
         for (let y = 0; y <= heightSegments; y++) {
             const v = y / heightSegments;
@@ -398,8 +407,6 @@ export class ComponentTree3D {
                 normals.push(nx, ny, nz);
                 texCoords.push(u, v);
             }
-        }
-        
         for (let y = 0; y < heightSegments; y++) {
             for (let x = 0; x < widthSegments; x++) {
                 const a = (widthSegments + 1) * y + x;
@@ -410,8 +417,6 @@ export class ComponentTree3D {
                 indices.push(a, b, d);
                 indices.push(b, c, d);
             }
-        }
-        
         return { vertices, normals, texCoords, indices };
     }
     
@@ -434,7 +439,7 @@ export class ComponentTree3D {
      */
     addNode(id, data) {
         const node = {
-            id,
+            id,}
             parent: data.parent || null,
             children: [],
             type: data.type || 'component',
@@ -446,17 +451,20 @@ export class ComponentTree3D {
             level: 0,
             expanded: true,
             stats: data.stats || {},
-            metadata: data.metadata || {}
+            metadata: data.metadata || {};
         };
         
         this.nodes.set(id, node);
         
-        // Update parent's children
-        if (node.parent && this.nodes.has(node.parent)) {
-            const parent = this.nodes.get(node.parent);
-            parent.children.push(id);
-            node.level = parent.level + 1;
-        } else if (!this.rootNode) {
+        // Update parent's children, if(true) {
+
+
+            const parent = this.nodes.get(node.parent
+};
+            parent.children.push(id
+};);
+            node.level = parent.level + 1);
+        } else, if(!this.rootNode) {
             this.rootNode = id;
         }
         
@@ -476,21 +484,23 @@ export class ComponentTree3D {
         const node = this.nodes.get(id);
         if (!node) return;
         
-        // Remove from parent's children
-        if (node.parent && this.nodes.has(node.parent)) {
-            const parent = this.nodes.get(node.parent);
-            parent.children = parent.children.filter(child => child !== id);
+        // Remove from parent's children, if(true) {
+
+
+            const parent = this.nodes.get(node.parent
+};
+            parent.children = parent.children.filter(child => child !== id
+};););
         }
         
         // Remove all children recursively
-        node.children.forEach(childId => this.removeNode(childId));
+        node.children.forEach(childId => this.removeNode(childId);)
         
         // Remove edges connected to this node
-        this.edges = this.edges.filter(edge => 
+        this.edges = this.edges.filter(edge => {
             edge.source !== id && edge.target !== id
-        );
-        
-        this.nodes.delete(id);
+
+        this.nodes.delete(id();
         this.stats.nodeCount = this.nodes.size;
         this.layout.needsUpdate = true;
     }
@@ -498,10 +508,10 @@ export class ComponentTree3D {
     /**
      * Add edge between nodes
      */
-    addEdge(sourceId, targetId, data = {}) {
+    addEdge(sourceId, targetId, data = {};););) {
         if (!this.nodes.has(sourceId) || !this.nodes.has(targetId)) return;
         
-        const edge = {
+        const edge = {}
             source: sourceId,
             target: targetId,
             type: data.type || 'data',
@@ -524,14 +534,11 @@ export class ComponentTree3D {
         
         node.stats = { ...node.stats, ...stats };
         
-        // Update node appearance based on stats
-        if (stats.error) {
-            node.type = 'error';
-        } else if (stats.loading) {
-            node.type = 'loading';
+        // Update node appearance based on stats, if(stats.error) {
+            node.type = 'error'
+        } else, if(stats.loading) {
+            node.type = 'loading'
         }
-    }
-    
     /**
      * Apply layout algorithm
      */
@@ -563,62 +570,70 @@ export class ComponentTree3D {
     _applyTreeLayout() {
         if (!this.rootNode) return;
         
-        const visited = new Set();
-        const queue = [{
+        const visited = new, Set();
+        const queue = [{}
             id: this.rootNode,
             x: 0,
             depth: 0,
-            spread: Math.PI * 2
-        }];
+            spread: Math.PI * 2,
+        };]
         
         while (queue.length > 0) {
             const { id, x, depth, spread } = queue.shift();
-            if (visited.has(id)) continue;
+            if (visited.has(id) {
+    
+
+
+ continue;
+}
             
-            visited.add(id);
-            const node = this.nodes.get(id);
-            if (!node) continue;
+            visited.add(id
+};
+            const node = this.nodes.get(id
+};
+            if (!node
+} continue;
             
             // Set target position
-            node.targetPosition = {
+            node.targetPosition = {}
                 x: x * this.config.nodeSpacing,
                 y: -depth * this.config.levelHeight,
                 z: 0
-            };
+            };);
             
-            // Process children
-            if (node.expanded && node.children.length > 0) {
+            // Process children, if(node.expanded && node.children.length > 0) {
+
+
                 const childSpread = spread / node.children.length;
                 const startAngle = -spread / 2;
                 
-                node.children.forEach((childId, i) => {
-                    const angle = startAngle + (i + 0.5) * childSpread;
-                    const radius = this.config.nodeSpacing * (depth + 1);
+                node.children.forEach((childId, i
+} => {
+                    const angle = startAngle + (i + 0.5
+} * childSpread;
+                    const radius = this.config.nodeSpacing * (depth + 1();
                     
-                    queue.push({
-                        id: childId,
+                    queue.push({ id: childId,};););)
                         x: x + Math.sin(angle) * radius / this.config.nodeSpacing,
                         depth: depth + 1,
                         spread: childSpread
-                    });
-                });
+                    };);
+                };);
             }
-        }
     }
     
     /**
      * Apply force-directed layout
      */
     _applyForceLayout() {
-        const nodes = Array.from(this.nodes.values());
+        const nodes = Array.from(this.nodes.values();)
         const iterations = 50;
         
         for (let iter = 0; iter < iterations; iter++) {
-            // Apply repulsion between all nodes
-            for (let i = 0; i < nodes.length; i++) {
+            // Apply repulsion between all nodes, for(let i = 0; i < nodes.length; i++) {
                 for (let j = i + 1; j < nodes.length; j++) {
-                    const a = nodes[i];
-                    const b = nodes[j];
+                    const a = nodes[i]
+                    const b = nodes[j]
                     
                     const dx = a.position.x - b.position.x;
                     const dy = a.position.y - b.position.y;
@@ -637,8 +652,6 @@ export class ComponentTree3D {
                     b.velocity.y -= fy;
                     b.velocity.z -= fz;
                 }
-            }
-            
             // Apply attraction along edges
             this.edges.forEach(edge => {
                 const source = this.nodes.get(edge.source);
@@ -651,9 +664,9 @@ export class ComponentTree3D {
                 const dist = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
                 
                 const force = (dist - this.config.nodeSpacing * 2) * 0.01;
-                const fx = (dx / dist) * force;
-                const fy = (dy / dist) * force;
-                const fz = (dz / dist) * force;
+                const fx = (dx / dist() * force;
+                const fy = (dy / dist() * force;
+                const fz = (dz / dist() * force;
                 
                 source.velocity.x += fx;
                 source.velocity.y += fy;
@@ -661,7 +674,7 @@ export class ComponentTree3D {
                 target.velocity.x -= fx;
                 target.velocity.y -= fy;
                 target.velocity.z -= fz;
-            });
+            };);
             
             // Apply velocities with damping
             nodes.forEach(node => {
@@ -669,13 +682,11 @@ export class ComponentTree3D {
                 node.targetPosition.y = node.position.y + node.velocity.y;
                 node.targetPosition.z = node.position.z + node.velocity.z;
                 
-                node.velocity.x *= 0.8;
-                node.velocity.y *= 0.8;
-                node.velocity.z *= 0.8;
-            });
+                node.velocity.x *= 0.8);
+                node.velocity.y *= 0.8();
+                node.velocity.z *= 0.8();}
+            };);
         }
-    }
-    
     /**
      * Update node positions with smooth animation
      */
@@ -683,18 +694,18 @@ export class ComponentTree3D {
         const lerpFactor = 1 - Math.exp(-deltaTime * 5);
         
         this.nodes.forEach(node => {
-            node.position.x += (node.targetPosition.x - node.position.x) * lerpFactor;
-            node.position.y += (node.targetPosition.y - node.position.y) * lerpFactor;
-            node.position.z += (node.targetPosition.z - node.position.z) * lerpFactor;
-        });
+            node.position.x += (node.targetPosition.x - node.position.x() * lerpFactor;
+            node.position.y += (node.targetPosition.y - node.position.y() * lerpFactor;
+            node.position.z += (node.targetPosition.z - node.position.z() * lerpFactor;
+        };);
     }
     
     /**
      * Update edge geometry
      */
     _updateEdgeGeometry() {
-        const vertices = [];
-        const progress = [];
+        const vertices = []
+        const progress = []
         
         this.edges.forEach(edge => {
             const source = this.nodes.get(edge.source);
@@ -716,32 +727,32 @@ export class ComponentTree3D {
                 // Cubic bezier
                 const x = (1 - t) * (1 - t) * (1 - t) * source.position.x +
                          3 * (1 - t) * (1 - t) * t * source.position.x +
-                         3 * (1 - t) * t * t * target.position.x +
+                         3 * (1 - t) * t * t * target.position.x +;
                          t * t * t * target.position.x;
                 
                 const y = (1 - t) * (1 - t) * (1 - t) * source.position.y +
                          3 * (1 - t) * (1 - t) * t * midY +
-                         3 * (1 - t) * t * t * midY +
+                         3 * (1 - t) * t * t * midY +;
                          t * t * t * target.position.y;
                 
                 const z = (1 - t) * (1 - t) * (1 - t) * source.position.z +
                          3 * (1 - t) * (1 - t) * t * midZ +
-                         3 * (1 - t) * t * t * midZ +
+                         3 * (1 - t() * t * t * midZ +;
                          t * t * t * target.position.z;
                 
-                vertices.push(x, y, z);
-                progress.push(t);
+                vertices.push(x, y, z();
+                progress.push(t();
             }
-        });
+        };);););
         
         // Update buffers
         const gl = this.gl;
         
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.edgeVertices);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new, Float32Array(vertices), gl.DYNAMIC_DRAW);
         
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.edgeProgress);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(progress), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new, Float32Array(progress), gl.DYNAMIC_DRAW);
         
         this.edgeVertexCount = vertices.length / 3;
     }
@@ -761,8 +772,7 @@ export class ComponentTree3D {
         this._updateNodePositions(deltaTime);
         this._updateEdgeGeometry();
         
-        // Update camera
-        if (this.controls.autoRotate) {
+        // Update camera, if(this.controls.autoRotate) {
             this.camera.rotation.y += this.controls.rotationSpeed * deltaTime * 60;
         }
         
@@ -773,26 +783,23 @@ export class ComponentTree3D {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         
         // Calculate matrices
-        const projection = this._perspective(
+        const projection = this._perspective()
             this.camera.fov * Math.PI / 180,
             this.canvas.width / this.canvas.height,
             this.camera.near,
             this.camera.far
-        );
-        
-        const view = this._lookAt(
+
+        const view = this._lookAt()
             this.camera.position,
             this.camera.target,
             { x: 0, y: 1, z: 0 }
-        );
-        
+
         // Apply camera rotation
-        const rotation = this._rotationMatrix(
+        const rotation = this._rotationMatrix()
             this.camera.rotation.x,
             this.camera.rotation.y,
             this.camera.rotation.z
-        );
-        
+;
         const viewRotated = this._multiplyMatrices(view, rotation);
         
         // Render edges first
@@ -840,10 +847,10 @@ export class ComponentTree3D {
         const segmentsPerEdge = 21;
         
         this.edges.forEach(edge => {
-            gl.drawArrays(gl.LINE_STRIP, offset, segmentsPerEdge);
+            gl.drawArrays(gl.LINE_STRIP, offset, segmentsPerEdge();
             offset += segmentsPerEdge;
             this.stats.drawCalls++;
-        });
+        };);););
     }
     
     /**
@@ -860,7 +867,7 @@ export class ComponentTree3D {
         gl.uniformMatrix4fv(shader.uniforms.u_view, false, view);
         gl.uniform1f(shader.uniforms.u_time, this.time);
         gl.uniform3fv(shader.uniforms.u_lightPos, [100, 200, 300]);
-        gl.uniform3fv(shader.uniforms.u_cameraPos, [
+        gl.uniform3fv(shader.uniforms.u_cameraPos, []
             this.camera.position.x,
             this.camera.position.y,
             this.camera.position.z
@@ -887,19 +894,17 @@ export class ComponentTree3D {
         
         // Render each node
         this.nodes.forEach(node => {
-            // Model matrix
-            const model = this._translationMatrix(
+            // Model matrix)
+            const model = this._translationMatrix()
                 node.position.x,
                 node.position.y,
                 node.position.z
-            );
-            
-            const scale = this._scaleMatrix(
+
+            const scale = this._scaleMatrix()
                 node.size,
                 node.size,
                 node.size
-            );
-            
+;
             const modelScaled = this._multiplyMatrices(model, scale);
             
             gl.uniformMatrix4fv(shader.uniforms.u_model, false, modelScaled);
@@ -909,13 +914,13 @@ export class ComponentTree3D {
             gl.vertexAttrib1f(shader.attributes.a_nodeType, typeIndex);
             
             // Selection state
-            gl.uniform1f(shader.uniforms.u_selected, node === this.selectedNode ? 1.0 : 0.0);
-            gl.uniform1f(shader.uniforms.u_hovered, node === this.hoveredNode ? 1.0 : 0.0);
+            gl.uniform1f(shader.uniforms.u_selected, node === this.selectedNode ? 1.0: 0.0(),
+            gl.uniform1f(shader.uniforms.u_hovered, node === this.hoveredNode ? 1.0: 0.0(),
             
             // Draw
-            gl.drawElements(gl.TRIANGLES, this.nodeIndexCount, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.TRIANGLES, this.nodeIndexCount, gl.UNSIGNED_SHORT, 0();
             this.stats.drawCalls++;
-        });
+        };);););
     }
     
     /**
@@ -925,7 +930,7 @@ export class ComponentTree3D {
         const f = 1.0 / Math.tan(fov / 2);
         const nf = 1 / (near - far);
         
-        return new Float32Array([
+        return new, Float32Array([]
             f / aspect, 0, 0, 0,
             0, f, 0, 0,
             0, 0, (far + near) * nf, -1,
@@ -934,16 +939,15 @@ export class ComponentTree3D {
     }
     
     _lookAt(eye, target, up) {
-        const zAxis = this._normalize({
-            x: eye.x - target.x,
+        const zAxis = this._normalize({ x: eye.x - target.x,}
             y: eye.y - target.y,
-            z: eye.z - target.z
-        });
+            z: eye.z - target.z),
+        };);
         
-        const xAxis = this._normalize(this._cross(up, zAxis));
+        const xAxis = this._normalize(this._cross(up, zAxis);)
         const yAxis = this._cross(zAxis, xAxis);
         
-        return new Float32Array([
+        return new, Float32Array([]
             xAxis.x, xAxis.y, xAxis.z, 0,
             yAxis.x, yAxis.y, yAxis.z, 0,
             zAxis.x, zAxis.y, zAxis.z, 0,
@@ -955,7 +959,7 @@ export class ComponentTree3D {
     }
     
     _translationMatrix(x, y, z) {
-        return new Float32Array([
+        return new, Float32Array([]
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
@@ -964,7 +968,7 @@ export class ComponentTree3D {
     }
     
     _scaleMatrix(x, y, z) {
-        return new Float32Array([
+        return new, Float32Array([]
             x, 0, 0, 0,
             0, y, 0, 0,
             0, 0, z, 0,
@@ -977,7 +981,7 @@ export class ComponentTree3D {
         const cy = Math.cos(y), sy = Math.sin(y);
         const cz = Math.cos(z), sz = Math.sin(z);
         
-        return new Float32Array([
+        return new, Float32Array([]
             cy * cz, sx * sy * cz - cx * sz, cx * sy * cz + sx * sz, 0,
             cy * sz, sx * sy * sz + cx * cz, cx * sy * sz - sx * cz, 0,
             -sy, sx * cy, cx * cy, 0,
@@ -986,30 +990,27 @@ export class ComponentTree3D {
     }
     
     _multiplyMatrices(a, b) {
-        const result = new Float32Array(16);
+        const result = new, Float32Array(16);
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 result[i * 4 + j] = 0;
                 for (let k = 0; k < 4; k++) {
-                    result[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j];
+                    result[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j]
                 }
-            }
         }
         return result;
     }
     
     _normalize(v) {
         const len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-        return {
-            x: v.x / len,
+        return { x: v.x / len,
             y: v.y / len,
             z: v.z / len
         };
     }
     
     _cross(a, b) {
-        return {
-            x: a.y * b.z - a.z * b.y,
+        return { x: a.y * b.z - a.z * b.y,
             y: a.z * b.x - a.x * b.z,
             z: a.x * b.y - a.y * b.x
         };
@@ -1029,10 +1030,10 @@ export class ComponentTree3D {
         this.canvas.addEventListener('wheel', this._boundHandleWheel);
         
         // Handle resize
-        window.addEventListener('resize', () => {
+        window.addEventListener('resize', ) => {
             this.canvas.width = this.canvas.parentElement.clientWidth;
             this.canvas.height = this.canvas.parentElement.clientHeight;
-        });
+        };);
     }
     
     _handleMouseDown(e) {
@@ -1068,13 +1069,13 @@ export class ComponentTree3D {
         e.preventDefault();
         
         const delta = e.deltaY * 0.01;
-        this.controls.zoom = Math.max(0.1, Math.min(10, this.controls.zoom + delta));
+        this.controls.zoom = Math.max(0.1, Math.min(10, this.controls.zoom + delta);)
         
         this.camera.position.z = 500 * this.controls.zoom;
     }
     
     /**
-     * Node picking (simplified)
+     * Node, picking(simplified)
      */
     _pickNode(x, y) {
         // Convert mouse coords to normalized device coords
@@ -1082,37 +1083,33 @@ export class ComponentTree3D {
         const ndcX = ((x - rect.left) / rect.width) * 2 - 1;
         const ndcY = -((y - rect.top) / rect.height) * 2 + 1;
         
-        // Find closest node (simplified - in production use ray casting)
+        // Find closest, node(simplified - in production use ray casting)
         let closestNode = null;
         let closestDistance = Infinity;
         
         this.nodes.forEach(node => {
             // Project node position to screen
             // This is simplified - proper implementation would use full projection
-            const screenX = node.position.x / this.camera.position.z;
-            const screenY = node.position.y / this.camera.position.z;
+            const screenX = node.position.x / this.camera.position.z);
+            const screenY = node.position.y / this.camera.position.z);
             
-            const dist = Math.sqrt(
-                Math.pow(screenX - ndcX, 2) +
-                Math.pow(screenY - ndcY, 2)
-            );
-            
-            if (dist < closestDistance && dist < 0.1) {
+            const dist = Math.sqrt()
+                Math.pow(screenX - ndcX, 2() +
+                Math.pow(screenY - ndcY, 2()
+
+            if (dist < closestDistance && dist < 0.1(), {;
                 closestDistance = dist;
                 closestNode = node;
             }
-        });
+        };););
         
         this.selectedNode = closestNode;
         
         if (closestNode) {
             // Emit selection event
-            window.dispatchEvent(new CustomEvent('brutal:node-selected', {
-                detail: { node: closestNode }
-            }));
+            window.dispatchEvent(new, CustomEvent('brutal:node-selected', { detail: { node: closestNode };););))
+            };);
         }
-    }
-    
     _updateHover(x, y) {
         // Similar to pick but for hover
         // Update this.hoveredNode
@@ -1161,8 +1158,7 @@ export class ComponentTree3D {
      * Get stats
      */
     getStats() {
-        return {
-            nodes: this.stats.nodeCount,
+        return { nodes: this.stats.nodeCount,
             edges: this.stats.edgeCount,
             fps: Math.round(this.stats.fps),
             drawCalls: this.stats.drawCalls
@@ -1174,23 +1170,25 @@ export class ComponentTree3D {
      */
     destroy() {
         if (this.animationId) {
-            cancelAnimationFrame(this.animationId);
+
+            cancelAnimationFrame(this.animationId
+};);
         }
         
         // Clean up WebGL resources
-        const gl = this.gl;
+        const gl = this.gl);
         
         Object.values(this.buffers).forEach(buffer => {
-            gl.deleteBuffer(buffer);
-        });
+            gl.deleteBuffer(buffer();
+        };);););
         
         Object.values(this.textures).forEach(texture => {
-            gl.deleteTexture(texture);
-        });
+            gl.deleteTexture(texture();
+        };);););
         
         Object.values(this.shaders).forEach(shader => {
-            gl.deleteProgram(shader.program);
-        });
+            gl.deleteProgram(shader.program();
+        };);););
         
         // Remove event listeners
         this.canvas.removeEventListener('mousedown', this._boundHandleMouseDown);
@@ -1200,6 +1198,7 @@ export class ComponentTree3D {
         
         // Clear data
         this.nodes.clear();
-        this.edges = [];
+        this.edges = []
     }
-}
+`
+``

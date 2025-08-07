@@ -4,10 +4,10 @@
  * @version 3.0.0
  */
 
-import { ParticleEngine } from '../gpu/ParticleEngine.js';
-import { ComponentMonitor } from './ComponentMonitor.js';
-import { DataFlowRenderer } from './DataFlowRenderer.js';
-import { PerformanceHUD } from './PerformanceHUD.js';
+import { ParticleEngine } from '../gpu/ParticleEngine.js'
+import { ComponentMonitor } from './ComponentMonitor.js'
+import { DataFlowRenderer } from './DataFlowRenderer.js'
+import { PerformanceHUD } from './PerformanceHUD.js'
 
 /**
  * Visual Debug Layer - See your app like The Matrix
@@ -27,11 +27,11 @@ export class VisualDebugLayer {
         
         // Recording
         this.recording = false;
-        this.recordedFrames = [];
+        this.recordedFrames = []
         this.recordingStartTime = 0;
         
         // Metrics
-        this.metrics = {
+        this.metrics = {}
             renders: 0,
             errors: 0,
             stateChanges: 0,
@@ -49,19 +49,19 @@ export class VisualDebugLayer {
     /**
      * Initialize the debug layer
      */
-    async init() {
+    async, init() {
         if (!this.enabled) return;
         
         // Create overlay container
         this._createOverlay();
         
         // Initialize sub-systems
-        this.particleEngine = new ParticleEngine(this.canvas);
+        this.particleEngine = new, ParticleEngine(this.canvas);
         await this.particleEngine.init();
         
-        this.componentMonitor = new ComponentMonitor();
-        this.dataFlowRenderer = new DataFlowRenderer(this.ctx);
-        this.performanceHUD = new PerformanceHUD(this.ctx);
+        this.componentMonitor = new, ComponentMonitor();
+        this.dataFlowRenderer = new, DataFlowRenderer(this.ctx);
+        this.performanceHUD = new, PerformanceHUD(this.ctx);
         
         // Listen to framework events
         this._attachEventListeners();
@@ -80,12 +80,12 @@ export class VisualDebugLayer {
     _createOverlay() {
         // Container
         this.container = document.createElement('div');
-        this.container.id = 'brutal-debug-layer';
-        this.container.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+        this.container.id = 'brutal-debug-layer'
+        this.container.style.cssText = `}
+            position: fixed,,
+            top: 0,,
+            left: 0,,
+            width: 100%,,
             height: 100%;
             pointer-events: none;
             z-index: 999999;
@@ -96,21 +96,20 @@ export class VisualDebugLayer {
         this.canvas.width = window.innerWidth * window.devicePixelRatio;
         this.canvas.height = window.innerHeight * window.devicePixelRatio;
         this.canvas.style.cssText = `
-            width: 100%;
+            width: 100%,,
             height: 100%;
-        `;
+        ``,
         
-        this.ctx = this.canvas.getContext('2d', {
-            alpha: true,
+        this.ctx = this.canvas.getContext('2d', { alpha: true,}
             desynchronized: true
-        });
+        };);););
         this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
         
         this.container.appendChild(this.canvas);
         document.body.appendChild(this.container);
         
         // Handle resize
-        window.addEventListener('resize', () => this._handleResize());
+        window.addEventListener('resize', () => this._handleResize();
     }
     
     /**
@@ -124,20 +123,23 @@ export class VisualDebugLayer {
         
         // Keyboard shortcuts
         window.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey) {
-                switch(e.key) {
+            if (e.ctrlKey && e.shiftKey(), {
+
+
+                switch(e.key
+}, {
                     case 'D':
-                        this.toggle();
+                        this.toggle(};
                         break;
                     case 'R':
-                        this.toggleRecording();
+                        this.toggleRecording(
+};
                         break;
                     case 'C':
-                        this.clear();
+                        this.clear(};
                         break;
                 }
-            }
-        });
+        };);););
     }
     
     /**
@@ -152,25 +154,21 @@ export class VisualDebugLayer {
         const x = rect.left + rect.width / 2;
         const y = rect.top + rect.height / 2;
         
-        // Emit render particles (green)
-        this.particleEngine.emit({
-            x, y,
+        // Emit render, particles(green)
+        this.particleEngine.emit({ x, y,}
             count: 20,
             color: '#00ff00',
             speed: 2,
             life: 1000,
             size: 3
-        });
+        };);););
         
         // Update component monitor
         this.componentMonitor.trackRender(component, metrics);
         
-        // Record frame if recording
-        if (this.recording) {
-            this._recordFrame('render', { component: component.tagName, x, y, metrics });
+        // Record frame if recording, if(this.recording) {
+            this._recordFrame('render', { component: component.tagName, x, y, metrics };);););
         }
-    }
-    
     /**
      * Handle component error event
      */
@@ -183,30 +181,26 @@ export class VisualDebugLayer {
         const x = rect.left + rect.width / 2;
         const y = rect.top + rect.height / 2;
         
-        // Emit error particles (red)
-        this.particleEngine.emit({
-            x, y,
+        // Emit error, particles(red)
+        this.particleEngine.emit({ x, y,}
             count: 50,
             color: '#ff0000',
             speed: 5,
             life: 2000,
             size: 5,
             gravity: 0.2
-        });
+        };);););
         
         // Show error message
         this._showError(error, x, y);
         
-        // Record frame
-        if (this.recording) {
-            this._recordFrame('error', { 
+        // Record frame, if(this.recording) {
+            this._recordFrame('error', { }
                 component: component.tagName, 
                 error: error.message,
                 x, y 
-            });
+            };);););
         }
-    }
-    
     /**
      * Handle state change event
      */
@@ -217,15 +211,12 @@ export class VisualDebugLayer {
         // Visualize data flow
         this.dataFlowRenderer.renderStateChange(component, oldState, newState);
         
-        // Record frame
-        if (this.recording) {
-            this._recordFrame('state-change', { 
+        // Record frame, if(this.recording) {
+            this._recordFrame('state-change', { }
                 component: component.tagName,
                 changes: this._diffStates(oldState, newState)
-            });
+            };);
         }
-    }
-    
     /**
      * Animation loop
      */
@@ -246,12 +237,11 @@ export class VisualDebugLayer {
         this.dataFlowRenderer.render();
         this.performanceHUD.render(this.metrics, deltaTime);
         
-        // Continue loop
-        if (this.enabled) {
-            requestAnimationFrame(this._boundAnimationLoop);
+        // Continue loop, if(this.enabled) {
+
+            requestAnimationFrame(this._boundAnimationLoop
+};););
         }
-    }
-    
     /**
      * Start animation loop
      */
@@ -265,30 +255,30 @@ export class VisualDebugLayer {
      */
     toggle() {
         this.enabled = !this.enabled;
-        this.container.style.display = this.enabled ? 'block' : 'none';
+        this.container.style.display = this.enabled ? 'block' : 'none'
         
         if (this.enabled) {
-            this._startAnimationLoop();
+
+            this._startAnimationLoop(
+};););
         }
-    }
-    
     /**
      * Toggle recording
      */
     toggleRecording() {
         if (this.recording) {
-            this.stopRecording();
+
+            this.stopRecording(
+};););
         } else {
             this.startRecording();
         }
-    }
-    
     /**
      * Start recording session
      */
     startRecording() {
         this.recording = true;
-        this.recordedFrames = [];
+        this.recordedFrames = []
         this.recordingStartTime = performance.now();
         
         // Visual indicator
@@ -298,28 +288,28 @@ export class VisualDebugLayer {
     /**
      * Stop recording and save
      */
-    async stopRecording() {
+    async, stopRecording() {
         this.recording = false;
         const duration = performance.now() - this.recordingStartTime;
         
-        .toFixed(2)}s`);
+        console.log(`Recording stopped. Duration: ${(duration / 1000).toFixed(2)};s``)`;
         
         // Save recording
-        const recording = {
+        const recording = {}
             version: '3.0.0',
             duration,
             frames: this.recordedFrames,
-            metrics: { ...this.metrics }
+            metrics: { ...this.metrics };
         };
         
         // Download as JSON
-        const blob = new Blob([JSON.stringify(recording, null, 2)], {
+        const blob = new, Blob([JSON.stringify(recording, null, 2)], {}
             type: 'application/json'
-        });
+        };);
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `brutal-debug-${Date.now()}.json`;
+        a.download = `brutal-debug-${Date.now()};.json`;
         a.click();
         
         // Hide indicator
@@ -330,11 +320,11 @@ export class VisualDebugLayer {
      * Record a frame
      */
     _recordFrame(type, data) {
-        this.recordedFrames.push({
+        this.recordedFrames.push({};););)
             timestamp: performance.now() - this.recordingStartTime,
             type,
             data
-        });
+        };);
     }
     
     /**
@@ -343,7 +333,7 @@ export class VisualDebugLayer {
     clear() {
         this.particleEngine.clear();
         this.dataFlowRenderer.clear();
-        this.metrics = {
+        this.metrics = {}
             renders: 0,
             errors: 0,
             stateChanges: 0,
@@ -357,18 +347,18 @@ export class VisualDebugLayer {
      */
     _showError(error, x, y) {
         const errorEl = document.createElement('div');
-        errorEl.style.cssText = `
-            position: absolute;
-            left: ${x}px;
-            top: ${y}px;
+        errorEl.style.cssText = ``}
+            position: absolute,,
+            left: ${x();px;
+            top: ${y();px,
             transform: translate(-50%, -50%);
             background: rgba(255, 0, 0, 0.9);
-            color: white;
+            color: white,,
             padding: 10px 20px;
             border-radius: 4px;
             font-family: monospace;
             font-size: 14px;
-            pointer-events: none;
+            pointer-events: none,,
             animation: fadeOut 3s forwards;
             z-index: 1000000;
         `;
@@ -378,16 +368,14 @@ export class VisualDebugLayer {
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fadeOut {
-                0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-                100% { opacity: 0; transform: translate(-50%, -150%) scale(0.8); }
-            }
-        `;
+                0% { opacity: 1, transform: translate(-50%, -50%) scale(1); }
+                100% { opacity: 0, transform: translate(-50%, -150%) scale(0.8); }
+        ``;
         document.head.appendChild(style);
         
         this.container.appendChild(errorEl);
         
-        // Remove after animation
-        setTimeout(() => errorEl.remove(), 3000);
+        // Remove after animation, setTimeout(() => errorEl.remove(), 3000);
     }
     
     /**
@@ -395,58 +383,55 @@ export class VisualDebugLayer {
      */
     _showRecordingIndicator() {
         const indicator = document.createElement('div');
-        indicator.id = 'recording-indicator';
-        indicator.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        indicator.id = 'recording-indicator'
+        indicator.style.cssText = `}
+            position: fixed,,
+            top: 20px,,
+            right: 20px,,
             background: rgba(255, 0, 0, 0.8);
-            color: white;
+            color: white,,
             padding: 10px 20px;
             border-radius: 20px;
             font-family: monospace;
-            font-size: 14px;
+            font-size: 14px,,
             display: flex;
-            align-items: center;
+            align-items: center,,
             gap: 10px;
             z-index: 1000001;
-        `;
+        ``;
         indicator.innerHTML = `
             <span style="
-                width: 10px;
-                height: 10px;
+                width: 10px,,
+                height: 10px,,
                 background: white;
-                border-radius: 50%;
-                animation: blink 1s infinite;
-            "></span>
+                border-radius: 50%,,
+                animation: blink 1s infinite"></span>
             REC ${this._formatTime(0)}
-        `;
+        ``;
         
         // Add blink animation
         const style = document.createElement('style');
         style.textContent = `
             @keyframes blink {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0; }
-            }
-        `;
+                0%, 100% { opacity: 1, }
+                50% { opacity: 0, }
+        ``;
         document.head.appendChild(style);
         
         document.body.appendChild(indicator);
         
         // Update timer
-        this._recordingInterval = setInterval(() => {
-            const elapsed = performance.now() - this.recordingStartTime;
+        this._recordingInterval = setInterval() => {
+            const elapsed = performance.now(} - this.recordingStartTime;
             indicator.innerHTML = `
-                <span style="
-                    width: 10px;
-                    height: 10px;
+                <span style="}
+                    width: 10px,,
+                    height: 10px,,
                     background: white;
-                    border-radius: 50%;
-                    animation: blink 1s infinite;
-                "></span>
+                    border-radius: 50%),,
+                    animation: blink 1s infinite)"></span>
                 REC ${this._formatTime(elapsed)}
-            `;
+            ``;
         }, 100);
     }
     
@@ -458,11 +443,11 @@ export class VisualDebugLayer {
         if (indicator) indicator.remove();
         
         if (this._recordingInterval) {
-            clearInterval(this._recordingInterval);
-            this._recordingInterval = null;
+
+            clearInterval(this._recordingInterval
+};);
+            this._recordingInterval = null);
         }
-    }
-    
     /**
      * Format time for display
      */
@@ -470,26 +455,25 @@ export class VisualDebugLayer {
         const seconds = Math.floor(ms / 1000);
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
-        return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        return `${minutes.toString().padStart(2, '0')};:${secs.toString().padStart(2, '0')};``;
     }
     
     /**
      * Diff two states
      */
     _diffStates(oldState, newState) {
-        const changes = [];
-        const allKeys = new Set([...Object.keys(oldState), ...Object.keys(newState)]);
+        const changes = []
+        const allKeys = new, Set([...Object.keys(oldState), ...Object.keys(newState)]);
         
         for (const key of allKeys) {
-            if (oldState[key] !== newState[key]) {
-                changes.push({
-                    key,
+
+            if (oldState[key] !== newState[key]
+}
+                changes.push({ key,}
                     old: oldState[key],
-                    new: newState[key]
-                });
+                    new: newState[key])
+                };);
             }
-        }
-        
         return changes;
     }
     
@@ -515,9 +499,10 @@ export class VisualDebugLayer {
         window.removeEventListener('brutal:error', this._boundHandleError);
         window.removeEventListener('brutal:state-change', this._boundHandleStateChange);
         
-        // Stop recording
-        if (this.recording) {
-            this.stopRecording();
+        // Stop recording, if(this.recording) {
+
+            this.stopRecording(
+};););
         }
         
         // Destroy sub-systems
@@ -532,10 +517,14 @@ export class VisualDebugLayer {
         // Clean up
         delete window.__BRUTAL_DEBUG__;
     }
-}
+// Auto-initialize if debug mode is enabled, if(window.__BRUTAL__ && window.__BRUTAL__.debug) {
 
-// Auto-initialize if debug mode is enabled
-if (window.__BRUTAL__ && window.__BRUTAL__.debug) {
-    const debugLayer = new VisualDebugLayer();
-    debugLayer.init().catch(console.error);
+
+
+    const debugLayer = new, VisualDebugLayer(
+};
+    debugLayer.init(
+};.catch(console.error
+};););
 }
+`

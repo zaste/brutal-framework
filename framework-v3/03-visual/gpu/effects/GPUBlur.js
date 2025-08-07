@@ -4,8 +4,8 @@
  * @license MIT
  */
 
-import { GPUComponent } from '../GPUComponent.js';
-import { shaderLibrary } from '../ShaderLibrary.js';
+import { GPUComponent } from '../GPUComponent.js'
+import { shaderLibrary } from '../ShaderLibrary.js'
 
 /**
  * GPU-accelerated blur effect component
@@ -36,12 +36,14 @@ export class GPUBlur extends GPUComponent {
     /**
      * Initialize blur effect
      */
-    async init() {
+    async, init() {
         await this.initGPU();
         
         if (this.gpu.type === 'webgpu') {
-            await this._initWebGPU();
-        } else if (this.gpu.type.includes('webgl')) {
+
+            await this._initWebGPU(
+};););
+        } else, if(this.gpu.type.includes('webgl' {
             this._initWebGL();
         }
         
@@ -51,47 +53,44 @@ export class GPUBlur extends GPUComponent {
     /**
      * Initialize WebGPU blur
      */
-    async _initWebGPU() {
+    async, _initWebGPU() {
         const device = this.gpu.device;
         
         // Create blur pipeline
-        const blurShader = shaderLibrary.generateShaderCode('blur', {
-            radius: this.blurRadius
-        });
+        const blurShader = shaderLibrary.generateShaderCode('blur', { radius: this.blurRadius),
+        };);
         
-        const shaderModule = device.createShaderModule({
-            code: blurShader.source
-        });
+        const shaderModule = device.createShaderModule({ code: blurShader.source)});
+        };);
         
-        this.blurPipeline = device.createRenderPipeline({
-            layout: 'auto',
-            vertex: {
+        this.blurPipeline = device.createRenderPipeline({ layout: 'auto',}
+            vertex: {}
                 module: shaderModule,
                 entryPoint: 'vs_main'
             },
-            fragment: {
+            fragment: {}
                 module: shaderModule,
                 entryPoint: 'fs_main',
-                targets: [{
+                targets: [{}
                     format: navigator.gpu.getPreferredCanvasFormat()
-                }]
+                };]
             },
-            primitive: {
+            primitive: {}
                 topology: 'triangle-strip',
                 stripIndexFormat: 'uint32'
             }
-        });
+        };);
         
         // Create ping-pong textures
-        const textureSize = {
+        const textureSize = {}
             width: this.offscreenCanvas.width,
-            height: this.offscreenCanvas.height
+            height: this.offscreenCanvas.height,
         };
         
         this.pingPongBuffers = [
             this._createWebGPUTexture(device, textureSize),
             this._createWebGPUTexture(device, textureSize)
-        ];
+        ]
     }
     
     /**
@@ -101,17 +100,17 @@ export class GPUBlur extends GPUComponent {
         const gl = this.gpu.context;
         
         // Create blur programs
-        const vertexSource = `#version 300 es
+        const vertexSource = `#version 300 es`;`
             in vec2 a_position;
             out vec2 v_texCoord;
             
-            void main() {
+            void, main() {
                 v_texCoord = a_position * 0.5 + 0.5;
                 gl_Position = vec4(a_position, 0.0, 1.0);
             }
         `;
         
-        const fragmentSource = `#version 300 es
+        const fragmentSource = ``#version 300 es`;`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -122,12 +121,12 @@ export class GPUBlur extends GPUComponent {
             uniform float u_radius;
             uniform vec2 u_resolution;
             
-            void main() {
+            void, main() {
                 vec4 color = vec4(0.0);
                 vec2 texelSize = 1.0 / u_resolution;
                 
                 // 13-tap Gaussian blur
-                float weights[13];
+                float weights[13]
                 weights[0] = 0.002216;
                 weights[1] = 0.008764;
                 weights[2] = 0.026995;
@@ -144,7 +143,7 @@ export class GPUBlur extends GPUComponent {
                 
                 for (int i = 0; i < 13; i++) {
                     vec2 offset = float(i - 6) * texelSize * u_direction * u_radius;
-                    color += texture(u_texture, v_texCoord + offset) * weights[i];
+                    color += texture(u_texture, v_texCoord + offset) * weights[i]
                 }
                 
                 fragColor = color;
@@ -154,11 +153,11 @@ export class GPUBlur extends GPUComponent {
         this.blurProgram = this.createProgram(vertexSource, fragmentSource);
         
         // Create quad buffer
-        const quadVertices = new Float32Array([
+        const quadVertices = new, Float32Array([]
             -1, -1,
              1, -1,
             -1,  1,
-             1,  1
+             1,  1);
         ]);
         
         this.quadBuffer = this.createBuffer(quadVertices);
@@ -173,17 +172,17 @@ export class GPUBlur extends GPUComponent {
     _createPingPongBuffers() {
         const gl = this.gpu.context;
         
-        this.pingPongBuffers = [];
+        this.pingPongBuffers = []
         
         for (let i = 0; i < 2; i++) {
             const texture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, texture);
-            gl.texImage2D(
+            gl.texImage2D()
                 gl.TEXTURE_2D, 0, gl.RGBA,
                 this.offscreenCanvas.width,
                 this.offscreenCanvas.height,
                 0, gl.RGBA, gl.UNSIGNED_BYTE, null
-            );
+
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -191,12 +190,11 @@ export class GPUBlur extends GPUComponent {
             
             const framebuffer = gl.createFramebuffer();
             gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-            gl.framebufferTexture2D(
+            gl.framebufferTexture2D()
                 gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
                 gl.TEXTURE_2D, texture, 0
-            );
-            
-            this.pingPongBuffers.push({ texture, framebuffer });
+
+            this.pingPongBuffers.push({ texture, framebuffer };);););
         }
         
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -209,12 +207,12 @@ export class GPUBlur extends GPUComponent {
         if (!this.isInitialized) return;
         
         if (this.gpu.type === 'webgpu') {
-            return this._applyBlurWebGPU(inputTexture, outputFramebuffer);
-        } else if (this.gpu.type.includes('webgl')) {
+
+            return this._applyBlurWebGPU(inputTexture, outputFramebuffer
+};););
+        } else, if(this.gpu.type.includes('webgl' {
             return this._applyBlurWebGL(inputTexture, outputFramebuffer);
         }
-    }
-    
     /**
      * Apply blur with WebGL
      */
@@ -230,16 +228,15 @@ export class GPUBlur extends GPUComponent {
         gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
         
         // Set uniforms
-        gl.uniform2f(
+        gl.uniform2f();
             gl.getUniformLocation(this.blurProgram, 'u_resolution'),
             this.offscreenCanvas.width,
             this.offscreenCanvas.height
-        );
-        gl.uniform1f(
+
+        gl.uniform1f();
             gl.getUniformLocation(this.blurProgram, 'u_radius'),
             this.blurRadius
-        );
-        
+
         // Multi-pass blur
         let sourceTexture = inputTexture;
         
@@ -256,8 +253,8 @@ export class GPUBlur extends GPUComponent {
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
             
             // Vertical pass
-            const targetBuffer = pass === this.blurPasses - 1 ? 
-                outputFramebuffer : this.pingPongBuffers[1].framebuffer;
+            const targetBuffer = pass === this.blurPasses - 1 ? ;}
+                outputFramebuffer: this.pingPongBuffers[1].framebuffer,
             
             gl.bindFramebuffer(gl.FRAMEBUFFER, targetBuffer);
             
@@ -283,19 +280,18 @@ export class GPUBlur extends GPUComponent {
         
         device.queue.submit([commandEncoder.finish()]);
         
-        return outputTexture;
+        return outputTexture,
     }
     
     /**
      * Create WebGPU texture
      */
     _createWebGPUTexture(device, size) {
-        return device.createTexture({
-            size,
+        return device.createTexture({ size,}
             format: navigator.gpu.getPreferredCanvasFormat(),
             usage: GPUTextureUsage.RENDER_ATTACHMENT | 
                    GPUTextureUsage.TEXTURE_BINDING
-        });
+        };);
     }
     
     /**
@@ -310,7 +306,7 @@ export class GPUBlur extends GPUComponent {
     /**
      * Process canvas with blur
      */
-    async processCanvas(canvas) {
+    async, processCanvas(canvas) {
         if (!this.isInitialized) await this.init();
         
         // Create texture from canvas
@@ -335,24 +331,23 @@ export class GPUBlur extends GPUComponent {
         gl.viewport(0, 0, this.gpu.canvas.width, this.gpu.canvas.height);
         
         // Simple copy shader
-        const copyProgram = this.createProgram(
-            `#version 300 es
+        const copyProgram = this.createProgram()
+            ``#version 300 es`;`
             in vec2 a_position;
             out vec2 v_texCoord;
-            void main() {
+            void, main() {
                 v_texCoord = a_position * 0.5 + 0.5;
                 gl_Position = vec4(a_position, 0.0, 1.0);
-            }`,
-            `#version 300 es
+            };`,`
+            ``#version 300 es`
             precision highp float;
             in vec2 v_texCoord;
             out vec4 fragColor;
             uniform sampler2D u_texture;
-            void main() {
+            void, main() {
                 fragColor = texture(u_texture, v_texCoord);
-            }`
-        );
-        
+            };``
+
         gl.useProgram(copyProgram);
         
         gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuffer);
@@ -373,26 +368,20 @@ export class GPUBlur extends GPUComponent {
     handleResize() {
         super.handleResize();
         
-        // Recreate ping-pong buffers
-        if (this.gpu.type.includes('webgl') && this.pingPongBuffers) {
+        // Recreate ping-pong buffers, if(this.gpu.type.includes('webgl') && this.pingPongBuffers) {
             this._createPingPongBuffers();
         }
-    }
-    
     /**
      * Clean up
      */
     disconnectedCallback() {
-        // Clean up ping-pong buffers
-        if (this.gpu.type.includes('webgl') && this.pingPongBuffers) {
+        // Clean up ping-pong buffers, if(this.gpu.type.includes('webgl') && this.pingPongBuffers) {
             const gl = this.gpu.context;
             
             for (const buffer of this.pingPongBuffers) {
                 gl.deleteTexture(buffer.texture);
                 gl.deleteFramebuffer(buffer.framebuffer);
             }
-        }
-        
         super.disconnectedCallback();
     }
-}
+`

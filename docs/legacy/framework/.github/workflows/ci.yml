@@ -1,0 +1,256 @@
+name: Native Web Components Framework CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '20'
+  PERFORMANCE_TARGET: '50'
+
+jobs:
+  test:
+    name: Test & Validate
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18, 20]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm run bootstrap
+          
+      - name: Lint code
+        run: npm run lint
+        
+      - name: Type check
+        run: npm run typecheck
+        
+      - name: Run unit tests
+        run: npm run test:unit
+        
+      - name: Run integration tests
+        run: npm run test:integration
+        
+      - name: Performance validation
+        run: |
+          npm run benchmark:validate
+          npm run performance:check
+          
+      - name: Security scan
+        run: npm audit --audit-level moderate
+
+  performance:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run performance benchmarks
+        run: |
+          npm run benchmark:comprehensive
+          npm run benchmark:react-comparison
+          
+      - name: Validate 50x React performance
+        run: |
+          npm run performance:validate-target
+          
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: benchmarks/results/
+
+  build:
+    name: Build & Package
+    runs-on: ubuntu-latest
+    needs: [test, performance]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build all packages
+        run: npm run build
+        
+      - name: Package for distribution
+        run: npm run package
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+
+  deployment-test:
+    name: Test Deployments
+    runs-on: ubuntu-latest
+    needs: build
+    
+    strategy:
+      matrix:
+        platform: [cloudflare, vercel]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          
+      - name: Test ${{ matrix.platform }} deployment
+        run: |
+          npm run deploy:test:${{ matrix.platform }}
+          
+      - name: Validate deployment
+        run: |
+          npm run deploy:validate:${{ matrix.platform }}
+
+  security:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run security audit
+        run: npm audit --audit-level high
+        
+      - name: Scan for vulnerabilities
+        uses: securecodewarrior/github-action-add-sarif@v1
+        with:
+          sarif-file: security-results.sarif
+        continue-on-error: true
+        
+      - name: CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          languages: javascript
+
+  documentation:
+    name: Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Generate documentation
+        run: npm run docs:generate
+        
+      - name: Validate documentation
+        run: npm run docs:validate
+        
+      - name: Deploy documentation (main branch only)
+        if: github.ref == 'refs/heads/main'
+        run: npm run docs:deploy
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [test, performance, build, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          
+      - name: Semantic Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  notify:
+    name: Notify Status
+    runs-on: ubuntu-latest
+    needs: [test, performance, build, security]
+    if: always()
+    
+    steps:
+      - name: Notify success
+        if: needs.test.result == 'success' && needs.performance.result == 'success'
+        run: |
+          echo "✅ All checks passed - Framework ready for deployment"
+          
+      - name: Notify failure
+        if: needs.test.result == 'failure' || needs.performance.result == 'failure'
+        run: |
+          echo "❌ CI failed - Check logs for details"
+          exit 1

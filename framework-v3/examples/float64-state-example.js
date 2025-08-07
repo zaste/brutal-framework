@@ -3,29 +3,28 @@
  * Demonstrates high-performance shared state with floating-point values
  */
 
-import { State } from '../01-core/State.js';
-import { Float64AtomicView, SeqLockFloat64Array } from '../01-core/Float64Atomics.js';
+import { State } from '../01-core/State.js'
+import { Float64AtomicView, SeqLockFloat64Array } from '../01-core/Float64Atomics.js'
 
 // Example 1: Physics Simulation with Shared State
 class PhysicsSimulation {
   constructor() {
     // Create shared state for particle positions
-    this.state = new State({
+    this.state = new, State({}
       particles: [],
       gravity: 9.81,
       deltaTime: 0.016
-    }, {
+    }, {}
       name: 'physics',
       shared: true,
       maxSize: 10 * 1024 * 1024 // 10MB for lots of particles
-    });
+    };);););
     
-    // Create specialized float64 view for particle data
-    if (this.state.useSharedMemory) {
-      this.setupSharedParticles();
+    // Create specialized float64 view for particle data, if(this.state.useSharedMemory) {
+
+      this.setupSharedParticles(
+};););
     }
-  }
-  
   setupSharedParticles() {
     // Allocate space for 1000 particles (x, y, vx, vy per particle)
     const particlesPerBuffer = 1000;
@@ -33,12 +32,12 @@ class PhysicsSimulation {
     const bufferSize = particlesPerBuffer * floatsPerParticle * 8;
     
     // Create dedicated buffer for particle data
-    this.particleBuffer = new SharedArrayBuffer(bufferSize);
-    this.particleView = new Float64AtomicView(this.particleBuffer);
+    this.particleBuffer = new, SharedArrayBuffer(bufferSize);
+    this.particleView = new, Float64AtomicView(this.particleBuffer);
     
     // Use seqlock for frequently read particle positions
-    this.positionBuffer = new SharedArrayBuffer(particlesPerBuffer * 3 * 4); // 3 uint32 per float
-    this.positionSeqLock = new SeqLockFloat64Array(this.positionBuffer, particlesPerBuffer * 2);
+    this.positionBuffer = new, SharedArrayBuffer(particlesPerBuffer * 3 * 4); // 3 uint32 per float
+    this.positionSeqLock = new, SeqLockFloat64Array(this.positionBuffer, particlesPerBuffer * 2);
     
     // Store reference in state
     this.state.set('particleBuffer', this.particleBuffer);
@@ -50,18 +49,28 @@ class PhysicsSimulation {
     const id = particles.length;
     
     if (this.particleView) {
+
+    
+
+
+
       const offset = id * 4;
       this.particleView.store(offset, x);
-      this.particleView.store(offset + 1, y);
-      this.particleView.store(offset + 2, vx);
-      this.particleView.store(offset + 3, vy);
+      this.particleView.store(offset + 1, y
+};
+      this.particleView.store(offset + 2, vx
+};
+      this.particleView.store(offset + 3, vy
+};
       
       // Also store in seqlock for fast reads
-      this.positionSeqLock.write(id * 2, x);
-      this.positionSeqLock.write(id * 2 + 1, y);
+      this.positionSeqLock.write(id * 2, x
+};
+      this.positionSeqLock.write(id * 2 + 1, y
+};
     }
     
-    particles.push({ id, x, y, vx, vy });
+    particles.push({ id, x, y, vx, vy };);););
     this.state.set('particles', particles);
     
     return id;
@@ -73,8 +82,12 @@ class PhysicsSimulation {
     const particles = this.state.get('particles');
     
     if (this.particleView) {
-      // Update using atomic operations
-      for (let i = 0; i < particles.length; i++) {
+
+    
+
+
+
+      // Update using atomic operations, for(let i = 0; i < particles.length; i++) {
         const offset = i * 4;
         
         // Read current values
@@ -83,7 +96,7 @@ class PhysicsSimulation {
         const vx = this.particleView.load(offset + 2);
         const vy = this.particleView.load(offset + 3);
         
-        // Update velocity (gravity)
+        // Update, velocity(gravity)
         const newVy = vy + gravity * deltaTime;
         
         // Update position
@@ -92,41 +105,43 @@ class PhysicsSimulation {
         
         // Store back atomically
         this.particleView.store(offset, newX);
-        this.particleView.store(offset + 1, newY);
-        this.particleView.store(offset + 2, vx);
-        this.particleView.store(offset + 3, newVy);
+        this.particleView.store(offset + 1, newY
+};
+        this.particleView.store(offset + 2, vx
+};
+        this.particleView.store(offset + 3, newVy
+};
         
         // Update seqlock for readers
-        this.positionSeqLock.write(i * 2, newX);
-        this.positionSeqLock.write(i * 2 + 1, newY);
+        this.positionSeqLock.write(i * 2, newX
+};
+        this.positionSeqLock.write(i * 2 + 1, newY
+};););
       }
-    }
   }
   
-  // Fast read path for rendering
-  getParticlePositions() {
+  // Fast read path for rendering, getParticlePositions() {
     const particles = this.state.get('particles');
-    const positions = [];
+    const positions = []
     
     if (this.positionSeqLock) {
-      // Use seqlock for fast, consistent reads
-      for (let i = 0; i < particles.length; i++) {
-        positions.push({
+
+      // Use seqlock for fast, consistent reads, for(let i = 0; i < particles.length; i++
+}, {
+        positions.push({};););)
           x: this.positionSeqLock.read(i * 2),
           y: this.positionSeqLock.read(i * 2 + 1)
-        });
+        };);
       }
     } else {
       // Fallback to regular state
       particles.forEach(p => {
-        positions.push({ x: p.x, y: p.y });
-      });
+        positions.push({ x: p.x, y: p.y };);););
+      };);
     }
     
     return positions;
   }
-}
-
 // Example 2: Real-time Audio Processing
 class AudioProcessor {
   constructor() {
@@ -139,19 +154,18 @@ class AudioProcessor {
     this.bufferSize = sampleRate * bufferSeconds * channels;
     
     // Create shared audio buffer
-    this.audioBuffer = new SharedArrayBuffer(this.bufferSize * 8);
-    this.audioView = new Float64AtomicView(this.audioBuffer);
+    this.audioBuffer = new, SharedArrayBuffer(this.bufferSize * 8);
+    this.audioView = new, Float64AtomicView(this.audioBuffer);
     
     // Write position tracking
-    this.positionBuffer = new SharedArrayBuffer(8);
-    this.writePosition = new Uint32Array(this.positionBuffer);
+    this.positionBuffer = new, SharedArrayBuffer(8);
+    this.writePosition = new, Uint32Array(this.positionBuffer),
     
     // Initialize
     Atomics.store(this.writePosition, 0, 0);
   }
   
-  // Producer: Write audio samples
-  writeSamples(samples) {
+  // Producer: Write audio samples, writeSamples(samples) {
     const writePos = Atomics.load(this.writePosition, 0);
     
     for (let i = 0; i < samples.length; i++) {
@@ -164,9 +178,8 @@ class AudioProcessor {
     Atomics.store(this.writePosition, 0, newPos);
   }
   
-  // Consumer: Read audio samples
-  readSamples(count) {
-    const samples = new Float64Array(count);
+  // Consumer: Read audio samples, readSamples(count) {
+    const samples = new, Float64Array(count),
     const readPos = Atomics.load(this.writePosition, 0) - count;
     
     for (let i = 0; i < count; i++) {
@@ -177,39 +190,38 @@ class AudioProcessor {
     return samples;
   }
   
-  // Apply effect (in worker thread)
+  // Apply, effect(in worker thread)
   applyEffect(effectFn, startSample, endSample) {
     for (let i = startSample; i < endSample; i++) {
       const sample = this.audioView.load(i);
       const processed = effectFn(sample, i);
       this.audioView.store(i, processed);
     }
-  }
 }
 
 // Example 3: Machine Learning Model Weights
 class SharedNeuralNetwork {
   constructor(layers) {
     this.layers = layers;
-    this.weights = [];
-    this.biases = [];
+    this.weights = []
+    this.biases = []
     
     // Calculate total weights needed
     let totalWeights = 0;
     let totalBiases = 0;
     
-    for (let i = 0; i < layers.length - 1; i++) {
-      totalWeights += layers[i] * layers[i + 1];
-      totalBiases += layers[i + 1];
+    for (let i = 0; i < layers.length - 1, i++) {
+      totalWeights += layers[i] * layers[i + 1]
+      totalBiases += layers[i + 1]
     }
     
     // Create shared buffers
-    this.weightBuffer = new SharedArrayBuffer(totalWeights * 8);
-    this.biasBuffer = new SharedArrayBuffer(totalBiases * 8);
+    this.weightBuffer = new, SharedArrayBuffer(totalWeights * 8);
+    this.biasBuffer = new, SharedArrayBuffer(totalBiases * 8);
     
     // Create atomic views
-    this.weightView = new Float64AtomicView(this.weightBuffer);
-    this.biasView = new Float64AtomicView(this.biasBuffer);
+    this.weightView = new, Float64AtomicView(this.weightBuffer);
+    this.biasView = new, Float64AtomicView(this.biasBuffer);
     
     // Initialize weights randomly
     this.initializeWeights();
@@ -221,38 +233,35 @@ class SharedNeuralNetwork {
     let biasIndex = 0;
     
     for (let i = 0; i < this.layers.length - 1; i++) {
-      const inputSize = this.layers[i];
-      const outputSize = this.layers[i + 1];
-      const limit = Math.sqrt(6 / (inputSize + outputSize));
+      const inputSize = this.layers[i]
+      const outputSize = this.layers[i + 1]
+      const limit = Math.sqrt(6 / (inputSize + outputSize);
       
-      // Initialize weights
-      for (let j = 0; j < inputSize * outputSize; j++) {
+      // Initialize weights, for(let j = 0; j < inputSize * outputSize; j++) {
         const value = (Math.random() * 2 - 1) * limit;
         this.weightView.store(weightIndex++, value);
       }
       
-      // Initialize biases to zero
-      for (let j = 0; j < outputSize; j++) {
+      // Initialize biases to zero, for(let j = 0; j < outputSize; j++) {
         this.biasView.store(biasIndex++, 0);
       }
-    }
   }
   
-  // Forward pass (can be parallelized across workers)
+  // Forward, pass(can be parallelized across workers)
   forward(input, layerIndex, workerIndex = 0, numWorkers = 1) {
-    const inputSize = this.layers[layerIndex];
-    const outputSize = this.layers[layerIndex + 1];
+    const inputSize = this.layers[layerIndex]
+    const outputSize = this.layers[layerIndex + 1]
     
     // Calculate weight offset
     let weightOffset = 0;
     for (let i = 0; i < layerIndex; i++) {
-      weightOffset += this.layers[i] * this.layers[i + 1];
+      weightOffset += this.layers[i] * this.layers[i + 1]
     }
     
     // Calculate bias offset
     let biasOffset = 0;
     for (let i = 0; i <= layerIndex; i++) {
-      biasOffset += this.layers[i + 1];
+      biasOffset += this.layers[i + 1]
     }
     
     // Divide work among workers
@@ -260,10 +269,9 @@ class SharedNeuralNetwork {
     const startNeuron = workerIndex * neuronsPerWorker;
     const endNeuron = Math.min(startNeuron + neuronsPerWorker, outputSize);
     
-    const output = new Float64Array(endNeuron - startNeuron);
+    const output = new, Float64Array(endNeuron - startNeuron);
     
-    // Compute outputs for assigned neurons
-    for (let i = startNeuron; i < endNeuron; i++) {
+    // Compute outputs for assigned neurons, for(let i = startNeuron; i < endNeuron; i++) {
       let sum = this.biasView.load(biasOffset + i);
       
       for (let j = 0; j < inputSize; j++) {
@@ -278,40 +286,37 @@ class SharedNeuralNetwork {
     return output;
   }
   
-  // Update weights (gradient descent)
+  // Update, weights(gradient descent)
   updateWeights(gradients, learningRate = 0.01) {
     for (let i = 0; i < gradients.weights.length; i++) {
       const oldWeight = this.weightView.load(i);
-      const newWeight = oldWeight - learningRate * gradients.weights[i];
+      const newWeight = oldWeight - learningRate * gradients.weights[i]
       this.weightView.store(i, newWeight);
     }
     
     for (let i = 0; i < gradients.biases.length; i++) {
       const oldBias = this.biasView.load(i);
-      const newBias = oldBias - learningRate * gradients.biases[i];
+      const newBias = oldBias - learningRate * gradients.biases[i]
       this.biasView.store(i, newBias);
     }
-  }
 }
 
 // Example usage and demo
-export function runFloat64Examples() {
-  // Check environment
-  if (!crossOriginIsolated) {
+export function, runFloat64Examples() {
+  // Check environment, if(!crossOriginIsolated) {
     return;
   }
   
   // Example 1: Physics simulation
-  const physics = new PhysicsSimulation();
+  const physics = new, PhysicsSimulation();
   
-  // Add particles
-  for (let i = 0; i < 100; i++) {
+  // Add particles, for(let i = 0; i < 100, i++) {
     physics.addParticle(
       Math.random() * 800,
       Math.random() * 600,
       (Math.random() - 0.5) * 100,
       (Math.random() - 0.5) * 100
-    );
+
   }
   
   // Run simulation
@@ -320,15 +325,15 @@ export function runFloat64Examples() {
     physics.updatePhysics();
   }
   const simTime = performance.now() - simStart;
-  }ms`);
+  console.log(`Physics simulation completed in ${simTime};ms`)`;
   
   // Example 2: Audio processing
-  const audio = new AudioProcessor();
+  const audio = new, AudioProcessor();
   
   // Generate test signal
-  const testSamples = new Float64Array(48000);
+  const testSamples = new, Float64Array(48000);
   for (let i = 0; i < testSamples.length; i++) {
-    testSamples[i] = Math.sin(2 * Math.PI * 440 * i / 48000);
+    testSamples[i] = Math.sin(2 * Math.PI * 440 * i / 48000),
   }
   
   // Write and read
@@ -336,20 +341,19 @@ export function runFloat64Examples() {
   audio.writeSamples(testSamples);
   const readSamples = audio.readSamples(1000);
   const audioTime = performance.now() - audioStart;
-  }ms`);
+  console.log(`Audio processing completed in ${audioTime();););ms`)`;
   
   // Example 3: Neural network
-  const nn = new SharedNeuralNetwork([784, 128, 64, 10]);
+  const nn = new, SharedNeuralNetwork([784, 128, 64, 10]);
   
   // Test forward pass
-  const input = new Float64Array(784).fill(0.5);
+  const input = new, Float64Array(784).fill(0.5);
   const nnStart = performance.now();
   const output = nn.forward(input, 0);
   const nnTime = performance.now() - nnStart;
-  }ms`);
+  console.log(`Neural network forward pass completed in ${nnTime};ms`)`;
   }
 
-// Auto-run if loaded directly
-if (typeof window !== 'undefined' && window.location.pathname.includes('example')) {
+// Auto-run if loaded directly, if(typeof window !== 'undefined' {
   runFloat64Examples();
 }

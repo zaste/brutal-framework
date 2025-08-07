@@ -1,0 +1,574 @@
+{
+  "timestamp": "2025-07-15T10:28:43.671Z",
+  "packages": {
+    "foundation": {
+      "implementations": {
+        "main": {
+          "files": 6,
+          "features": [
+            "testing",
+            "async",
+            "error-handling"
+          ]
+        },
+        "index": {
+          "files": 5,
+          "features": [
+            "error-handling",
+            "testing",
+            "performance",
+            "async"
+          ]
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "async",
+            "error-handling",
+            "testing"
+          ]
+        }
+      },
+      "allFeatures": [
+        "testing",
+        "async",
+        "error-handling",
+        "performance"
+      ],
+      "summary": {
+        "implementationCount": 3,
+        "featureCount": 4
+      }
+    },
+    "shared": {
+      "implementations": {
+        "main": {
+          "files": 2,
+          "features": [
+            "error-handling"
+          ]
+        },
+        "index": {
+          "files": 4,
+          "features": [
+            "async",
+            "error-handling",
+            "testing",
+            "workers",
+            "performance"
+          ]
+        }
+      },
+      "allFeatures": [
+        "error-handling",
+        "async",
+        "testing",
+        "workers",
+        "performance"
+      ],
+      "summary": {
+        "implementationCount": 2,
+        "featureCount": 5
+      }
+    },
+    "events": {
+      "implementations": {
+        "index": {
+          "files": 5,
+          "features": [
+            "async",
+            "testing",
+            "error-handling"
+          ]
+        },
+        "main": {
+          "files": 3,
+          "features": [
+            "async",
+            "error-handling",
+            "testing"
+          ]
+        }
+      },
+      "allFeatures": [
+        "async",
+        "testing",
+        "error-handling"
+      ],
+      "summary": {
+        "implementationCount": 2,
+        "featureCount": 3
+      }
+    },
+    "templates": {
+      "implementations": {
+        "compiler": {
+          "files": 1,
+          "features": [
+            "compilation",
+            "rendering",
+            "expressions",
+            "conditionals",
+            "loops",
+            "filters",
+            "escaping",
+            "ast",
+            "error-handling",
+            "testing"
+          ]
+        },
+        "main": {
+          "files": 5,
+          "features": [
+            "loops",
+            "compilation",
+            "expressions",
+            "conditionals",
+            "filters",
+            "ast",
+            "error-handling",
+            "testing",
+            "rendering",
+            "escaping",
+            "performance",
+            "caching",
+            "directives"
+          ]
+        },
+        "core": {
+          "files": 5,
+          "features": [
+            "compilation",
+            "rendering",
+            "expressions",
+            "conditionals",
+            "loops",
+            "filters",
+            "escaping",
+            "ast",
+            "performance",
+            "error-handling",
+            "testing"
+          ]
+        },
+        "engine": {
+          "files": 1,
+          "features": [
+            "compilation",
+            "rendering"
+          ]
+        },
+        "index": {
+          "files": 1,
+          "features": [
+            "compilation",
+            "rendering",
+            "expressions",
+            "loops",
+            "ast"
+          ]
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "compilation",
+            "rendering",
+            "expressions",
+            "conditionals",
+            "loops",
+            "filters",
+            "escaping",
+            "ast",
+            "error-handling",
+            "testing"
+          ]
+        },
+        "ultra-minimal": {
+          "files": 1,
+          "features": [
+            "compilation",
+            "rendering",
+            "expressions",
+            "conditionals",
+            "loops",
+            "escaping",
+            "error-handling",
+            "testing"
+          ]
+        }
+      },
+      "allFeatures": [
+        "compilation",
+        "rendering",
+        "expressions",
+        "conditionals",
+        "loops",
+        "filters",
+        "escaping",
+        "ast",
+        "error-handling",
+        "testing",
+        "performance",
+        "caching",
+        "directives"
+      ],
+      "summary": {
+        "implementationCount": 7,
+        "featureCount": 13
+      }
+    },
+    "components": {
+      "implementations": {
+        "base": {
+          "files": 3,
+          "features": [
+            "lifecycle",
+            "rendering",
+            "state",
+            "props",
+            "events",
+            "shadow-dom",
+            "observers",
+            "styling",
+            "registration",
+            "async",
+            "error-handling"
+          ]
+        },
+        "main": {
+          "files": 8,
+          "features": [
+            "async",
+            "error-handling",
+            "testing",
+            "props",
+            "events",
+            "slots",
+            "styling",
+            "shadow-dom",
+            "rendering"
+          ]
+        },
+        "index": {
+          "files": 5,
+          "features": [
+            "error-handling",
+            "state",
+            "lifecycle"
+          ]
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "lifecycle",
+            "state",
+            "props",
+            "rendering",
+            "events",
+            "shadow-dom",
+            "slots",
+            "observers",
+            "styling",
+            "registration",
+            "error-handling"
+          ]
+        }
+      },
+      "allFeatures": [
+        "lifecycle",
+        "rendering",
+        "state",
+        "props",
+        "events",
+        "shadow-dom",
+        "observers",
+        "styling",
+        "registration",
+        "async",
+        "error-handling",
+        "testing",
+        "slots"
+      ],
+      "summary": {
+        "implementationCount": 4,
+        "featureCount": 13
+      }
+    },
+    "state": {
+      "implementations": {
+        "index": {
+          "files": 6,
+          "features": [
+            "actions",
+            "store",
+            "persistence",
+            "devtools",
+            "middleware",
+            "subscriptions",
+            "selectors",
+            "error-handling"
+          ]
+        },
+        "main": {
+          "files": 11,
+          "features": [
+            "async",
+            "error-handling",
+            "testing",
+            "store",
+            "subscriptions",
+            "actions",
+            "computed",
+            "persistence",
+            "devtools",
+            "middleware",
+            "reactivity",
+            "selectors",
+            "performance"
+          ]
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "store",
+            "persistence",
+            "error-handling"
+          ]
+        }
+      },
+      "allFeatures": [
+        "actions",
+        "store",
+        "persistence",
+        "devtools",
+        "middleware",
+        "subscriptions",
+        "selectors",
+        "error-handling",
+        "async",
+        "testing",
+        "computed",
+        "reactivity",
+        "performance"
+      ],
+      "summary": {
+        "implementationCount": 3,
+        "featureCount": 13
+      }
+    },
+    "routing": {
+      "implementations": {
+        "main": {
+          "files": 12,
+          "features": [
+            "async",
+            "error-handling",
+            "testing",
+            "routes",
+            "navigation",
+            "history",
+            "params",
+            "query",
+            "lazy-loading",
+            "matching",
+            "guards",
+            "links",
+            "redirects"
+          ]
+        },
+        "index": {
+          "files": 5,
+          "features": [
+            "guards",
+            "history",
+            "routes",
+            "lazy-loading"
+          ]
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "routes",
+            "navigation",
+            "history",
+            "params",
+            "query",
+            "guards",
+            "matching",
+            "async",
+            "error-handling"
+          ]
+        }
+      },
+      "allFeatures": [
+        "async",
+        "error-handling",
+        "testing",
+        "routes",
+        "navigation",
+        "history",
+        "params",
+        "query",
+        "lazy-loading",
+        "matching",
+        "guards",
+        "links",
+        "redirects"
+      ],
+      "summary": {
+        "implementationCount": 3,
+        "featureCount": 13
+      }
+    },
+    "cache": {
+      "implementations": {
+        "main": {
+          "files": 8,
+          "features": [
+            "async",
+            "error-handling",
+            "testing"
+          ]
+        },
+        "index": {
+          "files": 5,
+          "features": []
+        }
+      },
+      "allFeatures": [
+        "async",
+        "error-handling",
+        "testing"
+      ],
+      "summary": {
+        "implementationCount": 2,
+        "featureCount": 3
+      }
+    },
+    "http": {
+      "implementations": {
+        "index": {
+          "files": 1,
+          "features": []
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "async",
+            "error-handling"
+          ]
+        },
+        "main": {
+          "files": 1,
+          "features": [
+            "async",
+            "error-handling"
+          ]
+        }
+      },
+      "allFeatures": [
+        "async",
+        "error-handling"
+      ],
+      "summary": {
+        "implementationCount": 3,
+        "featureCount": 2
+      }
+    },
+    "validation": {
+      "implementations": {
+        "index": {
+          "files": 1,
+          "features": []
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "async",
+            "error-handling",
+            "testing"
+          ]
+        },
+        "main": {
+          "files": 1,
+          "features": [
+            "async",
+            "error-handling"
+          ]
+        }
+      },
+      "allFeatures": [
+        "async",
+        "error-handling",
+        "testing"
+      ],
+      "summary": {
+        "implementationCount": 3,
+        "featureCount": 3
+      }
+    },
+    "animation": {
+      "implementations": {
+        "index": {
+          "files": 1,
+          "features": []
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "async",
+            "performance"
+          ]
+        },
+        "main": {
+          "files": 1,
+          "features": []
+        }
+      },
+      "allFeatures": [
+        "async",
+        "performance"
+      ],
+      "summary": {
+        "implementationCount": 3,
+        "featureCount": 2
+      }
+    },
+    "testing": {
+      "implementations": {
+        "index": {
+          "files": 1,
+          "features": [
+            "error-handling",
+            "testing"
+          ]
+        },
+        "minimal": {
+          "files": 1,
+          "features": [
+            "async",
+            "error-handling",
+            "testing"
+          ]
+        },
+        "main": {
+          "files": 1,
+          "features": [
+            "async",
+            "error-handling",
+            "testing"
+          ]
+        }
+      },
+      "allFeatures": [
+        "error-handling",
+        "testing",
+        "async"
+      ],
+      "summary": {
+        "implementationCount": 3,
+        "featureCount": 3
+      }
+    }
+  }
+}

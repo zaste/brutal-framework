@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Worker Infrastructure Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .status {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .status.success {
+            background: #1a4d1a;
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+        
+        .status.error {
+            background: #4d1a1a;
+            color: #f87171;
+            border: 1px solid #f87171;
+        }
+        
+        .status.info {
+            background: #1a1a4d;
+            color: #60a5fa;
+            border: 1px solid #60a5fa;
+        }
+        
+        .metric {
+            display: inline-block;
+            background: #262626;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            font-family: monospace;
+        }
+        
+        pre {
+            background: #262626;
+            padding: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 4px;
+        }
+        
+        button:hover {
+            background: #2563eb;
+        }
+        
+        button:disabled {
+            background: #4b5563;
+            cursor: not-allowed;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #262626;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚡ BRUTAL V4 - Worker Infrastructure Test</h1>
+    
+    <div class="test-section">
+        <h2>Worker Support Detection</h2>
+        <div id="support-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Single Worker Test</h2>
+        <button onclick="testSingleWorker()">Test Single Worker</button>
+        <div id="single-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Worker Pool Test</h2>
+        <button onclick="testWorkerPool()">Test Worker Pool</button>
+        <button onclick="testPoolMap()">Test Pool Map</button>
+        <div id="pool-results"></div>
+        <div class="progress">
+            <div class="progress-bar" id="pool-progress" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Performance Comparison</h2>
+        <button onclick="runPerformanceTest()">Run Performance Test</button>
+        <div id="perf-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Worker Manager Stats</h2>
+        <button onclick="showStats()">Show Stats</button>
+        <div id="stats-results"></div>
+    </div>
+    
+    <script type="module">
+        import { workerManager } from '../workers/core/index.js';
+        
+        const supportResults = document.getElementById('support-results');
+        const singleResults = document.getElementById('single-results');
+        const poolResults = document.getElementById('pool-results');
+        const perfResults = document.getElementById('perf-results');
+        const statsResults = document.getElementById('stats-results');
+        
+        // Check worker support
+        function checkSupport() {
+            const support = workerManager.isSupported;
+            
+            supportResults.innerHTML = '<h3>Browser Support:</h3>';
+            supportResults.innerHTML += `<div class="status ${support.worker ? 'success' : 'error'}">Web Workers: ${support.worker ? '✅ Supported' : '❌ Not supported'}</div>`;
+            supportResults.innerHTML += `<div class="status ${support.sharedWorker ? 'success' : 'error'}">Shared Workers: ${support.sharedWorker ? '✅ Supported' : '❌ Not supported'}</div>`;
+            supportResults.innerHTML += `<div class="status ${support.serviceWorker ? 'success' : 'error'}">Service Workers: ${support.serviceWorker ? '✅ Supported' : '❌ Not supported'}</div>`;
+            supportResults.innerHTML += `<div class="status ${support.module ? 'success' : 'error'}">Module Workers: ${support.module ? '✅ Supported' : '❌ Not supported'}</div>`;
+        }
+        
+        // Test single worker
+        window.testSingleWorker = async function() {
+            singleResults.innerHTML = '<h3>Testing Single Worker...</h3>';
+            
+            try {
+                // Create worker
+                const worker = workerManager.createWorker(
+                    'test-worker', 
+                    '../workers/templates/base-worker.js',
+                    { module: true }
+                );
+                
+                if (!worker) {
+                    throw new Error('Failed to create worker');
+                }
+                
+                singleResults.innerHTML += '<div class="status success">✅ Worker created</div>';
+                
+                // Test compute task
+                const computeResult = await worker.execute('compute', { iterations: 1000000 });
+                singleResults.innerHTML += `<div class="status success">✅ Compute task: <span class="metric">result=${computeResult.result.toFixed(2)}</span></div>`;
+                
+                // Test process task
+                const processResult = await worker.execute('process', {
+                    items: [{ id: 1 }, { id: 2 }, { id: 3 }]
+                });
+                singleResults.innerHTML += `<div class="status success">✅ Process task: <span class="metric">${processResult.length} items processed</span></div>`;
+                
+                // Test ping
+                const pingStart = performance.now();
+                await worker.ping();
+                const pingTime = performance.now() - pingStart;
+                singleResults.innerHTML += `<div class="status success">✅ Ping: <span class="metric">${pingTime.toFixed(2)}ms</span></div>`;
+                
+                // Terminate
+                worker.terminate();
+                singleResults.innerHTML += '<div class="status info">🔵 Worker terminated</div>';
+                
+            } catch (error) {
+                singleResults.innerHTML += `<div class="status error">❌ Error: ${error.message}</div>`;
+            }
+        };
+        
+        // Test worker pool
+        window.testWorkerPool = async function() {
+            poolResults.innerHTML = '<h3>Testing Worker Pool...</h3>';
+            
+            try {
+                // Create pool
+                const pool = workerManager.createPool('compute-pool', {
+                    size: 4,
+                    workerScript: '../workers/templates/base-worker.js',
+                    workerType: 'module'
+                });
+                
+                poolResults.innerHTML += `<div class="status success">✅ Pool created with ${pool.size} workers</div>`;
+                
+                // Execute multiple tasks
+                const tasks = [];
+                const taskCount = 10;
+                
+                for (let i = 0; i < taskCount; i++) {
+                    tasks.push(pool.execute('compute', { iterations: 500000 }));
+                }
+                
+                poolResults.innerHTML += `<div class="status info">🔵 Executing ${taskCount} tasks...</div>`;
+                
+                const results = await Promise.all(tasks);
+                
+                poolResults.innerHTML += `<div class="status success">✅ All tasks completed</div>`;
+                
+                // Show pool stats
+                const stats = pool.getStats();
+                poolResults.innerHTML += '<h4>Pool Statistics:</h4>';
+                poolResults.innerHTML += `<pre>${JSON.stringify(stats, null, 2)}</pre>`;
+                
+            } catch (error) {
+                poolResults.innerHTML += `<div class="status error">❌ Error: ${error.message}</div>`;
+            }
+        };
+        
+        // Test pool map operation
+        window.testPoolMap = async function() {
+            poolResults.innerHTML = '<h3>Testing Pool Map Operation...</h3>';
+            
+            try {
+                const pool = workerManager.getPool('compute-pool') || 
+                    workerManager.createPool('compute-pool', {
+                        size: 4,
+                        workerScript: '../workers/templates/base-worker.js',
+                        workerType: 'module'
+                    });
+                
+                // Create data array
+                const data = Array.from({ length: 100 }, (_, i) => ({ id: i, value: i * 2 }));
+                
+                poolResults.innerHTML += `<div class="status info">🔵 Processing ${data.length} items across pool...</div>`;
+                
+                const progressBar = document.getElementById('pool-progress');
+                progressBar.style.width = '0%';
+                
+                // Process in pool
+                const startTime = performance.now();
+                const results = await pool.map(data, 'process');
+                const duration = performance.now() - startTime;
+                
+                progressBar.style.width = '100%';
+                
+                poolResults.innerHTML += `<div class="status success">✅ Processed ${results.length} items in <span class="metric">${duration.toFixed(2)}ms</span></div>`;
+                poolResults.innerHTML += `<div>Speed: <span class="metric">${(data.length / (duration / 1000)).toFixed(2)} items/sec</span></div>`;
+                
+            } catch (error) {
+                poolResults.innerHTML += `<div class="status error">❌ Error: ${error.message}</div>`;
+            }
+        };
+        
+        // Performance comparison
+        window.runPerformanceTest = async function() {
+            perfResults.innerHTML = '<h3>Performance Comparison...</h3>';
+            
+            const iterations = 5000000;
+            
+            // Test on main thread
+            perfResults.innerHTML += '<h4>Main Thread:</h4>';
+            const mainStart = performance.now();
+            let mainResult = 0;
+            for (let i = 0; i < iterations; i++) {
+                mainResult += Math.sqrt(i);
+            }
+            const mainDuration = performance.now() - mainStart;
+            perfResults.innerHTML += `<div>Duration: <span class="metric">${mainDuration.toFixed(2)}ms</span></div>`;
+            
+            // Test with single worker
+            perfResults.innerHTML += '<h4>Single Worker:</h4>';
+            const worker = workerManager.getWorker('test-worker') || 
+                workerManager.createWorker('test-worker', '../workers/templates/base-worker.js', { module: true });
+            
+            const workerStart = performance.now();
+            const workerResult = await worker.execute('compute', { iterations });
+            const workerDuration = performance.now() - workerStart;
+            perfResults.innerHTML += `<div>Duration: <span class="metric">${workerDuration.toFixed(2)}ms</span></div>`;
+            
+            // Test with pool (parallel)
+            perfResults.innerHTML += '<h4>Worker Pool (4 workers):</h4>';
+            const pool = workerManager.getPool('compute-pool') || 
+                workerManager.createPool('compute-pool', {
+                    size: 4,
+                    workerScript: '../workers/templates/base-worker.js',
+                    workerType: 'module'
+                });
+            
+            const poolStart = performance.now();
+            const poolTasks = [];
+            const chunkSize = Math.ceil(iterations / 4);
+            for (let i = 0; i < 4; i++) {
+                poolTasks.push(pool.execute('compute', { iterations: chunkSize }));
+            }
+            await Promise.all(poolTasks);
+            const poolDuration = performance.now() - poolStart;
+            perfResults.innerHTML += `<div>Duration: <span class="metric">${poolDuration.toFixed(2)}ms</span></div>`;
+            
+            // Summary
+            perfResults.innerHTML += '<h4>Summary:</h4>';
+            perfResults.innerHTML += `<div>Main thread baseline: <span class="metric">100%</span></div>`;
+            perfResults.innerHTML += `<div>Single worker: <span class="metric">${((workerDuration / mainDuration) * 100).toFixed(1)}%</span> ${workerDuration < mainDuration ? '🚀' : '🐌'}</div>`;
+            perfResults.innerHTML += `<div>Worker pool: <span class="metric">${((poolDuration / mainDuration) * 100).toFixed(1)}%</span> ${poolDuration < mainDuration ? '🚀' : '🐌'}</div>`;
+        };
+        
+        // Show stats
+        window.showStats = function() {
+            const stats = workerManager.getStats();
+            statsResults.innerHTML = '<h3>Worker Manager Statistics:</h3>';
+            statsResults.innerHTML += `<pre>${JSON.stringify(stats, null, 2)}</pre>`;
+        };
+        
+        // Initialize
+        checkSupport();
+    </script>
+</body>
+</html>

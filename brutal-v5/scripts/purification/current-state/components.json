@@ -1,0 +1,176 @@
+{
+  "name": "@brutal/components",
+  "timestamp": "2025-07-15T10:24:04.717Z",
+  "exports": {
+    "PropType": {
+      "file": "base/Component.ts",
+      "type": "type"
+    },
+    "PropDefinition": {
+      "file": "base/Component.ts",
+      "type": "type"
+    },
+    "Props": {
+      "file": "base/Component.ts",
+      "type": "type"
+    },
+    "State": {
+      "file": "base/Component.ts",
+      "type": "type"
+    },
+    "LifecycleHook": {
+      "file": "base/Component.ts",
+      "type": "type"
+    },
+    "ComponentOptions": {
+      "file": "base/Component.ts",
+      "type": "interface"
+    },
+    "Component": {
+      "file": "base/Component.ts",
+      "type": "class"
+    },
+    "component": {
+      "file": "base/Component.ts",
+      "type": "function"
+    },
+    "defineComponent": {
+      "file": "base/Component.ts",
+      "type": "function"
+    },
+    "base": {
+      "file": "base/index.ts",
+      "type": "const"
+    },
+    "VERSION": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "DEFAULT_CONFIG": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "INTERNAL": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "errorBoundary": {
+      "file": "error-boundary/index.ts",
+      "type": "const"
+    },
+    "ExampleFeature": {
+      "file": "example-feature/example-feature.ts",
+      "type": "class"
+    },
+    "FeatureState": {
+      "file": "example-feature/example-feature.types.ts",
+      "type": "interface"
+    },
+    "ProcessOptions": {
+      "file": "example-feature/example-feature.types.ts",
+      "type": "interface"
+    },
+    "validateOptions": {
+      "file": "example-feature/helpers/validate.ts",
+      "type": "function"
+    },
+    "formatError": {
+      "file": "example-feature/helpers/validate.ts",
+      "type": "function"
+    },
+    "hooks": {
+      "file": "hooks/index.ts",
+      "type": "const"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "lifecycle": {
+      "file": "lifecycle/index.ts",
+      "type": "const"
+    },
+    "C": {
+      "file": "minimal.ts",
+      "type": "class"
+    },
+    "comp": {
+      "file": "minimal.ts",
+      "type": "function"
+    },
+    "Btn": {
+      "file": "minimal.ts",
+      "type": "class"
+    },
+    "Inp": {
+      "file": "minimal.ts",
+      "type": "class"
+    },
+    "Mod": {
+      "file": "minimal.ts",
+      "type": "class"
+    },
+    "registry": {
+      "file": "registry/index.ts",
+      "type": "const"
+    },
+    "ExampleOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ExampleResult": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ExampleCallback": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "ButtonVariant": {
+      "file": "ui/Button.ts",
+      "type": "type"
+    },
+    "ButtonSize": {
+      "file": "ui/Button.ts",
+      "type": "type"
+    },
+    "Button": {
+      "file": "ui/Button.ts",
+      "type": "class"
+    },
+    "Input": {
+      "file": "ui/Input.ts",
+      "type": "class"
+    },
+    "Modal": {
+      "file": "ui/Modal.ts",
+      "type": "class"
+    }
+  },
+  "files": [
+    "base/BrutalComponent.ts",
+    "base/Component.ts",
+    "base/index.ts",
+    "constants.ts",
+    "error-boundary/index.ts",
+    "example-feature/example-feature.ts",
+    "example-feature/example-feature.types.ts",
+    "example-feature/helpers/validate.ts",
+    "hooks/index.ts",
+    "index.ts",
+    "lifecycle/index.ts",
+    "minimal.ts",
+    "registry/index.ts",
+    "types.ts",
+    "ui/Button.ts",
+    "ui/Input.ts",
+    "ui/Modal.ts"
+  ],
+  "bundleSize": 9274,
+  "dependencies": {
+    "@brutal/foundation": "workspace:*",
+    "@brutal/templates": "workspace:*",
+    "@brutal/events": "workspace:*"
+  },
+  "consumers": []
+}

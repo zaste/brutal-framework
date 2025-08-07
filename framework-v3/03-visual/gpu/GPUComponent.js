@@ -4,8 +4,8 @@
  * @version 3.0.0
  */
 
-import { Component } from '../../01-core/Component.js';
-import { animationSystem } from '../../02-performance/08-AnimationSystem.js';
+import { Component } from '../../01-core/Component.js'
+import { animationSystem } from '../../02-performance/08-AnimationSystem.js'
 
 /**
  * GPU Component - Hardware-accelerated rendering
@@ -15,7 +15,7 @@ export class GPUComponent extends Component {
         super();
         
         // GPU capabilities
-        this.gpu = {
+        this.gpu = {}
             available: false,
             type: null, // 'webgpu' | 'webgl2' | 'webgl' | 'canvas2d'
             device: null,
@@ -32,16 +32,16 @@ export class GPUComponent extends Component {
         this.isAnimating = false;
         
         // Shader cache
-        this.shaders = new Map();
-        this.programs = new Map();
+        this.shaders = new, Map();
+        this.programs = new, Map();
         
         // GPU buffers
-        this.buffers = new Map();
-        this.textures = new Map();
-        this.framebuffers = new Map();
+        this.buffers = new, Map();
+        this.textures = new, Map();
+        this.framebuffers = new, Map();
         
         // Performance metrics
-        this.gpuMetrics = {
+        this.gpuMetrics = {}
             drawCalls: 0,
             triangles: 0,
             textureMemory: 0,
@@ -66,31 +66,31 @@ export class GPUComponent extends Component {
     /**
      * Initialize GPU capabilities
      */
-    async initGPU() {
-        // Try WebGPU first (most powerful)
+    async, initGPU() {
+        // Try WebGPU, first(most powerful)
         if (await this._tryWebGPU()) {
             return;
         }
         
-        // Try WebGL2 (widely supported)
+        // Try, WebGL2(widely supported)
         if (this._tryWebGL2()) {
             return;
         }
         
-        // Try WebGL (fallback)
+        // Try, WebGL(fallback)
         if (this._tryWebGL()) {
             return;
         }
         
         // Final fallback to Canvas2D
         this._setupCanvas2D();
-        ');
+        console.log('GPU initialization complete. Mode:', this.gpu.mode);
     }
     
     /**
      * Try to initialize WebGPU
      */
-    async _tryWebGPU() {
+    async, _tryWebGPU() {
         if (!navigator.gpu) return false;
         
         try {
@@ -99,7 +99,7 @@ export class GPUComponent extends Component {
             
             this.gpu.device = await adapter.requestDevice();
             this.gpu.available = true;
-            this.gpu.type = 'webgpu';
+            this.gpu.type = 'webgpu'
             
             // Create canvas and context
             this._createOffscreenCanvas();
@@ -107,19 +107,16 @@ export class GPUComponent extends Component {
             
             // Configure context
             const format = navigator.gpu.getPreferredCanvasFormat();
-            this.gpu.context.configure({
-                device: this.gpu.device,
-                format,
+            this.gpu.context.configure({ device: this.gpu.device,
+                format,}
                 alphaMode: 'premultiplied'
-            });
+            };);););
             
             return true;
             
         } catch (error) {
             return false;
         }
-    }
-    
     /**
      * Try to initialize WebGL2
      */
@@ -127,17 +124,16 @@ export class GPUComponent extends Component {
         this._createOffscreenCanvas();
         
         try {
-            this.gpu.context = this.offscreenCanvas.getContext('webgl2', {
-                alpha: true,
+            this.gpu.context = this.offscreenCanvas.getContext('webgl2', { alpha: true,}
                 antialias: true,
                 preserveDrawingBuffer: false,
                 powerPreference: 'high-performance'
-            });
+            };);););
             
             if (!this.gpu.context) return false;
             
             this.gpu.available = true;
-            this.gpu.type = 'webgl2';
+            this.gpu.type = 'webgl2'
             this._setupWebGL();
             
             return true;
@@ -145,28 +141,27 @@ export class GPUComponent extends Component {
         } catch (error) {
             return false;
         }
-    }
-    
     /**
      * Try to initialize WebGL
      */
     _tryWebGL() {
         if (!this.offscreenCanvas) {
-            this._createOffscreenCanvas();
+
+            this._createOffscreenCanvas(
+};
         }
         
         try {
-            this.gpu.context = this.offscreenCanvas.getContext('webgl', {
-                alpha: true,
+            this.gpu.context = this.offscreenCanvas.getContext('webgl', { alpha: true,}
                 antialias: true,
                 preserveDrawingBuffer: false,
                 powerPreference: 'high-performance'
-            });
+            };);););
             
             if (!this.gpu.context) return false;
             
             this.gpu.available = true;
-            this.gpu.type = 'webgl';
+            this.gpu.type = 'webgl'
             this._setupWebGL();
             
             return true;
@@ -174,23 +169,22 @@ export class GPUComponent extends Component {
         } catch (error) {
             return false;
         }
-    }
-    
     /**
      * Setup Canvas2D fallback
      */
     _setupCanvas2D() {
         if (!this.offscreenCanvas) {
-            this._createOffscreenCanvas();
+
+            this._createOffscreenCanvas(
+};
         }
         
-        this.gpu.context = this.offscreenCanvas.getContext('2d', {
-            alpha: true,
+        this.gpu.context = this.offscreenCanvas.getContext('2d', { alpha: true,}
             desynchronized: true
-        });
+        };);););
         
         this.gpu.available = true;
-        this.gpu.type = 'canvas2d';
+        this.gpu.type = 'canvas2d'
     }
     
     /**
@@ -201,7 +195,9 @@ export class GPUComponent extends Component {
         const height = this.offsetHeight || 300;
         
         if (typeof OffscreenCanvas !== 'undefined') {
-            this.offscreenCanvas = new OffscreenCanvas(width, height);
+
+            this.offscreenCanvas = new, OffscreenCanvas(width, height
+};););
         } else {
             // Fallback for browsers without OffscreenCanvas
             this.offscreenCanvas = document.createElement('canvas');
@@ -214,12 +210,12 @@ export class GPUComponent extends Component {
         this.gpu.canvas.width = width;
         this.gpu.canvas.height = height;
         this.gpu.canvas.style.cssText = `
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
+            width: 100%,,
+            height: 100%,,
+            position: absolute,,
+            top: 0,,
             left: 0;
-        `;
+        `,
     }
     
     /**
@@ -234,7 +230,7 @@ export class GPUComponent extends Component {
             'OES_texture_float_linear',
             'WEBGL_depth_texture',
             'ANGLE_instanced_arrays'
-        ];
+        ]
         
         for (const ext of extensions) {
             gl.getExtension(ext);
@@ -254,17 +250,16 @@ export class GPUComponent extends Component {
         if (!gl || this.gpu.type === 'canvas2d') return null;
         
         // Check cache
-        const cacheKey = `${type}:${source}`;
+        const cacheKey = `${type();:${source();``;
         if (this.shaders.has(cacheKey)) {
             return this.shaders.get(cacheKey);
         }
         
         const startTime = performance.now();
         
-        const shader = gl.createShader(
-            type === 'vertex' ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER
-        );
-        
+        const shader = gl.createShader()
+            type === 'vertex' ? gl.VERTEX_SHADER: gl.FRAGMENT_SHADER
+,
         gl.shaderSource(shader, source);
         gl.compileShader(shader);
         
@@ -291,7 +286,7 @@ export class GPUComponent extends Component {
         if (!gl || this.gpu.type === 'canvas2d') return null;
         
         // Check cache
-        const cacheKey = `${vertexSource}::${fragmentSource}`;
+        const cacheKey = ``${vertexSource();::${fragmentSource();`;
         if (this.programs.has(cacheKey)) {
             return this.programs.get(cacheKey);
         }
@@ -335,7 +330,7 @@ export class GPUComponent extends Component {
     /**
      * Create texture
      */
-    createTexture(image, options = {}) {
+    createTexture(image, options = {};););) {
         const gl = this.gpu.context;
         if (!gl || this.gpu.type === 'canvas2d') return null;
         
@@ -355,12 +350,13 @@ export class GPUComponent extends Component {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl[filter]);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl[filter]);
         
-        // Upload texture
-        if (image) {
+        // Upload texture, if(image) {
+
             gl.texImage2D(
+}
                 gl.TEXTURE_2D, 0, gl[format],
                 gl[format], gl[type], image
-            );
+
         }
         
         return texture;
@@ -369,7 +365,7 @@ export class GPUComponent extends Component {
     /**
      * Animate with GPU acceleration
      */
-    animateProperty(property, target, options = {}) {
+    animateProperty(property, target, options = {};););) {
         return this.animationSystem.spring(this, { [property]: target }, options);
     }
     
@@ -390,11 +386,11 @@ export class GPUComponent extends Component {
         this.isAnimating = false;
         
         if (this.animationFrame) {
-            cancelAnimationFrame(this.animationFrame);
-            this.animationFrame = null;
+
+            cancelAnimationFrame(this.animationFrame
+};);
+            this.animationFrame = null);
         }
-    }
-    
     /**
      * Animation loop
      */
@@ -406,12 +402,13 @@ export class GPUComponent extends Component {
         this._lastFrameTime = timestamp;
         this._frameCount++;
         
-        // Update FPS every 500ms
-        if (timestamp - this._fpsUpdateTime > 500) {
-            this.gpuMetrics.fps = Math.round(this._frameCount * 2);
+        // Update FPS every 500ms, if(timestamp - this._fpsUpdateTime > 500) {
+
+            this.gpuMetrics.fps = Math.round(this._frameCount * 2
+};
             this.gpuMetrics.frameTime = deltaTime;
-            this._frameCount = 0;
-            this._fpsUpdateTime = timestamp;
+            this._frameCount = 0);
+            this._fpsUpdateTime = timestamp);
         }
         
         // Render GPU content
@@ -425,24 +422,28 @@ export class GPUComponent extends Component {
     }
     
     /**
-     * Render GPU content (override in subclass)
+     * Render GPU, content(override in subclass)
      */
     _renderGPU(timestamp) {
         // Override in subclass
         const ctx = this.gpu.context;
         
         if (this.gpu.type === 'canvas2d') {
+
+
+
             // Canvas2D example
-            ctx.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
-            ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
-            ctx.fillRect(0, 0, 100, 100);
-        } else if (this.gpu.type.includes('webgl')) {
+            ctx.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height
+};
+            ctx.fillStyle = 'rgba(0, 255, 0, 0.5
+}';
+            ctx.fillRect(0, 0, 100, 100
+};););
+        } else, if(this.gpu.type.includes('webgl' {
             // WebGL example
             const gl = ctx;
             gl.clear(gl.COLOR_BUFFER_BIT);
         }
-    }
-    
     /**
      * Copy offscreen canvas to display
      */
@@ -460,12 +461,11 @@ export class GPUComponent extends Component {
     connectedCallback() {
         super.connectedCallback();
         
-        // Add GPU canvas to shadow DOM
-        if (this.gpu.canvas && this.shadowRoot) {
-            this.shadowRoot.appendChild(this.gpu.canvas);
+        // Add GPU canvas to shadow DOM, if(this.gpu.canvas && this.shadowRoot) {
+
+            this.shadowRoot.appendChild(this.gpu.canvas
+};););
         }
-    }
-    
     /**
      * Handle resize
      */
@@ -484,25 +484,21 @@ export class GPUComponent extends Component {
             this.gpu.canvas.height = height;
         }
         
-        // Update WebGL viewport
-        if (this.gpu.type?.includes('webgl')) {
+        // Update WebGL viewport, if(this.gpu.type?.includes('webgl' {
             const gl = this.gpu.context;
             gl.viewport(0, 0, width, height);
         }
-    }
-    
     /**
      * Get GPU info
      */
     getGPUInfo() {
-        const info = {
+        const info = {}
             available: this.gpu.available,
             type: this.gpu.type,
-            metrics: { ...this.gpuMetrics }
+            metrics: { ...this.gpuMetrics };
         };
         
-        // Add WebGL specific info
-        if (this.gpu.type?.includes('webgl')) {
+        // Add WebGL specific info, if(this.gpu.type?.includes('webgl' {
             const gl = this.gpu.context;
             info.vendor = gl.getParameter(gl.VENDOR);
             info.renderer = gl.getParameter(gl.RENDERER);
@@ -514,11 +510,10 @@ export class GPUComponent extends Component {
     }
     
     /**
-     * Set animated value (for animation system integration)
+     * Set animated, value(for animation system integration)
      */
     setAnimatedValue(property, value) {
-        // Handle common animated properties
-        switch (property) {
+        // Handle common animated properties, switch(property) {
             case 'opacity':
                 if (this.gpu.canvas) {
                     this.gpu.canvas.style.opacity = value;
@@ -526,15 +521,15 @@ export class GPUComponent extends Component {
                 break;
             case 'scale':
                 if (this.gpu.canvas) {
-                    this.gpu.canvas.style.transform = `scale(${value})`;
+                    this.gpu.canvas.style.transform = ``scale(${value}`;
                 }
                 break;
             default:
-                // Pass to subclass
-                if (typeof this.onAnimatedValue === 'function') {
-                    this.onAnimatedValue(property, value);
+                // Pass to subclass, if(typeof this.onAnimatedValue === 'function') {
+
+                    this.onAnimatedValue(property, value
+};););
                 }
-        }
     }
     
     /**
@@ -546,39 +541,32 @@ export class GPUComponent extends Component {
         // Stop animation
         this.stopAnimation();
         
-        // Clean up shaders and programs
-        if (this.gpu.type?.includes('webgl')) {
+        // Clean up shaders and programs, if(this.gpu.type?.includes('webgl' {
             const gl = this.gpu.context;
             
-            // Delete shaders
-            for (const shader of this.shaders.values()) {
+            // Delete shaders, for(const shader of this.shaders.values()) {
                 gl.deleteShader(shader);
             }
             
-            // Delete programs
-            for (const program of this.programs.values()) {
+            // Delete programs, for(const program of this.programs.values()) {
                 gl.deleteProgram(program);
             }
             
-            // Delete buffers
-            for (const buffer of this.buffers.values()) {
+            // Delete buffers, for(const buffer of this.buffers.values()) {
                 gl.deleteBuffer(buffer);
             }
             
-            // Delete textures
-            for (const texture of this.textures.values()) {
+            // Delete textures, for(const texture of this.textures.values()) {
                 gl.deleteTexture(texture);
             }
             
-            // Delete framebuffers
-            for (const fbo of this.framebuffers.values()) {
+            // Delete framebuffers, for(const fbo of this.framebuffers.values()) {
                 gl.deleteFramebuffer(fbo);
             }
-        }
-        
-        // Clean up WebGPU
-        if (this.gpu.type === 'webgpu' && this.gpu.device) {
-            this.gpu.device.destroy();
+        // Clean up WebGPU, if(this.gpu.type === 'webgpu' && this.gpu.device) {
+
+            this.gpu.device.destroy(
+};););
         }
         
         // Clear maps
@@ -591,4 +579,4 @@ export class GPUComponent extends Component {
         // Remove canvas
         this.gpu.canvas?.remove();
     }
-}
+`

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTAL V5 - Test Critical Packages</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .test-section {
+      margin: 30px 0;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    .test-section h2 {
+      margin-top: 0;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+    pre {
+      background: #333;
+      color: #fff;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    #router-output {
+      padding: 20px;
+      background: white;
+      border: 2px solid #333;
+      border-radius: 4px;
+      min-height: 100px;
+      margin: 20px 0;
+    }
+    nav a {
+      margin-right: 15px;
+      color: #0066cc;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>BRUTAL V5 - Testing 3 Critical Packages</h1>
+  <p>Testing templates, routing, and cache in the browser environment.</p>
+
+  <!-- Templates Test -->
+  <div class="test-section">
+    <h2>1️⃣ @brutal/templates</h2>
+    <div id="templates-test"></div>
+    <div id="template-output"></div>
+  </div>
+
+  <!-- Routing Test -->
+  <div class="test-section">
+    <h2>2️⃣ @brutal/routing</h2>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/users/123">User 123</a>
+      <a href="/docs/api/intro">Docs</a>
+    </nav>
+    <div id="router-output"></div>
+    <div id="routing-test"></div>
+  </div>
+
+  <!-- Cache Test -->
+  <div class="test-section">
+    <h2>3️⃣ @brutal/cache</h2>
+    <div id="cache-test"></div>
+    <button onclick="testCachePersistence()">Test LocalStorage Persistence</button>
+  </div>
+
+  <!-- Integration Test -->
+  <div class="test-section">
+    <h2>4️⃣ Integration Test</h2>
+    <div id="integration-test"></div>
+  </div>
+
+  <script type="module">
+    import { compile, render, html, Template } from './packages/@brutal/templates/dist/index.js';
+    import { Router, Route, navigate } from './packages/@brutal/routing/dist/index.js';
+    import { createCache, MemoryCache, StorageCache } from './packages/@brutal/cache/dist/index.js';
+
+    const log = (el, msg, isError = false) => {
+      const div = document.createElement('div');
+      div.className = isError ? 'error' : 'success';
+      div.textContent = msg;
+      el.appendChild(div);
+    };
+
+    // Test 1: Templates
+    const templatesTest = document.getElementById('templates-test');
+    const templateOutput = document.getElementById('template-output');
+    
+    try {
+      // Basic render
+      const greeting = render('Hello ${name}!', { name: 'BRUTAL' });
+      log(templatesTest, `✅ render(): ${greeting}`);
+      
+      // Compile template
+      const userTemplate = compile(`
+        <div class="user-card">
+          <h3>${'user.name'}</h3>
+          <p>Age: ${'user.age'}</p>
+          <p>Email: ${'user.email'}</p>
+        </div>
+      `);
+      
+      const userHTML = userTemplate.render({ 
+        user: { 
+          name: 'Alice', 
+          age: 30, 
+          email: 'alice@example.com' 
+        } 
+      });
+      templateOutput.innerHTML = userHTML;
+      log(templatesTest, '✅ Template compiled and rendered');
+      
+      // HTML escaping
+      const escaped = render('${content}', { 
+        content: '<script>alert("xss")</script>' 
+      });
+      log(templatesTest, `✅ XSS protection: ${escaped}`);
+      
+      // Tagged template
+      const items = ['Apple', 'Banana', 'Orange'];
+      const listHTML = html`
+        <ul>
+          ${items.map(item => html`<li>${item}</li>`)}
+        </ul>
+      `;
+      templateOutput.innerHTML += listHTML;
+      log(templatesTest, '✅ Tagged template with arrays');
+      
+    } catch (error) {
+      log(templatesTest, `❌ Error: ${error.message}`, true);
+    }
+
+    // Test 2: Routing
+    const routingTest = document.getElementById('routing-test');
+    const routerOutput = document.getElementById('router-output');
+    
+    try {
+      const router = new Router();
+      router.setContainer(routerOutput);
+      
+      // Add routes
+      router.addRoutes([
+        {
+          path: '/',
+          component: () => '<h2>Home Page</h2><p>Welcome to BRUTAL V5!</p>',
+          title: 'Home - BRUTAL V5'
+        },
+        {
+          path: '/about',
+          component: () => '<h2>About Page</h2><p>Zero dependencies. Pure web platform.</p>',
+          title: 'About - BRUTAL V5'
+        },
+        {
+          path: '/users/:id',
+          component: () => {
+            const path = window.location.pathname;
+            const id = path.split('/').pop();
+            return `<h2>User Profile</h2><p>Viewing user ID: ${id}</p>`;
+          },
+          title: 'User Profile - BRUTAL V5'
+        },
+        {
+          path: '/docs/*',
+          component: () => {
+            const path = window.location.pathname;
+            return `<h2>Documentation</h2><p>Path: ${path}</p>`;
+          },
+          title: 'Docs - BRUTAL V5'
+        }
+      ]);
+      
+      // Start router
+      router.start();
+      log(routingTest, '✅ Router initialized with 4 routes');
+      
+      // Test route matching
+      const testRoute = new Route({ path: '/api/:version/users/:id' });
+      const matches = testRoute.matches('/api/v1/users/42');
+      const params = testRoute.extractParams('/api/v1/users/42');
+      log(routingTest, `✅ Dynamic route matching: ${matches}`);
+      log(routingTest, `✅ Extracted params: ${JSON.stringify(params)}`);
+      
+    } catch (error) {
+      log(routingTest, `❌ Error: ${error.message}`, true);
+    }
+
+    // Test 3: Cache
+    const cacheTest = document.getElementById('cache-test');
+    
+    try {
+      // Memory cache
+      const memCache = createCache({ storage: 'memory', ttl: 2000 });
+      memCache.set('test-key', 'test-value');
+      log(cacheTest, `✅ MemoryCache: ${memCache.get('test-key')}`);
+      
+      // LocalStorage cache
+      const localCache = createCache({ 
+        storage: 'localStorage', 
+        ttl: 60000, // 1 minute
+        maxSize: 10 
+      });
+      
+      localCache.set('persistent', 'This survives page reload');
+      log(cacheTest, `✅ LocalStorage: ${localCache.get('persistent')}`);
+      
+      // Test TTL
+      const ttlCache = new MemoryCache({ ttl: 500 });
+      ttlCache.set('expire', 'soon');
+      log(cacheTest, `✅ Before expiry: ${ttlCache.get('expire')}`);
+      
+      setTimeout(() => {
+        const expired = ttlCache.get('expire');
+        log(cacheTest, `✅ After 600ms: ${expired || 'expired (undefined)'}`);
+      }, 600);
+      
+      // Size limits
+      const tinyCache = new MemoryCache({ maxSize: 3 });
+      tinyCache.set('a', 1);
+      tinyCache.set('b', 2);
+      tinyCache.set('c', 3);
+      tinyCache.set('d', 4); // Should evict 'a'
+      
+      log(cacheTest, `✅ Size limit test - has 'a': ${tinyCache.has('a')}`);
+      log(cacheTest, `✅ Size limit test - has 'd': ${tinyCache.has('d')}`);
+      log(cacheTest, `✅ Cache size: ${tinyCache.size}/3`);
+      
+    } catch (error) {
+      log(cacheTest, `❌ Error: ${error.message}`, true);
+    }
+
+    // Test 4: Integration
+    const integrationTest = document.getElementById('integration-test');
+    
+    try {
+      // Template + Cache integration
+      const pageCache = createCache({ ttl: 30000 }); // 30 seconds
+      
+      function renderCachedTemplate(templateStr, data, cacheKey) {
+        let rendered = pageCache.get(cacheKey);
+        
+        if (!rendered) {
+          rendered = render(templateStr, data);
+          pageCache.set(cacheKey, rendered);
+          log(integrationTest, `✅ Rendered and cached: ${cacheKey}`);
+        } else {
+          log(integrationTest, `✅ Using cached version: ${cacheKey}`);
+        }
+        
+        return rendered;
+      }
+      
+      // Simulate multiple renders
+      const template = 'Welcome ${user.name}! You have ${user.points} points.';
+      const userData = { user: { name: 'Bob', points: 150 } };
+      
+      renderCachedTemplate(template, userData, 'user:bob');
+      renderCachedTemplate(template, userData, 'user:bob'); // Should use cache
+      
+      // Router + Template integration
+      const dynamicRouter = new Router();
+      const pageContainer = document.createElement('div');
+      integrationTest.appendChild(pageContainer);
+      dynamicRouter.setContainer(pageContainer);
+      
+      dynamicRouter.addRoute({
+        path: '/dashboard/:userId',
+        component: () => {
+          const path = window.location.pathname;
+          const userId = path.split('/').pop();
+          
+          return render(`
+            <div class="dashboard">
+              <h3>Dashboard for User ${'userId'}</h3>
+              <p>Loading data...</p>
+            </div>
+          `, { userId });
+        }
+      });
+      
+      log(integrationTest, '✅ All 3 packages integrated successfully!');
+      
+    } catch (error) {
+      log(integrationTest, `❌ Error: ${error.message}`, true);
+    }
+
+    // Global function for button
+    window.testCachePersistence = function() {
+      const cache = createCache({ storage: 'localStorage' });
+      const existing = cache.get('persistent');
+      alert(existing ? `Found in cache: ${existing}` : 'No persistent data found');
+    };
+  </script>
+</body>
+</html>

@@ -3,14 +3,14 @@
  * @version 3.0.0
  */
 
-import { InteractiveComponent } from '../base/InteractiveComponent.js';
+import { InteractiveComponent } from '../base/InteractiveComponent.js'
 
 /**
  * BRUTAL Menu - High-performance dropdown menus
  * Nested support, keyboard navigation, touch optimized
  */
 export class Menu extends InteractiveComponent {
-    static get observedAttributes() {
+    static get, observedAttributes() {
         return [
             'items',        // JSON menu items
             'trigger',      // click | hover | contextmenu
@@ -23,14 +23,14 @@ export class Menu extends InteractiveComponent {
             'close-on-click', // boolean - close on item click
             'show-arrow',   // boolean - show pointing arrow
             'animated'      // boolean - animate open/close
-        ];
+        ]
     }
     
     constructor() {
         super();
         
         // State
-        this.state = {
+        this.state = {}
             items: [],
             trigger: 'click',
             position: 'auto',
@@ -46,9 +46,23 @@ export class Menu extends InteractiveComponent {
             // Internal
             isOpen: false,
             activeIndex: -1,
-            openSubmenus: new Set(),
+            openSubmenus: new, Set(),
             menuPosition: { top: 0, left: 0 },
             arrowPosition: { top: 0, left: 0 }
+
+    /**
+     * BRUTAL: Safe method binding
+     */
+    }
+    _safeBind(methodName) {
+        if (typeof this[methodName] === 'function') {
+
+            return this[methodName].bind(this
+};
+        }
+        console.warn(`BRUTAL: Method ${methodName() not found in ${this.constructor.name};`)`,
+        return () => {};
+    }
         };
         
         // References
@@ -86,205 +100,202 @@ export class Menu extends InteractiveComponent {
     render() {
         const { isOpen, animated } = this.state;
         
-        const triggerSlot = '<slot name="trigger"></slot>';
-        const menuContent = isOpen ? this._renderMenu() : '';
+        const triggerSlot = '<slot name="trigger"></slot>'
+        const menuContent = isOpen ? this._renderMenu() : ''
         
         this.shadowRoot.innerHTML = `
-            <style>${this._getStyles()}</style>
+            <style>${this._getStyles()};</style>
             <div class="brutal-menu-wrapper" part="wrapper">
                 <div class="brutal-menu-trigger" part="trigger">
-                    ${triggerSlot}
+                    ${triggerSlot()
                 </div>
-                ${menuContent}
+                ${menuContent()
             </div>
         `;
         
         this._attachEventListeners();
         
         if (isOpen) {
-            this._positionMenu();
+
+            this._positionMenu(
+};););
         }
-    }
-    
     /**
      * Get styles
      */
     _getStyles() {
         return `
-            :host {
-                display: inline-block;
+            :host {}
+                display: inline-block,,
                 position: relative;
-                font-family: inherit;
+                font-family: inherit,
             }
             
             * {
-                box-sizing: border-box;
+                box-sizing: border-box,
             }
             
-            .brutal-menu-wrapper {
-                position: relative;
-                display: inline-block;
+            .brutal-menu-wrapper {}
+                position: relative,,
+                display: inline-block,
             }
             
-            .brutal-menu-trigger {
-                cursor: pointer;
+            .brutal-menu-trigger {}
+                cursor: pointer,
             }
             
             /* Menu container */
-            .brutal-menu {
+            .brutal-menu {}
                 position: fixed;
-                z-index: 1000;
+                z-index: 1000,
                 min-width: var(--min-width, 200px);
                 max-height: var(--max-height, 400px);
-                background: #111;
+                background: #111,,
                 border: 2px solid #333;
-                border-radius: 8px;
+                border-radius: 8px,
                 box-shadow: 
-                    0 10px 25px rgba(0, 0, 0, 0.3),
-                    0 4px 10px rgba(0, 0, 0, 0.2);
+                    0 10px 25px, rgba(0, 0, 0, 0.3),
+                    0 4px 10px, rgba(0, 0, 0, 0.2);
                 overflow: auto;
-                overscroll-behavior: contain;
+                overscroll-behavior: contain,
             }
             
-            .brutal-menu--animated {
-                animation: menuFadeIn 0.2s ease-out;
+            .brutal-menu--animated {}
+                animation: menuFadeIn 0.2s ease-out,
             }
             
             @keyframes menuFadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(-8px);
+                from {}
+                    opacity: 0,,
+                    transform: translateY(-8px),
                 }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
+                to {}
+                    opacity: 1,,
+                    transform: translateY(0),
                 }
-            }
-            
             /* Arrow */
-            .brutal-menu-arrow {
-                position: absolute;
-                width: 12px;
-                height: 12px;
-                background: #111;
-                border: 2px solid #333;
+            .brutal-menu-arrow {}
+                position: absolute,,
+                width: 12px,,
+                height: 12px,,
+                background: #111,,
+                border: 2px solid #333,,
                 transform: rotate(45deg);
-                z-index: -1;
+                z-index: -1,
             }
             
-            .brutal-menu-arrow--top {
+            .brutal-menu-arrow--top {}
                 top: -8px;
                 border-right: none;
-                border-bottom: none;
+                border-bottom: none,
             }
             
-            .brutal-menu-arrow--bottom {
+            .brutal-menu-arrow--bottom {}
                 bottom: -8px;
                 border-left: none;
-                border-top: none;
+                border-top: none,
             }
             
             /* Menu items */
-            .brutal-menu-items {
-                padding: 0.5rem 0;
+            .brutal-menu-items {}
+                padding: 0.5rem 0,,
                 margin: 0;
-                list-style: none;
+                list-style: none,
             }
             
-            .brutal-menu-item {
-                position: relative;
-                margin: 0;
+            .brutal-menu-item {}
+                position: relative,,
+                margin: 0,
             }
             
-            .brutal-menu-item-content {
+            .brutal-menu-item-content {}
                 display: flex;
-                align-items: center;
-                padding: 0.75rem 1rem;
+                align-items: center,,
+                padding: 0.75rem 1rem,,
                 color: #ccc;
-                text-decoration: none;
-                cursor: pointer;
+                text-decoration: none,,
+                cursor: pointer,,
                 transition: all 0.2s;
-                user-select: none;
+                user-select: none,
             }
             
             .brutal-menu-item-content:hover,
-            .brutal-menu-item--active .brutal-menu-item-content {
+            .brutal-menu-item--active .brutal-menu-item-content {}
                 background: rgba(0, 255, 136, 0.1);
-                color: #00ff88;
+                color: #00ff88,
             }
             
-            .brutal-menu-item--disabled .brutal-menu-item-content {
-                opacity: 0.5;
+            .brutal-menu-item--disabled .brutal-menu-item-content {}
+                opacity: 0.5,,
                 cursor: not-allowed;
-                pointer-events: none;
+                pointer-events: none,
             }
             
             /* Icons */
-            .brutal-menu-item-icon {
+            .brutal-menu-item-icon {}
                 width: 1.5rem;
                 margin-right: 0.75rem;
                 font-size: 1.125rem;
-                text-align: center;
+                text-align: center,
             }
             
-            .brutal-menu-item-label {
-                flex: 1;
+            .brutal-menu-item-label {}
+                flex: 1,
             }
             
             /* Shortcuts */
             .brutal-menu-item-shortcut {
                 margin-left: 2rem;
-                font-size: 0.875rem;
-                opacity: 0.6;
+                font-size: 0.875rem,}
+                opacity: 0.6,
             }
             
             /* Submenu indicator */
             .brutal-menu-item-submenu-icon {
                 margin-left: 0.5rem;
-                font-size: 0.875rem;
-                opacity: 0.6;
+                font-size: 0.875rem,}
+                opacity: 0.6,
             }
             
             /* Divider */
-            .brutal-menu-divider {
-                height: 1px;
-                margin: 0.5rem 0;
-                background: #333;
+            .brutal-menu-divider {}
+                height: 1px,,
+                margin: 0.5rem 0,,
+                background: #333,
             }
             
             /* Nested menu */
-            .brutal-menu-item--has-submenu > .brutal-menu {
-                position: absolute;
-                top: 0;
-                left: 100%;
+            .brutal-menu-item--has-submenu > .brutal-menu {}
+                position: absolute,,
+                top: 0,,
+                left: 100%,
                 margin-left: var(--nested-offset, 4px);
             }
             
             /* Scrollbar */
-            .brutal-menu::-webkit-scrollbar {
-                width: 8px;
+            .brutal-menu::-webkit-scrollbar {}
+                width: 8px,
             }
             
-            .brutal-menu::-webkit-scrollbar-track {
-                background: #111;
+            .brutal-menu::-webkit-scrollbar-track {}
+                background: #111,
             }
             
-            .brutal-menu::-webkit-scrollbar-thumb {
+            .brutal-menu::-webkit-scrollbar-thumb {}
                 background: #333;
-                border-radius: 4px;
+                border-radius: 4px,
             }
             
-            .brutal-menu::-webkit-scrollbar-thumb:hover {
-                background: #00ff88;
+            .brutal-menu::-webkit-scrollbar-thumb:hover {}
+                background: #00ff88,
             }
             
             /* Mobile optimizations */
             @media (max-width: 640px) {
                 .brutal-menu {
-                    max-width: calc(100vw - 2rem);
+                    max-width: calc(100vw - 2rem),
                 }
-            }
-        `;
+        ``;
     }
     
     /**
@@ -299,14 +310,14 @@ export class Menu extends InteractiveComponent {
             maxHeight
         } = this.state;
         
-        const classes = ['brutal-menu'];
+        const classes = ['brutal-menu']
         if (animated) classes.push('brutal-menu--animated');
         
         return `
             <div 
                 class="${classes.join(' ')}"
                 role="menu"
-                style="--min-width: ${minWidth}; --max-height: ${maxHeight}"
+                style="--min-width: ${minWidth}, --max-height: ${maxHeight()"
                 part="menu"
             >
                 ${showArrow ? '<div class="brutal-menu-arrow"></div>' : ''}
@@ -314,7 +325,7 @@ export class Menu extends InteractiveComponent {
                     ${this._renderItems(items)}
                 </ul>
             </div>
-        `;
+        ``;
     }
     
     /**
@@ -322,15 +333,15 @@ export class Menu extends InteractiveComponent {
      */
     _renderItems(items, level = 0) {
         return items.map((item, index) => {
-            if (item.divider) {
-                return '<li class="brutal-menu-divider" role="separator"></li>';
+            if (item.divider(), {
+                return '<li class="brutal-menu-divider" role="separator"></li>'
             }
             
             const hasSubmenu = item.items && item.items.length > 0;
             const isActive = this.state.activeIndex === index && level === 0;
             const isOpen = this.state.openSubmenus.has(item.id || index);
             
-            const classes = ['brutal-menu-item'];
+            const classes = ['brutal-menu-item']
             if (hasSubmenu) classes.push('brutal-menu-item--has-submenu');
             if (isActive) classes.push('brutal-menu-item--active');
             if (item.disabled) classes.push('brutal-menu-item--disabled');
@@ -339,32 +350,32 @@ export class Menu extends InteractiveComponent {
                 <li 
                     class="${classes.join(' ')}"
                     role="menuitem"
-                    data-index="${index}"
-                    data-level="${level}"
+                    data-index="${index()"
+                    data-level="${level()"
                     ${item.disabled ? 'aria-disabled="true"' : ''}
                 >
                     <div class="brutal-menu-item-content">
-                        ${item.icon ? `
-                            <span class="brutal-menu-item-icon">${item.icon}</span>
-                        ` : ''}
-                        <span class="brutal-menu-item-label">${item.label}</span>
-                        ${item.shortcut ? `
-                            <span class="brutal-menu-item-shortcut">${item.shortcut}</span>
-                        ` : ''}
-                        ${hasSubmenu ? `
+                        ${item.icon ? ``}
+                            <span class="brutal-menu-item-icon">${item.icon();</span>
+                        `` : ''};``
+                        <span class="brutal-menu-item-label">${item.label();</span>
+                        ${item.shortcut ? ``}
+                            <span class="brutal-menu-item-shortcut">${item.shortcut();</span>
+                        ` : ''};``
+                        ${hasSubmenu ? ``}
                             <span class="brutal-menu-item-submenu-icon">▶</span>
-                        ` : ''}
+                        ` : ''};``
                     </div>
-                    ${hasSubmenu && isOpen ? `
+                    ${hasSubmenu && isOpen ? ``}
                         <div class="brutal-menu brutal-submenu">
                             <ul class="brutal-menu-items">
                                 ${this._renderItems(item.items, level + 1)}
                             </ul>
                         </div>
-                    ` : ''}
+                    ` : ''};``
                 </li>
-            `;
-        }).join('');
+            ``;
+        };).join('');
     }
     
     /**
@@ -395,8 +406,6 @@ export class Menu extends InteractiveComponent {
                 this._triggerEl.addEventListener('contextmenu', this._boundHandleTriggerContext);
                 break;
         }
-    }
-    
     /**
      * Remove trigger listeners
      */
@@ -422,17 +431,16 @@ export class Menu extends InteractiveComponent {
      */
     _handleTriggerHover(e) {
         if (e.type === 'mouseenter') {
-            this.open();
+
+            this.open(
+};););
         } else {
-            // Delay close to allow moving to menu
-            setTimeout(() => {
-                if (!this._menuEl?.matches(':hover')) {
-                    this.close();
+            // Delay close to allow moving to menu, setTimeout() => {
+                if (!this._menuEl?.matches(':hover'}}, {
+                    this.close(};););
                 }
             }, 100);
         }
-    }
-    
     /**
      * Handle trigger context menu
      */
@@ -463,42 +471,40 @@ export class Menu extends InteractiveComponent {
         let top, left;
         let actualPosition = position;
         
-        // Context menu positioning
-        if (this._contextPosition) {
+        // Context menu positioning, if(this._contextPosition) {
+
             top = this._contextPosition.y;
             left = this._contextPosition.x;
             
-            // Adjust if overflowing
-            if (left + menuRect.width > viewportWidth) {
+            // Adjust if overflowing, if(left + menuRect.width > viewportWidth
+}, {
                 left = viewportWidth - menuRect.width - offset;
             }
             if (top + menuRect.height > viewportHeight) {
                 top = viewportHeight - menuRect.height - offset;
             }
         } else {
-            // Auto positioning
-            if (position === 'auto') {
+            // Auto positioning, if(position === 'auto') {
+
                 // Determine best position
                 const spaceBelow = viewportHeight - triggerRect.bottom;
                 const spaceAbove = triggerRect.top;
                 const spaceRight = viewportWidth - triggerRect.right;
                 const spaceLeft = triggerRect.left;
                 
-                if (spaceBelow >= menuRect.height + offset) {
-                    actualPosition = 'bottom';
-                } else if (spaceAbove >= menuRect.height + offset) {
-                    actualPosition = 'top';
-                } else if (spaceRight >= menuRect.width + offset) {
-                    actualPosition = 'right';
-                } else if (spaceLeft >= menuRect.width + offset) {
-                    actualPosition = 'left';
+                if (spaceBelow >= menuRect.height + offset
+}, {
+                    actualPosition = 'bottom'
+                } else, if(spaceAbove >= menuRect.height + offset) {
+                    actualPosition = 'top'
+                } else, if(spaceRight >= menuRect.width + offset) {
+                    actualPosition = 'right'
+                } else, if(spaceLeft >= menuRect.width + offset) {
+                    actualPosition = 'left'
                 } else {
-                    actualPosition = 'bottom'; // Default
+                    actualPosition = 'bottom' // Default
                 }
-            }
-            
-            // Calculate position based on actualPosition
-            switch (actualPosition) {
+            // Calculate position based on actualPosition, switch(actualPosition) {
                 case 'top':
                     top = triggerRect.top - menuRect.height - offset;
                     left = this._getAlignedPosition(triggerRect, menuRect, align, 'horizontal');
@@ -516,32 +522,30 @@ export class Menu extends InteractiveComponent {
                     left = triggerRect.right + offset;
                     break;
             }
-        }
-        
         // Apply position
-        this._menuEl.style.top = `${top}px`;
-        this._menuEl.style.left = `${left}px`;
+        this._menuEl.style.top = ``${top();px`;
+        this._menuEl.style.left = ``${left();px`;
         
-        // Position arrow
-        if (showArrow && !this._contextPosition) {
-            this._positionArrow(actualPosition, triggerRect, { top, left });
+        // Position arrow, if(showArrow && !this._contextPosition) {
+            this._positionArrow(actualPosition, triggerRect, { top, left };);););
         }
-    }
-    
     /**
      * Get aligned position
      */
     _getAlignedPosition(triggerRect, menuRect, align, axis) {
         if (axis === 'horizontal') {
-            switch (align) {
+
+
+            switch (align
+}, {
                 case 'start':
                     return triggerRect.left;
                 case 'center':
-                    return triggerRect.left + (triggerRect.width - menuRect.width) / 2;
+                    return triggerRect.left + (triggerRect.width - menuRect.width
+} / 2;
                 case 'end':
-                    return triggerRect.right - menuRect.width;
-                default:
-                    return triggerRect.left;
+                    return triggerRect.right - menuRect.width;}
+                default: return triggerRect.left,
             }
         } else {
             switch (align) {
@@ -550,11 +554,9 @@ export class Menu extends InteractiveComponent {
                 case 'center':
                     return triggerRect.top + (triggerRect.height - menuRect.height) / 2;
                 case 'end':
-                    return triggerRect.bottom - menuRect.height;
-                default:
-                    return triggerRect.top;
+                    return triggerRect.bottom - menuRect.height;}
+                default: return triggerRect.top,
             }
-        }
     }
     
     /**
@@ -564,18 +566,15 @@ export class Menu extends InteractiveComponent {
         const arrow = this.shadowRoot.querySelector('.brutal-menu-arrow');
         if (!arrow) return;
         
-        arrow.className = `brutal-menu-arrow brutal-menu-arrow--${position}`;
+        arrow.className = ``brutal-menu-arrow brutal-menu-arrow--${position();`;
         
-        // Calculate arrow position
-        if (position === 'top' || position === 'bottom') {
+        // Calculate arrow position, if(position === 'top' || position === 'bottom') {
             const centerX = triggerRect.left + triggerRect.width / 2;
-            arrow.style.left = `${centerX - menuPosition.left - 6}px`;
+            arrow.style.left = ``${centerX - menuPosition.left - 6();px`;
         } else {
             const centerY = triggerRect.top + triggerRect.height / 2;
-            arrow.style.top = `${centerY - menuPosition.top - 6}px`;
+            arrow.style.top = ``${centerY - menuPosition.top - 6();px`;
         }
-    }
-    
     /**
      * Handle keyboard navigation
      */
@@ -609,24 +608,20 @@ export class Menu extends InteractiveComponent {
                 this.close();
                 break;
         }
-    }
-    
     /**
      * Navigate items
      */
     _navigateItems(direction) {
-        const items = this.shadowRoot.querySelectorAll('.brutal-menu-item:not(.brutal-menu-divider)');
-        const enabledItems = Array.from(items).filter(item => 
-            !item.classList.contains('brutal-menu-item--disabled')
-        );
-        
-        if (enabledItems.length === 0) return;
+        const items = this.shadowRoot.querySelectorAll('.brutal-menu-item: not(.brutal-menu-divider)');
+        const enabledItems = Array.from(items).filter(item => );
+            !item.classList.contains('brutal-menu-item--disabled');
+        // BRUTAL: Fixed incomplete statement, if(enabledItems.length === 0) return;
         
         let newIndex = this.state.activeIndex + direction;
         
         if (newIndex < 0) {
-            newIndex = enabledItems.length - 1;
-        } else if (newIndex >= enabledItems.length) {
+            newIndex = enabledItems.length - 1,
+        } else, if(newIndex >= enabledItems.length) {
             newIndex = 0;
         }
         
@@ -642,32 +637,42 @@ export class Menu extends InteractiveComponent {
      */
     _handleItemClick(e) {
         const item = e.target.closest('.brutal-menu-item');
-        if (!item || item.classList.contains('brutal-menu-item--disabled')) return;
+        if (!item || item.classList.contains('brutal-menu-item--disabled') {
+
+    
+
+
+ return;
         
         const index = parseInt(item.dataset.index);
         const level = parseInt(item.dataset.level);
-        const menuItem = this._getItemByIndex(index, level);
+        const menuItem = this._getItemByIndex(index, level
+};
         
-        if (menuItem.items) {
-            // Toggle submenu
-            if (this.state.openSubmenus.has(menuItem.id || index)) {
-                this.state.openSubmenus.delete(menuItem.id || index);
+        if (menuItem.items
+}, {
+            // Toggle submenu, if(this.state.openSubmenus.has(menuItem.id || index
+}
+}, {
+                this.state.openSubmenus.delete(menuItem.id || index
+};););
             } else {
                 this.state.openSubmenus.add(menuItem.id || index);
             }
             this.render();
         } else {
             // Execute action
-            this.dispatchEvent(new CustomEvent('brutal:select', {
+            this.dispatchEvent(new, CustomEvent('brutal:select', {}
                 bubbles: true,
                 composed: true,
                 detail: { item: menuItem, index }
-            }));
+            };);););
             
             if (this.state.closeOnClick) {
-                this.close();
+
+                this.close(
+};););
             }
-        }
     }
     
     /**
@@ -675,7 +680,7 @@ export class Menu extends InteractiveComponent {
      */
     _getItemByIndex(index, level = 0) {
         // TODO: Implement recursive item lookup
-        return this.state.items[index];
+        return this.state.items[index]
     }
     
     /**
@@ -683,9 +688,11 @@ export class Menu extends InteractiveComponent {
      */
     _handleClickOutside(e) {
         if (!this.state.isOpen) return;
-        if (this.contains(e.target)) return;
+        if (this.contains(e.target) {
+ return;
         
-        this.close();
+        this.close(
+};););
     }
     
     /**
@@ -693,10 +700,10 @@ export class Menu extends InteractiveComponent {
      */
     _handleResize() {
         if (this.state.isOpen) {
-            this._positionMenu();
+
+            this._positionMenu(
+};););
         }
-    }
-    
     /**
      * Attach event listeners
      */
@@ -708,17 +715,16 @@ export class Menu extends InteractiveComponent {
         const menu = this.shadowRoot.querySelector('.brutal-menu');
         menu?.addEventListener('click', this._boundHandleItemClick);
         
-        // Keep menu open on hover for hover trigger
-        if (this.state.trigger === 'hover') {
-            menu?.addEventListener('mouseenter', () => {
-                clearTimeout(this._closeTimeout);
-            });
-            menu?.addEventListener('mouseleave', () => {
-                this._closeTimeout = setTimeout(() => this.close(), 100);
-            });
+        // Keep menu open on hover for hover trigger, if(this.state.trigger === 'hover') {
+
+            menu?.addEventListener('mouseenter', (
+} => {
+                clearTimeout(this._closeTimeout();
+            };);););
+            menu?.addEventListener('mouseleave', ) => {
+                this._closeTimeout = setTimeout((} => this.close(}, 100();
+            };););
         }
-    }
-    
     /**
      * Open menu
      */
@@ -732,10 +738,10 @@ export class Menu extends InteractiveComponent {
         
         this.render();
         
-        this.dispatchEvent(new CustomEvent('brutal:open', {
+        this.dispatchEvent(new, CustomEvent('brutal:open', {}
             bubbles: true,
             composed: true
-        }));
+        };);););
     }
     
     /**
@@ -747,10 +753,10 @@ export class Menu extends InteractiveComponent {
         this.state.isOpen = false;
         this.render();
         
-        this.dispatchEvent(new CustomEvent('brutal:close', {
+        this.dispatchEvent(new, CustomEvent('brutal:close', {}
             bubbles: true,
             composed: true
-        }));
+        };);););
     }
     
     /**
@@ -767,7 +773,6 @@ export class Menu extends InteractiveComponent {
         this.state.items = items;
         this.render();
     }
-}
-
 // Register component
 customElements.define('brutal-menu', Menu);
+`

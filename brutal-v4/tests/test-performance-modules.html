@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Performance Module Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .status {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .status.success {
+            background: #1a4d1a;
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+        
+        .status.error {
+            background: #4d1a1a;
+            color: #f87171;
+            border: 1px solid #f87171;
+        }
+        
+        .status.warning {
+            background: #4d4d1a;
+            color: #fbbf24;
+            border: 1px solid #fbbf24;
+        }
+        
+        .metric {
+            display: inline-block;
+            background: #262626;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            font-family: monospace;
+        }
+        
+        pre {
+            background: #262626;
+            padding: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 4px;
+        }
+        
+        button:hover {
+            background: #2563eb;
+        }
+        
+        #summary {
+            background: #262626;
+            padding: 16px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 BRUTAL V4 - Performance Module Test</h1>
+    
+    <div class="test-section">
+        <h2>Module Structure Verification</h2>
+        <div id="module-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Performance Monitoring Test</h2>
+        <button onclick="runPerformanceTest()">Run Performance Test</button>
+        <button onclick="showSummary()">Show Summary</button>
+        <button onclick="clearMetrics()">Clear Metrics</button>
+        <div id="performance-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Collector Tests</h2>
+        <button onclick="testCollectors()">Test All Collectors</button>
+        <div id="collector-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Line Count Verification</h2>
+        <div id="line-count"></div>
+    </div>
+    
+    <div id="summary"></div>
+    
+    <script type="module">
+        import { 
+            BrutalPerformance, 
+            PerformanceUtils, 
+            measure,
+            ComponentCollector,
+            MemoryCollector,
+            DOMCollector,
+            NetworkCollector,
+            BrutalPerformanceObserver
+        } from '../core/performance/index.js';
+        
+        const results = document.getElementById('module-results');
+        const perfResults = document.getElementById('performance-results');
+        const collectorResults = document.getElementById('collector-results');
+        const lineCount = document.getElementById('line-count');
+        
+        // Module structure test
+        async function testModuleStructure() {
+            results.innerHTML = '<h3>Testing Module Structure...</h3>';
+            
+            const modules = [
+                { name: 'BrutalPerformance', obj: BrutalPerformance },
+                { name: 'PerformanceUtils', obj: PerformanceUtils },
+                { name: 'measure decorator', obj: measure },
+                { name: 'ComponentCollector', obj: ComponentCollector },
+                { name: 'MemoryCollector', obj: MemoryCollector },
+                { name: 'DOMCollector', obj: DOMCollector },
+                { name: 'NetworkCollector', obj: NetworkCollector },
+                { name: 'BrutalPerformanceObserver', obj: BrutalPerformanceObserver }
+            ];
+            
+            for (const module of modules) {
+                if (module.obj) {
+                    results.innerHTML += `<div class="status success">✅ ${module.name} imported successfully</div>`;
+                } else {
+                    results.innerHTML += `<div class="status error">❌ ${module.name} failed to import</div>`;
+                }
+            }
+            
+            // Test that performance monitoring can be enabled
+            try {
+                BrutalPerformance.enable({
+                    components: true,
+                    memory: true,
+                    rendering: true
+                });
+                results.innerHTML += '<div class="status success">✅ Performance monitoring enabled</div>';
+            } catch (error) {
+                results.innerHTML += `<div class="status error">❌ Failed to enable monitoring: ${error.message}</div>`;
+            }
+        }
+        
+        // Performance test
+        window.runPerformanceTest = async function() {
+            perfResults.innerHTML = '<h3>Running Performance Tests...</h3>';
+            
+            // Test measurement
+            const timer = BrutalPerformance.startMeasurement('test-operation');
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const result = BrutalPerformance.endMeasurement('test-operation');
+            
+            if (result) {
+                perfResults.innerHTML += `<div class="status success">✅ Measurement completed: <span class="metric">${result.duration.toFixed(2)}ms</span></div>`;
+            }
+            
+            // Test metric recording
+            BrutalPerformance.recordMetric('test-metric', 42, { test: true });
+            perfResults.innerHTML += '<div class="status success">✅ Metric recorded</div>';
+            
+            // Test utils
+            const sessionResult = await PerformanceUtils.measureAsync(async () => {
+                await new Promise(resolve => setTimeout(resolve, 50));
+                return 'done';
+            }, 'async-test');
+            
+            perfResults.innerHTML += '<div class="status success">✅ Async measurement completed</div>';
+            
+            // Test session
+            const session = PerformanceUtils.createSession('test-session');
+            session.measure('step1', () => {
+                // Simulate work
+                const arr = new Array(1000).fill(0).map((_, i) => i * 2);
+            });
+            await session.measureAsync('step2', async () => {
+                await new Promise(resolve => setTimeout(resolve, 25));
+            });
+            const sessionSummary = session.finish();
+            
+            perfResults.innerHTML += `<div class="status success">✅ Session completed: <span class="metric">${sessionSummary.totalDuration.toFixed(2)}ms</span> with ${sessionSummary.measurements.length} measurements</div>`;
+        };
+        
+        // Collector test
+        window.testCollectors = function() {
+            collectorResults.innerHTML = '<h3>Testing Collectors...</h3>';
+            
+            // Get current metrics
+            const metrics = BrutalPerformance.getMetrics();
+            
+            collectorResults.innerHTML += '<h4>Current Metrics:</h4>';
+            for (const [name, measurements] of metrics) {
+                if (measurements.length > 0) {
+                    const last = measurements[measurements.length - 1];
+                    collectorResults.innerHTML += `<div><span class="metric">${name}: ${typeof last.value === 'number' ? last.value.toFixed(2) : last.value}</span></div>`;
+                }
+            }
+            
+            // Test thresholds
+            BrutalPerformance.setThreshold('test-threshold', 50);
+            BrutalPerformance.recordMetric('test-threshold', 100);
+            
+            collectorResults.innerHTML += '<div class="status warning">⚠️ Threshold test: Should emit threshold exceeded event</div>';
+        };
+        
+        // Show summary
+        window.showSummary = function() {
+            const summary = BrutalPerformance.getSummary();
+            document.getElementById('summary').innerHTML = `<h3>Performance Summary:</h3><pre>${JSON.stringify(summary, null, 2)}</pre>`;
+        };
+        
+        // Clear metrics
+        window.clearMetrics = function() {
+            BrutalPerformance.clearMetrics();
+            document.getElementById('summary').innerHTML = '<div class="status success">✅ Metrics cleared</div>';
+        };
+        
+        // Line count verification
+        async function verifyLineCounts() {
+            const files = [
+                { path: '../core/performance/Monitor.js', maxLines: 200 },
+                { path: '../core/performance/collectors/ComponentCollector.js', maxLines: 150 },
+                { path: '../core/performance/collectors/MemoryCollector.js', maxLines: 150 },
+                { path: '../core/performance/collectors/DOMCollector.js', maxLines: 150 },
+                { path: '../core/performance/collectors/NetworkCollector.js', maxLines: 150 },
+                { path: '../core/performance/observers/PerformanceObserver.js', maxLines: 200 },
+                { path: '../core/performance/utils/PerformanceUtils.js', maxLines: 150 }
+            ];
+            
+            lineCount.innerHTML = '<h3>Module Line Counts:</h3>';
+            
+            for (const file of files) {
+                try {
+                    const response = await fetch(file.path);
+                    const text = await response.text();
+                    const lines = text.split('\n').length;
+                    
+                    if (lines <= file.maxLines) {
+                        lineCount.innerHTML += `<div class="status success">✅ ${file.path.split('/').pop()}: ${lines} lines (max: ${file.maxLines})</div>`;
+                    } else {
+                        lineCount.innerHTML += `<div class="status error">❌ ${file.path.split('/').pop()}: ${lines} lines (exceeds max: ${file.maxLines})</div>`;
+                    }
+                } catch (error) {
+                    lineCount.innerHTML += `<div class="status warning">⚠️ Could not verify ${file.path.split('/').pop()}</div>`;
+                }
+            }
+        }
+        
+        // Listen for performance events
+        window.addEventListener('brutal:performance:threshold-exceeded', (event) => {
+            console.warn('Threshold exceeded:', event.detail);
+        });
+        
+        // Run tests on load
+        testModuleStructure();
+        verifyLineCounts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Day 3 Features Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .status {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .status.success {
+            background: #1a4d1a;
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+        
+        .status.error {
+            background: #4d1a1a;
+            color: #f87171;
+            border: 1px solid #f87171;
+        }
+        
+        .status.info {
+            background: #1a1a4d;
+            color: #60a5fa;
+            border: 1px solid #60a5fa;
+        }
+        
+        .feature {
+            display: inline-block;
+            background: #262626;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            font-family: monospace;
+        }
+        
+        pre {
+            background: #262626;
+            padding: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 4px;
+        }
+        
+        button:hover {
+            background: #2563eb;
+        }
+        
+        /* Component demos */
+        .demo-container {
+            background: #262626;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        brutal-button {
+            margin: 5px;
+        }
+        
+        brutal-input {
+            margin: 10px 0;
+            display: block;
+            max-width: 300px;
+        }
+        
+        lazy-boundary {
+            border: 2px dashed #444;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            min-height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 BRUTAL V4 - Day 3 Features Test</h1>
+    <p>Testing Constructable StyleSheets, ElementInternals, Lazy Loading, and Feature Detection</p>
+    
+    <div class="test-section">
+        <h2>1. Constructable StyleSheets</h2>
+        <button onclick="testConstructableStyleSheets()">Test StyleSheets</button>
+        <div id="stylesheets-results"></div>
+        
+        <div class="demo-container">
+            <h3>Components with Constructable StyleSheets:</h3>
+            <brutal-button variant="primary">Primary Button</brutal-button>
+            <brutal-button variant="secondary">Secondary Button</brutal-button>
+            <brutal-button variant="danger" loading>Loading...</brutal-button>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. ElementInternals & Form Association</h2>
+        <button onclick="testElementInternals()">Test Form Features</button>
+        <div id="internals-results"></div>
+        
+        <div class="demo-container">
+            <h3>Form with Custom Elements:</h3>
+            <form id="test-form">
+                <brutal-input 
+                    name="username" 
+                    label="Username" 
+                    required 
+                    placeholder="Enter username">
+                </brutal-input>
+                <brutal-input 
+                    name="email" 
+                    type="email" 
+                    label="Email" 
+                    required 
+                    placeholder="user@example.com">
+                </brutal-input>
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+            </form>
+            <div id="form-output"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Lazy Loading Boundaries</h2>
+        <button onclick="testLazyLoading()">Test Lazy Loading</button>
+        <div id="lazy-results"></div>
+        
+        <div class="demo-container">
+            <h3>Scroll down to load components:</h3>
+            <lazy-boundary 
+                component="brutal-modal" 
+                placeholder="Modal will load when visible..."
+                threshold="0.5">
+                <brutal-modal title="Lazy Loaded Modal">
+                    <p>This modal was loaded on demand!</p>
+                </brutal-modal>
+            </lazy-boundary>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Feature Detection</h2>
+        <button onclick="testFeatureDetection()">Run Feature Detection</button>
+        <button onclick="testSharedArrayBuffer()">Test SharedArrayBuffer</button>
+        <div id="feature-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Async Component Lifecycle</h2>
+        <button onclick="testAsyncComponent()">Test Async Component</button>
+        <div id="async-results"></div>
+        
+        <div class="demo-container" id="async-demo">
+            <!-- Async component will be added here -->
+        </div>
+    </div>
+    
+    <script type="module">
+        import { BrutalComponent } from '../core/foundation/Component.js';
+        import { AsyncComponent, AsyncDataComponent } from '../core/foundation/AsyncComponent.js';
+        import { LazyBoundary, LazyLoader } from '../core/foundation/LazyBoundary.js';
+        import { FeatureDetection, checkSharedArrayBuffer } from '../core/utils/FeatureDetection.js';
+        import '../components/Button.js';
+        import '../components/Input.js';
+        import '../components/Modal.js';
+        
+        // Test Constructable StyleSheets
+        window.testConstructableStyleSheets = function() {
+            const results = document.getElementById('stylesheets-results');
+            results.innerHTML = '<h3>Testing Constructable StyleSheets...</h3>';
+            
+            // Check support
+            const supported = FeatureDetection.isSupported('constructableStyleSheets');
+            results.innerHTML += `<div class="status ${supported ? 'success' : 'error'}">
+                ${supported ? '✅' : '❌'} Constructable StyleSheets: ${supported ? 'Supported' : 'Not supported'}
+            </div>`;
+            
+            // Check adopted stylesheets
+            const adoptedSupported = FeatureDetection.isSupported('adoptedStyleSheets');
+            results.innerHTML += `<div class="status ${adoptedSupported ? 'success' : 'error'}">
+                ${adoptedSupported ? '✅' : '❌'} Adopted StyleSheets: ${adoptedSupported ? 'Supported' : 'Not supported'}
+            </div>`;
+            
+            // Test creating a stylesheet
+            if (supported) {
+                try {
+                    const sheet = new CSSStyleSheet();
+                    sheet.replaceSync('.test { color: red; }');
+                    results.innerHTML += '<div class="status success">✅ Created and populated StyleSheet</div>';
+                    
+                    // Check if components are using it
+                    const button = document.querySelector('brutal-button');
+                    if (button && button.shadowRoot) {
+                        const sheets = button.getStyleSheets();
+                        results.innerHTML += `<div class="status info">📋 Button has ${sheets.length} adopted stylesheets</div>`;
+                    }
+                } catch (error) {
+                    results.innerHTML += `<div class="status error">❌ Error: ${error.message}</div>`;
+                }
+            }
+        };
+        
+        // Test ElementInternals
+        window.testElementInternals = function() {
+            const results = document.getElementById('internals-results');
+            results.innerHTML = '<h3>Testing ElementInternals...</h3>';
+            
+            // Check support
+            const supported = FeatureDetection.isSupported('elementInternals');
+            results.innerHTML += `<div class="status ${supported ? 'success' : 'error'}">
+                ${supported ? '✅' : '❌'} ElementInternals: ${supported ? 'Supported' : 'Not supported'}
+            </div>`;
+            
+            // Check form association
+            const formSupported = FeatureDetection.isSupported('formAssociated');
+            results.innerHTML += `<div class="status ${formSupported ? 'success' : 'error'}">
+                ${formSupported ? '✅' : '❌'} Form Association: ${formSupported ? 'Supported' : 'Not supported'}
+            </div>`;
+            
+            // Test form
+            const form = document.getElementById('test-form');
+            const formOutput = document.getElementById('form-output');
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                formOutput.innerHTML = `<h4>Form Data:</h4><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                
+                results.innerHTML += '<div class="status success">✅ Form submission captured custom element values</div>';
+            });
+            
+            // Check if inputs have internals
+            const input = document.querySelector('brutal-input');
+            if (input && input.internals) {
+                results.innerHTML += '<div class="status success">✅ Input has ElementInternals</div>';
+                
+                // Test validity
+                input.setValidity({ customError: true }, 'Test error');
+                const valid = input.checkValidity();
+                results.innerHTML += `<div class="status info">📋 Validity API working: ${!valid}</div>`;
+                
+                // Clear error
+                input.setValidity({});
+            }
+        };
+        
+        // Test Lazy Loading
+        window.testLazyLoading = function() {
+            const results = document.getElementById('lazy-results');
+            results.innerHTML = '<h3>Testing Lazy Loading...</h3>';
+            
+            // Check IntersectionObserver support
+            const ioSupported = FeatureDetection.isSupported('intersectionObserver');
+            results.innerHTML += `<div class="status ${ioSupported ? 'success' : 'error'}">
+                ${ioSupported ? '✅' : '❌'} IntersectionObserver: ${ioSupported ? 'Supported' : 'Not supported'}
+            </div>`;
+            
+            // Monitor lazy boundary
+            const boundary = document.querySelector('lazy-boundary');
+            if (boundary) {
+                boundary.addEventListener('brutal:lazy:loaded', (e) => {
+                    results.innerHTML += `<div class="status success">✅ Component loaded: ${e.detail.component}</div>`;
+                });
+                
+                boundary.addEventListener('brutal:lazy:error', (e) => {
+                    results.innerHTML += `<div class="status error">❌ Load error: ${e.detail.error}</div>`;
+                });
+                
+                results.innerHTML += '<div class="status info">📋 Lazy boundary registered, scroll to trigger</div>';
+                
+                // Test manual load
+                setTimeout(() => {
+                    boundary.forceLoad();
+                    results.innerHTML += '<div class="status info">📋 Force loaded after 2 seconds</div>';
+                }, 2000);
+            }
+            
+            // Test lazy loader utilities
+            results.innerHTML += '<h4>Lazy Loader Utilities:</h4>';
+            
+            // Test preload
+            LazyLoader.preload('../components/Modal.js');
+            results.innerHTML += '<div class="status success">✅ Preloaded Modal.js</div>';
+            
+            // Test prefetch
+            LazyLoader.prefetch('../components/DataGrid.js');
+            results.innerHTML += '<div class="status success">✅ Prefetched DataGrid.js</div>';
+        };
+        
+        // Test Feature Detection
+        window.testFeatureDetection = function() {
+            const results = document.getElementById('feature-results');
+            results.innerHTML = '<h3>Feature Detection Results:</h3>';
+            
+            const features = FeatureDetection.getAllFeatures();
+            const browserInfo = FeatureDetection.getBrowserInfo();
+            
+            // Group features
+            const groups = {
+                'Core Web Components': ['customElements', 'shadowDOM', 'template', 'proxy'],
+                'Style Features': ['constructableStyleSheets', 'adoptedStyleSheets'],
+                'Form Features': ['elementInternals', 'formAssociated'],
+                'Worker Features': ['webWorkers', 'sharedWorkers', 'serviceWorker', 'moduleWorkers'],
+                'Advanced Features': ['sharedArrayBuffer', 'atomics', 'bigInt', 'weakRefs'],
+                'Graphics': ['webGL', 'webGL2', 'webGPU', 'offscreenCanvas'],
+                'Observers': ['intersectionObserver', 'resizeObserver', 'mutationObserver', 'performanceObserver'],
+                'Module Features': ['esModules', 'dynamicImport', 'importMaps', 'asyncIterators'],
+                'Other': ['navigation', 'requestIdleCallback', 'webAssembly', 'webAssemblyStreaming']
+            };
+            
+            for (const [group, groupFeatures] of Object.entries(groups)) {
+                results.innerHTML += `<h4>${group}:</h4>`;
+                for (const feature of groupFeatures) {
+                    if (feature in features) {
+                        const supported = features[feature];
+                        results.innerHTML += `<div class="feature">${feature}: ${supported ? '✅' : '❌'}</div>`;
+                    }
+                }
+            }
+            
+            // Browser info
+            results.innerHTML += '<h4>Browser Info:</h4>';
+            results.innerHTML += `<pre>${JSON.stringify(browserInfo, null, 2)}</pre>`;
+            
+            // Polyfill recommendations
+            const polyfills = FeatureDetection.getPolyfillRecommendations();
+            if (polyfills.length > 0) {
+                results.innerHTML += '<h4>Recommended Polyfills:</h4>';
+                polyfills.forEach(p => {
+                    results.innerHTML += `<div class="status info">📦 ${p.feature}: ${p.polyfill}</div>`;
+                });
+            }
+        };
+        
+        // Test SharedArrayBuffer specifically
+        window.testSharedArrayBuffer = function() {
+            const results = document.getElementById('feature-results');
+            results.innerHTML = '<h3>SharedArrayBuffer Test:</h3>';
+            
+            const sabStatus = checkSharedArrayBuffer();
+            
+            results.innerHTML += `<div class="status ${sabStatus.supported ? 'success' : 'error'}">
+                ${sabStatus.supported ? '✅' : '❌'} SharedArrayBuffer: ${sabStatus.supported ? 'Available' : 'Not available'}
+            </div>`;
+            
+            if (sabStatus.reason) {
+                results.innerHTML += `<div class="status info">📋 Reason: ${sabStatus.reason}</div>`;
+            }
+            
+            if (sabStatus.crossOriginIsolated !== undefined) {
+                results.innerHTML += `<div class="status ${sabStatus.crossOriginIsolated ? 'success' : 'info'}">
+                    ${sabStatus.crossOriginIsolated ? '✅' : '⚠️'} Cross-Origin Isolated: ${sabStatus.crossOriginIsolated}
+                </div>`;
+            }
+            
+            if (!sabStatus.crossOriginIsolated) {
+                results.innerHTML += `<div class="status info">
+                    ℹ️ To enable SharedArrayBuffer, add these headers:<br>
+                    Cross-Origin-Embedder-Policy: require-corp<br>
+                    Cross-Origin-Opener-Policy: same-origin
+                </div>`;
+            }
+        };
+        
+        // Test Async Component
+        window.testAsyncComponent = async function() {
+            const results = document.getElementById('async-results');
+            const demo = document.getElementById('async-demo');
+            
+            results.innerHTML = '<h3>Testing Async Component...</h3>';
+            
+            // Create test async component
+            class TestAsyncComponent extends AsyncDataComponent {
+                async asyncInitialize() {
+                    results.innerHTML += '<div class="status info">📋 Starting async initialization...</div>';
+                    
+                    // Simulate async work
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    // Simulate data fetch
+                    this._data = {
+                        users: [
+                            { id: 1, name: 'John Doe' },
+                            { id: 2, name: 'Jane Smith' }
+                        ],
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    results.innerHTML += '<div class="status success">✅ Async initialization complete</div>';
+                }
+                
+                createTemplate() {
+                    const state = this._state.getAll();
+                    
+                    this.setStyles(`
+                        :host {
+                            display: block;
+                            padding: 20px;
+                            background: #1a1a1a;
+                            border-radius: 8px;
+                        }
+                        .loading {
+                            color: #60a5fa;
+                        }
+                        .ready {
+                            color: #4ade80;
+                        }
+                        .user {
+                            padding: 5px;
+                            margin: 5px 0;
+                            background: #262626;
+                            border-radius: 4px;
+                        }
+                    `);
+                    
+                    this._template = state.asyncLoading ? 
+                        `<div class="loading">⏳ Loading async data...</div>` :
+                        state.asyncReady && this._data ? 
+                        `<div class="ready">
+                            <h4>Async Data Loaded:</h4>
+                            ${this._data.users.map(u => `<div class="user">User ${u.id}: ${u.name}</div>`).join('')}
+                            <p>Loaded at: ${this._data.timestamp}</p>
+                        </div>` :
+                        `<div>Ready to load...</div>`;
+                }
+            }
+            
+            // Register and create
+            if (!customElements.get('test-async-component')) {
+                customElements.define('test-async-component', TestAsyncComponent);
+            }
+            
+            // Add to demo
+            demo.innerHTML = '<test-async-component></test-async-component>';
+            
+            // Monitor events
+            const component = demo.querySelector('test-async-component');
+            component.addEventListener('brutal:async:ready', () => {
+                results.innerHTML += '<div class="status success">✅ Received async:ready event</div>';
+                results.innerHTML += `<pre>Async State: ${JSON.stringify(component.asyncState, null, 2)}</pre>`;
+            });
+            
+            component.addEventListener('brutal:async:error', (e) => {
+                results.innerHTML += `<div class="status error">❌ Async error: ${e.detail.error}</div>`;
+            });
+        };
+        
+        // Setup form
+        document.getElementById('test-form').addEventListener('reset', () => {
+            document.getElementById('form-output').innerHTML = '';
+        });
+    </script>
+</body>
+</html>

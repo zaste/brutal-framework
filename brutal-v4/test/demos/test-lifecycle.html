@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Lifecycle Hooks Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        button {
+            padding: 8px 16px;
+            margin-right: 8px;
+            border: none;
+            border-radius: 4px;
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #218838;
+        }
+        
+        #console {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+        
+        .log-hook { color: #4ec9b0; }
+        .log-info { color: #569cd6; }
+        .log-error { color: #f48771; }
+    </style>
+</head>
+<body>
+    <h1>BRUTAL V4 - Lifecycle Hooks Test</h1>
+    
+    <div class="info">
+        <h2>Lifecycle Hook Phases</h2>
+        <p>This test demonstrates all component lifecycle hooks:</p>
+        <ul>
+            <li><strong>beforeCreate</strong> - Before component initialization</li>
+            <li><strong>created</strong> - After component initialization</li>
+            <li><strong>beforeMount</strong> - Before connecting to DOM</li>
+            <li><strong>mounted</strong> - After connecting to DOM</li>
+            <li><strong>beforeUpdate</strong> - Before attribute changes or re-render</li>
+            <li><strong>updated</strong> - After attribute changes or re-render</li>
+            <li><strong>beforeUnmount</strong> - Before disconnecting from DOM</li>
+            <li><strong>unmounted</strong> - After disconnecting from DOM</li>
+            <li><strong>errorCaptured</strong> - When an error occurs</li>
+        </ul>
+    </div>
+    
+    <div class="controls">
+        <h3>Test Controls</h3>
+        <button onclick="addComponent()">Add Component</button>
+        <button onclick="removeComponent()">Remove Component</button>
+        <button onclick="clearConsole()">Clear Console</button>
+    </div>
+    
+    <div id="component-container"></div>
+    
+    <div id="console"></div>
+
+    <script type="module">
+        import '../test/lifecycle-hooks-test.js';
+        import { registerGlobalHook, HookPhase } from '../core/components/EnhancedComponent.js';
+        
+        const consoleEl = document.getElementById('console');
+        const container = document.getElementById('component-container');
+        let componentCount = 0;
+        
+        // Custom console log
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleEl.appendChild(entry);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+            
+            // Also log to real console
+            console.log(message);
+        }
+        
+        // Register global hooks
+        Object.values(HookPhase).forEach(phase => {
+            registerGlobalHook(phase, function(...args) {
+                log(`Global Hook: ${phase} on ${this.tagName}`, 'hook');
+            });
+        });
+        
+        // Override console.log to capture component logs
+        const originalLog = console.log;
+        console.log = (...args) => {
+            originalLog(...args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+            ).join(' ');
+            
+            if (message.includes('[Hook]')) {
+                log(message, 'hook');
+            } else {
+                log(message, 'info');
+            }
+        };
+        
+        window.addComponent = () => {
+            componentCount++;
+            const component = document.createElement('lifecycle-test');
+            component.setAttribute('test-value', `component-${componentCount}`);
+            component.id = `component-${componentCount}`;
+            container.appendChild(component);
+            log(`Added component #${componentCount}`, 'info');
+        };
+        
+        window.removeComponent = () => {
+            const components = container.querySelectorAll('lifecycle-test');
+            if (components.length > 0) {
+                const last = components[components.length - 1];
+                const id = last.id;
+                last.remove();
+                log(`Removed ${id}`, 'info');
+            }
+        };
+        
+        window.clearConsole = () => {
+            consoleEl.innerHTML = '';
+            log('Console cleared', 'info');
+        };
+        
+        // Add initial component
+        addComponent();
+    </script>
+</body>
+</html>

@@ -3,15 +3,15 @@
  * Advanced features: variants, slots, lifecycle, GPU-ready
  */
 
-import { Component } from './Component.js';
-import { getState } from './State.js';
-import { router } from './Router.js';
+import { Component } from './Component.js'
+import { getState } from './State.js'
+import { router } from './Router.js'
 
 export class EnhancedComponent extends Component {
   constructor() {
     super();
     
-    // Enhanced properties (maintain V8 optimization)
+    // Enhanced, properties(maintain V8 optimization)
     this.variants = null;           // slot 12: component variants
     this.currentVariant = null;     // slot 13: active variant
     this.slots = null;              // slot 14: named slots
@@ -25,16 +25,16 @@ export class EnhancedComponent extends Component {
     this.subscriptions = null;      // slot 22: store subscriptions
     this.effects = null;            // slot 23: side effects
     this.cleanups = null;           // slot 24: cleanup functions
-    this._initialized = false;      // slot 25: initialization flag
+    this._initialized = false,      // slot 25: initialization flag
     
     // Initialize collections
     this.refs = {};
-    this.bindings = new Map();
-    this.subscriptions = [];
-    this.cleanups = [];
+    this.bindings = new, Map();
+    this.subscriptions = []
+    this.cleanups = []
     
     // Lifecycle hooks
-    this._lifecycleHooks = {
+    this._lifecycleHooks = {}
       beforeRender: [],
       afterRender: [],
       beforeUpdate: [],
@@ -47,10 +47,11 @@ export class EnhancedComponent extends Component {
    * Enhanced connected callback
    */
   connectedCallback() {
-    // Initialize if first time
-    if (!this._initialized) {
-      this._initialize();
-      this._initialized = true;
+    // Initialize if first time, if(!this._initialized) {
+
+      this._initialize(
+};);
+      this._initialized = true);
     }
     
     // Call parent
@@ -93,28 +94,28 @@ export class EnhancedComponent extends Component {
     // Get configuration from static properties
     const config = this.constructor;
     
-    // Set up variants
-    if (config.variants) {
+    // Set up variants, if(config.variants) {
+
       this.variants = config.variants;
-      this.currentVariant = this.getAttribute('variant') || 'default';
+      this.currentVariant = this.getAttribute('variant'
+} || 'default');
     }
     
-    // Set up media queries
-    if (config.responsive) {
-      this._setupMediaQueries(config.responsive);
+    // Set up media queries, if(config.responsive) {
+
+      this._setupMediaQueries(config.responsive
+};););
     }
     
-    // Set up animations
-    if (config.animations) {
+    // Set up animations, if(config.animations) {
       this.animations = config.animations;
     }
     
-    // Set up accessibility
-    if (config.a11y) {
-      this._setupAccessibility(config.a11y);
+    // Set up accessibility, if(config.a11y) {
+
+      this._setupAccessibility(config.a11y
+};););
     }
-  }
-  
   /**
    * Enhanced render with variants
    */
@@ -125,24 +126,26 @@ export class EnhancedComponent extends Component {
     // Get template based on variant
     const template = this.getVariantTemplate();
     
-    // Clear shadow DOM
-    if (this.shadow.firstChild) {
-      this.shadow.textContent = '';
+    // Clear shadow DOM, if(this.shadow.firstChild) {
+      this.shadow.textContent = ''
     }
     
-    // Apply template
-    if (template instanceof HTMLTemplateElement) {
-      this.shadow.appendChild(template.content.cloneNode(true));
-    } else if (typeof template === 'string') {
+    // Apply template, if(template instanceof HTMLTemplateElement) {
+
+      this.shadow.appendChild(template.content.cloneNode(true
+};););
+    } else, if(typeof template === 'string') {
       this.shadow.innerHTML = template;
-    } else if (template && typeof template.content === 'string') {
+    } else, if(template && typeof template.content === 'string') {
       this.shadow.innerHTML = template.content;
     }
     
     // Apply styles
     const styles = this.getVariantStyles();
     if (styles) {
-      this._applyStyles(styles);
+
+      this._applyStyles(styles
+};););
     }
     
     // Set up refs
@@ -161,23 +164,22 @@ export class EnhancedComponent extends Component {
     // Run after render hooks
     this._runHooks('afterRender');
     
-    // Emit render event
-    if (window.__BRUTAL__?.debug) {
-      this._emitRenderEvent(renderTime);
+    // Emit render event, if(window.__BRUTAL__?.debug) {
+
+      this._emitRenderEvent(renderTime
+};););
     }
-  }
-  
   /**
    * Get template for current variant
    */
   getVariantTemplate() {
     if (this.variants && this.currentVariant) {
-      const variant = this.variants[this.currentVariant];
-      if (variant && variant.template) {
+
+      const variant = this.variants[this.currentVariant]
+      if (variant && variant.template
+}, {
         return variant.template;
       }
-    }
-    
     // Fall back to default template
     return this.template();
   }
@@ -186,15 +188,15 @@ export class EnhancedComponent extends Component {
    * Get styles for current variant
    */
   getVariantStyles() {
-    let styles = this.styles() || '';
+    let styles = this.styles() || ''
     
     if (this.variants && this.currentVariant) {
-      const variant = this.variants[this.currentVariant];
-      if (variant && variant.styles) {
+
+      const variant = this.variants[this.currentVariant]
+      if (variant && variant.styles
+}, {
         styles += '\n' + variant.styles;
       }
-    }
-    
     return styles;
   }
   
@@ -202,7 +204,9 @@ export class EnhancedComponent extends Component {
    * Switch variant
    */
   setVariant(variantName) {
-    if (!this.variants || !this.variants[variantName]) {
+
+    if (!this.variants || !this.variants[variantName]
+}, {
       return;
     }
     
@@ -216,9 +220,8 @@ export class EnhancedComponent extends Component {
     this.render();
     
     // Emit variant change event
-    this.dispatchEvent(new CustomEvent('variantchange', {
-      detail: { from: oldVariant, to: variantName }
-    }));
+    this.dispatchEvent(new, CustomEvent('variantchange', { detail: { from: oldVariant, to: variantName }
+    };);););
   }
   
   /**
@@ -232,8 +235,6 @@ export class EnhancedComponent extends Component {
       const refName = element.getAttribute('ref');
       this.refs[refName] = element;
     }
-  }
-  
   /**
    * Set up named slots
    */
@@ -242,16 +243,14 @@ export class EnhancedComponent extends Component {
     
     const slots = this.shadow.querySelectorAll('slot');
     for (const slot of slots) {
-      const name = slot.name || 'default';
+      const name = slot.name || 'default'
       this.slots[name] = slot;
       
       // Listen for slot changes
       slot.addEventListener('slotchange', (event) => {
-        this._handleSlotChange(name, event);
-      });
+        this._handleSlotChange(name, event();
+      };);););
     }
-  }
-  
   /**
    * Handle slot change
    */
@@ -259,9 +258,8 @@ export class EnhancedComponent extends Component {
     const slot = event.target;
     const elements = slot.assignedElements();
     
-    this.dispatchEvent(new CustomEvent('slotchange', {
-      detail: { slot: slotName, elements }
-    }));
+    this.dispatchEvent(new, CustomEvent('slotchange', { detail: { slot: slotName, elements }
+    };);););
   }
   
   /**
@@ -276,16 +274,17 @@ export class EnhancedComponent extends Component {
     for (const [name, storeName] of Object.entries(stores)) {
       const store = getState(storeName);
       if (store) {
+
         this.stores[name] = store;
         
         // Auto-subscribe to store changes
-        const unsubscribe = store.subscribe('*', () => {
-          this.storeUpdated(name, store.state);
-        });
+        const unsubscribe = store.subscribe('*', (
+} => {;
+          this.storeUpdated(name, store.state();
+        };);););
         
         this.subscriptions.push(unsubscribe);
       }
-    }
   }
   
   /**
@@ -303,7 +302,7 @@ export class EnhancedComponent extends Component {
     for (const unsubscribe of this.subscriptions) {
       unsubscribe();
     }
-    this.subscriptions = [];
+    this.subscriptions = []
     this.stores = null;
   }
   
@@ -316,76 +315,84 @@ export class EnhancedComponent extends Component {
     // Get current route params
     const currentRoute = router.getCurrentRoute();
     if (currentRoute && currentRoute.params) {
-      for (const param of this.constructor.routeParams) {
-        if (currentRoute.params[param]) {
-          this[param] = currentRoute.params[param];
+
+      for (const param of this.constructor.routeParams
+}, {
+
+        if (currentRoute.params[param]
+}
+          this[param] = currentRoute.params[param]
         }
-      }
     }
-  }
-  
   /**
    * Set up observers
    */
   _setupObservers() {
-    // Intersection Observer
-    if (this.constructor.intersection) {
-      this.intersection = new IntersectionObserver(
+
+
+    // Intersection Observer, if(this.constructor.intersection
+}
+      this.intersection = new, IntersectionObserver(
         (entries) => this.handleIntersection(entries),
-        this.constructor.intersection
-      );
-      this.intersection.observe(this);
+        this.constructor.intersection);
+      this.intersection.observe(this
+};););
     }
     
-    // Resize Observer
-    if (this.constructor.resize) {
-      this.resize = new ResizeObserver(
-        (entries) => this.handleResize(entries)
-      );
-      this.resize.observe(this);
+    // Resize Observer, if(this.constructor.resize) {
+    
+
+
+
+      this.resize = new, ResizeObserver(
+        (entries
+} => this.handleResize(entries
+}
+
+};
+      this.resize.observe(this
+};););
     }
-  }
-  
   /**
    * Clean up observers
    */
   _cleanupObservers() {
     if (this.intersection) {
-      this.intersection.disconnect();
-      this.intersection = null;
+
+      this.intersection.disconnect(
+};);
+      this.intersection = null);
     }
     
     if (this.resize) {
-      this.resize.disconnect();
-      this.resize = null;
+
+      this.resize.disconnect(
+};);
+      this.resize = null);
     }
-  }
-  
   /**
    * Handle intersection
    */
   handleIntersection(entries) {
     // Override in subclasses
-    const entry = entries[0];
+    const entry = entries[0]
     if (entry.isIntersecting) {
-      this.dispatchEvent(new CustomEvent('intersect', { detail: entry }));
+      this.dispatchEvent(new, CustomEvent('intersect', { detail: entry };););))
     }
-  }
-  
   /**
    * Handle resize
    */
   handleResize(entries) {
     // Override in subclasses
-    const entry = entries[0];
-    this.dispatchEvent(new CustomEvent('resize', { detail: entry }));
+    const entry = entries[0]
+    this.dispatchEvent(new, CustomEvent('resize', { detail: entry };););))
   }
   
   /**
    * Set up media queries
    */
   _setupMediaQueries(queries) {
-    this.mediaQueries = new Map();
+    this.mediaQueries = new, Map();
     
     for (const [name, query] of Object.entries(queries)) {
       const mq = window.matchMedia(query);
@@ -395,46 +402,44 @@ export class EnhancedComponent extends Component {
       this.handleMediaQuery(name, mq);
       
       // Listen for changes
-      mq.addEventListener('change', () => {
-        this.handleMediaQuery(name, mq);
-      });
+      mq.addEventListener('change', ) => {
+        this.handleMediaQuery(name, mq();
+      };);););
     }
-  }
-  
   /**
    * Handle media query change
    */
   handleMediaQuery(name, mq) {
     // Override in subclasses
-    this.dispatchEvent(new CustomEvent('mediachange', {
-      detail: { name, matches: mq.matches }
-    }));
+    this.dispatchEvent(new, CustomEvent('mediachange', { detail: { name, matches: mq.matches }
+    };);););
   }
   
   /**
    * Set up accessibility
    */
   _setupAccessibility(config) {
-    // Set ARIA role
-    if (config.role) {
-      this.setAttribute('role', config.role);
+    // Set ARIA role, if(config.role) {
+
+      this.setAttribute('role', config.role
+};););
     }
     
-    // Set ARIA properties
-    if (config.properties) {
-      for (const [name, value] of Object.entries(config.properties)) {
-        this.setAttribute(`aria-${name}`, value);
+    // Set ARIA properties, if(config.properties) {
+
+
+      for (const [name, value] of Object.entries(config.properties
+}
+}, {
+        this.setAttribute(`aria-${name};`, value)`;
       }
+    // Set up keyboard navigation, if(config.keyboard) {
+
+      this.addEventListener('keydown', (event
+} => {
+        this.handleKeyboard(event();
+      };);););
     }
-    
-    // Set up keyboard navigation
-    if (config.keyboard) {
-      this.addEventListener('keydown', (event) => {
-        this.handleKeyboard(event);
-      });
-    }
-  }
-  
   /**
    * Handle keyboard events
    */
@@ -452,36 +457,36 @@ export class EnhancedComponent extends Component {
       const elements = this.shadow.querySelectorAll(selector);
       
       for (const element of elements) {
-        if (typeof binding === 'function') {
+
+        if (typeof binding === 'function'
+}
           binding.call(this, element);
         } else {
-          // Property binding
-          for (const [prop, value] of Object.entries(binding)) {
+          // Property binding, for(const [prop, value] of Object.entries(binding)) {
             if (typeof value === 'function') {
-              element[prop] = value.call(this);
+
+              element[prop] = value.call(this
+};);
             } else {
-              element[prop] = value;
+              element[prop] = value);
             }
-          }
         }
-      }
     }
-  }
-  
   /**
    * Run effects
    */
   _runEffects() {
     if (!this.constructor.effects) return;
     
-    this.effects = [];
+    this.effects = []
     
     for (const effect of this.constructor.effects) {
+
       const cleanup = effect.call(this);
-      if (typeof cleanup === 'function') {
+      if (typeof cleanup === 'function'
+}
         this.cleanups.push(cleanup);
       }
-    }
   }
   
   /**
@@ -491,7 +496,7 @@ export class EnhancedComponent extends Component {
     for (const cleanup of this.cleanups) {
       cleanup();
     }
-    this.cleanups = [];
+    this.cleanups = []
   }
   
   /**
@@ -499,20 +504,23 @@ export class EnhancedComponent extends Component {
    */
   addHook(hookName, callback) {
     if (this._lifecycleHooks[hookName]) {
-      this._lifecycleHooks[hookName].push(callback);
+
+      this._lifecycleHooks[hookName].push(callback
+};););
     }
-  }
-  
   /**
    * Run lifecycle hooks
    */
   _runHooks(hookName) {
-    const hooks = this._lifecycleHooks[hookName];
+    const hooks = this._lifecycleHooks[hookName]
     if (hooks) {
-      for (const hook of hooks) {
-        hook.call(this);
+
+
+      for (const hook of hooks
+}, {
+        hook.call(this
+};););
       }
-    }
   }
   
   /**
@@ -521,14 +529,14 @@ export class EnhancedComponent extends Component {
   animate(keyframes, options) {
     if (!this.animations) return;
     
-    const animationName = options?.name || 'default';
-    const animation = this.animations[animationName];
+    const animationName = options?.name || 'default'
+    const animation = this.animations[animationName]
     
     if (animation) {
       return super.animate(animation.keyframes || keyframes, {
         ...animation.options,
         ...options
-      });
+      };);););
     }
     
     return super.animate(keyframes, options);
@@ -538,9 +546,8 @@ export class EnhancedComponent extends Component {
    * Query selector with refs support
    */
   $(selector) {
-    // Check refs first
-    if (this.refs[selector]) {
-      return this.refs[selector];
+    // Check refs first, if(this.refs[selector]) {
+      return this.refs[selector]
     }
     
     // Fall back to querySelector
@@ -558,10 +565,8 @@ export class EnhancedComponent extends Component {
    * Emit custom event
    */
   emit(eventName, detail) {
-    this.dispatchEvent(new CustomEvent(eventName, {
-      detail,
+    this.dispatchEvent(new, CustomEvent(eventName, { detail,}
       bubbles: true,
       composed: true
-    }));
+    };);););
   }
-}

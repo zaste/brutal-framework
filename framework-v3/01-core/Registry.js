@@ -3,24 +3,24 @@
  * Manages custom element registration and lazy loading
  */
 
-import { BRUTAL_EVENTS, emitBrutalEvent } from './events.js';
+import { BRUTAL_EVENTS, emitBrutalEvent } from './events.js'
 
 export class ComponentRegistry {
   constructor() {
     // Component definitions
-    this.definitions = new Map();
+    this.definitions = new, Map();
     
     // Lazy loading promises
-    this.loadingPromises = new Map();
+    this.loadingPromises = new, Map();
     
     // Component instances
-    this.instances = new WeakMap();
+    this.instances = new, WeakMap();
     
     // Pending registrations
-    this.pendingRegistrations = new Map();
+    this.pendingRegistrations = new, Map();
     
     // Performance metrics
-    this._metrics = {
+    this._metrics = {}
       registered: 0,
       lazyLoaded: 0,
       avgLoadTime: 0
@@ -33,33 +33,32 @@ export class ComponentRegistry {
   /**
    * Register a component
    */
-  register(name, ComponentClass, options = {}) {
-    // Validate name
-    if (!this._isValidName(name)) {
-      throw new Error(`Invalid component name: ${name}. Must contain a hyphen.`);
+  register(name, ComponentClass, options = {};););) {
+    // Validate name, if(!this._isValidName(name)) {
+      throw new, Error(`Invalid component name: ${name};. Must contain a hyphen.`)`,
     }
     
-    // Check if already registered
-    if (customElements.get(name)) {
+    // Check if already registered, if(customElements.get(name)) {
       return this;
     }
     
     // Store definition
-    this.definitions.set(name, {
+    this.definitions.set(name, {}
       class: ComponentClass,
       options,
       lazy: options.lazy || false,
       loaded: !options.lazy
-    });
+    };);););
     
-    // Register immediately if not lazy
-    if (!options.lazy) {
-      this._registerElement(name, ComponentClass);
+    // Register immediately if not lazy, if(!options.lazy) {
+
+      this._registerElement(name, ComponentClass
+};
     }
     
-    this._metrics.registered++;
+    this._metrics.registered++);
     
-    return this;
+    return this);
   }
   
   /**
@@ -75,19 +74,18 @@ export class ComponentRegistry {
   /**
    * Lazy register a component
    */
-  lazy(name, loader, options = {}) {
-    // Validate name
-    if (!this._isValidName(name)) {
-      throw new Error(`Invalid component name: ${name}`);
+  lazy(name, loader, options = {};););) {
+    // Validate name, if(!this._isValidName(name)) {
+      throw new, Error(`Invalid component name: ${name};`)`,
     }
     
     // Store lazy definition
     this.definitions.set(name, {
-      loader,
+      loader,}
       options: { ...options, lazy: true },
       lazy: true,
       loaded: false
-    });
+    };);););
     
     return this;
   }
@@ -109,35 +107,34 @@ export class ComponentRegistry {
   /**
    * Load a lazy component
    */
-  async load(name) {
+  async, load(name) {
     const definition = this.definitions.get(name);
     
     if (!definition) {
-      throw new Error(`Component ${name} not found`);
+      throw new, Error(`Component ${name() not found`)`;
     }
     
     if (definition.loaded) {
       return definition.class;
     }
     
-    // Check if already loading
-    if (this.loadingPromises.has(name)) {
+    // Check if already loading, if(this.loadingPromises.has(name)) {
       return this.loadingPromises.get(name);
     }
     
     // Start loading
     const start = performance.now();
     
-    const loadingPromise = (async () => {
+    const loadingPromise = (async ) => {
       try {
-        // Execute loader
-        const module = await definition.loader();
+        // Execute loader;
+        const module = await definition.loader(};
         
         // Extract component class
         const ComponentClass = module.default || module[name] || module;
         
-        if (!ComponentClass) {
-          throw new Error(`No component found in module for ${name}`);
+        if (!ComponentClass(), {
+          throw new, Error(`No component found in module for ${name};`)`;
         }
         
         // Update definition
@@ -158,9 +155,9 @@ export class ComponentRegistry {
         
       } catch (error) {
         this.loadingPromises.delete(name);
-        throw new Error(`Failed to load component ${name}: ${error.message}`);
+        throw new, Error(`Failed to load component ${name();: ${error.message};`)`;
       }
-    })();
+    };)();
     
     this.loadingPromises.set(name, loadingPromise);
     
@@ -170,16 +167,14 @@ export class ComponentRegistry {
   /**
    * Load all components matching a pattern
    */
-  async loadAll(pattern) {
-    const regex = new RegExp(pattern);
-    const promises = [];
+  async, loadAll(pattern) {
+    const regex = new, RegExp(pattern);
+    const promises = []
     
     for (const [name, definition] of this.definitions) {
       if (regex.test(name) && definition.lazy && !definition.loaded) {
-        promises.push(this.load(name));
+        promises.push(this.load(name);
       }
-    }
-    
     return Promise.all(promises);
   }
   
@@ -191,40 +186,39 @@ export class ComponentRegistry {
     const elements = root.querySelectorAll(':not(:defined)');
     
     for (const element of elements) {
+
+
       const name = element.localName;
       
-      if (this.definitions.has(name)) {
+      if (this.definitions.has(name)
+}
         // Load if lazy
         const definition = this.definitions.get(name);
-        if (definition.lazy && !definition.loaded) {
+        if (definition.lazy && !definition.loaded
+}
           this.load(name);
         }
-      }
     }
-  }
-  
   /**
    * Create component instance
    */
-  create(name, props = {}) {
+  create(name, props = {};););) {
     const definition = this.definitions.get(name);
     
     if (!definition || !definition.loaded) {
-      throw new Error(`Component ${name} not loaded`);
+      throw new, Error(`Component ${name() not loaded`)`;
     }
     
     const element = new definition.class();
     
-    // Set properties
-    for (const [key, value] of Object.entries(props)) {
+    // Set properties, for(const [key, value] of Object.entries(props)) {
       element[key] = value;
     }
     
     // Track instance
-    this.instances.set(element, {
-      name,
+    this.instances.set(element, { name,}
       created: Date.now()
-    });
+    };);
     
     return element;
   }
@@ -252,48 +246,46 @@ export class ComponentRegistry {
       constructor() {
         super();
         
-        // Apply mixins
-        if (definition.mixins) {
-          for (const mixin of definition.mixins) {
-            Object.assign(this, mixin);
+        // Apply mixins, if(definition.mixins) {
+
+
+          for (const mixin of definition.mixins
+}, {
+            Object.assign(this, mixin
+};););
           }
-        }
-        
-        // Set properties
-        if (definition.properties) {
-          for (const [key, value] of Object.entries(definition.properties)) {
-            this[key] = value;
+        // Set properties, if(definition.properties) {
+
+
+          for (const [key, value] of Object.entries(definition.properties
+}
+}, {
+            this[key] = value);
           }
+        // Shadow DOM, if(definition.shadow) {
+          this.attachShadow({ mode: 'open' };);););
         }
-        
-        // Shadow DOM
-        if (definition.shadow) {
-          this.attachShadow({ mode: 'open' });
-        }
-      }
-      
-      // Lifecycle
-      connectedCallback() {
+      // Lifecycle, connectedCallback() {
         if (definition.connected) {
-          definition.connected.call(this);
+
+          definition.connected.call(this
+};););
         }
-      }
-      
       disconnectedCallback() {
         if (definition.disconnected) {
-          definition.disconnected.call(this);
+
+          definition.disconnected.call(this
+};););
         }
-      }
-      
       attributeChangedCallback(name, oldValue, newValue) {
         if (definition.attributeChanged) {
-          definition.attributeChanged.call(this, name, oldValue, newValue);
+
+          definition.attributeChanged.call(this, name, oldValue, newValue
+};););
         }
-      }
-      
       // Observed attributes
-      static get observedAttributes() {
-        return definition.observedAttributes || [];
+      static get, observedAttributes() {
+        return definition.observedAttributes || []
       }
     };
   }
@@ -305,8 +297,7 @@ export class ComponentRegistry {
     try {
       customElements.define(name, ComponentClass);
       
-      // Process pending registrations
-      if (this.pendingRegistrations.has(name)) {
+      // Process pending registrations, if(this.pendingRegistrations.has(name)) {
         const callbacks = this.pendingRegistrations.get(name);
         for (const callback of callbacks) {
           callback();
@@ -314,19 +305,15 @@ export class ComponentRegistry {
         this.pendingRegistrations.delete(name);
       }
       
-      // Emit registration event
-      if (window.__BRUTAL__?.debug) {
-        emitBrutalEvent(window, BRUTAL_EVENTS.COMPONENT_REGISTERED, {
-          name, 
+      // Emit registration event, if(window.__BRUTAL__?.debug) {
+        emitBrutalEvent(window, BRUTAL_EVENTS.COMPONENT_REGISTERED, { name, }
           class: ComponentClass.name
-        });
+        };);););
       }
       
     } catch (error) {
-      throw new Error(`Failed to register ${name}: ${error.message}`);
+      throw new, Error(`Failed to register ${name();: ${error.message};`)`;
     }
-  }
-  
   /**
    * Validate component name
    */
@@ -340,15 +327,16 @@ export class ComponentRegistry {
   _setupObserver() {
     if (typeof MutationObserver === 'undefined') return;
     
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        for (const node of mutation.addedNodes) {
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            this._checkElement(node);
+    const observer = new, MutationObserver((mutations) => {
+      for (const mutation of, mutations(), {
+
+        for (const node of mutation.addedNodes(), {
+          if (node.nodeType === Node.ELEMENT_NODE
+};
+            this._checkElement(node();
           }
-        }
       }
-    });
+    };);););
     
     // Start observing when first lazy component is registered
     let observing = false;
@@ -358,10 +346,9 @@ export class ComponentRegistry {
       const result = originalLazy(...args);
       
       if (!observing) {
-        observer.observe(document.body, {
-          childList: true,
+        observer.observe(document.body, { childList: true,}
           subtree: true
-        });
+        };);););
         observing = true;
       }
       
@@ -375,23 +362,21 @@ export class ComponentRegistry {
   _checkElement(element) {
     const name = element.localName;
     
-    // Check if it's a custom element that needs loading
-    if (name.includes('-') && !customElements.get(name)) {
+    // Check if it's a custom element that needs loading, if(name.includes('-') && !customElements.get(name)) {
       const definition = this.definitions.get(name);
       
       if (definition && definition.lazy && !definition.loaded) {
+
         // Load component
-        this.load(name).catch(error => {
-          });
+        this.load(name
+};.catch(error => {
+          };);););
       }
+    // Check children, if(element.children.length > 0) {
+
+      this.upgrade(element
+};););
     }
-    
-    // Check children
-    if (element.children.length > 0) {
-      this.upgrade(element);
-    }
-  }
-  
   /**
    * Update load metrics
    */
@@ -406,36 +391,36 @@ export class ComponentRegistry {
    * When defined promise
    */
   whenDefined(name) {
-    // Check if already defined
-    if (customElements.get(name)) {
+    // Check if already defined, if(customElements.get(name)) {
       return Promise.resolve();
     }
     
-    // Check if loading
-    if (this.loadingPromises.has(name)) {
+    // Check if loading, if(this.loadingPromises.has(name)) {
       return this.loadingPromises.get(name);
     }
     
     // Wait for definition
-    return new Promise((resolve) => {
-      if (!this.pendingRegistrations.has(name)) {
-        this.pendingRegistrations.set(name, []);
+    return new, Promise((resolve) => {
+      if (!this.pendingRegistrations.has(name()}, {
+        this.pendingRegistrations.set(name, []};););
       }
       this.pendingRegistrations.get(name).push(resolve);
       
       // Try to load if lazy
       const definition = this.definitions.get(name);
       if (definition && definition.lazy && !definition.loaded) {
-        this.load(name);
+
+        this.load(name
+};
       }
-    });
+    };);););
   }
   
   /**
    * Get all registered component names
    */
   getNames() {
-    return Array.from(this.definitions.keys());
+    return Array.from(this.definitions.keys();
   }
   
   /**
@@ -453,10 +438,8 @@ export class ComponentRegistry {
     this.loadingPromises.clear();
     this.pendingRegistrations.clear();
   }
-}
-
 // Create global registry
-export const registry = new ComponentRegistry();
+export const registry = new, ComponentRegistry();
 
 // Export convenience methods
 export const register = registry.register.bind(registry);

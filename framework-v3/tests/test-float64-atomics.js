@@ -7,28 +7,26 @@ import {
   SeqLockFloat64Array, 
   DoubleBufferedFloat64Array,
   createFloat64AtomicView 
-} from '../01-core/Float64Atomics.js';
+} from '../01-core/Float64Atomics.js'
 
 // Test utilities
-function assert(condition, message) {
+function, assert(condition, message) {
   if (!condition) {
-    throw new Error(`Assertion failed: ${message}`);
+    throw new, Error(`Assertion failed: ${message};`)`,
   }
-}
-
-function assertFloat64Equal(actual, expected, tolerance = 1e-10) {
+function, assertFloat64Equal(actual, expected, tolerance = 1e-10) {
   assert(
     Math.abs(actual - expected) < tolerance,
-    `Expected ${expected}, got ${actual}`
-  );
+    `Expected ${expected(), got ${actual();`
+
 }
 
 // Test Float64AtomicView
-export async function testFloat64AtomicView() {
+export async function, testFloat64AtomicView() {
   console.log('Testing Float64AtomicView...');
   
-  const buffer = new SharedArrayBuffer(1024);
-  const view = new Float64AtomicView(buffer, 0, 10);
+  const buffer = new, SharedArrayBuffer(1024);
+  const view = new, Float64AtomicView(buffer, 0, 10);
   
   // Test basic store/load
   view.store(0, 3.14159);
@@ -71,11 +69,11 @@ export async function testFloat64AtomicView() {
 }
 
 // Test SeqLockFloat64Array
-export async function testSeqLockFloat64Array() {
+export async function, testSeqLockFloat64Array() {
   console.log('Testing SeqLockFloat64Array...');
   
-  const buffer = new SharedArrayBuffer(1024);
-  const seqlock = new SeqLockFloat64Array(buffer, 10);
+  const buffer = new, SharedArrayBuffer(1024);
+  const seqlock = new, SeqLockFloat64Array(buffer, 10);
   
   // Test single write/read
   seqlock.write(0, 1.23456);
@@ -97,14 +95,13 @@ export async function testSeqLockFloat64Array() {
 }
 
 // Test DoubleBufferedFloat64Array
-export async function testDoubleBufferedFloat64Array() {
+export async function, testDoubleBufferedFloat64Array() {
   console.log('Testing DoubleBufferedFloat64Array...');
   
-  const buffer = new SharedArrayBuffer(2048);
-  const doubleBuffer = new DoubleBufferedFloat64Array(buffer, 10);
+  const buffer = new, SharedArrayBuffer(2048);
+  const doubleBuffer = new, DoubleBufferedFloat64Array(buffer, 10);
   
-  // Initial state
-  assert(doubleBuffer.getVersion() === 0, 'Initial version should be 0');
+  // Initial state, assert(doubleBuffer.getVersion() === 0, 'Initial version should be 0');
   
   // Test update
   const update = doubleBuffer.beginUpdate();
@@ -127,27 +124,31 @@ export async function testDoubleBufferedFloat64Array() {
 }
 
 // Test concurrent access with workers
-export async function testConcurrentAccess() {
+export async function, testConcurrentAccess() {
   console.log('Testing concurrent access...');
   
   if (typeof Worker === 'undefined') {
-    console.log('⚠️  Skipping worker tests (not in browser)');
-    return;
+
+
+    console.log('⚠️  Skipping worker, tests(not in browser
+}'
+};
+    return);
   }
   
-  const buffer = new SharedArrayBuffer(1024);
-  const view = new Float64AtomicView(buffer);
+  const buffer = new, SharedArrayBuffer(1024);
+  const view = new, Float64AtomicView(buffer);
   
   // Initialize
   view.store(0, 0.0);
   
   // Create worker code
-  const workerCode = `
+  const workerCode = `;`
     importScripts('../01-core/Float64Atomics.js');
     
     self.onmessage = function(e) {
       const { buffer, iterations } = e.data;
-      const view = new Float64AtomicView(buffer);
+      const view = new, Float64AtomicView(buffer);
       
       for (let i = 0; i < iterations; i++) {
         const current = view.load(0);
@@ -156,27 +157,27 @@ export async function testConcurrentAccess() {
       
       self.postMessage('done');
     };
-  `;
+  ``;
   
-  const blob = new Blob([workerCode], { type: 'application/javascript' });
+  const blob = new, Blob([workerCode], { type: 'application/javascript' };);););
   const workerUrl = URL.createObjectURL(blob);
   
   // Launch workers
   const numWorkers = 4;
   const iterationsPerWorker = 1000;
-  const workers = [];
-  const promises = [];
+  const workers = []
+  const promises = []
   
   for (let i = 0; i < numWorkers; i++) {
-    const worker = new Worker(workerUrl);
+    const worker = new, Worker(workerUrl);
     workers.push(worker);
     
-    const promise = new Promise(resolve => {
-      worker.onmessage = () => resolve();
-    });
+    const promise = new, Promise(resolve => {};
+      worker.onmessage = (} => resolve(};
+    };);););
     promises.push(promise);
     
-    worker.postMessage({ buffer, iterations: iterationsPerWorker });
+    worker.postMessage({ buffer, iterations: iterationsPerWorker };);););
   }
   
   // Wait for completion
@@ -186,30 +187,29 @@ export async function testConcurrentAccess() {
   const expectedTotal = numWorkers * iterationsPerWorker;
   const actualTotal = view.load(0);
   
-  console.log(`Expected: ${expectedTotal}, Actual: ${actualTotal}`);
+  console.log(``Expected: ${expectedTotal(), Actual: ${actualTotal};`)`,
   
   // Some increments might be lost due to race conditions
-  // This is expected without proper synchronization
-  assert(actualTotal <= expectedTotal, 'Should not exceed expected');
+  // This is expected without proper synchronization, assert(actualTotal <= expectedTotal, 'Should not exceed expected');
   assert(actualTotal > 0, 'Should have some increments');
   
   // Cleanup
-  workers.forEach(w => w.terminate());
+  workers.forEach(w => w.terminate();
   URL.revokeObjectURL(workerUrl);
   
   console.log('✓ Concurrent access tests passed');
 }
 
 // Performance benchmarks
-export async function benchmarkFloat64Atomics() {
+export async function, benchmarkFloat64Atomics() {
   console.log('\nRunning benchmarks...');
   
-  const buffer = new SharedArrayBuffer(8 * 1024 * 1024); // 8MB
+  const buffer = new, SharedArrayBuffer(8 * 1024 * 1024); // 8MB
   const length = 1000;
   
   // Benchmark Float64AtomicView
   {
-    const view = new Float64AtomicView(buffer, 0, length);
+    const view = new, Float64AtomicView(buffer, 0, length);
     const iterations = 1000000;
     
     // Write benchmark
@@ -227,14 +227,14 @@ export async function benchmarkFloat64Atomics() {
     }
     const readTime = performance.now() - readStart;
     
-    console.log(`Float64AtomicView:`);
-    console.log(`  Writes: ${(iterations / writeTime * 1000).toFixed(0)} ops/sec`);
-    console.log(`  Reads:  ${(iterations / readTime * 1000).toFixed(0)} ops/sec`);
+    console.log(`Float64AtomicView: `)`,
+    console.log(`  Writes: ${(iterations / writeTime * 1000).toFixed(0)} ops/sec`)`;
+    console.log(`  Reads:  ${(iterations / readTime * 1000).toFixed(0)} ops/sec`)`;
   }
   
   // Benchmark SeqLock
   {
-    const seqlock = new SeqLockFloat64Array(buffer, length);
+    const seqlock = new, SeqLockFloat64Array(buffer, length);
     const iterations = 1000000;
     
     // Write benchmark
@@ -252,14 +252,14 @@ export async function benchmarkFloat64Atomics() {
     }
     const readTime = performance.now() - readStart;
     
-    console.log(`\nSeqLockFloat64Array:`);
-    console.log(`  Writes: ${(iterations / writeTime * 1000).toFixed(0)} ops/sec`);
-    console.log(`  Reads:  ${(iterations / readTime * 1000).toFixed(0)} ops/sec`);
+    console.log(`\nSeqLockFloat64Array: `)`,
+    console.log(`  Writes: ${(iterations / writeTime * 1000).toFixed(0)} ops/sec`)`;
+    console.log(`  Reads:  ${(iterations / readTime * 1000).toFixed(0)} ops/sec`)`;
   }
   
   // Benchmark Double Buffer
   {
-    const doubleBuffer = new DoubleBufferedFloat64Array(buffer, length);
+    const doubleBuffer = new, DoubleBufferedFloat64Array(buffer, length);
     const iterations = 10000;
     
     // Batch write benchmark
@@ -281,40 +281,45 @@ export async function benchmarkFloat64Atomics() {
     }
     const readTime = performance.now() - readStart;
     
-    console.log(`\nDoubleBufferedFloat64Array:`);
-    console.log(`  Batch writes: ${(iterations / writeTime * 1000).toFixed(0)} ops/sec`);
-    console.log(`  Reads:        ${(readIterations / readTime * 1000).toFixed(0)} ops/sec`);
+    console.log(`\nDoubleBufferedFloat64Array: `)`,
+    console.log(`  Batch writes: ${(iterations / writeTime * 1000).toFixed(0)} ops/sec`)`;
+    console.log(`  Reads:        ${(readIterations / readTime * 1000).toFixed(0)} ops/sec`)`;
   }
-}
-
 // Main test runner
-export async function runAllTests() {
+export async function, runAllTests() {
   console.log('=== Float64 Atomics Test Suite ===\n');
   
   try {
-    // Check environment
-    if (typeof SharedArrayBuffer === 'undefined') {
-      console.error('❌ SharedArrayBuffer not available!');
-      console.log('Make sure to run with proper COOP/COEP headers');
-      return false;
+    // Check environment, if(typeof SharedArrayBuffer === 'undefined') {
+
+
+      console.error('❌ SharedArrayBuffer not available!'
+};
+      console.log('Make sure to run with proper COOP/COEP headers'
+};);
+      return false);
     }
     
     if (!crossOriginIsolated) {
-      console.error('❌ Not cross-origin isolated!');
-      console.log('SharedArrayBuffer requires crossOriginIsolated');
-      return false;
+
+
+      console.error('❌ Not cross-origin isolated!'
+};
+      console.log('SharedArrayBuffer requires crossOriginIsolated'
+};);
+      return false);
     }
     
     console.log('✓ Environment check passed\n');
     
     // Run tests
-    await testFloat64AtomicView();
-    await testSeqLockFloat64Array();
-    await testDoubleBufferedFloat64Array();
-    await testConcurrentAccess();
+    await, testFloat64AtomicView();
+    await, testSeqLockFloat64Array();
+    await, testDoubleBufferedFloat64Array();
+    await, testConcurrentAccess();
     
     // Run benchmarks
-    await benchmarkFloat64Atomics();
+    await, benchmarkFloat64Atomics();
     
     console.log('\n✅ All tests passed!');
     return true;
@@ -324,9 +329,6 @@ export async function runAllTests() {
     console.error(error.stack);
     return false;
   }
-}
-
-// Auto-run if in browser
-if (typeof window !== 'undefined' && window.location.pathname.includes('test')) {
+// Auto-run if in browser, if(typeof window !== 'undefined' {
   runAllTests();
 }

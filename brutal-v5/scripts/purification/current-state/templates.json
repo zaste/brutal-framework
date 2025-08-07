@@ -1,0 +1,306 @@
+{
+  "name": "@brutal/templates",
+  "timestamp": "2025-07-15T10:24:04.684Z",
+  "exports": {
+    "Compiler": {
+      "file": "core/compiler.ts",
+      "type": "class"
+    },
+    "compile": {
+      "file": "ultra-minimal.ts",
+      "type": "function"
+    },
+    "VERSION": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "DEFAULT_CONFIG": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "INTERNAL": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "Evaluator": {
+      "file": "core/evaluator.ts",
+      "type": "class"
+    },
+    "CompactCompiler": {
+      "file": "core/optimizer.ts",
+      "type": "class"
+    },
+    "compileCompact": {
+      "file": "core/optimizer.ts",
+      "type": "function"
+    },
+    "ASTNode": {
+      "file": "core/parser.ts",
+      "type": "type"
+    },
+    "ExprParser": {
+      "file": "core/parser.ts",
+      "type": "class"
+    },
+    "TmplParser": {
+      "file": "core/parser.ts",
+      "type": "class"
+    },
+    "T_EOF": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "T_TEXT": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "T_NUM": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "T_STR": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "T_ID": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "T_OP": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "T_CTRL": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "Token": {
+      "file": "core/tokenizer.ts",
+      "type": "interface"
+    },
+    "OP_DOT": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_LPAREN": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_RPAREN": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_LBRACKET": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_RBRACKET": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_COMMA": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_PLUS": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_MINUS": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_MUL": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_DIV": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_MOD": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_LT": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_GT": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_LTE": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_GTE": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_EQ": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_NEQ": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_SEQ": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_SNEQ": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_AND": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_OR": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_NOT": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_QUES": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_COLON": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "OP_PIPE": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_IF": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_ELIF": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_ELSE": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_ENDIF": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_FOR": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_ENDFOR": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_EACH": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_ENDEACH": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "CTRL_EXPR": {
+      "file": "core/tokenizer.ts",
+      "type": "const"
+    },
+    "Tokenizer": {
+      "file": "core/tokenizer.ts",
+      "type": "class"
+    },
+    "render": {
+      "file": "ultra-minimal.ts",
+      "type": "function"
+    },
+    "Lexer": {
+      "file": "expression/evaluator.ts",
+      "type": "class"
+    },
+    "Parser": {
+      "file": "expression/evaluator.ts",
+      "type": "class"
+    },
+    "ExpressionEvaluator": {
+      "file": "expression/evaluator.ts",
+      "type": "class"
+    },
+    "html": {
+      "file": "html/html.ts",
+      "type": "function"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "Template": {
+      "file": "template/template.ts",
+      "type": "class"
+    },
+    "TemplateContext": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "TemplateFunction": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "TemplateOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "CompiledTemplate": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "FilterFunction": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "Directive": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ExpressionNode": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "TemplateError": {
+      "file": "types.ts",
+      "type": "class"
+    }
+  },
+  "files": [
+    "compiler/compiler.ts",
+    "constants.ts",
+    "core/compiler.ts",
+    "core/evaluator.ts",
+    "core/optimizer.ts",
+    "core/parser.ts",
+    "core/tokenizer.ts",
+    "engine/engine.ts",
+    "expression/evaluator.ts",
+    "html/html.ts",
+    "index.ts",
+    "minimal.ts",
+    "template/template.ts",
+    "types.ts",
+    "ultra-minimal.ts"
+  ],
+  "bundleSize": 7063,
+  "dependencies": {
+    "@brutal/shared": "workspace:*"
+  },
+  "consumers": [
+    "@brutal/components"
+  ]
+}

@@ -1,0 +1,77 @@
+# Cloudflare Workers configuration for Native Web Components Framework
+# Optimized for edge deployment with enterprise-grade performance
+
+name = "native-web-components-framework"
+main = "dist/worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment configuration
+[env.development]
+workers_dev = true
+route = ""
+
+[env.staging]
+workers_dev = false
+route = "staging.native-web-components.dev/*"
+
+[env.production] 
+workers_dev = false
+route = "native-web-components.dev/*"
+
+# KV Namespaces for caching and configuration
+[[kv_namespaces]]
+binding = "FRAMEWORK_CACHE"
+id = "framework_cache_namespace"
+preview_id = "framework_cache_preview"
+
+[[kv_namespaces]]
+binding = "FRAMEWORK_CONFIG"
+id = "framework_config_namespace"
+preview_id = "framework_config_preview"
+
+# R2 Buckets for asset storage
+[[r2_buckets]]
+binding = "FRAMEWORK_ASSETS"
+bucket_name = "native-web-components-assets"
+
+# Durable Objects for state management
+[[durable_objects.bindings]]
+name = "PERFORMANCE_MONITOR"
+class_name = "PerformanceMonitor"
+
+# Analytics and monitoring
+[analytics_engine_datasets]
+binding = "FRAMEWORK_ANALYTICS"
+dataset = "framework_metrics"
+
+# Build configuration
+[build]
+command = "npm run build:worker"
+cwd = "."
+watch_dir = ["packages/core/src", "packages/worker/src"]
+
+[build.upload]
+format = "modules"
+dir = "dist"
+main = "./worker.js"
+
+# Variables for runtime configuration
+[vars]
+ENVIRONMENT = "production"
+PERFORMANCE_TARGET = "50"
+ENABLE_ANALYTICS = "true"
+ENABLE_MONITORING = "true"
+
+# Secrets (set via wrangler secret put)
+# GITHUB_TOKEN - for deployment webhooks
+# MONITORING_API_KEY - for external monitoring
+# ENCRYPTION_KEY - for data encryption
+
+# Placement configuration for optimal performance
+[placement]
+mode = "smart"
+
+# Limits for enterprise usage
+[limits]
+cpu_ms = 50 # 50ms CPU time limit per request

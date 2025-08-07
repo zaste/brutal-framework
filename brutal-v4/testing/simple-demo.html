@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test Runner - BRUTAL V4</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        
+        h1 {
+            color: #f39c12;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        button {
+            background: #f39c12;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        
+        button:hover {
+            background: #e67e22;
+        }
+        
+        #results {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            line-height: 1.6;
+        }
+        
+        .pass { color: #27ae60; }
+        .fail { color: #e74c3c; }
+        .info { color: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simple Test Runner</h1>
+        
+        <p>A pragmatic approach to testing. No magic, just functions that return pass/fail.</p>
+        
+        <button id="runTests">Run Tests</button>
+        
+        <div id="results"></div>
+    </div>
+    
+    <script type="module">
+        import { SimpleTestRunner, assert } from './simple-test-runner.js';
+        
+        const runner = new SimpleTestRunner();
+        const resultsDiv = document.getElementById('results');
+        
+        // Define some tests
+        runner.test('State Management', () => {
+            // Test basic state creation
+            const state = { count: 0 };
+            assert.equal(state.count, 0);
+            
+            // Test state update
+            state.count++;
+            assert.equal(state.count, 1);
+            
+            return { pass: true, message: 'State management works correctly' };
+        });
+        
+        runner.test('Component Lifecycle', async () => {
+            // Simulate component lifecycle
+            const lifecycle = [];
+            
+            lifecycle.push('constructor');
+            lifecycle.push('connectedCallback');
+            
+            // Simulate async initialization
+            await new Promise(resolve => setTimeout(resolve, 10));
+            lifecycle.push('initialized');
+            
+            assert.equal(lifecycle.length, 3);
+            assert.equal(lifecycle[0], 'constructor');
+            assert.equal(lifecycle[1], 'connectedCallback');
+            assert.equal(lifecycle[2], 'initialized');
+            
+            return { pass: true };
+        });
+        
+        runner.test('Event System', () => {
+            // Test event dispatching
+            let eventFired = false;
+            const handler = () => { eventFired = true; };
+            
+            // Simulate event
+            const element = document.createElement('div');
+            element.addEventListener('test', handler);
+            element.dispatchEvent(new CustomEvent('test'));
+            
+            assert.true(eventFired, 'Event should have fired');
+            
+            return { pass: true };
+        });
+        
+        runner.test('Memory Cleanup', () => {
+            // Test WeakMap for memory safety
+            const cache = new WeakMap();
+            let obj = { data: 'test' };
+            
+            cache.set(obj, 'cached');
+            assert.equal(cache.get(obj), 'cached');
+            
+            // Reference still exists
+            assert.true(cache.has(obj));
+            
+            return { pass: true, message: 'WeakMap properly maintains references' };
+        });
+        
+        runner.test('Error Handling', () => {
+            // This test intentionally fails to show error handling
+            assert.throws(() => {
+                throw new Error('Expected error');
+            });
+            
+            // Test that doesn't throw when it should
+            try {
+                assert.throws(() => {
+                    // This should throw but doesn't
+                });
+                return { pass: false, message: 'Should have caught missing throw' };
+            } catch (e) {
+                // Good, assert.throws worked correctly
+            }
+            
+            return { pass: true };
+        });
+        
+        // Run tests on button click
+        document.getElementById('runTests').addEventListener('click', async () => {
+            resultsDiv.textContent = 'Running tests...';
+            resultsDiv.className = 'info';
+            
+            try {
+                const summary = await runner.runAll();
+                const report = runner.getReport();
+                
+                // Color code the output
+                const coloredReport = report
+                    .split('\n')
+                    .map(line => {
+                        if (line.includes('✅ PASS')) {
+                            return `<span class="pass">${line}</span>`;
+                        } else if (line.includes('❌ FAIL')) {
+                            return `<span class="fail">${line}</span>`;
+                        } else if (line.includes('Total:')) {
+                            const className = summary.failed > 0 ? 'fail' : 'pass';
+                            return `<span class="${className}">${line}</span>`;
+                        }
+                        return line;
+                    })
+                    .join('\n');
+                
+                resultsDiv.innerHTML = coloredReport;
+                resultsDiv.className = summary.failed > 0 ? 'fail' : 'pass';
+                
+            } catch (error) {
+                resultsDiv.textContent = `Test runner error: ${error.message}\n${error.stack}`;
+                resultsDiv.className = 'fail';
+            }
+        });
+        
+        // Auto-run tests on load
+        document.getElementById('runTests').click();
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Native Framework v2 - Demo Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+        
+        .demo-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .demo-link {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        
+        .demo-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .demo-link.primary {
+            background: rgba(78, 205, 196, 0.3);
+            border-color: #4ecdc4;
+            font-size: 1.4rem;
+            padding: 2rem;
+        }
+        
+        .demo-link.primary:hover {
+            background: rgba(78, 205, 196, 0.4);
+        }
+        
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: normal;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Native Framework v2</h1>
+        <p class="subtitle">Choose Your Demo Experience</p>
+        
+        <div class="demo-links">
+            <a href="gallery.html" class="demo-link primary">
+                <span class="icon">🎨</span>
+                Complete Demo Gallery
+                <p class="description">Browse all demos with descriptions and categories</p>
+            </a>
+            
+            <a href="index.html" class="demo-link">
+                <span class="icon">⚡</span>
+                Quick Start Demo
+                <p class="description">Basic components and framework features</p>
+            </a>
+            
+            <a href="showcase/advanced.html" class="demo-link">
+                <span class="icon">💪</span>
+                Advanced Power Demo
+                <p class="description">See the full 50x React performance in action</p>
+            </a>
+            
+            <a href="showcase/mission-control.html" class="demo-link">
+                <span class="icon">🛸</span>
+                Mission Control
+                <p class="description">NASA-style real-time monitoring dashboard</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

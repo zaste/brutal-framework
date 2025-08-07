@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Memory Safety Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .metrics {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 BRUTAL V4 - Memory Safety Test</h1>
+    
+    <div class="test-section">
+        <h2>Memory Usage Monitor</h2>
+        <div id="memory-metrics" class="metrics">Loading...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Component Lifecycle Test</h2>
+        <p>Tests WeakMap cleanup when components are removed</p>
+        <button id="create-components">Create 100 Components</button>
+        <button id="remove-components">Remove All Components</button>
+        <button id="force-gc">Force Garbage Collection</button>
+        <div id="component-count" class="metrics">Components: 0</div>
+        <div id="component-container" style="display: none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>State Subscription Test</h2>
+        <p>Tests WeakRef cleanup for state subscriptions</p>
+        <button id="create-subscriptions">Create 100 Subscriptions</button>
+        <button id="clear-subscriptions">Clear Subscription References</button>
+        <div id="subscription-count" class="metrics">Subscriptions: 0</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Event Listener Test</h2>
+        <p>Tests WeakMap cleanup for event listeners</p>
+        <button id="add-listeners">Add 100 Event Listeners</button>
+        <button id="remove-listeners">Remove Event Listeners</button>
+        <div id="listener-count" class="metrics">Listeners: 0</div>
+    </div>
+    
+    <div class="warning">
+        <strong>Note:</strong> Garbage collection timing is not deterministic. 
+        Memory may not be freed immediately. Use Chrome DevTools Memory Profiler 
+        for accurate measurements.
+    </div>
+
+    <script type="module">
+        import { BrutalComponent, BrutalState, BrutalEvents, html } from './core/index.js';
+        
+        // Memory metrics update
+        let memoryInterval;
+        function updateMemoryMetrics() {
+            if (performance.memory) {
+                const used = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                const total = (performance.memory.totalJSHeapSize / 1024 / 1024).toFixed(2);
+                const limit = (performance.memory.jsHeapSizeLimit / 1024 / 1024).toFixed(2);
+                
+                document.getElementById('memory-metrics').innerHTML = `
+                    <div>Used JS Heap: ${used} MB</div>
+                    <div>Total JS Heap: ${total} MB</div>
+                    <div>JS Heap Limit: ${limit} MB</div>
+                    <div>Usage: ${((performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100).toFixed(2)}%</div>
+                `;
+            } else {
+                document.getElementById('memory-metrics').innerHTML = 
+                    'Memory API not available. Use Chrome with --enable-precise-memory-info flag.';
+            }
+        }
+        
+        memoryInterval = setInterval(updateMemoryMetrics, 1000);
+        updateMemoryMetrics();
+        
+        // Test component with state and events
+        class TestComponent extends BrutalComponent {
+            static counter = 0;
+            
+            constructor() {
+                super();
+                this.id = TestComponent.counter++;
+                this.largeData = new Array(1000).fill('x'); // Some memory pressure
+            }
+            
+            initializeState() {
+                super.initializeState();
+                this._state.set({
+                    count: 0,
+                    data: this.largeData
+                });
+            }
+            
+            createTemplate() {
+                this._template = html`<div>Component ${this.id}</div>`;
+            }
+            
+            setupEventListeners() {
+                super.setupEventListeners();
+                this.on('click', () => {
+                    this._state.update(s => s.count++);
+                });
+            }
+        }
+        
+        customElements.define('test-memory-component', TestComponent);
+        
+        // Component lifecycle test
+        const container = document.getElementById('component-container');
+        let components = [];
+        
+        document.getElementById('create-components').addEventListener('click', () => {
+            for (let i = 0; i < 100; i++) {
+                const comp = document.createElement('test-memory-component');
+                container.appendChild(comp);
+                components.push(comp);
+            }
+            document.getElementById('component-count').textContent = `Components: ${components.length}`;
+        });
+        
+        document.getElementById('remove-components').addEventListener('click', () => {
+            container.innerHTML = '';
+            components = [];
+            document.getElementById('component-count').textContent = `Components: 0`;
+        });
+        
+        document.getElementById('force-gc').addEventListener('click', () => {
+            if (window.gc) {
+                window.gc();
+                console.log('Garbage collection requested');
+            } else {
+                alert('GC not available. Run Chrome with --js-flags="--expose-gc"');
+            }
+        });
+        
+        // State subscription test
+        let subscriptions = [];
+        let states = [];
+        
+        document.getElementById('create-subscriptions').addEventListener('click', () => {
+            for (let i = 0; i < 100; i++) {
+                const state = new BrutalState({ value: i });
+                const callback = (changes) => {
+                    // Subscription callback
+                };
+                const unsubscribe = state.subscribe(callback);
+                
+                states.push(state);
+                subscriptions.push({ state, unsubscribe, callback });
+            }
+            document.getElementById('subscription-count').textContent = 
+                `Subscriptions: ${subscriptions.length}`;
+        });
+        
+        document.getElementById('clear-subscriptions').addEventListener('click', () => {
+            // Clear references but don't unsubscribe
+            // This tests if WeakRefs clean up properly
+            subscriptions = [];
+            states = [];
+            document.getElementById('subscription-count').textContent = `Subscriptions: 0 (references cleared)`;
+        });
+        
+        // Event listener test
+        let eventTargets = [];
+        let eventManagers = [];
+        
+        document.getElementById('add-listeners').addEventListener('click', () => {
+            for (let i = 0; i < 100; i++) {
+                const div = document.createElement('div');
+                const events = new BrutalEvents(div);
+                
+                events.on('click', () => console.log('clicked'));
+                events.on('mouseover', () => console.log('hover'));
+                
+                eventTargets.push(div);
+                eventManagers.push(events);
+            }
+            document.getElementById('listener-count').textContent = 
+                `Listeners: ${eventTargets.length * 2}`;
+        });
+        
+        document.getElementById('remove-listeners').addEventListener('click', () => {
+            // Cleanup event managers
+            eventManagers.forEach(em => em.cleanup && em.cleanup());
+            
+            eventTargets = [];
+            eventManagers = [];
+            document.getElementById('listener-count').textContent = `Listeners: 0`;
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            clearInterval(memoryInterval);
+        });
+    </script>
+</body>
+</html>

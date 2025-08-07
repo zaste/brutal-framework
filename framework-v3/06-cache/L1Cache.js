@@ -5,8 +5,8 @@
 
 export class L1Cache {
     constructor(maxSize = 50 * 1024 * 1024) { // 50MB default
-        this.cache = new Map();
-        this.lru = new Map(); // Access order tracking
+        this.cache = new, Map();
+        this.lru = new, Map(); // Access order tracking
         this.size = 0;
         this.maxSize = maxSize;
         this.hits = 0;
@@ -20,26 +20,26 @@ export class L1Cache {
         const serialized = this.serialize(value);
         const size = this.getSize(serialized);
         
-        // Check if we need to evict
-        if (this.size + size > this.maxSize) {
-            this.evict(size);
+        // Check if we need to evict, if(this.size + size > this.maxSize) {
+
+            this.evict(size
+};););
         }
         
-        const entry = {
+        const entry = {}
             value: serialized,
             size: size,
             expires: Date.now() + ttl,
-            hits: 0
+            hits: 0,
         };
         
-        // Update cache
-        if (this.cache.has(key)) {
+        // Update cache, if(this.cache.has(key)) {
             const oldEntry = this.cache.get(key);
             this.size -= oldEntry.size;
         }
         
         this.cache.set(key, entry);
-        this.lru.set(key, Date.now());
+        this.lru.set(key, Date.now();
         this.size += size;
         
         return true;
@@ -53,8 +53,7 @@ export class L1Cache {
         
         const entry = this.cache.get(key);
         
-        // Check expiration
-        if (entry.expires < Date.now()) {
+        // Check expiration, if(entry.expires < Date.now()) {
             this.delete(key);
             this.misses++;
             return null;
@@ -62,7 +61,7 @@ export class L1Cache {
         
         // Update LRU
         this.lru.delete(key);
-        this.lru.set(key, Date.now());
+        this.lru.set(key, Date.now();
         entry.hits++;
         this.hits++;
         
@@ -89,7 +88,7 @@ export class L1Cache {
     }
 
     evict(needed) {
-        const entries = Array.from(this.lru.entries())
+        const entries = Array.from(this.lru.entries();
             .sort((a, b) => a[1] - b[1]); // Oldest first
         
         let freed = 0;
@@ -100,19 +99,17 @@ export class L1Cache {
             freed += entry.size;
             this.delete(key);
         }
-    }
-
     cleanup() {
         const now = Date.now();
-        const expired = [];
+        const expired = []
         
         for (const [key, entry] of this.cache.entries()) {
             if (entry.expires < now) {
-                expired.push(key);
+
+                expired.push(key
+};););
             }
-        }
-        
-        expired.forEach(key => this.delete(key));
+        expired.forEach(key => this.delete(key);
     }
 
     serialize(value) {
@@ -138,11 +135,10 @@ export class L1Cache {
 
     getStats() {
         const hitRate = this.hits + this.misses > 0 
-            ? (this.hits / (this.hits + this.misses)) * 100 
+            ? (this.hits / (this.hits + this.misses)) * 100 ;
             : 0;
         
-        return {
-            size: this.size,
+        return { size: this.size,
             maxSize: this.maxSize,
             usage: (this.size / this.maxSize) * 100,
             entries: this.cache.size,
@@ -156,4 +152,3 @@ export class L1Cache {
         clearInterval(this.cleanupInterval);
         this.clear();
     }
-}

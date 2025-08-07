@@ -1,0 +1,216 @@
+{
+  "name": "@brutal/routing",
+  "timestamp": "2025-07-15T10:24:04.779Z",
+  "exports": {
+    "VERSION": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "DEFAULT_CONFIG": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "INTERNAL": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "ExampleFeature": {
+      "file": "example-feature/example-feature.ts",
+      "type": "class"
+    },
+    "FeatureState": {
+      "file": "example-feature/example-feature.types.ts",
+      "type": "interface"
+    },
+    "ProcessOptions": {
+      "file": "example-feature/example-feature.types.ts",
+      "type": "interface"
+    },
+    "validateOptions": {
+      "file": "example-feature/helpers/validate.ts",
+      "type": "function"
+    },
+    "formatError": {
+      "file": "example-feature/helpers/validate.ts",
+      "type": "function"
+    },
+    "guards": {
+      "file": "guards/index.ts",
+      "type": "const"
+    },
+    "history": {
+      "file": "history/index.ts",
+      "type": "const"
+    },
+    "HTML5History": {
+      "file": "history.ts",
+      "type": "class"
+    },
+    "HashHistory": {
+      "file": "history.ts",
+      "type": "class"
+    },
+    "MemoryHistory": {
+      "file": "history.ts",
+      "type": "class"
+    },
+    "createHistory": {
+      "file": "history.ts",
+      "type": "function"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "preloadRoute": {
+      "file": "lazy.ts",
+      "type": "function"
+    },
+    "clearLazyCache": {
+      "file": "lazy.ts",
+      "type": "function"
+    },
+    "getLoadingComponent": {
+      "file": "lazy.ts",
+      "type": "function"
+    },
+    "getErrorComponent": {
+      "file": "lazy.ts",
+      "type": "function"
+    },
+    "isRouteLoading": {
+      "file": "lazy.ts",
+      "type": "function"
+    },
+    "isRouteLoaded": {
+      "file": "lazy.ts",
+      "type": "function"
+    },
+    "compilePath": {
+      "file": "matcher.ts",
+      "type": "function"
+    },
+    "matchPath": {
+      "file": "matcher.ts",
+      "type": "function"
+    },
+    "createMatcher": {
+      "file": "matcher.ts",
+      "type": "function"
+    },
+    "r": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "navigate": {
+      "file": "navigation/navigation.ts",
+      "type": "function"
+    },
+    "back": {
+      "file": "navigation/navigation.ts",
+      "type": "function"
+    },
+    "forward": {
+      "file": "navigation/navigation.ts",
+      "type": "function"
+    },
+    "Route": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "router": {
+      "file": "router/index.ts",
+      "type": "const"
+    },
+    "Router": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "BrutalRouter": {
+      "file": "router.ts",
+      "type": "class"
+    },
+    "createRouter": {
+      "file": "router.ts",
+      "type": "function"
+    },
+    "routes": {
+      "file": "routes/index.ts",
+      "type": "const"
+    },
+    "RouteParams": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "RouteQuery": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "RouteLocation": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "NavigationGuard": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "NavigationGuardNext": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "NavigationHook": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "RouterOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "HistoryState": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "History": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "RouteMatcher": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "RouterLinkProps": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "RouterViewProps": {
+      "file": "types.ts",
+      "type": "interface"
+    }
+  },
+  "files": [
+    "constants.ts",
+    "example-feature/example-feature.ts",
+    "example-feature/example-feature.types.ts",
+    "example-feature/helpers/validate.ts",
+    "guards/index.ts",
+    "history/index.ts",
+    "history.ts",
+    "index.ts",
+    "lazy.ts",
+    "matcher.ts",
+    "minimal.ts",
+    "navigation/navigation.ts",
+    "route/route.ts",
+    "router/index.ts",
+    "router/router.ts",
+    "router.ts",
+    "routes/index.ts",
+    "types.ts"
+  ],
+  "bundleSize": 1942,
+  "dependencies": {
+    "@brutal/events": "workspace:*",
+    "@brutal/shared": "workspace:*"
+  },
+  "consumers": []
+}

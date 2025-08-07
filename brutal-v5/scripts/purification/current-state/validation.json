@@ -1,0 +1,90 @@
+{
+  "name": "@brutal/validation",
+  "timestamp": "2025-07-15T10:24:04.937Z",
+  "exports": {
+    "VERSION": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "s": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "n": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "b": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "a": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "o": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "v": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "str": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "ValidatorFn": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "ValidatorOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "StringOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "NumberOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ArrayOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ObjectOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ValidationResult": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "Schema": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "Validator": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "SchemaDefinition": {
+      "file": "types.ts",
+      "type": "type"
+    }
+  },
+  "files": [
+    "index.ts",
+    "minimal.ts",
+    "types.ts"
+  ],
+  "bundleSize": 3500,
+  "dependencies": {},
+  "consumers": []
+}

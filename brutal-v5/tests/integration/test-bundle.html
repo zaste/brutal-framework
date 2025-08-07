@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTAL V5 Bundle Test</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .test {
+      margin: 20px 0;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 4px;
+    }
+    .test h3 {
+      margin-top: 0;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+    pre {
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>BRUTAL V5 Bundle Test</h1>
+  
+  <div class="test">
+    <h3>Testing brutal-lite.js bundle</h3>
+    <div id="lite-test"></div>
+  </div>
+  
+  <div class="test">
+    <h3>Testing brutal-core.js bundle</h3>
+    <div id="core-test"></div>
+  </div>
+
+  <script type="module">
+    const log = (el, msg, isError = false) => {
+      const div = document.createElement('div');
+      div.className = isError ? 'error' : 'success';
+      div.textContent = msg;
+      el.appendChild(div);
+    };
+
+    // Test brutal-lite bundle
+    const liteTest = document.getElementById('lite-test');
+    try {
+      const { registry, configLoader, EventEmitter, BrutalComponent, sanitizeHTML, BrutalError, BUNDLE } = await import('./dist/brutal-lite.js');
+      
+      log(liteTest, '✅ Bundle loaded successfully');
+      log(liteTest, `✅ Bundle info: ${BUNDLE.name} (size limit: ${BUNDLE.sizeLimit})`);
+      
+      // Test functionality
+      configLoader.load({ test: true });
+      log(liteTest, '✅ Config loader works');
+      
+      registry.register('@test/lite', '1.0.0');
+      log(liteTest, '✅ Registry works');
+      
+      const events = new EventEmitter();
+      let eventFired = false;
+      events.on('test', () => { eventFired = true; });
+      events.emit('test');
+      log(liteTest, eventFired ? '✅ EventEmitter works' : '❌ EventEmitter failed');
+      
+      const clean = sanitizeHTML('<script>alert("xss")</script>Hello');
+      log(liteTest, `✅ Sanitizer works: "${clean}"`);
+      
+    } catch (error) {
+      log(liteTest, `❌ Error: ${error.message}`, true);
+      console.error(error);
+    }
+
+    // Test brutal-core bundle
+    const coreTest = document.getElementById('core-test');
+    try {
+      const { createStore, BUNDLE } = await import('./dist/brutal-core.js');
+      
+      log(coreTest, '✅ Bundle loaded successfully');
+      log(coreTest, `✅ Bundle info: ${BUNDLE.name} (size limit: ${BUNDLE.sizeLimit})`);
+      
+      // Test state management
+      const store = createStore({ count: 0 });
+      let updateReceived = false;
+      
+      store.subscribe((state) => {
+        updateReceived = true;
+      });
+      
+      store.setState({ count: 1 });
+      const state = store.getState();
+      
+      log(coreTest, updateReceived ? '✅ State management works' : '❌ State management failed');
+      log(coreTest, `✅ Current state: count = ${state.count}`);
+      
+    } catch (error) {
+      log(coreTest, `❌ Error: ${error.message}`, true);
+      console.error(error);
+    }
+  </script>
+</body>
+</html>

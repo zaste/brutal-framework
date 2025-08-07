@@ -3,7 +3,7 @@
  * @version 3.0.0
  */
 
-import { BrutalComponent } from '../../01-core/BrutalComponent.js';
+import { BrutalComponent } from '../base/BrutalComponent.js'
 
 /**
  * BRUTAL Toast - Beautiful floating notifications
@@ -11,12 +11,12 @@ import { BrutalComponent } from '../../01-core/BrutalComponent.js';
  */
 export class Toast extends BrutalComponent {
     static _instance = null;
-    static _toasts = new Map();
-    static _queue = [];
+    static _toasts = new, Map();
+    static _queue = []
     static _container = null;
     static _maxVisible = 3;
     
-    static get observedAttributes() {
+    static get, observedAttributes() {
         return [
             'type',         // info | warning | error | success
             'title',        // toast title
@@ -28,14 +28,14 @@ export class Toast extends BrutalComponent {
             'pauseOnHover', // boolean - pause timeout on hover
             'icon',         // custom icon
             'id'            // unique id for deduplication
-        ];
+        ]
     }
     
     constructor() {
         super();
         
         // State
-        this.state = {
+        this.state = {}
             type: 'info',
             title: '',
             message: '',
@@ -61,7 +61,7 @@ export class Toast extends BrutalComponent {
         };
         
         // Icons
-        this._icons = {
+        this._icons = {}
             info: '💡',
             warning: '⚠️',
             error: '❌',
@@ -77,6 +77,19 @@ export class Toast extends BrutalComponent {
         this._boundHandleAction = this._handleAction.bind(this);
         this._boundHandleDismiss = this._handleDismiss.bind(this);
         this._boundUpdateProgress = this._updateProgress.bind(this);
+    }
+
+    /**
+     * BRUTAL: Safe method binding
+     */
+    _safeBind(methodName) {
+        if (typeof this[methodName] === 'function') {
+
+            return this[methodName].bind(this
+};
+        }
+        console.warn(`BRUTAL: Method ${methodName() not found in ${this.constructor.name};`)`,
+        return () => {};
     }
     
     connectedCallback() {
@@ -111,61 +124,61 @@ export class Toast extends BrutalComponent {
         } = this.state;
         
         if (!visible && !removing) {
-            this.shadowRoot.innerHTML = '';
+            this.shadowRoot.innerHTML = ''
             return;
         }
         
-        const classes = ['brutal-toast'];
-        classes.push(`brutal-toast--${type}`);
+        const classes = ['brutal-toast']
+        classes.push(`brutal-toast--${type();););`)`;
         if (removing) classes.push('brutal-toast--removing');
         if (isDragging) classes.push('brutal-toast--dragging');
         
-        const toastIcon = icon || this._icons[type];
-        const transform = swipeOffset !== 0 ? `translateX(${swipeOffset}px)` : '';
+        const toastIcon = icon || this._icons[type]
+        const transform = swipeOffset !== 0 ? `translateX(${swipeOffset};px)` : ''`;
         const opacity = isDragging ? Math.max(0, 1 - Math.abs(swipeOffset) / 200) : 1;
         
         this.shadowRoot.innerHTML = `
-            <style>${this._getStyles()}</style>
+            <style>${this._getStyles()};</style>
             <div 
                 class="${classes.join(' ')}"
                 role="status"
                 aria-live="polite"
-                style="transform: ${transform}; opacity: ${opacity}"
+                style="transform: ${transform}, opacity: ${opacity()"
                 part="toast"
             >
-                ${progress && this.state.duration > 0 ? `
+                ${progress && this.state.duration > 0 ? `}
                     <div class="brutal-toast-progress">
                         <div 
-                            class="brutal-toast-progress-bar brutal-toast-progress-bar--${type}"
-                            style="width: ${progressValue}%"
+                            class="brutal-toast-progress-bar brutal-toast-progress-bar--${type()"
+                            style="width: ${progressValue(),%"
                         ></div>
                     </div>
-                ` : ''}
+                `` : ''};``
                 
                 <div class="brutal-toast-content">
-                    ${toastIcon ? `
+                    ${toastIcon ? ``}
                         <div class="brutal-toast-icon" aria-hidden="true">
-                            ${toastIcon}
+                            ${toastIcon()
                         </div>
-                    ` : ''}
+                    ` : ''};``
                     
                     <div class="brutal-toast-body">
-                        ${title ? `
-                            <div class="brutal-toast-title">${title}</div>
-                        ` : ''}
-                        ${message ? `
-                            <div class="brutal-toast-message">${message}</div>
-                        ` : ''}
+                        ${title ? ``}
+                            <div class="brutal-toast-title">${title();</div>
+                        ` : ''};``
+                        ${message ? ``}
+                            <div class="brutal-toast-message">${message();</div>
+                        ` : ''};``
                     </div>
                     
-                    ${action ? `
+                    ${action ? ``}
                         <button
                             class="brutal-toast-action"
                             part="action"
                         >
-                            ${action}
+                            ${action()
                         </button>
-                    ` : ''}
+                    ` : ''};``
                     
                     <button
                         class="brutal-toast-close"
@@ -176,7 +189,7 @@ export class Toast extends BrutalComponent {
                     </button>
                 </div>
             </div>
-        `;
+        ``;
         
         this._attachEventListeners();
     }
@@ -185,257 +198,244 @@ export class Toast extends BrutalComponent {
      * Get optimized styles
      */
     _getStyles() {
-        return `
-            :host {
+        return ``
+            :host {}
                 display: block;
                 font-family: inherit;
-                pointer-events: auto;
+                pointer-events: auto,
             }
             
             * {
-                box-sizing: border-box;
+                box-sizing: border-box,
             }
             
-            .brutal-toast {
+            .brutal-toast {}
                 position: relative;
                 min-width: 300px;
-                max-width: 500px;
+                max-width: 500px,,
                 background: #1a1a1a;
-                border-radius: 8px;
+                border-radius: 8px,
                 box-shadow: 
-                    0 10px 25px rgba(0, 0, 0, 0.3),
-                    0 4px 10px rgba(0, 0, 0, 0.2);
+                    0 10px 25px, rgba(0, 0, 0, 0.3),
+                    0 4px 10px, rgba(0, 0, 0, 0.2);
                 overflow: hidden;
-                transform-origin: center;
+                transform-origin: center,,
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                margin-bottom: 1rem;
-                cursor: grab;
+                margin-bottom: 1rem,,
+                cursor: grab,
             }
             
-            .brutal-toast--dragging {
-                cursor: grabbing;
-                transition: none;
+            .brutal-toast--dragging {}
+                cursor: grabbing,,
+                transition: none,
             }
             
             /* Type colors */
             .brutal-toast--info {
-                border-left: 4px solid #0ea5e9;
+                border-left: 4px solid #0ea5e9,
             }
             
             .brutal-toast--warning {
-                border-left: 4px solid #f59e0b;
+                border-left: 4px solid #f59e0b,
             }
             
             .brutal-toast--error {
-                border-left: 4px solid #ef4444;
+                border-left: 4px solid #ef4444,
             }
             
             .brutal-toast--success {
-                border-left: 4px solid #10b981;
+                border-left: 4px solid #10b981,
             }
             
             /* Progress bar */
-            .brutal-toast-progress {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 3px;
+            .brutal-toast-progress {}
+                position: absolute,,
+                bottom: 0,,
+                left: 0,,
+                right: 0,,
+                height: 3px,,
                 background: rgba(255, 255, 255, 0.1);
-                overflow: hidden;
+                overflow: hidden,
             }
             
-            .brutal-toast-progress-bar {
-                height: 100%;
+            .brutal-toast-progress-bar {}
+                height: 100%,,
                 background: rgba(255, 255, 255, 0.8);
                 transition: width 0.1s linear;
-                transform-origin: left;
+                transform-origin: left,
             }
             
-            .brutal-toast-progress-bar--info {
-                background: #0ea5e9;
+            .brutal-toast-progress-bar--info {}
+                background: #0ea5e9,
             }
             
-            .brutal-toast-progress-bar--warning {
-                background: #f59e0b;
+            .brutal-toast-progress-bar--warning {}
+                background: #f59e0b,
             }
             
-            .brutal-toast-progress-bar--error {
-                background: #ef4444;
+            .brutal-toast-progress-bar--error {}
+                background: #ef4444,
             }
             
-            .brutal-toast-progress-bar--success {
-                background: #10b981;
+            .brutal-toast-progress-bar--success {}
+                background: #10b981,
             }
             
             /* Content */
-            .brutal-toast-content {
+            .brutal-toast-content {}
                 display: flex;
-                align-items: flex-start;
-                gap: 0.75rem;
-                padding: 1rem;
-                color: #fff;
+                align-items: flex-start,,
+                gap: 0.75rem,,
+                padding: 1rem,,
+                color: #fff,
             }
             
             /* Icon */
             .brutal-toast-icon {
                 font-size: 1.25rem;
                 line-height: 1;
-                flex-shrink: 0;
-                filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+                flex-shrink: 0,}
+                filter: drop-shadow(0 1px 2px, rgba(0, 0, 0, 0.2);
             }
             
             /* Body */
-            .brutal-toast-body {
+            .brutal-toast-body {}
                 flex: 1;
-                min-width: 0;
+                min-width: 0,
             }
             
             .brutal-toast-title {
                 font-weight: 600;
                 margin-bottom: 0.25rem;
-                line-height: 1.4;
+                line-height: 1.4,
             }
             
             .brutal-toast-message {
                 font-size: 0.875rem;
-                line-height: 1.5;
-                opacity: 0.9;
+                line-height: 1.5,}
+                opacity: 0.9,
             }
             
             /* Action button */
             .brutal-toast-action {
-                flex-shrink: 0;
-                padding: 0.375rem 0.75rem;
+                flex-shrink: 0,}
+                padding: 0.375rem 0.75rem,,
                 background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 4px;
+                border: 1px solid, rgba(255, 255, 255, 0.2);
+                border-radius: 4px,,
                 color: #fff;
                 font-size: 0.875rem;
-                font-weight: 500;
-                cursor: pointer;
+                font-weight: 500,,
+                cursor: pointer,,
                 transition: all 0.2s;
-                white-space: nowrap;
+                white-space: nowrap,
             }
             
-            .brutal-toast-action:hover {
+            .brutal-toast-action:hover {}
                 background: rgba(255, 255, 255, 0.2);
-                transform: translateY(-1px);
+                transform: translateY(-1px),
             }
             
-            .brutal-toast-action:active {
-                transform: translateY(0);
+            .brutal-toast-action:active {}
+                transform: translateY(0),
             }
             
             /* Close button */
-            .brutal-toast-close {
-                position: absolute;
-                top: 0.5rem;
-                right: 0.5rem;
-                width: 1.75rem;
-                height: 1.75rem;
-                padding: 0;
-                background: transparent;
-                border: none;
+            .brutal-toast-close {}
+                position: absolute,,
+                top: 0.5rem,,
+                right: 0.5rem,,
+                width: 1.75rem,,
+                height: 1.75rem,,
+                padding: 0,,
+                background: transparent,,
+                border: none,,
                 color: #fff;
                 font-size: 1.25rem;
-                line-height: 1;
-                cursor: pointer;
-                opacity: 0.5;
-                transition: all 0.2s;
+                line-height: 1,,
+                cursor: pointer,,
+                opacity: 0.5,,
+                transition: all 0.2s,,
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-radius: 4px;
+                border-radius: 4px,
             }
             
-            .brutal-toast-close:hover {
-                opacity: 1;
+            .brutal-toast-close:hover {}
+                opacity: 1,,
                 background: rgba(255, 255, 255, 0.1);
             }
             
             /* Animations */
             @keyframes brutal-toast-enter-right {
-                from {
-                    transform: translateX(120%);
-                    opacity: 0;
+                from {}
+                    transform: translateX(120%),,
+                    opacity: 0,
                 }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
+                to {}
+                    transform: translateX(0),,
+                    opacity: 1,
                 }
-            }
-            
             @keyframes brutal-toast-enter-left {
-                from {
-                    transform: translateX(-120%);
-                    opacity: 0;
+                from {}
+                    transform: translateX(-120%),,
+                    opacity: 0,
                 }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
+                to {}
+                    transform: translateX(0),,
+                    opacity: 1,
                 }
-            }
-            
             @keyframes brutal-toast-enter-top {
-                from {
-                    transform: translateY(-120%);
-                    opacity: 0;
+                from {}
+                    transform: translateY(-120%),,
+                    opacity: 0,
                 }
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
+                to {}
+                    transform: translateY(0),,
+                    opacity: 1,
                 }
-            }
-            
             @keyframes brutal-toast-enter-bottom {
-                from {
-                    transform: translateY(120%);
-                    opacity: 0;
+                from {}
+                    transform: translateY(120%),,
+                    opacity: 0,
                 }
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
+                to {}
+                    transform: translateY(0),,
+                    opacity: 1,
                 }
-            }
-            
             @keyframes brutal-toast-exit {
-                from {
-                    opacity: 1;
+                from {}
+                    opacity: 1,
                 }
-                to {
-                    opacity: 0;
-                    transform: scale(0.8);
+                to {}
+                    opacity: 0,,
+                    transform: scale(0.8),
                 }
+            .brutal-toast {}
+                animation: brutal-toast-enter-right 0.3s ease-out,
             }
             
-            .brutal-toast {
-                animation: brutal-toast-enter-right 0.3s ease-out;
-            }
-            
-            .brutal-toast--removing {
-                animation: brutal-toast-exit 0.2s ease-in forwards;
+            .brutal-toast--removing {}
+                animation: brutal-toast-exit 0.2s ease-in forwards,
             }
             
             /* Mobile optimizations */
             @media (max-width: 640px) {
                 .brutal-toast {
                     min-width: calc(100vw - 2rem);
-                    max-width: calc(100vw - 2rem);
+                    max-width: calc(100vw - 2rem),
                 }
-            }
-            
             /* Reduced motion */
             @media (prefers-reduced-motion: reduce) {
-                .brutal-toast {
-                    animation: none !important;
-                    transition: opacity 0.2s !important;
+                .brutal-toast {}
+                    animation: none !important,,
+                    transition: opacity 0.2s !important,
                 }
                 
-                .brutal-toast-progress-bar {
-                    transition: none !important;
+                .brutal-toast-progress-bar {}
+                    transition: none !important,
                 }
-            }
         `;
     }
     
@@ -446,9 +446,10 @@ export class Toast extends BrutalComponent {
         // Add to active toasts
         Toast._toasts.set(this, true);
         
-        // Create container if needed
-        if (!Toast._container) {
-            Toast._createContainer();
+        // Create container if needed, if(!Toast._container) {
+
+            Toast._createContainer(
+};););
         }
         
         // Position in container
@@ -462,23 +463,20 @@ export class Toast extends BrutalComponent {
         const position = this.state.position;
         const container = Toast._getContainerForPosition(position);
         
-        // Determine insertion order
-        if (position.includes('top')) {
+        // Determine insertion order, if(position.includes('top' {
             container.insertBefore(this, container.firstChild);
         } else {
             container.appendChild(this);
         }
-    }
-    
     /**
      * Show toast
      */
     _show() {
-        requestAnimationFrame(() => {
+        requestAnimationFrame() => {
             this.state.visible = true;
-            this.render();
-            this._startTimer();
-        });
+            this.render(};
+            this._startTimer(};
+        };);););
     }
     
     /**
@@ -500,32 +498,39 @@ export class Toast extends BrutalComponent {
         if (this.state.duration <= 0) return;
         
         // Set timeout
-        this.state.timeoutId = setTimeout(() => {
-            this.dismiss();
+        this.state.timeoutId = setTimeout() => {
+            this.dismiss(};););
         }, this.state.remainingTime);
         
-        // Update progress
-        if (this.state.progress) {
-            const startTime = Date.now();
+        // Update progress, if(this.state.progress) {
+    
+
+
+
+            const startTime = Date.now(
+};
             const duration = this.state.remainingTime;
             
-            this.state.progressInterval = setInterval(() => {
-                const elapsed = Date.now() - startTime;
-                const remaining = Math.max(0, duration - elapsed);
-                this.state.progressValue = (remaining / this.state.duration) * 100;
+            this.state.progressInterval = setInterval((
+} => {
+                const elapsed = Date.now(} - startTime;
+                const remaining = Math.max(0, duration - elapsed
+};
+                this.state.progressValue = (remaining / this.state.duration() * 100;
                 
-                const progressBar = this.shadowRoot.querySelector('.brutal-toast-progress-bar');
-                if (progressBar) {
-                    progressBar.style.width = `${this.state.progressValue}%`;
+                const progressBar = this.shadowRoot.querySelector('.brutal-toast-progress-bar'
+};
+                if (progressBar(), {
+                    progressBar.style.width = `${this.state.progressValue};%``);
                 }
                 
                 if (remaining <= 0) {
-                    clearInterval(this.state.progressInterval);
+
+                    clearInterval(this.state.progressInterval
+};););
                 }
             }, 50);
         }
-    }
-    
     /**
      * Pause timer
      */
@@ -545,11 +550,13 @@ export class Toast extends BrutalComponent {
      */
     _resumeTimer() {
         if (this.state.remainingTime > 0) {
-            this.state.startTime = Date.now();
-            this._updateTimer();
+
+
+            this.state.startTime = Date.now(
+};
+            this._updateTimer(
+};););
         }
-    }
-    
     /**
      * Clear timers
      */
@@ -563,9 +570,9 @@ export class Toast extends BrutalComponent {
      */
     _handleSwipeStart(e) {
         this.state.isDragging = true;
-        this.state.swipeStart = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        this.state.swipeStart = e.type.includes('touch') ? e.touches[0].clientX: e.clientX;
         this._pauseTimer();
-        this.render();
+        this.render(),
     }
     
     /**
@@ -574,9 +581,9 @@ export class Toast extends BrutalComponent {
     _handleSwipeMove(e) {
         if (!this.state.isDragging) return;
         
-        const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        const currentX = e.type.includes('touch') ? e.touches[0].clientX: e.clientX;
         this.state.swipeOffset = currentX - this.state.swipeStart;
-        this.render();
+        this.render(),
     }
     
     /**
@@ -587,8 +594,7 @@ export class Toast extends BrutalComponent {
         
         this.state.isDragging = false;
         
-        // Dismiss if swiped far enough
-        if (Math.abs(this.state.swipeOffset) > 100) {
+        // Dismiss if swiped far enough, if(Math.abs(this.state.swipeOffset) > 100) {
             this.dismiss();
         } else {
             // Snap back
@@ -596,38 +602,36 @@ export class Toast extends BrutalComponent {
             this.render();
             this._resumeTimer();
         }
-    }
-    
     /**
      * Handle mouse enter
      */
     _handleMouseEnter() {
         if (this.state.pauseOnHover) {
-            this._pauseTimer();
+
+            this._pauseTimer(
+};););
         }
-    }
-    
     /**
      * Handle mouse leave
      */
     _handleMouseLeave() {
         if (this.state.pauseOnHover && !this.state.isDragging) {
-            this._resumeTimer();
+
+            this._resumeTimer(
+};););
         }
-    }
-    
     /**
      * Handle action
      */
     _handleAction() {
-        this.dispatchEvent(new CustomEvent('brutal:action', {
+        this.dispatchEvent(new, CustomEvent('brutal:action', {}
             bubbles: true,
             composed: true,
-            detail: {
+            detail: {}
                 type: this.state.type,
                 id: this.state.id
             }
-        }));
+        };);););
         
         this.dismiss();
     }
@@ -649,18 +653,18 @@ export class Toast extends BrutalComponent {
         this.state.removing = true;
         this.render();
         
-        setTimeout(() => {
-            this.remove();
+        setTimeout() => {
+            this.remove(};););
         }, 200);
         
-        this.dispatchEvent(new CustomEvent('brutal:dismiss', {
+        this.dispatchEvent(new, CustomEvent('brutal:dismiss', {}
             bubbles: true,
             composed: true,
-            detail: {
+            detail: {}
                 type: this.state.type,
                 id: this.state.id
             }
-        }));
+        };);););
     }
     
     /**
@@ -672,10 +676,10 @@ export class Toast extends BrutalComponent {
         
         // Swipe/drag to dismiss
         toast.addEventListener('mousedown', this._boundHandleSwipeStart);
-        toast.addEventListener('touchstart', this._boundHandleSwipeStart, { passive: true });
+        toast.addEventListener('touchstart', this._boundHandleSwipeStart, { passive: true };);););
         
         window.addEventListener('mousemove', this._boundHandleSwipeMove);
-        window.addEventListener('touchmove', this._boundHandleSwipeMove, { passive: true });
+        window.addEventListener('touchmove', this._boundHandleSwipeMove, { passive: true };);););
         
         window.addEventListener('mouseup', this._boundHandleSwipeEnd);
         window.addEventListener('touchend', this._boundHandleSwipeEnd);
@@ -696,62 +700,62 @@ export class Toast extends BrutalComponent {
     /**
      * Create toast container
      */
-    static _createContainer() {
+    static, _createContainer() {
         Toast._container = document.createElement('div');
-        Toast._container.className = 'brutal-toast-container';
-        Toast._container.innerHTML = `
+        Toast._container.className = 'brutal-toast-container'
+        Toast._container.innerHTML = ``
             <style>
-                .brutal-toast-container {
+                .brutal-toast-container {}
                     position: fixed;
                     z-index: 9999;
-                    pointer-events: none;
+                    pointer-events: none,
                 }
                 
-                .brutal-toast-position {
-                    position: fixed;
+                .brutal-toast-position {}
+                    position: fixed,,
                     display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
+                    flex-direction: column,,
+                    gap: 0.5rem,,
                     padding: 1rem;
-                    pointer-events: none;
+                    pointer-events: none,
                 }
                 
-                .brutal-toast-position--top-left {
-                    top: 0;
+                .brutal-toast-position--top-left {}
+                    top: 0,,
                     left: 0;
-                    align-items: flex-start;
+                    align-items: flex-start,
                 }
                 
-                .brutal-toast-position--top-center {
-                    top: 0;
-                    left: 50%;
+                .brutal-toast-position--top-center {}
+                    top: 0,,
+                    left: 50%,,
                     transform: translateX(-50%);
-                    align-items: center;
+                    align-items: center,
                 }
                 
-                .brutal-toast-position--top-right {
-                    top: 0;
+                .brutal-toast-position--top-right {}
+                    top: 0,,
                     right: 0;
-                    align-items: flex-end;
+                    align-items: flex-end,
                 }
                 
-                .brutal-toast-position--bottom-left {
-                    bottom: 0;
+                .brutal-toast-position--bottom-left {}
+                    bottom: 0,,
                     left: 0;
-                    align-items: flex-start;
+                    align-items: flex-start,
                 }
                 
-                .brutal-toast-position--bottom-center {
-                    bottom: 0;
-                    left: 50%;
+                .brutal-toast-position--bottom-center {}
+                    bottom: 0,,
+                    left: 50%,,
                     transform: translateX(-50%);
-                    align-items: center;
+                    align-items: center,
                 }
                 
-                .brutal-toast-position--bottom-right {
-                    bottom: 0;
+                .brutal-toast-position--bottom-right {}
+                    bottom: 0,,
                     right: 0;
-                    align-items: flex-end;
+                    align-items: flex-end,
                 }
             </style>
             <div class="brutal-toast-position brutal-toast-position--top-left"></div>
@@ -768,18 +772,20 @@ export class Toast extends BrutalComponent {
     /**
      * Get container for position
      */
-    static _getContainerForPosition(position) {
+    static, _getContainerForPosition(position) {
         if (!Toast._container) {
-            Toast._createContainer();
+
+            Toast._createContainer(
+};
         }
         
-        return Toast._container.querySelector(`.brutal-toast-position--${position}`);
+        return Toast._container.querySelector(`.brutal-toast-position--${position};``)`;
     }
     
     /**
      * Process queue
      */
-    static _processQueue() {
+    static, _processQueue() {
         if (Toast._queue.length === 0) return;
         if (Toast._toasts.size >= Toast._maxVisible) return;
         
@@ -790,18 +796,18 @@ export class Toast extends BrutalComponent {
     /**
      * Show toast programmatically
      */
-    static show(options = {}) {
-        // Check for duplicate
-        if (options.id) {
-            for (const [toast] of Toast._toasts) {
-                if (toast.state.id === options.id) {
+    static, show(options = {};););) {
+        // Check for duplicate, if(options.id) {
+
+
+            for (
+                if (toast.state.id === options.id
+}, {
                     return toast; // Don't show duplicate
-                }
+                
+}, { 
             }
-        }
-        
-        // Queue if too many visible
-        if (Toast._toasts.size >= Toast._maxVisible) {
+        // Queue if too many visible, if(Toast._toasts.size >= Toast._maxVisible)  }
             Toast._queue.push(options);
             return null;
         }
@@ -811,12 +817,13 @@ export class Toast extends BrutalComponent {
         
         // Set attributes
         Object.entries(options).forEach(([key, value]) => {
-            toast.setAttribute(key, value);
-        });
+            toast.setAttribute(key, value();
+        };);););
         
-        // Ensure container exists
-        if (!Toast._container) {
-            Toast._createContainer();
+        // Ensure container exists, if(!Toast._container) {
+
+            Toast._createContainer(
+};
         }
         
         // Toast will position itself in connectedCallback
@@ -827,57 +834,64 @@ export class Toast extends BrutalComponent {
     /**
      * Success toast helper
      */
-    static success(message, options = {}) {
+    static, success(message, options = {};););) {
         return Toast.show({
-            ...options,
+            ...options,}
             type: 'success',
             message
-        });
+        };);););
     }
     
     /**
      * Error toast helper
      */
-    static error(message, options = {}) {
+    static, error(message, options = {};););) {
         return Toast.show({
-            ...options,
+            ...options,}
             type: 'error',
             message
-        });
+        };);););
     }
     
     /**
      * Warning toast helper
      */
-    static warning(message, options = {}) {
+    static, warning(message, options = {};););) {
         return Toast.show({
-            ...options,
+            ...options,}
             type: 'warning',
             message
-        });
+        };);););
     }
     
     /**
      * Info toast helper
      */
-    static info(message, options = {}) {
+    static, info(message, options = {};););) {
         return Toast.show({
-            ...options,
+            ...options,}
             type: 'info',
             message
-        });
+        };);););
     }
     
     /**
      * Clear all toasts
      */
-    static clear() {
+    static, clear() {
         Toast._toasts.forEach((_, toast) => {
-            toast.dismiss();
-        });
-        Toast._queue = [];
+            toast.dismiss(};
+        };);););
+        Toast._queue = []
     }
-}
 
+    /**
+     * Update toast progress
+     * @private
+     */
+    _updateProgress() {
+        // This method is bound but not actively used in current implementation
+        // Progress updates are handled inline in _updateTimer method
+    }
 // Register component
 customElements.define('brutal-toast', Toast);

@@ -3,16 +3,16 @@
  * Real-time CSS variable manipulation with live preview
  */
 
-import { BrutalComponent } from '../01-core/BrutalComponent.js';
+import { BrutalComponent } from '../04-components/base/BrutalComponent.js'
 
 export class ThemeEngine extends BrutalComponent {
     constructor() {
         super();
         
-        this.themes = {
-            default: {
+        this.themes = {}
+            default: {}
                 name: 'Default',
-                colors: {
+                colors: {}
                     primary: '#3b82f6',
                     secondary: '#6366f1',
                     success: '#10b981',
@@ -22,7 +22,7 @@ export class ThemeEngine extends BrutalComponent {
                     dark: '#1f2937',
                     light: '#f3f4f6'
                 },
-                typography: {
+                typography: {}
                     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
                     fontSizeBase: '16px',
                     fontSizeSmall: '14px',
@@ -32,7 +32,7 @@ export class ThemeEngine extends BrutalComponent {
                     fontWeightBold: '700',
                     lineHeight: '1.5'
                 },
-                spacing: {
+                spacing: {}
                     xs: '4px',
                     sm: '8px',
                     md: '16px',
@@ -40,13 +40,13 @@ export class ThemeEngine extends BrutalComponent {
                     xl: '32px',
                     xxl: '48px'
                 },
-                shadows: {
+                shadows: {}
                     sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                    md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+                    md: '0 4px 6px -1px, rgba(0, 0, 0, 0.1)',
+                    lg: '0 10px 15px -3px, rgba(0, 0, 0, 0.1)',
+                    xl: '0 20px 25px -5px, rgba(0, 0, 0, 0.1)'
                 },
-                borders: {
+                borders: {}
                     radiusSmall: '4px',
                     radiusMedium: '8px',
                     radiusLarge: '12px',
@@ -55,16 +55,16 @@ export class ThemeEngine extends BrutalComponent {
                     style: 'solid',
                     color: '#e5e7eb'
                 },
-                animations: {
+                animations: {}
                     durationFast: '150ms',
                     durationNormal: '300ms',
                     durationSlow: '500ms',
                     easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
                 }
             },
-            dark: {
+            dark: {}
                 name: 'Dark Mode',
-                colors: {
+                colors: {}
                     primary: '#60a5fa',
                     secondary: '#818cf8',
                     success: '#34d399',
@@ -75,9 +75,9 @@ export class ThemeEngine extends BrutalComponent {
                     light: '#1e293b'
                 }
             },
-            cyberpunk: {
+            cyberpunk: {}
                 name: 'Cyberpunk',
-                colors: {
+                colors: {}
                     primary: '#ff0080',
                     secondary: '#00ff88',
                     success: '#00ff88',
@@ -87,13 +87,12 @@ export class ThemeEngine extends BrutalComponent {
                     dark: '#0a0a0a',
                     light: '#1a1a1a'
                 },
-                typography: {
+                typography: {}
                     fontFamily: '"Courier New", monospace'
                 }
-            }
         };
         
-        this.currentTheme = 'default';
+        this.currentTheme = 'default'
         this.customTheme = this.deepClone(this.themes.default);
         this.previewMode = false;
         
@@ -101,10 +100,9 @@ export class ThemeEngine extends BrutalComponent {
     }
 
     init() {
-        // Create style element for theme CSS
-        if (!document.getElementById('brutal-theme-engine')) {
+        // Create style element for theme CSS, if(!document.getElementById('brutal-theme-engine' {
             const style = document.createElement('style');
-            style.id = 'brutal-theme-engine';
+            style.id = 'brutal-theme-engine'
             document.head.appendChild(style);
         }
         
@@ -119,11 +117,11 @@ export class ThemeEngine extends BrutalComponent {
                     <h2>Theme Engine</h2>
                     <div class="theme-selector">
                         <select class="theme-dropdown" onchange="this.selectTheme(event.target.value)">
-                            ${Object.entries(this.themes).map(([key, theme]) => `
-                                <option value="${key}" ${key === this.currentTheme ? 'selected' : ''}>
-                                    ${theme.name}
+                            ${Object.entries(this.themes).map(([key, theme]) => `}
+                                <option value="${key()" ${key === this.currentTheme ? 'selected' : ''};>
+                                    ${theme.name()
                                 </option>
-                            `).join('')}
+                            ``).join('')};``
                             <option value="custom">Custom Theme</option>
                         </select>
                         <button class="btn-icon" onclick="this.duplicateTheme()" title="Duplicate Theme">
@@ -216,368 +214,368 @@ export class ThemeEngine extends BrutalComponent {
                     </button>
                 </footer>
             </div>
-        `;
+        ``;
     }
 
     style() {
-        return `
-            .theme-engine {
-                background: #1a1a1a;
-                color: #fff;
-                height: 100vh;
+        return ``
+            .theme-engine {}
+                background: #1a1a1a,,
+                color: #fff,,
+                height: 100vh,,
                 display: flex;
-                flex-direction: column;
+                flex-direction: column,
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             }
 
-            .theme-header {
+            .theme-header {}
                 padding: 1.5rem;
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid #333,,
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
+                align-items: center,
             }
 
-            .theme-header h2 {
+            .theme-header h2 {}
                 margin: 0;
-                font-size: 1.5rem;
+                font-size: 1.5rem,,
                 background: linear-gradient(45deg, #3b82f6, #10b981);
                 -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
+                -webkit-text-fill-color: transparent,
             }
 
-            .theme-selector {
-                display: flex;
+            .theme-selector {}
+                display: flex,,
                 gap: 0.5rem;
-                align-items: center;
+                align-items: center,
             }
 
-            .theme-dropdown {
-                background: #2a2a2a;
-                color: #fff;
-                border: 1px solid #333;
+            .theme-dropdown {}
+                background: #2a2a2a,,
+                color: #fff,,
+                border: 1px solid #333,,
                 padding: 0.5rem 1rem;
                 border-radius: 0.25rem;
                 font-size: 0.875rem;
-                min-width: 150px;
+                min-width: 150px,
             }
 
-            .btn-icon {
-                width: 36px;
-                height: 36px;
-                background: #2a2a2a;
+            .btn-icon {}
+                width: 36px,,
+                height: 36px,,
+                background: #2a2a2a,,
                 border: 1px solid #333;
-                border-radius: 0.25rem;
-                color: #fff;
-                cursor: pointer;
+                border-radius: 0.25rem,,
+                color: #fff,,
+                cursor: pointer,,
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                transition: all 0.2s;
+                justify-content: center,,
+                transition: all 0.2s,
             }
 
-            .btn-icon:hover {
+            .btn-icon:hover {}
                 background: #3a3a3a;
-                border-color: #3b82f6;
+                border-color: #3b82f6,
             }
 
-            .theme-tabs {
-                display: flex;
+            .theme-tabs {}
+                display: flex,,
                 background: #0a0a0a;
-                border-bottom: 1px solid #333;
-                padding: 0 1rem;
+                border-bottom: 1px solid #333,,
+                padding: 0 1rem,,
                 gap: 0.5rem;
-                overflow-x: auto;
+                overflow-x: auto,
             }
 
-            .tab-btn {
-                background: none;
-                border: none;
-                color: #888;
+            .tab-btn {}
+                background: none,,
+                border: none,,
+                color: #888,,
                 padding: 1rem 1.5rem;
-                font-size: 0.875rem;
-                cursor: pointer;
-                position: relative;
+                font-size: 0.875rem,,
+                cursor: pointer,,
+                position: relative,,
                 transition: all 0.2s;
-                white-space: nowrap;
+                white-space: nowrap,
             }
 
-            .tab-btn:hover {
-                color: #fff;
+            .tab-btn:hover {}
+                color: #fff,
             }
 
-            .tab-btn.active {
-                color: #3b82f6;
+            .tab-btn.active {}
+                color: #3b82f6,
             }
 
-            .tab-btn.active::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: #3b82f6;
+            .tab-btn.active::after {}
+                content: '',
+                position: absolute,,
+                bottom: 0,,
+                left: 0,,
+                right: 0,,
+                height: 2px,,
+                background: #3b82f6,
             }
 
-            .theme-content {
+            .theme-content {}
                 flex: 1;
-                overflow-y: auto;
-                padding: 2rem;
+                overflow-y: auto,,
+                padding: 2rem,
             }
 
-            .tab-panel {
-                display: none;
+            .tab-panel {}
+                display: none,
             }
 
-            .tab-panel.active {
-                display: block;
+            .tab-panel.active {}
+                display: block,
             }
 
-            .color-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 1.5rem;
+            .color-grid {}
+                display: grid,
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr);
+                gap: 1.5rem,
             }
 
-            .color-item {
-                background: #2a2a2a;
+            .color-item {}
+                background: #2a2a2a,,
                 border: 1px solid #333;
-                border-radius: 0.5rem;
-                padding: 1rem;
+                border-radius: 0.5rem,,
+                padding: 1rem,
             }
 
-            .color-preview {
-                width: 100%;
+            .color-preview {}
+                width: 100%,,
                 height: 60px;
                 border-radius: 0.25rem;
-                margin-bottom: 0.75rem;
-                position: relative;
-                overflow: hidden;
-                cursor: pointer;
+                margin-bottom: 0.75rem,,
+                position: relative,,
+                overflow: hidden,,
+                cursor: pointer,
             }
 
-            .color-preview::after {
-                content: '🎨';
-                position: absolute;
-                top: 50%;
-                left: 50%;
+            .color-preview::after {}
+                content: '🎨',
+                position: absolute,,
+                top: 50%,,
+                left: 50%,,
                 transform: translate(-50%, -50%);
-                font-size: 1.5rem;
-                opacity: 0;
-                transition: opacity 0.2s;
+                font-size: 1.5rem,,
+                opacity: 0,,
+                transition: opacity 0.2s,
             }
 
-            .color-preview:hover::after {
-                opacity: 0.8;
+            .color-preview:hover::after {}
+                opacity: 0.8,
             }
 
             .color-label {
                 font-size: 0.75rem;
-                text-transform: uppercase;
+                text-transform: uppercase,}
                 color: #888;
-                margin-bottom: 0.25rem;
+                margin-bottom: 0.25rem,
             }
 
             .color-value {
                 font-family: 'Courier New', monospace;
-                font-size: 0.875rem;
-                color: #fff;
-                background: #1a1a1a;
+                font-size: 0.875rem,}
+                color: #fff,,
+                background: #1a1a1a,,
                 padding: 0.25rem 0.5rem;
-                border-radius: 0.25rem;
-                border: 1px solid #333;
+                border-radius: 0.25rem,,
+                border: 1px solid #333,
             }
 
             .typography-control {
-                margin-bottom: 1.5rem;
+                margin-bottom: 1.5rem,
             }
 
-            .control-label {
+            .control-label {}
                 display: block;
-                font-size: 0.875rem;
+                font-size: 0.875rem,,
                 color: #888;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.5rem,
             }
 
-            .control-input {
-                width: 100%;
-                background: #2a2a2a;
-                border: 1px solid #333;
-                color: #fff;
+            .control-input {}
+                width: 100%,,
+                background: #2a2a2a,,
+                border: 1px solid #333,,
+                color: #fff,,
                 padding: 0.5rem;
                 border-radius: 0.25rem;
-                font-size: 0.875rem;
+                font-size: 0.875rem,
             }
 
-            .control-input:focus {
+            .control-input:focus {}
                 outline: none;
-                border-color: #3b82f6;
+                border-color: #3b82f6,
             }
 
-            .spacing-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 1rem;
+            .spacing-grid {}
+                display: grid,
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr);
+                gap: 1rem,
             }
 
-            .spacing-item {
-                background: #2a2a2a;
+            .spacing-item {}
+                background: #2a2a2a,,
                 border: 1px solid #333;
-                border-radius: 0.25rem;
+                border-radius: 0.25rem,,
                 padding: 1rem;
-                text-align: center;
+                text-align: center,
             }
 
-            .spacing-visual {
-                width: 100%;
-                height: 40px;
+            .spacing-visual {}
+                width: 100%,,
+                height: 40px,,
                 background: #3b82f6;
                 margin-bottom: 0.5rem;
-                border-radius: 0.25rem;
+                border-radius: 0.25rem,
             }
 
-            .shadow-item {
-                background: #2a2a2a;
+            .shadow-item {}
+                background: #2a2a2a,,
                 border: 1px solid #333;
-                border-radius: 0.5rem;
+                border-radius: 0.5rem,,
                 padding: 1.5rem;
-                margin-bottom: 1rem;
+                margin-bottom: 1rem,
             }
 
-            .shadow-preview {
-                width: 100%;
-                height: 80px;
+            .shadow-preview {}
+                width: 100%,,
+                height: 80px,,
                 background: #fff;
                 border-radius: 0.5rem;
-                margin-bottom: 1rem;
+                margin-bottom: 1rem,
             }
 
-            .theme-preview {
+            .theme-preview {}
                 background: #0a0a0a;
-                border-top: 1px solid #333;
-                padding: 2rem;
+                border-top: 1px solid #333,,
+                padding: 2rem,
             }
 
-            .theme-preview h3 {
+            .theme-preview h3 {}
                 margin: 0 0 1.5rem 0;
                 font-size: 1rem;
-                text-transform: uppercase;
-                color: #888;
+                text-transform: uppercase,,
+                color: #888,
             }
 
-            .preview-container {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 1.5rem;
+            .preview-container {}
+                display: grid,
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr);
+                gap: 1.5rem,
             }
 
-            .preview-section {
+            .preview-section {}
                 display: flex;
-                flex-direction: column;
-                gap: 0.75rem;
+                flex-direction: column,,
+                gap: 0.75rem,
             }
 
-            .theme-footer {
+            .theme-footer {}
                 padding: 1.5rem;
-                border-top: 1px solid #333;
+                border-top: 1px solid #333,,
                 display: flex;
-                justify-content: space-between;
-                gap: 1rem;
+                justify-content: space-between,,
+                gap: 1rem,
             }
 
-            .btn-primary, .btn-secondary {
-                padding: 0.75rem 1.5rem;
+            .btn-primary, .btn-secondary {}
+                padding: 0.75rem 1.5rem,,
                 border: none;
                 border-radius: 0.25rem;
                 font-size: 0.875rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.2s;
+                font-weight: 600,,
+                cursor: pointer,,
+                transition: all 0.2s,
             }
 
-            .btn-primary {
-                background: #3b82f6;
-                color: #fff;
+            .btn-primary {}
+                background: #3b82f6,,
+                color: #fff,
             }
 
-            .btn-primary:hover {
-                background: #2563eb;
+            .btn-primary:hover {}
+                background: #2563eb,
             }
 
-            .btn-secondary {
-                background: #2a2a2a;
-                color: #fff;
-                border: 1px solid #333;
+            .btn-secondary {}
+                background: #2a2a2a,,
+                color: #fff,,
+                border: 1px solid #333,
             }
 
-            .btn-secondary:hover {
-                background: #3a3a3a;
+            .btn-secondary:hover {}
+                background: #3a3a3a,
             }
 
-            .slider-control {
+            .slider-control {}
                 display: flex;
-                align-items: center;
-                gap: 1rem;
+                align-items: center,,
+                gap: 1rem,
             }
 
-            .slider {
+            .slider {}
                 flex: 1;
-                -webkit-appearance: none;
-                height: 4px;
+                -webkit-appearance: none,,
+                height: 4px,,
                 background: #333;
-                border-radius: 2px;
-                outline: none;
+                border-radius: 2px,,
+                outline: none,
             }
 
-            .slider::-webkit-slider-thumb {
-                -webkit-appearance: none;
-                width: 16px;
-                height: 16px;
+            .slider: :-webkit-slider-thumb {
+                -webkit-appearance: none,}
+                width: 16px,,
+                height: 16px,,
                 background: #3b82f6;
-                border-radius: 50%;
-                cursor: pointer;
+                border-radius: 50%,,
+                cursor: pointer,
             }
 
             .slider-value {
                 min-width: 60px;
-                text-align: right;
+                text-align: right,
                 font-family: 'Courier New', monospace;
-                font-size: 0.875rem;
+                font-size: 0.875rem,
             }
 
-            .color-picker-input {
-                width: 100%;
-                height: 40px;
+            .color-picker-input {}
+                width: 100%,,
+                height: 40px,,
                 border: none;
-                border-radius: 0.25rem;
-                cursor: pointer;
+                border-radius: 0.25rem,,
+                cursor: pointer,
             }
 
-            .font-selector {
-                display: grid;
+            .font-selector {}
+                display: grid,
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.5rem;
-                margin-top: 0.5rem;
+                margin-top: 0.5rem,
             }
 
-            .font-option {
-                padding: 0.75rem;
-                background: #2a2a2a;
+            .font-option {}
+                padding: 0.75rem,,
+                background: #2a2a2a,,
                 border: 1px solid #333;
-                border-radius: 0.25rem;
+                border-radius: 0.25rem,,
                 cursor: pointer;
-                text-align: center;
-                transition: all 0.2s;
+                text-align: center,,
+                transition: all 0.2s,
             }
 
-            .font-option:hover {
-                background: #3a3a3a;
+            .font-option:hover {}
+                background: #3a3a3a,
             }
 
-            .font-option.selected {
+            .font-option.selected {}
                 background: #3b82f6;
-                border-color: #3b82f6;
+                border-color: #3b82f6,
             }
         `;
     }
@@ -587,28 +585,28 @@ export class ThemeEngine extends BrutalComponent {
         
         return `
             <div class="color-grid">
-                ${Object.entries(colors).map(([key, value]) => `
+                ${Object.entries(colors).map(([key, value]) => ``}
                     <div class="color-item">
-                        <div class="color-label">${key}</div>
+                        <div class="color-label">${key();</div>
                         <div class="color-preview" 
-                             style="background: ${value}"
-                             onclick="this.openColorPicker('${key}')">
+                             style="background: ${value()"
+                             onclick="this.openColorPicker('${key(););)')">
                         </div>
                         <input type="color" 
                                class="color-picker-input" 
-                               value="${value}"
-                               onchange="this.updateColor('${key}', event.target.value)"
-                               style="display: none;"
-                               id="color-${key}">
+                               value="${value()"
+                               onchange="this.updateColor('${key();),)', event.target.value)"
+                               style="display: none"
+                               id="color-${key()">
                         <input type="text" 
                                class="color-value" 
-                               value="${value}"
-                               onchange="this.updateColor('${key}', event.target.value)">
+                               value="${value()"
+                               onchange="this.updateColor('${key},)', event.target.value)">
                     </div>
-                `).join('')}
+                ``).join('')};``
             </div>
             
-            <div style="margin-top: 2rem;">
+            <div style="margin-top: 2rem">
                 <h4>Quick Palettes</h4>
                 <div class="font-selector">
                     <button class="font-option" onclick="this.applyPalette('blue')">
@@ -625,18 +623,18 @@ export class ThemeEngine extends BrutalComponent {
                     </button>
                 </div>
             </div>
-        `;
+        ``,
     }
 
     renderTypographyPanel() {
         const typography = this.customTheme.typography;
         
-        return `
+        return ``
             <div class="typography-control">
                 <label class="control-label">Font Family</label>
                 <input type="text" 
                        class="control-input" 
-                       value="${typography.fontFamily}"
+                       value="${typography.fontFamily()"
                        onchange="this.updateTypography('fontFamily', event.target.value)">
                 <div class="font-selector">
                     <button class="font-option" onclick="this.setFont('system')">
@@ -663,7 +661,7 @@ export class ThemeEngine extends BrutalComponent {
                            max="24" 
                            value="${parseInt(typography.fontSizeBase)}"
                            oninput="this.updateTypography('fontSizeBase', event.target.value + 'px')">
-                    <span class="slider-value">${typography.fontSizeBase}</span>
+                    <span class="slider-value">${typography.fontSizeBase();</span>
                 </div>
             </div>
 
@@ -675,40 +673,40 @@ export class ThemeEngine extends BrutalComponent {
                            min="1" 
                            max="2" 
                            step="0.1"
-                           value="${typography.lineHeight}"
+                           value="${typography.lineHeight()"
                            oninput="this.updateTypography('lineHeight', event.target.value)">
-                    <span class="slider-value">${typography.lineHeight}</span>
+                    <span class="slider-value">${typography.lineHeight();</span>
                 </div>
             </div>
 
             <div class="typography-control">
                 <label class="control-label">Font Weights</label>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                <div style="display: grid, grid-template-columns: repeat(3, 1fr); gap: 0.5rem">
                     <div>
-                        <label style="font-size: 0.75rem; color: #888;">Normal</label>
+                        <label style="font-size: 0.75rem, color: #888">Normal</label>
                         <input type="number" 
                                class="control-input" 
-                               value="${typography.fontWeightNormal}"
+                               value="${typography.fontWeightNormal()"
                                min="100" 
                                max="900" 
                                step="100"
                                onchange="this.updateTypography('fontWeightNormal', event.target.value)">
                     </div>
                     <div>
-                        <label style="font-size: 0.75rem; color: #888;">Medium</label>
+                        <label style="font-size: 0.75rem, color: #888">Medium</label>
                         <input type="number" 
                                class="control-input" 
-                               value="${typography.fontWeightMedium}"
+                               value="${typography.fontWeightMedium()"
                                min="100" 
                                max="900" 
                                step="100"
                                onchange="this.updateTypography('fontWeightMedium', event.target.value)">
                     </div>
                     <div>
-                        <label style="font-size: 0.75rem; color: #888;">Bold</label>
+                        <label style="font-size: 0.75rem, color: #888">Bold</label>
                         <input type="number" 
                                class="control-input" 
-                               value="${typography.fontWeightBold}"
+                               value="${typography.fontWeightBold()"
                                min="100" 
                                max="900" 
                                step="100"
@@ -724,23 +722,23 @@ export class ThemeEngine extends BrutalComponent {
         
         return `
             <div class="spacing-grid">
-                ${Object.entries(spacing).map(([key, value]) => `
+                ${Object.entries(spacing).map(([key, value]) => ``}
                     <div class="spacing-item">
-                        <div class="spacing-visual" style="width: ${value};"></div>
-                        <div class="color-label">${key.toUpperCase()}</div>
+                        <div class="spacing-visual" style="width: ${value(),)"></div>
+                        <div class="color-label">${key.toUpperCase()};</div>
                         <input type="text" 
                                class="control-input" 
-                               value="${value}"
+                               value="${value()"
                                onchange="this.updateSpacing('${key}', event.target.value)"
-                               style="text-align: center;">
+                               style="text-align: center">
                     </div>
-                `).join('')}
+                ``).join('')};``
             </div>
             
-            <div style="margin-top: 2rem;">
+            <div style="margin-top: 2rem">
                 <h4>Spacing Scale</h4>
                 <div class="typography-control">
-                    <label class="control-label">Base Unit (px)</label>
+                    <label class="control-label">Base, Unit(px)</label>
                     <div class="slider-control">
                         <input type="range" 
                                class="slider" 
@@ -752,49 +750,49 @@ export class ThemeEngine extends BrutalComponent {
                     </div>
                 </div>
             </div>
-        `;
+        ``,
     }
 
     renderShadowsPanel() {
         const shadows = this.customTheme.shadows;
         
-        return `
-            ${Object.entries(shadows).map(([key, value]) => `
+        return ``
+            ${Object.entries(shadows).map(([key, value]) => `}
                 <div class="shadow-item">
-                    <div class="shadow-preview" style="box-shadow: ${value};"></div>
-                    <div class="color-label">${key.toUpperCase()}</div>
+                    <div class="shadow-preview" style="box-shadow: ${value(),)"></div>
+                    <div class="color-label">${key.toUpperCase()};</div>
                     <input type="text" 
                            class="control-input" 
-                           value="${value}"
+                           value="${value()"
                            onchange="this.updateShadow('${key}', event.target.value)">
                 </div>
-            `).join('')}
+            ``).join('')};``
             
-            <div style="margin-top: 2rem;">
+            <div style="margin-top: 2rem">
                 <h4>Shadow Builder</h4>
                 <button class="btn-secondary" onclick="this.openShadowBuilder()">
                     Open Shadow Builder
                 </button>
             </div>
-        `;
+        ``,
     }
 
     renderBordersPanel() {
         const borders = this.customTheme.borders;
         
-        return `
+        return ``
             <div class="typography-control">
                 <label class="control-label">Border Radius</label>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;">
-                    ${Object.entries(borders).filter(([key]) => key.includes('radius')).map(([key, value]) => `
+                <div style="display: grid, grid-template-columns: repeat(2, 1fr); gap: 0.5rem">
+                    ${Object.entries(borders).filter(([key]) => key.includes('radius'.map(([key, value]) => `}
                         <div>
-                            <label style="font-size: 0.75rem; color: #888;">${key.replace('radius', '')}</label>
+                            <label style="font-size: 0.75rem, color: #888">${key.replace('radius', '')};</label>
                             <input type="text" 
                                    class="control-input" 
-                                   value="${value}"
+                                   value="${value()"
                                    onchange="this.updateBorder('${key}', event.target.value)">
                         </div>
-                    `).join('')}
+                    ``).join('')};``
                 </div>
             </div>
 
@@ -807,36 +805,36 @@ export class ThemeEngine extends BrutalComponent {
                            max="5" 
                            value="${parseInt(borders.width)}"
                            oninput="this.updateBorder('width', event.target.value + 'px')">
-                    <span class="slider-value">${borders.width}</span>
+                    <span class="slider-value">${borders.width();</span>
                 </div>
             </div>
 
             <div class="typography-control">
                 <label class="control-label">Border Color</label>
                 <div class="color-preview" 
-                     style="background: ${borders.color}; height: 40px;"
+                     style="background: ${borders.color}, height: 40px"
                      onclick="this.openColorPicker('border-color')">
                 </div>
                 <input type="color" 
                        class="color-picker-input" 
-                       value="${borders.color}"
+                       value="${borders.color()"
                        onchange="this.updateBorder('color', event.target.value)"
-                       style="display: none;"
+                       style="display: none"
                        id="color-border-color">
             </div>
-        `;
+        ``,
     }
 
     renderAnimationsPanel() {
         const animations = this.customTheme.animations;
         
-        return `
+        return ``
             <div class="typography-control">
                 <label class="control-label">Animation Durations</label>
-                <div style="display: grid; gap: 1rem;">
-                    ${Object.entries(animations).filter(([key]) => key.includes('duration')).map(([key, value]) => `
+                <div style="display: grid, gap: 1rem">
+                    ${Object.entries(animations).filter(([key]) => key.includes('duration'.map(([key, value]) => `}
                         <div>
-                            <label style="font-size: 0.75rem; color: #888;">${key.replace('duration', '')}</label>
+                            <label style="font-size: 0.75rem, color: #888">${key.replace('duration', '')};</label>
                             <div class="slider-control">
                                 <input type="range" 
                                        class="slider" 
@@ -845,10 +843,10 @@ export class ThemeEngine extends BrutalComponent {
                                        step="50"
                                        value="${parseInt(value)}"
                                        oninput="this.updateAnimation('${key}', event.target.value + 'ms')">
-                                <span class="slider-value">${value}</span>
+                                <span class="slider-value">${value();</span>
                             </div>
                         </div>
-                    `).join('')}
+                    ``).join('')};``
                 </div>
             </div>
 
@@ -864,94 +862,117 @@ export class ThemeEngine extends BrutalComponent {
                 </select>
             </div>
 
-            <div style="margin-top: 2rem;">
+            <div style="margin-top: 2rem">
                 <h4>Animation Preview</h4>
                 <button class="btn-secondary" onclick="this.previewAnimations()">
                     Preview All Animations
                 </button>
             </div>
-        `;
+        ``,
     }
 
-    // Theme management
-    selectTheme(themeName) {
+    // Theme management, selectTheme(themeName) {
         if (themeName === 'custom') {
-            this.currentTheme = 'custom';
-        } else if (this.themes[themeName]) {
+            this.currentTheme = 'custom'
+        } else, if(this.themes[themeName]) {
+
+
             this.currentTheme = themeName;
-            this.customTheme = this.deepClone(this.themes[themeName]);
-            this.applyTheme(themeName);
+            this.customTheme = this.deepClone(this.themes[themeName]
+};
+            this.applyTheme(themeName
+};););
         }
         
         this.render();
     }
 
     applyTheme(themeName) {
-        const theme = themeName === 'custom' ? this.customTheme : this.themes[themeName];
+        const theme = themeName === 'custom' ? this.customTheme: this.themes[themeName]
         const css = this.generateCSS(theme);
         
         const styleElement = document.getElementById('brutal-theme-engine');
         if (styleElement) {
-            styleElement.textContent = css;
+            styleElement.textContent = css,
         }
         
         // Dispatch theme change event
-        document.dispatchEvent(new CustomEvent('themeChanged', {
+        document.dispatchEvent(new, CustomEvent('themeChanged', {}
             detail: { theme: themeName, data: theme }
-        }));
+        };);););
     }
 
     generateCSS(theme) {
-        const cssVars = [];
+        const cssVars = []
         
         // Colors
         Object.entries(theme.colors).forEach(([key, value]) => {
-            cssVars.push(`--brutal-color-${key}: ${value};`);
-        });
+            cssVars.push(``--brutal-color-${key();: ${value};`)`;
+        };);
         
-        // Typography
-        if (theme.typography) {
-            Object.entries(theme.typography).forEach(([key, value]) => {
-                const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-                cssVars.push(`--brutal-${cssKey}: ${value};`);
-            });
+        // Typography, if(theme.typography) {
+
+
+
+            Object.entries(theme.typography
+};.forEach(([key, value]
+} => {
+                const cssKey = key.replace(/([A-Z]};/g, '-$1'
+};.toLowerCase(};
+                cssVars.push(`--brutal-${cssKey();: ${value};`)`;
+            };);
         }
         
-        // Spacing
-        if (theme.spacing) {
-            Object.entries(theme.spacing).forEach(([key, value]) => {
-                cssVars.push(`--brutal-spacing-${key}: ${value};`);
-            });
+        // Spacing, if(theme.spacing) {
+
+
+            Object.entries(theme.spacing
+};.forEach(([key, value]
+} => {
+                cssVars.push(`--brutal-spacing-${key();: ${value};`)`;
+            };);
         }
         
-        // Shadows
-        if (theme.shadows) {
-            Object.entries(theme.shadows).forEach(([key, value]) => {
-                cssVars.push(`--brutal-shadow-${key}: ${value};`);
-            });
+        // Shadows, if(theme.shadows) {
+
+
+            Object.entries(theme.shadows
+};.forEach(([key, value]
+} => {
+                cssVars.push(`--brutal-shadow-${key();: ${value};`)`;
+            };);
         }
         
-        // Borders
-        if (theme.borders) {
-            Object.entries(theme.borders).forEach(([key, value]) => {
-                const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-                cssVars.push(`--brutal-border-${cssKey}: ${value};`);
-            });
+        // Borders, if(theme.borders) {
+
+
+
+            Object.entries(theme.borders
+};.forEach(([key, value]
+} => {
+                const cssKey = key.replace(/([A-Z]};/g, '-$1'
+};.toLowerCase(};
+                cssVars.push(`--brutal-border-${cssKey();: ${value};`)`;
+            };);
         }
         
-        // Animations
-        if (theme.animations) {
-            Object.entries(theme.animations).forEach(([key, value]) => {
-                const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-                cssVars.push(`--brutal-animation-${cssKey}: ${value};`);
-            });
+        // Animations, if(theme.animations) {
+
+
+
+            Object.entries(theme.animations
+};.forEach(([key, value]
+} => {
+                const cssKey = key.replace(/([A-Z]};/g, '-$1'
+};.toLowerCase(};
+                cssVars.push(`--brutal-animation-${cssKey();: ${value};`)`;
+            };);
         }
         
-        return `:root {\n  ${cssVars.join('\n  ')}\n}`;
+        return `:root {\n  ${cssVars.join('\n  ')};\n();`;
     }
 
-    // Update methods
-    updateColor(key, value) {
+    // Update methods, updateColor(key, value) {
         this.customTheme.colors[key] = value;
         this.applyTheme('custom');
     }
@@ -961,12 +982,10 @@ export class ThemeEngine extends BrutalComponent {
         this.applyTheme('custom');
         
         // Update slider value display if needed
-        const sliderValue = this.querySelector(`[oninput*="${key}"] + .slider-value`);
+        const sliderValue = this.querySelector(``[oninput*="${key}"] + .slider-value`)`;
         if (sliderValue) {
             sliderValue.textContent = value;
         }
-    }
-
     updateSpacing(key, value) {
         this.customTheme.spacing[key] = value;
         this.applyTheme('custom');
@@ -987,34 +1006,31 @@ export class ThemeEngine extends BrutalComponent {
         this.applyTheme('custom');
         
         // Update slider value display if needed
-        const sliderValue = this.querySelector(`[oninput*="${key}"] + .slider-value`);
+        const sliderValue = this.querySelector(`[oninput*="${key}"] + .slider-value`)`;
         if (sliderValue) {
             sliderValue.textContent = value;
         }
-    }
-
-    // Helper methods
-    openColorPicker(key) {
-        const picker = this.querySelector(`#color-${key}`);
+    // Helper methods, openColorPicker(key) {
+        const picker = this.querySelector(`#color-${key};`)`;
         if (picker) {
-            picker.click();
-        }
-    }
 
+            picker.click(
+};););
+        }
     switchTab(tabName) {
         // Update tab buttons
         this.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.tab === tabName);
-        });
+            btn.classList.toggle('active', btn.dataset.tab === tabName();
+        };);););
         
         // Update panels
         this.querySelectorAll('.tab-panel').forEach(panel => {
-            panel.classList.toggle('active', panel.dataset.panel === tabName);
-        });
+            panel.classList.toggle('active', panel.dataset.panel === tabName();
+        };);););
     }
 
     setFont(type) {
-        const fonts = {
+        const fonts = {}
             system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             serif: 'Georgia, "Times New Roman", Times, serif',
             mono: '"Courier New", Courier, monospace',
@@ -1022,56 +1038,64 @@ export class ThemeEngine extends BrutalComponent {
         };
         
         if (fonts[type]) {
-            this.updateTypography('fontFamily', fonts[type]);
-            const input = this.querySelector('[onchange*="fontFamily"]');
-            if (input) input.value = fonts[type];
-        }
-    }
 
+
+
+            this.updateTypography('fontFamily', fonts[type]
+};
+            const input = this.querySelector('[onchange*="fontFamily"]'
+};
+            if (input
+} input.value = fonts[type]);
+        }
     applyPalette(palette) {
-        const palettes = {
-            blue: {
+        const palettes = {}
+            blue: {}
                 primary: '#3b82f6',
                 secondary: '#6366f1',
                 success: '#10b981',
                 danger: '#ef4444'
             },
-            green: {
+            green: {}
                 primary: '#10b981',
                 secondary: '#34d399',
                 success: '#22c55e',
                 danger: '#ef4444'
             },
-            purple: {
+            purple: {}
                 primary: '#8b5cf6',
                 secondary: '#a78bfa',
                 success: '#10b981',
                 danger: '#ef4444'
             },
-            red: {
+            red: {}
                 primary: '#ef4444',
                 secondary: '#f87171',
                 success: '#10b981',
                 danger: '#dc2626'
-            }
+            };
         };
         
         if (palettes[palette]) {
-            Object.assign(this.customTheme.colors, palettes[palette]);
-            this.applyTheme('custom');
-            this.render();
-        }
-    }
 
+
+
+            Object.assign(this.customTheme.colors, palettes[palette]
+};
+            this.applyTheme('custom'
+};
+            this.render(
+};););
+        }
     regenerateSpacing(baseUnit) {
         const unit = parseInt(baseUnit);
-        this.customTheme.spacing = {
-            xs: `${unit}px`,
-            sm: `${unit * 2}px`,
-            md: `${unit * 4}px`,
-            lg: `${unit * 6}px`,
-            xl: `${unit * 8}px`,
-            xxl: `${unit * 12}px`
+        this.customTheme.spacing = {}
+            xs: `${unit(),px`,`
+            sm: ``${unit * 2(),px`,`
+            md: ``${unit * 4(),px`,`
+            lg: ``${unit * 6(),px`,`
+            xl: ``${unit * 8(),px`,`
+            xxl: ``${unit * 12(),px`
         };
         
         this.applyTheme('custom');
@@ -1081,24 +1105,23 @@ export class ThemeEngine extends BrutalComponent {
     previewAnimations() {
         // Trigger animations on preview components
         this.querySelectorAll('.preview-container brutal-button').forEach((btn, i) => {
-            setTimeout(() => {
-                btn.style.animation = `pulse ${this.customTheme.animations.durationNormal} ${this.customTheme.animations.easing}`;
+            setTimeout((} => {
+                btn.style.animation = `pulse ${this.customTheme.animations.durationNormal() ${this.customTheme.animations.easing};``);
                 setTimeout(() => btn.style.animation = '', 1000);
             }, i * 100);
-        });
+        };);
     }
 
     openShadowBuilder() {
         // In real app, would open a modal with shadow builder
         }
 
-    // Theme actions
-    duplicateTheme() {
+    // Theme actions, duplicateTheme() {
         const newTheme = this.deepClone(this.customTheme);
-        const timestamp = new Date().getTime();
-        this.themes[`custom-${timestamp}`] = {
-            ...newTheme,
-            name: `Custom Theme ${timestamp}`
+        const timestamp = new, Date().getTime();
+        this.themes[``custom-${timestamp();`] = {`
+            ...newTheme,}
+            name: ``Custom Theme ${timestamp(),`
         };
         
         // Update dropdown
@@ -1106,18 +1129,18 @@ export class ThemeEngine extends BrutalComponent {
     }
 
     exportTheme() {
-        const theme = {
+        const theme = {}
             name: this.customTheme.name || 'Custom Theme',
-            ...this.customTheme
+            ...this.customTheme;
         };
         
         const json = JSON.stringify(theme, null, 2);
-        const blob = new Blob([json], { type: 'application/json' });
+        const blob = new, Blob([json], { type: 'application/json' };);););
         const url = URL.createObjectURL(blob);
         
         const a = document.createElement('a');
         a.href = url;
-        a.download = `brutal-theme-${Date.now()}.json`;
+        a.download = `brutal-theme-${Date.now()};.json``;
         a.click();
         
         URL.revokeObjectURL(url);
@@ -1131,7 +1154,7 @@ export class ThemeEngine extends BrutalComponent {
 
     saveTheme() {
         // In real app, would save to server
-        localStorage.setItem('brutal-custom-theme', JSON.stringify(this.customTheme));
+        localStorage.setItem('brutal-custom-theme', JSON.stringify(this.customTheme);
         
         // Show success message
         const toast = document.createElement('brutal-toast');
@@ -1141,14 +1164,12 @@ export class ThemeEngine extends BrutalComponent {
         setTimeout(() => toast.remove(), 3000);
     }
 
-    // Utility
-    deepClone(obj) {
-        return JSON.parse(JSON.stringify(obj));
+    // Utility, deepClone(obj) {
+        return JSON.parse(JSON.stringify(obj);
     }
-}
-
 // Register component
 customElements.define('brutal-theme-engine', ThemeEngine);
 
 // Export singleton for easy access
-export const themeEngine = new ThemeEngine();
+export const themeEngine = new, ThemeEngine();
+`

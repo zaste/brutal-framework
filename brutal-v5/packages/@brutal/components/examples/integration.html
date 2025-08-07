@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@brutal/components - Integration Example</title>
+</head>
+<body>
+  <h1>@brutal/components Integration Example</h1>
+  
+  <p>This example shows integration with other BRUTAL packages.</p>
+  <p>Check the console for event logs.</p>
+  
+  <button id="start">Start Processing</button>
+  <div id="status"></div>
+
+  <script type="module">
+    // This example assumes other packages are available
+    // In real use, you would import them
+    
+    import { ExampleFeature } from '../dist/index.js';
+    
+    // Simulated EventEmitter for demo
+    class EventEmitter {
+      constructor() {
+        this.listeners = new Map();
+      }
+      
+      on(event, callback) {
+        if (!this.listeners.has(event)) {
+          this.listeners.set(event, []);
+        }
+        this.listeners.get(event).push(callback);
+      }
+      
+      emit(event, data) {
+        const callbacks = this.listeners.get(event) || [];
+        callbacks.forEach(cb => cb(data));
+      }
+    }
+    
+    class ProcessingService extends EventEmitter {
+      constructor() {
+        super();
+        this.feature = new ExampleFeature({ debug: true });
+      }
+      
+      async process(input) {
+        this.emit('start', { input });
+        
+        const result = await this.feature.execute(input);
+        
+        if (result.success) {
+          this.emit('success', result.data);
+        } else {
+          this.emit('error', result.error);
+        }
+        
+        return result;
+      }
+    }
+    
+    const service = new ProcessingService();
+    const status = document.getElementById('status');
+    
+    service.on('start', ({ input }) => {
+      console.log('[Event] Processing started:', input);
+      status.textContent = `Processing: ${input}...`;
+    });
+    
+    service.on('success', (data) => {
+      console.log('[Event] Success:', data);
+      status.textContent = `Success: ${data}`;
+      status.style.color = 'green';
+    });
+    
+    service.on('error', (error) => {
+      console.log('[Event] Error:', error);
+      status.textContent = `Error: ${error.message}`;
+      status.style.color = 'red';
+    });
+    
+    document.getElementById('start').addEventListener('click', async () => {
+      const testInputs = ['First', 'Second', 'Third'];
+      
+      for (const input of testInputs) {
+        await service.process(input);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      
+      status.textContent = 'All processing complete!';
+    });
+  </script>
+</body>
+</html>

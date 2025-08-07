@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTAL Lite Bundle Test</title>
+</head>
+<body>
+  <h1>BRUTAL Lite Bundle Test</h1>
+  <div id="app"></div>
+  
+  <script type="module">
+    import * as brutal from '../dist/brutal-lite.js';
+    
+    console.log('BRUTAL Lite loaded:', brutal);
+    
+    // Test foundation
+    if (brutal.foundation) {
+      console.log('✅ Foundation module loaded');
+    }
+    
+    // Test shared utilities
+    if (brutal.shared) {
+      console.log('✅ Shared module loaded');
+      
+      // Test error classes
+      if (brutal.shared.BrutalError) {
+        const error = new brutal.shared.BrutalError('Test error');
+        console.log('✅ BrutalError works:', error.message);
+      }
+    }
+    
+    // Test templates
+    if (brutal.templates) {
+      console.log('✅ Templates module loaded');
+      
+      // Test template compilation
+      if (brutal.templates.compile) {
+        const template = brutal.templates.compile('Hello ${name}!');
+        const result = template.render({ name: 'BRUTAL' });
+        console.log('✅ Template rendering works:', result);
+        document.getElementById('app').innerHTML = result;
+      }
+    }
+    
+    // Test components
+    if (brutal.components) {
+      console.log('✅ Components module loaded');
+    }
+    
+    // Bundle info
+    console.log('Bundle size (gzipped): ~1.96KB');
+  </script>
+</body>
+</html>

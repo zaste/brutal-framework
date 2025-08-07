@@ -1,0 +1,110 @@
+{
+  "name": "@brutal/cache",
+  "timestamp": "2025-07-15T10:24:04.831Z",
+  "exports": {
+    "VERSION": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "DEFAULT_CONFIG": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "INTERNAL": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "ExampleFeature": {
+      "file": "example-feature/example-feature.ts",
+      "type": "class"
+    },
+    "FeatureState": {
+      "file": "example-feature/example-feature.types.ts",
+      "type": "interface"
+    },
+    "ProcessOptions": {
+      "file": "example-feature/example-feature.types.ts",
+      "type": "interface"
+    },
+    "validateOptions": {
+      "file": "example-feature/helpers/validate.ts",
+      "type": "function"
+    },
+    "formatError": {
+      "file": "example-feature/helpers/validate.ts",
+      "type": "function"
+    },
+    "createCache": {
+      "file": "factory/cache-factory.ts",
+      "type": "function"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "invalidation": {
+      "file": "invalidation/index.ts",
+      "type": "const"
+    },
+    "memory": {
+      "file": "memory/index.ts",
+      "type": "const"
+    },
+    "MemoryCache": {
+      "file": "memory/memory-cache.ts",
+      "type": "class"
+    },
+    "persistent": {
+      "file": "persistent/index.ts",
+      "type": "const"
+    },
+    "StorageCache": {
+      "file": "storage/storage-cache.ts",
+      "type": "class"
+    },
+    "strategies": {
+      "file": "strategies/index.ts",
+      "type": "const"
+    },
+    "ExampleOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ExampleResult": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ExampleCallback": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "CacheOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "CacheEntry": {
+      "file": "types.ts",
+      "type": "interface"
+    }
+  },
+  "files": [
+    "constants.ts",
+    "example-feature/example-feature.ts",
+    "example-feature/example-feature.types.ts",
+    "example-feature/helpers/validate.ts",
+    "factory/cache-factory.ts",
+    "index.ts",
+    "invalidation/index.ts",
+    "memory/index.ts",
+    "memory/memory-cache.ts",
+    "persistent/index.ts",
+    "storage/storage-cache.ts",
+    "strategies/index.ts",
+    "types.ts"
+  ],
+  "bundleSize": 6271,
+  "dependencies": {
+    "@brutal/shared": "workspace:*"
+  },
+  "consumers": []
+}

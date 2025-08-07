@@ -1,0 +1,44 @@
+{
+  "name": "@brutal/enhanced-state",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "BRUTAL V5 - enhanced-state package",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "size": "size-limit",
+    "validate:structure": "node ../../scripts/validate-structure.js ."
+  },
+  "dependencies": {
+    "@brutal/state": "workspace:*"
+  },
+  "devDependencies": {},
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "8KB"
+    }
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

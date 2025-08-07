@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTAL V5 - Basic Test</title>
+</head>
+<body>
+  <h1>BRUTAL V5 - Basic Test</h1>
+  
+  <div id="app"></div>
+  
+  <script type="module">
+    // Test imports from packages directly
+    import { registry, configLoader } from '../packages/@brutal/foundation/src/index.js';
+    import { BrutalError, sanitizeHTML } from '../packages/@brutal/shared/src/index.js';
+    import { EventEmitter } from '../packages/@brutal/events/src/index.js';
+    import { BrutalComponent } from '../packages/@brutal/components/src/index.js';
+    import { createStore } from '../packages/@brutal/state/src/index.js';
+    
+    console.log('🧪 Testing BRUTAL V5...');
+    
+    // Test 1: Foundation
+    console.log('\n1️⃣ Foundation:');
+    registry.register('@brutal/test', '1.0.0');
+    console.log('✅ Registry:', registry.list());
+    
+    configLoader.load({ debug: true });
+    console.log('✅ Config:', configLoader.get('debug'));
+    
+    // Test 2: Shared utilities
+    console.log('\n2️⃣ Shared:');
+    const dirty = '<script>alert("xss")</script>';
+    console.log('✅ Sanitized:', sanitizeHTML(dirty));
+    
+    const error = new BrutalError('Test error', 'TEST_001');
+    console.log('✅ Error:', error.message, error.code);
+    
+    // Test 3: Events
+    console.log('\n3️⃣ Events:');
+    const emitter = new EventEmitter();
+    emitter.on('test', (data) => console.log('✅ Event received:', data));
+    emitter.emit('test', { message: 'Hello BRUTAL!' });
+    
+    // Test 4: State
+    console.log('\n4️⃣ State:');
+    const store = createStore({ count: 0 });
+    store.subscribe(state => console.log('✅ State changed:', state));
+    store.setState({ count: 1 });
+    
+    // Test 5: Components
+    console.log('\n5️⃣ Components:');
+    class TestComponent extends BrutalComponent {
+      constructor() {
+        super();
+        console.log('✅ Component created');
+      }
+      
+      init() {
+        console.log('✅ Component initialized');
+        this.render();
+      }
+      
+      render() {
+        this.innerHTML = '<p>BRUTAL Component Rendered!</p>';
+        console.log('✅ Component rendered');
+      }
+    }
+    
+    // Register and use component
+    customElements.define('test-component', TestComponent);
+    const component = document.createElement('test-component');
+    document.getElementById('app').appendChild(component);
+    
+    console.log('\n✨ All tests completed!');
+  </script>
+</body>
+</html>

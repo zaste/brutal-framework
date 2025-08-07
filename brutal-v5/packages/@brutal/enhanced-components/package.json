@@ -1,0 +1,50 @@
+{
+  "name": "@brutal/enhanced-components",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "BRUTAL V5 - Enhanced components with async loading, portals, observers, and advanced lifecycle",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:playwright": "playwright test",
+    "serve": "node serve-enhanced.js",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "size": "size-limit",
+    "validate:structure": "node ../../scripts/validate-structure.js ."
+  },
+  "dependencies": {
+    "@brutal/components": "workspace:*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "@size-limit/preset-small-lib": "^11.2.0",
+    "vite": "^7.0.4"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "10KB"
+    }
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

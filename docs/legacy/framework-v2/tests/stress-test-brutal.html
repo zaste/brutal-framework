@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTAL Stress Test - Enhanced Components</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: monospace;
+      background: #000;
+      color: #0f0;
+      padding: 1rem;
+    }
+    .test-header {
+      border: 2px solid #0f0;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .metric {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      background: #111;
+    }
+    .fail {
+      color: #f00;
+      font-weight: bold;
+    }
+    .pass {
+      color: #0f0;
+    }
+    .warn {
+      color: #ff0;
+    }
+    #test-container {
+      position: absolute;
+      left: -9999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-header">
+    <h1>🔥 BRUTAL PERFORMANCE STRESS TEST</h1>
+    <p>Testing Enhanced Components to their limits...</p>
+  </div>
+  
+  <div id="results"></div>
+  <div id="test-container"></div>
+
+  <script type="module">
+    import '../../src/components/sections/hero-section.js';
+    
+    const results = document.getElementById('results');
+    const container = document.getElementById('test-container');
+    const tests = [];
+    
+    function log(test, passed, time, message) {
+      const div = document.createElement('div');
+      div.className = 'metric';
+      const status = passed ? '<span class="pass">PASS</span>' : '<span class="fail">FAIL</span>';
+      div.innerHTML = `${status} [${time.toFixed(3)}ms] ${test}: ${message}`;
+      results.appendChild(div);
+      tests.push({ test, passed, time });
+    }
+    
+    function logWarn(message) {
+      const div = document.createElement('div');
+      div.className = 'metric warn';
+      div.innerHTML = `⚠️  ${message}`;
+      results.appendChild(div);
+    }
+    
+    // TEST 1: Create 1000 components rapidly
+    async function testMassCreation() {
+      const start = performance.now();
+      const components = [];
+      
+      for (let i = 0; i < 1000; i++) {
+        const hero = document.createElement('hero-section');
+        components.push(hero);
+      }
+      
+      const time = performance.now() - start;
+      const avgTime = time / 1000;
+      
+      log('Mass Creation (1000 components)', 
+          avgTime < 0.5, 
+          time, 
+          `Average: ${avgTime.toFixed(3)}ms per component`);
+      
+      return components;
+    }
+    
+    // TEST 2: DOM attachment stress
+    async function testDOMAttachment(components) {
+      const start = performance.now();
+      const fragment = document.createDocumentFragment();
+      
+      components.forEach(c => fragment.appendChild(c));
+      container.appendChild(fragment);
+      
+      const time = performance.now() - start;
+      
+      log('DOM Attachment (1000 components)', 
+          time < 100, 
+          time, 
+          `Attached 1000 components to DOM`);
+    }
+    
+    // TEST 3: Rapid variant switching
+    async function testVariantSwitching() {
+      const hero = document.createElement('hero-section');
+      container.appendChild(hero);
+      
+      const variants = ['default', 'split', 'fullscreen', 'gradient', 'minimal', 
+                       'animated', 'particles', 'parallax', 'video', 'cta'];
+      
+      const start = performance.now();
+      
+      // Switch variants 100 times rapidly
+      for (let i = 0; i < 100; i++) {
+        hero.updateVariant(variants[i % variants.length]);
+      }
+      
+      const time = performance.now() - start;
+      const avgTime = time / 100;
+      
+      log('Rapid Variant Switching (100x)', 
+          avgTime < 2, 
+          time, 
+          `Average: ${avgTime.toFixed(3)}ms per switch`);
+    }
+    
+    // TEST 4: Content update bombardment
+    async function testContentUpdates() {
+      const hero = document.createElement('hero-section');
+      container.appendChild(hero);
+      
+      const start = performance.now();
+      
+      // Update content 500 times
+      for (let i = 0; i < 500; i++) {
+        hero.updateContent({
+          title: `Title Update #${i}`,
+          subtitle: `Subtitle with random content ${Math.random()}`,
+          primaryAction: { text: `Action ${i}`, href: `#${i}` }
+        });
+      }
+      
+      const time = performance.now() - start;
+      const avgTime = time / 500;
+      
+      log('Content Update Bombardment (500x)', 
+          avgTime < 1, 
+          time, 
+          `Average: ${avgTime.toFixed(3)}ms per update`);
+    }
+    
+    // TEST 5: Memory leak test
+    async function testMemoryLeaks() {
+      const initialMemory = performance.memory ? performance.memory.usedJSHeapSize : 0;
+      
+      // Create and destroy 100 times
+      for (let i = 0; i < 100; i++) {
+        const hero = document.createElement('hero-section');
+        container.appendChild(hero);
+        hero.updateVariant('animated');
+        hero.updateContent({ title: `Memory test ${i}` });
+        container.removeChild(hero);
+      }
+      
+      // Force garbage collection if available
+      if (window.gc) {
+        window.gc();
+      }
+      
+      const finalMemory = performance.memory ? performance.memory.usedJSHeapSize : 0;
+      const memoryDiff = (finalMemory - initialMemory) / 1024 / 1024;
+      
+      if (performance.memory) {
+        log('Memory Leak Test (100 create/destroy)', 
+            memoryDiff < 5, 
+            memoryDiff, 
+            `Memory difference: ${memoryDiff.toFixed(2)}MB`);
+      } else {
+        logWarn('Memory API not available - skipping memory test');
+      }
+    }
+    
+    // TEST 6: Simultaneous operations
+    async function testSimultaneousOps() {
+      const heroes = [];
+      for (let i = 0; i < 50; i++) {
+        const hero = document.createElement('hero-section');
+        container.appendChild(hero);
+        heroes.push(hero);
+      }
+      
+      const start = performance.now();
+      
+      // All heroes update simultaneously
+      const promises = heroes.map((hero, i) => {
+        return new Promise(resolve => {
+          hero.updateVariant(['gradient', 'minimal', 'animated'][i % 3]);
+          hero.updateContent({
+            title: `Simultaneous Update ${i}`,
+            subtitle: `Testing parallel operations`
+          });
+          resolve();
+        });
+      });
+      
+      await Promise.all(promises);
+      
+      const time = performance.now() - start;
+      
+      log('Simultaneous Operations (50 components)', 
+          time < 50, 
+          time, 
+          `Updated 50 components in parallel`);
+    }
+    
+    // TEST 7: Render performance under load
+    async function testRenderUnderLoad() {
+      // Fill container with 100 components
+      for (let i = 0; i < 100; i++) {
+        const hero = document.createElement('hero-section');
+        hero.updateVariant(['default', 'gradient', 'minimal'][i % 3]);
+        container.appendChild(hero);
+      }
+      
+      // Now create a new one and measure its render time
+      const start = performance.now();
+      const hero = document.createElement('hero-section');
+      container.appendChild(hero);
+      const time = performance.now() - start;
+      
+      log('Render Under Load (with 100 siblings)', 
+          time < 5, 
+          time, 
+          `Single component render with heavy DOM`);
+    }
+    
+    // TEST 8: Event handling stress
+    async function testEventStress() {
+      const hero = document.createElement('hero-section');
+      container.appendChild(hero);
+      
+      let eventCount = 0;
+      hero.addEventListener('click', () => eventCount++);
+      
+      const start = performance.now();
+      
+      // Trigger 1000 click events
+      for (let i = 0; i < 1000; i++) {
+        hero.dispatchEvent(new MouseEvent('click'));
+      }
+      
+      const time = performance.now() - start;
+      
+      log('Event Handling Stress (1000 events)', 
+          time < 10 && eventCount === 1000, 
+          time, 
+          `Processed ${eventCount} events`);
+    }
+    
+    // TEST 9: Attribute mutation observer test
+    async function testAttributeMutations() {
+      const hero = document.createElement('hero-section');
+      container.appendChild(hero);
+      
+      const start = performance.now();
+      
+      // Rapidly change attributes
+      for (let i = 0; i < 200; i++) {
+        hero.setAttribute('data-test', i);
+        hero.setAttribute('class', `test-${i}`);
+        hero.setAttribute('id', `hero-${i}`);
+      }
+      
+      const time = performance.now() - start;
+      
+      log('Attribute Mutations (600 changes)', 
+          time < 20, 
+          time, 
+          `Rapid attribute changes`);
+    }
+    
+    // TEST 10: Compare with React baseline
+    async function testReactComparison() {
+      const results = {
+        creation: 0.031,  // React baseline from previous tests
+        render: 0.157,    // React baseline
+        update: 0.089     // React baseline
+      };
+      
+      // Our component
+      const start = performance.now();
+      const hero = document.createElement('hero-section');
+      const createTime = performance.now() - start;
+      
+      container.appendChild(hero);
+      const renderTime = performance.now() - start - createTime;
+      
+      const updateStart = performance.now();
+      hero.updateContent({ title: 'Comparison Test' });
+      const updateTime = performance.now() - updateStart;
+      
+      log('vs React - Creation', 
+          createTime < results.creation, 
+          createTime, 
+          `${(results.creation / createTime).toFixed(1)}x faster than React`);
+      
+      log('vs React - Render', 
+          renderTime < results.render, 
+          renderTime, 
+          `${(results.render / renderTime).toFixed(1)}x faster than React`);
+      
+      log('vs React - Update', 
+          updateTime < results.update, 
+          updateTime, 
+          `${(results.update / updateTime).toFixed(1)}x faster than React`);
+    }
+    
+    // RUN ALL TESTS
+    async function runAllTests() {
+      logWarn('Starting brutal stress tests...');
+      
+      try {
+        const components = await testMassCreation();
+        await testDOMAttachment(components);
+        
+        // Clear for next tests
+        container.innerHTML = '';
+        
+        await testVariantSwitching();
+        await testContentUpdates();
+        await testMemoryLeaks();
+        await testSimultaneousOps();
+        
+        // Clear again
+        container.innerHTML = '';
+        
+        await testRenderUnderLoad();
+        await testEventStress();
+        await testAttributeMutations();
+        await testReactComparison();
+        
+        // Summary
+        const passed = tests.filter(t => t.passed).length;
+        const failed = tests.filter(t => !t.passed).length;
+        
+        logWarn(`\nTEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
+        
+        if (failed === 0) {
+          logWarn('🎉 ALL TESTS PASSED! Components are BRUTAL!');
+        } else {
+          logWarn('❌ Some tests failed - optimization needed');
+        }
+        
+      } catch (error) {
+        log('Test Suite Error', false, 0, error.message);
+      }
+    }
+    
+    // Run tests after a small delay
+    setTimeout(runAllTests, 100);
+  </script>
+</body>
+</html>

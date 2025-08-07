@@ -1,0 +1,10 @@
+# Compiled JavaScript files
+*.js
+*.d.ts
+*.js.map
+
+# But allow the pre-commit shell script
+!enforce/pre-commit
+
+# Logs
+*.log

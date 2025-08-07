@@ -1,0 +1,1558 @@
+{
+  "timestamp": "2025-07-11T13:43:29.546Z",
+  "totalFiles": {
+    "js": 144,
+    "html": 70,
+    "config": 4
+  },
+  "errors": {
+    "syntaxErrors": [
+      {
+        "file": "01-core/Registry.js",
+        "error": "/workspaces/web/framework-v3/01-core/Registry.js:356\n    const originalLazy = this.lazy.bind(this));\n                                             ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "02-performance/03-DOMScheduler.js",
+        "error": "/workspaces/web/framework-v3/02-performance/03-DOMScheduler.js:40\n    this._processBatch = this._processBatch.bind(this));\n                                                      ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "02-performance/05-EventManager.js",
+        "error": "/workspaces/web/framework-v3/02-performance/05-EventManager.js:41\n    this._handleEvent = this._handleEvent.bind(this));\n                                                    ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "02-performance/09-GestureSystem.js",
+        "error": "/workspaces/web/framework-v3/02-performance/09-GestureSystem.js:39\n        this._boundHandlePointerDown = this._handlePointerDown.bind(this));\n                                                                         ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "03-visual/debug/AutomatedVisualTester.js",
+        "error": "/workspaces/web/framework-v3/03-visual/debug/AutomatedVisualTester.js:60\n        this._boundRunTests = this._runAutomatedTests.bind(this));\n                                                                ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "03-visual/debug/ComponentTree3D.js",
+        "error": "/workspaces/web/framework-v3/03-visual/debug/ComponentTree3D.js:103\n        this._boundRender = this._render.bind(this));\n                                                   ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "03-visual/debug/ConfigPanel.js",
+        "error": "/workspaces/web/framework-v3/03-visual/debug/ConfigPanel.js:107\n        this._boundHandleDrag = this._handleDrag.bind(this));\n                                                           ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "03-visual/debug/RecordingEngine.js",
+        "error": "/workspaces/web/framework-v3/03-visual/debug/RecordingEngine.js:68\n        this._boundCaptureFrame = this._captureFrame.bind(this));\n                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "03-visual/debug/VisualDebugLayer.js",
+        "error": "/workspaces/web/framework-v3/03-visual/debug/VisualDebugLayer.js:43\n        this._boundHandleRender = this._handleRender.bind(this));\n                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "03-visual/debug/VisualDebugLayerGPU.js",
+        "error": "/workspaces/web/framework-v3/03-visual/debug/VisualDebugLayerGPU.js:109\n        this._boundHandleRender = this._handleRender.bind(this));\n                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "03-visual/gpu/GPUComponent.js",
+        "error": "/workspaces/web/framework-v3/03-visual/gpu/GPUComponent.js:59\n        this._boundRender = this._renderGPU.bind(this));\n                                                      ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "03-visual/gpu/ParticleSystem.js",
+        "error": "/workspaces/web/framework-v3/03-visual/gpu/ParticleSystem.js:713\n            );\n            ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/advanced/CodeEditor.js",
+        "error": "/workspaces/web/framework-v3/04-components/advanced/CodeEditor.js:1261\n        lines.forEach(line => observer.observe(line);\n                                                   ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/advanced/DragDropZone.js",
+        "error": "/workspaces/web/framework-v3/04-components/advanced/DragDropZone.js:811\n                        Math.min(bounds.width - physics.radius, physics.position.x);\n                                                                                  ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/base/BrutalComponent.js",
+        "error": "/workspaces/web/framework-v3/04-components/base/BrutalComponent.js:161\n                });\n                 ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/base/DataComponent.js",
+        "error": "/workspaces/web/framework-v3/04-components/base/DataComponent.js:71\n        this._boundScroll = this._handleScroll.bind(this));\n                                                         ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/base/FormComponent.js",
+        "error": "/workspaces/web/framework-v3/04-components/base/FormComponent.js:51\n        this._boundHandleInput = this._handleInput.bind(this));\n                                                             ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/base/InteractiveComponent.js",
+        "error": "/workspaces/web/framework-v3/04-components/base/InteractiveComponent.js:83\n        this._boundHandleKeyDown = this._handleKeyDown.bind(this));\n                                                                 ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/base/LayoutComponent.js",
+        "error": "/workspaces/web/framework-v3/04-components/base/LayoutComponent.js:89\n        this._boundHandleResize = this._handleResize.bind(this));\n                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/base/MediaComponent.js",
+        "error": "/workspaces/web/framework-v3/04-components/base/MediaComponent.js:67\n        this._boundHandleIntersection = this._handleIntersection.bind(this));\n                                                                           ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/base/WebWorkerComponent-Enhanced.js",
+        "error": "/workspaces/web/framework-v3/04-components/base/WebWorkerComponent-Enhanced.js:53\n        this._boundHandleWorkerMessage = this._handleWorkerMessage.bind(this));\n                                                                             ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/base/WebWorkerComponent.js",
+        "error": "/workspaces/web/framework-v3/04-components/base/WebWorkerComponent.js:46\n        this._boundHandleWorkerMessage = this._handleWorkerMessage.bind(this));\n                                                                             ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/core/Button.js",
+        "error": "/workspaces/web/framework-v3/04-components/core/Button.js:48\n        this._boundHandleClick = this._handleClick.bind(this));\n                                                             ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/core/Card.js",
+        "error": "/workspaces/web/framework-v3/04-components/core/Card.js:47\n        this._boundHandleClick = this._handleClick.bind(this));\n                                                             ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/core/HeroSection.js",
+        "error": "/workspaces/web/framework-v3/04-components/core/HeroSection.js:908\n        });\n         ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/core/Input.js",
+        "error": "/workspaces/web/framework-v3/04-components/core/Input.js:76\n        this._boundHandleInput = this._handleInput.bind(this));\n                                                             ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/core/Select.js",
+        "error": "/workspaces/web/framework-v3/04-components/core/Select.js:83\n        this._boundHandleToggle = this._handleToggle.bind(this));\n                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/data/DataGrid.js",
+        "error": "/workspaces/web/framework-v3/04-components/data/DataGrid.js:593\n        });\n         ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/data/List.js",
+        "error": "/workspaces/web/framework-v3/04-components/data/List.js:75\n        this._boundHandleScroll = this._handleScroll.bind(this));\n                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/data/Table.js",
+        "error": "/workspaces/web/framework-v3/04-components/data/Table.js:74\n        this._boundHandleScroll = this._handleScroll.bind(this));\n                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/feedback/Alert.js",
+        "error": "/workspaces/web/framework-v3/04-components/feedback/Alert.js:63\n        this._boundHandleDismiss = this._handleDismiss.bind(this));\n                                                                 ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/feedback/Toast.js",
+        "error": "/workspaces/web/framework-v3/04-components/feedback/Toast.js:72\n        this._boundHandleSwipeStart = this._handleSwipeStart.bind(this));\n                                                                       ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/forms/FormBuilder.js",
+        "error": "/workspaces/web/framework-v3/04-components/forms/FormBuilder.js:79\n            });\n             ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/media/ImageGallery.js",
+        "error": "/workspaces/web/framework-v3/04-components/media/ImageGallery.js:788\n                this._zoomLevel = Math.max(1, Math.min(4, this._zoomLevel * scale);\n                                                                                 ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/media/VideoPlayer.js",
+        "error": "/workspaces/web/framework-v3/04-components/media/VideoPlayer.js:861\n            this.dispatchEvent(new CustomEvent('error', { detail: e });\n                                                                     ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/navigation/Breadcrumb.js",
+        "error": "/workspaces/web/framework-v3/04-components/navigation/Breadcrumb.js:50\n        this._boundHandleDropdownToggle = this._handleDropdownToggle.bind(this));\n                                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/navigation/Menu.js",
+        "error": "/workspaces/web/framework-v3/04-components/navigation/Menu.js:56\n    _safeBind(methodName) {\n    ^^^^^^^^^\n\nSyntaxError: Unexpected identifier '_safeBind'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/navigation/NavigationBar.js",
+        "error": "/workspaces/web/framework-v3/04-components/navigation/NavigationBar.js:341\n      gl.uniform2fv(this._rippleProgram.uniforms.rippleOrigin, new Float32Array(origins);\n                                                                                       ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/navigation/Sidebar.js",
+        "error": "/workspaces/web/framework-v3/04-components/navigation/Sidebar.js:61\n        this._boundHandleToggle = this._handleToggle.bind(this));\n                                                               ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/showcase/ShowcaseDemo.js",
+        "error": "/workspaces/web/framework-v3/04-components/showcase/ShowcaseDemo.js:851\n                d.features.some(f => f.toLowerCase().includes(query));\n                                                                    ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/Accordion.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/Accordion.js:479\n            const headers = Array.from(this.shadowRoot.querySelectorAll('.accordion-header:not([disabled])');\n                                                                                                           ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/Carousel.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/Carousel.js:67\n        this._handleResize = this._handleResize.bind(this));\n                                                          ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/Charts.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/Charts.js:79\n        this._render = this._render.bind(this));\n                                              ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/LoadingSpinner.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/LoadingSpinner.js:719\n        const positions = new Float32Array(this._particles.flatMap(p => [p.x, p.y]);\n                                                                                  ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/Modal.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/Modal.js:48\n        this._handleKeydown = this._handleKeydown.bind(this));\n                                                            ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/Notifications.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/Notifications.js:513\n        window.addEventListener('resize', () => this._resizeCanvas();\n                                                                   ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/ProgressBar.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/ProgressBar.js:457\n        const value = Math.max(this._config.min, Math.min(this._config.max, this._displayValue);\n                                                                                              ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/SearchBox.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/SearchBox.js:64\n        this._handleInput = this._handleInput.bind(this));\n                                                        ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/TabPanel.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/TabPanel.js:791\n            const tabs = Array.from(tabsList.querySelectorAll('.tab:not(.disabled)');\n                                                                                   ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/Timeline.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/Timeline.js:79\n        this._render = this._render.bind(this));\n                                              ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-components/ui/Tooltip.js",
+        "error": "/workspaces/web/framework-v3/04-components/ui/Tooltip.js:437\n            });\n             ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "04-workers/core/SharedMemory.js",
+        "error": "/workspaces/web/framework-v3/04-workers/core/SharedMemory.js:247\n            this.coalesceFreeBl ocks();\n                                ^^^^\n\nSyntaxError: Unexpected identifier 'ocks'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "analyze-bundle-size.js",
+        "error": "/workspaces/web/framework-v3/analyze-bundle-size.js:114\n    }`);\n      ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "build-bundle.js",
+        "error": "/workspaces/web/framework-v3/build-bundle.js:79\n            }`);\n            ^\n\nSyntaxError: Missing catch or finally after try\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "debug-browser-errors.js",
+        "error": "/workspaces/web/framework-v3/debug-browser-errors.js:38\n            }`);\n            ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "debug-components.js",
+        "error": "/workspaces/web/framework-v3/debug-components.js:20\n            .toUpperCase()}] ${msg.text()}`);\n            ^\n\nSyntaxError: Unexpected token '.'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "error-detector.js",
+        "error": "/workspaces/web/framework-v3/error-detector.js:62\n        issues.forEach(issue => );\n                                ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "remove-dev-code.js",
+        "error": "/workspaces/web/framework-v3/remove-dev-code.js:71\n    });\n       \n\nSyntaxError: Unexpected end of input\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "rollup.config.js",
+        "error": "/workspaces/web/framework-v3/rollup.config.js:163\n                    .toFixed(2)} KB`);\n                    ^\n\nSyntaxError: Unexpected token '.'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "test/UnifiedTestSystem.js",
+        "error": "/workspaces/web/framework-v3/test/UnifiedTestSystem.js:73\n        } MODE]`);\n              ^\n\nSyntaxError: Unexpected token ']'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "test/archived/ConsolidatedTestSystem.js",
+        "error": "/workspaces/web/framework-v3/test/archived/ConsolidatedTestSystem.js:338\n        );\n        ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "test/archived/test-orchestrator.js",
+        "error": "/workspaces/web/framework-v3/test/archived/test-orchestrator.js:143\n    );\n    ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "test/archived/verify-100-percent.js",
+        "error": "/workspaces/web/framework-v3/test/archived/verify-100-percent.js:56\n    .toFixed(1)}%\\n`);\n    ^\n\nSyntaxError: Unexpected token '.'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "v8-optimization-check.js",
+        "error": "/workspaces/web/framework-v3/v8-optimization-check.js:190\n        );\n        ^\n\nSyntaxError: Unexpected token ')'\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "verify-cli.js",
+        "error": "/workspaces/web/framework-v3/verify-cli.js:83\n})();\n     \n\nSyntaxError: Unexpected end of input\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      },
+      {
+        "file": "visual-verification.js",
+        "error": "/workspaces/web/framework-v3/visual-verification.js:28\n            }`);\n            ^\n\nSyntaxError: missing ) after argument list\n    at checkSyntax (node:internal/main/check_syntax:74:5)\n\nNode.js v22.16.0"
+      }
+    ],
+    "importErrors": [
+      {
+        "file": "04-components/showcase/ShowcaseDemo.js",
+        "import": "../visualization/Timeline.js",
+        "line": 17,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "04-components/showcase/ShowcaseDemo.js",
+        "import": "../charts/Charts.js",
+        "line": 18,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "08-builders/PageBuilder.js",
+        "import": "../01-core/BrutalComponent.js",
+        "line": 6,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "08-builders/ThemeEngine.js",
+        "import": "../01-core/BrutalComponent.js",
+        "line": 6,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "index-full.js",
+        "import": "./brutal-index.js",
+        "line": 7,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "test/UnifiedTestSystem.js",
+        "import": "./ConsolidatedTestSystem.js",
+        "line": 6,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "test/UnifiedTestSystem.js",
+        "import": "./test/UnifiedTestSystem.js",
+        "line": 614,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "test/archived/ConsolidatedTestSystem.js",
+        "import": "./ComponentTestHarness.js",
+        "line": 7,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "test/archived/ConsolidatedTestSystem.js",
+        "import": "./EnhancedTestHarness.js",
+        "line": 8,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "test/archived/test-orchestrator.js",
+        "import": "./test/ConsolidatedTestSystem.js",
+        "line": 8,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "test/archived/verify-100-percent.js",
+        "import": "./run-all-tests.js",
+        "line": 6,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/performance-baseline.js",
+        "import": "../../04-workers/WorkerPool.js",
+        "line": 336,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/performance-baseline.js",
+        "import": "../../04-workers/SharedMemory.js",
+        "line": 337,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/core/Form.js",
+        "line": 55,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/core/Checkbox.js",
+        "line": 56,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/core/Radio.js",
+        "line": 57,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/core/Toggle.js",
+        "line": 58,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/core/Modal.js",
+        "line": 59,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/core/Tabs.js",
+        "line": 60,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/feedback/Progress.js",
+        "line": 69,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/feedback/Spinner.js",
+        "line": 70,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-components/navigation/Nav.js",
+        "line": 76,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-workers/WorkerPool.js",
+        "line": 292,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-workers/SharedMemory.js",
+        "line": 321,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-workers/MessageBroker.js",
+        "line": 344,
+        "type": "esm",
+        "error": "Import path does not exist"
+      },
+      {
+        "file": "tests/integration/test-orchestrator.js",
+        "import": "../../04-workers/WorkerPool.js",
+        "line": 370,
+        "type": "esm",
+        "error": "Import path does not exist"
+      }
+    ],
+    "pathErrors": [],
+    "configErrors": [
+      {
+        "file": "rollup.config.js",
+        "field": "input",
+        "value": "04-workers/index.js",
+        "error": "Rollup input file does not exist"
+      },
+      {
+        "file": "rollup.config.js",
+        "field": "input",
+        "value": "03-visual/gpu/index.js",
+        "error": "Rollup input file does not exist"
+      }
+    ],
+    "htmlErrors": [
+      {
+        "file": "demos/ecosystem-demo.html",
+        "import": "../brutal-framework.js",
+        "line": 420,
+        "error": "Module import not found in inline script"
+      },
+      {
+        "file": "landing/index.html",
+        "import": "../brutal-framework.js",
+        "line": 927,
+        "error": "Module import not found in inline script"
+      },
+      {
+        "file": "landing/index.html",
+        "import": "@brutal/framework",
+        "line": 1050,
+        "error": "Module import not found in inline script"
+      },
+      {
+        "file": "landing/index.html",
+        "import": "@brutal/framework",
+        "line": 1082,
+        "error": "Module import not found in inline script"
+      },
+      {
+        "file": "landing/index.html",
+        "import": "@brutal/framework",
+        "line": 1101,
+        "error": "Module import not found in inline script"
+      },
+      {
+        "file": "test-runner.html",
+        "import": "./run-all-tests.js",
+        "line": 159,
+        "error": "Module import not found in inline script"
+      },
+      {
+        "file": "verify-browser.html",
+        "import": "./run-all-tests.js",
+        "line": 139,
+        "error": "Module import not found in inline script"
+      }
+    ],
+    "circularDependencies": [],
+    "missingFiles": [],
+    "packageErrors": [],
+    "moduleLoadErrors": [
+      {
+        "file": "index.js",
+        "error": "No exports found in module"
+      }
+    ],
+    "otherErrors": []
+  },
+  "totalErrors": 102,
+  "statistics": {
+    "totalImports": 436,
+    "uniqueImports": 235,
+    "orphanedFiles": [
+      "03-visual/gpu/GPUBenchmark.js",
+      "04-components/base/LayoutComponent.js",
+      "04-components/base/WebWorkerComponent-Enhanced.js",
+      "04-components/base/WebWorkerComponent.js",
+      "04-components/index.js",
+      "04-components/navigation/index.js",
+      "04-workers/compute-worker.js",
+      "04-workers/data-worker.js",
+      "04-workers/render-worker.js",
+      "06-cache/CacheManager.js",
+      "06-cache/service-worker.js",
+      "08-builders/index.js",
+      "analyze-bundle-size.js",
+      "brutal-repository-analysis-safe.js",
+      "brutal-repository-analysis.js",
+      "build-bundle.js",
+      "build-production.js",
+      "check-files-syntax.js",
+      "debug-browser-errors.js",
+      "debug-components.js",
+      "error-detector.js",
+      "examples/float64-state-example.js",
+      "index-core.js",
+      "index-full.js",
+      "optimize-bundle.js",
+      "performance-validation.js",
+      "remove-dev-code.js",
+      "rollup.config.js",
+      "server-with-headers.js",
+      "v8-optimization-check.js",
+      "verify-cli.js",
+      "visual-verification.js"
+    ]
+  },
+  "dependencyGraph": [
+    {
+      "file": "01-core/Component.js",
+      "dependencies": [
+        "01-core/events.js",
+        "02-performance/index.js"
+      ]
+    },
+    {
+      "file": "01-core/EnhancedComponent.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "01-core/State.js",
+        "01-core/Router.js"
+      ]
+    },
+    {
+      "file": "01-core/Float64Atomics.js",
+      "dependencies": []
+    },
+    {
+      "file": "01-core/Registry.js",
+      "dependencies": [
+        "01-core/events.js"
+      ]
+    },
+    {
+      "file": "01-core/Router.js",
+      "dependencies": [
+        "01-core/events.js"
+      ]
+    },
+    {
+      "file": "01-core/State.js",
+      "dependencies": [
+        "01-core/events.js"
+      ]
+    },
+    {
+      "file": "01-core/Template.js",
+      "dependencies": []
+    },
+    {
+      "file": "01-core/events.js",
+      "dependencies": []
+    },
+    {
+      "file": "01-core/index.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "01-core/EnhancedComponent.js",
+        "01-core/State.js",
+        "01-core/Router.js",
+        "01-core/Registry.js",
+        "01-core/Template.js",
+        "01-core/events.js",
+        "01-core/Float64Atomics.js"
+      ]
+    },
+    {
+      "file": "02-performance/01-StyleManager.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/02-FragmentPool.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/03-DOMScheduler.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/04-TemplateCache.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/05-EventManager.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/06-ThemeEngine.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/07-LayoutOptimizer.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/08-AnimationSystem.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/09-GestureSystem.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/10-ThemeSystem.js",
+      "dependencies": []
+    },
+    {
+      "file": "02-performance/index.js",
+      "dependencies": [
+        "02-performance/01-StyleManager.js",
+        "02-performance/02-FragmentPool.js",
+        "02-performance/03-DOMScheduler.js",
+        "02-performance/04-TemplateCache.js",
+        "02-performance/05-EventManager.js",
+        "02-performance/06-ThemeEngine.js",
+        "02-performance/07-LayoutOptimizer.js",
+        "02-performance/01-StyleManager.js",
+        "02-performance/02-FragmentPool.js",
+        "02-performance/03-DOMScheduler.js",
+        "02-performance/04-TemplateCache.js",
+        "02-performance/05-EventManager.js",
+        "02-performance/06-ThemeEngine.js",
+        "02-performance/07-LayoutOptimizer.js",
+        "02-performance/08-AnimationSystem.js",
+        "02-performance/09-GestureSystem.js",
+        "02-performance/10-ThemeSystem.js"
+      ]
+    },
+    {
+      "file": "03-visual/debug/AutomatedVisualTester.js",
+      "dependencies": [
+        "03-visual/debug/ComponentMonitor.js"
+      ]
+    },
+    {
+      "file": "03-visual/debug/ComponentMonitor.js",
+      "dependencies": []
+    },
+    {
+      "file": "03-visual/debug/ComponentTree3D.js",
+      "dependencies": [
+        "03-visual/gpu/GPUDetector.js"
+      ]
+    },
+    {
+      "file": "03-visual/debug/ConfigPanel.js",
+      "dependencies": []
+    },
+    {
+      "file": "03-visual/debug/DataFlowRenderer.js",
+      "dependencies": []
+    },
+    {
+      "file": "03-visual/debug/PerformanceHUD.js",
+      "dependencies": []
+    },
+    {
+      "file": "03-visual/debug/RecordingEngine.js",
+      "dependencies": [
+        "03-visual/gpu/GPUDetector.js"
+      ]
+    },
+    {
+      "file": "03-visual/debug/VisualDebugLayer.js",
+      "dependencies": [
+        "03-visual/gpu/ParticleEngine.js",
+        "03-visual/debug/ComponentMonitor.js",
+        "03-visual/debug/DataFlowRenderer.js",
+        "03-visual/debug/PerformanceHUD.js"
+      ]
+    },
+    {
+      "file": "03-visual/debug/VisualDebugLayerGPU.js",
+      "dependencies": [
+        "03-visual/gpu/ParticleSystem.js",
+        "03-visual/gpu/GPUDetector.js",
+        "03-visual/debug/ComponentMonitor.js",
+        "03-visual/debug/DataFlowRenderer.js",
+        "03-visual/debug/PerformanceHUD.js",
+        "03-visual/effects/ParticleEffects.js",
+        "03-visual/debug/RecordingEngine.js",
+        "03-visual/debug/ConfigPanel.js",
+        "03-visual/debug/ComponentTree3D.js"
+      ]
+    },
+    {
+      "file": "03-visual/effects/ParticleEffects.js",
+      "dependencies": [
+        "03-visual/gpu/ParticleEngine.js",
+        "03-visual/gpu/ShaderLibrary.js"
+      ]
+    },
+    {
+      "file": "03-visual/gpu/GPUBenchmark.js",
+      "dependencies": [
+        "03-visual/gpu/GPUDetector.js",
+        "03-visual/gpu/ParticleSystem.js",
+        "03-visual/gpu/effects/GPUBlur.js",
+        "03-visual/gpu/ShaderLibrary.js"
+      ]
+    },
+    {
+      "file": "03-visual/gpu/GPUComponent.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "03-visual/gpu/GPUDetector.js",
+      "dependencies": []
+    },
+    {
+      "file": "03-visual/gpu/ParticleEngine.js",
+      "dependencies": []
+    },
+    {
+      "file": "03-visual/gpu/ParticleSystem.js",
+      "dependencies": [
+        "03-visual/gpu/GPUDetector.js"
+      ]
+    },
+    {
+      "file": "03-visual/gpu/ShaderLibrary.js",
+      "dependencies": []
+    },
+    {
+      "file": "03-visual/gpu/effects/GPUBlur.js",
+      "dependencies": [
+        "03-visual/gpu/GPUComponent.js",
+        "03-visual/gpu/ShaderLibrary.js"
+      ]
+    },
+    {
+      "file": "03-visual/gpu/effects/GPUDistortion.js",
+      "dependencies": [
+        "03-visual/gpu/GPUComponent.js"
+      ]
+    },
+    {
+      "file": "03-visual/gpu/effects/GPUGlow.js",
+      "dependencies": [
+        "03-visual/gpu/GPUComponent.js",
+        "03-visual/gpu/effects/GPUBlur.js"
+      ]
+    },
+    {
+      "file": "03-visual/gpu/effects/GPUTransition.js",
+      "dependencies": [
+        "03-visual/gpu/GPUComponent.js"
+      ]
+    },
+    {
+      "file": "03-visual/index.js",
+      "dependencies": [
+        "03-visual/debug/VisualDebugLayer.js",
+        "03-visual/debug/ComponentMonitor.js",
+        "03-visual/debug/DataFlowRenderer.js",
+        "03-visual/debug/PerformanceHUD.js",
+        "03-visual/debug/AutomatedVisualTester.js",
+        "03-visual/gpu/GPUComponent.js",
+        "03-visual/gpu/ParticleEngine.js",
+        "03-visual/gpu/ShaderLibrary.js",
+        "03-visual/effects/ParticleEffects.js",
+        "03-visual/debug/VisualDebugLayer.js",
+        "03-visual/debug/AutomatedVisualTester.js",
+        "03-visual/gpu/GPUComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/advanced/CodeEditor.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/02-FragmentPool.js"
+      ]
+    },
+    {
+      "file": "04-components/advanced/DragDropZone.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "03-visual/gpu/ParticleEngine.js",
+        "02-performance/09-GestureSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/base/BrutalComponent.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "01-core/State.js",
+        "02-performance/index.js",
+        "03-visual/gpu/GPUComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/base/DataComponent.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "01-core/State.js",
+        "02-performance/02-FragmentPool.js"
+      ]
+    },
+    {
+      "file": "04-components/base/FormComponent.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "01-core/State.js"
+      ]
+    },
+    {
+      "file": "04-components/base/InteractiveComponent.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "02-performance/09-GestureSystem.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/base/LayoutComponent.js",
+      "dependencies": [
+        "01-core/Component.js"
+      ]
+    },
+    {
+      "file": "04-components/base/MediaComponent.js",
+      "dependencies": [
+        "03-visual/gpu/GPUComponent.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/base/WebWorkerComponent-Enhanced.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "04-workers/core/WorkerPool.js",
+        "04-workers/core/SharedMemory.js",
+        "04-workers/core/MessageBroker.js"
+      ]
+    },
+    {
+      "file": "04-components/base/WebWorkerComponent.js",
+      "dependencies": [
+        "01-core/Component.js"
+      ]
+    },
+    {
+      "file": "04-components/core/Button.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/core/Card.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/core/HeroSection.js",
+      "dependencies": [
+        "04-components/base/BrutalComponent.js",
+        "01-core/index.js",
+        "03-visual/index.js"
+      ]
+    },
+    {
+      "file": "04-components/core/Input.js",
+      "dependencies": [
+        "04-components/base/FormComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/core/Select.js",
+      "dependencies": [
+        "04-components/base/FormComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/data/DataGrid.js",
+      "dependencies": [
+        "04-components/base/DataComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js",
+        "02-performance/09-GestureSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/data/List.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/data/Table.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/feedback/Alert.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/feedback/Toast.js",
+      "dependencies": [
+        "04-components/base/BrutalComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/forms/FormBuilder.js",
+      "dependencies": [
+        "04-components/base/FormComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/index.js",
+      "dependencies": [
+        "04-components/base/BrutalComponent.js",
+        "04-components/core/HeroSection.js",
+        "04-components/navigation/NavigationBar.js",
+        "04-components/ui/Modal.js",
+        "04-components/ui/Notifications.js",
+        "04-components/data/DataGrid.js",
+        "04-components/forms/FormBuilder.js",
+        "04-components/ui/SearchBox.js",
+        "04-components/ui/Charts.js",
+        "04-components/ui/Carousel.js",
+        "04-components/media/ImageGallery.js",
+        "04-components/media/VideoPlayer.js",
+        "04-components/ui/Timeline.js",
+        "04-components/ui/TabPanel.js",
+        "04-components/ui/Accordion.js",
+        "04-components/ui/Tooltip.js",
+        "04-components/ui/ProgressBar.js",
+        "04-components/ui/LoadingSpinner.js",
+        "04-components/advanced/CodeEditor.js",
+        "04-components/advanced/DragDropZone.js",
+        "04-components/showcase/ShowcaseDemo.js"
+      ]
+    },
+    {
+      "file": "04-components/media/ImageGallery.js",
+      "dependencies": [
+        "04-components/base/MediaComponent.js",
+        "01-core/Template.js",
+        "02-performance/09-GestureSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/media/VideoPlayer.js",
+      "dependencies": [
+        "04-components/base/MediaComponent.js",
+        "01-core/Template.js",
+        "03-visual/gpu/ParticleEngine.js"
+      ]
+    },
+    {
+      "file": "04-components/navigation/Breadcrumb.js",
+      "dependencies": [
+        "04-components/base/BrutalComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/navigation/Menu.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/navigation/NavigationBar.js",
+      "dependencies": [
+        "04-components/base/BrutalComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/navigation/Sidebar.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js"
+      ]
+    },
+    {
+      "file": "04-components/navigation/index.js",
+      "dependencies": [
+        "04-components/navigation/NavigationBar.js"
+      ]
+    },
+    {
+      "file": "04-components/showcase/ShowcaseDemo.js",
+      "dependencies": [
+        "04-components/base/BrutalComponent.js",
+        "01-core/Template.js",
+        "04-components/navigation/NavigationBar.js",
+        "04-components/data/DataGrid.js",
+        "04-components/forms/FormBuilder.js",
+        "04-components/ui/Modal.js",
+        "04-components/ui/Carousel.js",
+        "04-components/ui/SearchBox.js",
+        "04-components/ui/Notifications.js",
+        "04-components/ui/TabPanel.js",
+        "04-components/ui/Accordion.js",
+        "04-components/ui/Tooltip.js",
+        "04-components/ui/ProgressBar.js",
+        "04-components/ui/LoadingSpinner.js",
+        "04-components/media/ImageGallery.js",
+        "04-components/media/VideoPlayer.js",
+        "04-components/advanced/CodeEditor.js",
+        "04-components/advanced/DragDropZone.js",
+        "04-components/core/HeroSection.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/Accordion.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/Carousel.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js",
+        "02-performance/09-GestureSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/Charts.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js",
+        "02-performance/09-GestureSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/LoadingSpinner.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "03-visual/gpu/ParticleEngine.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/Modal.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js",
+        "02-performance/09-GestureSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/Notifications.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/ProgressBar.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js",
+        "03-visual/gpu/ParticleEngine.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/SearchBox.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/TabPanel.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/Timeline.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js",
+        "02-performance/09-GestureSystem.js"
+      ]
+    },
+    {
+      "file": "04-components/ui/Tooltip.js",
+      "dependencies": [
+        "04-components/base/InteractiveComponent.js",
+        "01-core/Template.js",
+        "02-performance/08-AnimationSystem.js"
+      ]
+    },
+    {
+      "file": "04-workers/compute-worker.js",
+      "dependencies": []
+    },
+    {
+      "file": "04-workers/core/MessageBroker.js",
+      "dependencies": []
+    },
+    {
+      "file": "04-workers/core/SharedMemory.js",
+      "dependencies": []
+    },
+    {
+      "file": "04-workers/core/WorkerPool.js",
+      "dependencies": [
+        "04-workers/core/MessageBroker.js",
+        "04-workers/core/SharedMemory.js"
+      ]
+    },
+    {
+      "file": "04-workers/data-worker.js",
+      "dependencies": []
+    },
+    {
+      "file": "04-workers/render-worker.js",
+      "dependencies": []
+    },
+    {
+      "file": "06-cache/CacheManager.js",
+      "dependencies": [
+        "06-cache/L1Cache.js",
+        "06-cache/L2Cache.js"
+      ]
+    },
+    {
+      "file": "06-cache/L1Cache.js",
+      "dependencies": []
+    },
+    {
+      "file": "06-cache/L2Cache.js",
+      "dependencies": []
+    },
+    {
+      "file": "06-cache/service-worker.js",
+      "dependencies": []
+    },
+    {
+      "file": "07-ai/ComponentGenerator.js",
+      "dependencies": []
+    },
+    {
+      "file": "08-builders/DragDropSystem.js",
+      "dependencies": []
+    },
+    {
+      "file": "08-builders/PageBuilder.js",
+      "dependencies": [
+        "08-builders/DragDropSystem.js",
+        "07-ai/ComponentGenerator.js"
+      ]
+    },
+    {
+      "file": "08-builders/ThemeEngine.js",
+      "dependencies": []
+    },
+    {
+      "file": "08-builders/index.js",
+      "dependencies": [
+        "08-builders/DragDropSystem.js",
+        "08-builders/PageBuilder.js",
+        "08-builders/ThemeEngine.js"
+      ]
+    },
+    {
+      "file": "analyze-bundle-size.js",
+      "dependencies": []
+    },
+    {
+      "file": "brutal-repository-analysis-safe.js",
+      "dependencies": []
+    },
+    {
+      "file": "brutal-repository-analysis.js",
+      "dependencies": []
+    },
+    {
+      "file": "brutal-test-system.js",
+      "dependencies": [
+        "01-core/index.js",
+        "02-performance/index.js",
+        "03-visual/index.js",
+        "01-core/Component.js",
+        "02-performance/index.js"
+      ]
+    },
+    {
+      "file": "build-bundle.js",
+      "dependencies": []
+    },
+    {
+      "file": "build-production.js",
+      "dependencies": []
+    },
+    {
+      "file": "check-files-syntax.js",
+      "dependencies": []
+    },
+    {
+      "file": "debug-browser-errors.js",
+      "dependencies": []
+    },
+    {
+      "file": "debug-components.js",
+      "dependencies": [
+        "04-components/navigation/NavigationBar.js",
+        "index.js"
+      ]
+    },
+    {
+      "file": "error-detector.js",
+      "dependencies": []
+    },
+    {
+      "file": "examples/float64-state-example.js",
+      "dependencies": [
+        "01-core/State.js",
+        "01-core/Float64Atomics.js"
+      ]
+    },
+    {
+      "file": "index-core.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "01-core/EnhancedComponent.js",
+        "01-core/State.js",
+        "01-core/Router.js",
+        "01-core/Template.js",
+        "04-components/base/BrutalComponent.js",
+        "04-components/base/InteractiveComponent.js",
+        "04-components/base/FormComponent.js",
+        "02-performance/01-StyleManager.js",
+        "02-performance/03-DOMScheduler.js",
+        "02-performance/04-TemplateCache.js"
+      ]
+    },
+    {
+      "file": "index-full.js",
+      "dependencies": [
+        "03-visual/debug/VisualDebugLayerGPU.js",
+        "03-visual/debug/ComponentTree3D.js",
+        "03-visual/debug/RecordingEngine.js",
+        "03-visual/debug/PerformanceHUD.js",
+        "03-visual/debug/DataFlowRenderer.js",
+        "03-visual/debug/AutomatedVisualTester.js",
+        "03-visual/gpu/effects/GPUBlur.js",
+        "03-visual/gpu/effects/GPUGlow.js",
+        "03-visual/gpu/effects/GPUDistortion.js",
+        "03-visual/gpu/effects/GPUTransition.js",
+        "04-components/advanced/CodeEditor.js",
+        "04-components/advanced/DragDropZone.js",
+        "04-components/ui/Accordion.js",
+        "04-components/ui/Carousel.js",
+        "04-components/ui/Charts.js",
+        "04-components/ui/Modal.js",
+        "04-components/ui/TabPanel.js",
+        "04-components/ui/Timeline.js",
+        "04-components/ui/Tooltip.js",
+        "04-components/ui/SearchBox.js",
+        "04-components/ui/ProgressBar.js",
+        "04-components/ui/LoadingSpinner.js",
+        "04-components/ui/Notifications.js",
+        "04-components/media/VideoPlayer.js",
+        "04-components/media/ImageGallery.js",
+        "04-components/data/DataGrid.js",
+        "04-components/forms/FormBuilder.js",
+        "02-performance/10-ThemeSystem.js",
+        "02-performance/06-ThemeEngine.js",
+        "02-performance/08-AnimationSystem.js",
+        "02-performance/09-GestureSystem.js"
+      ]
+    },
+    {
+      "file": "index.js",
+      "dependencies": [
+        "01-core/index.js",
+        "01-core/State.js",
+        "01-core/Registry.js",
+        "01-core/index.js",
+        "02-performance/index.js",
+        "03-visual/index.js"
+      ]
+    },
+    {
+      "file": "optimize-bundle.js",
+      "dependencies": []
+    },
+    {
+      "file": "performance-validation.js",
+      "dependencies": []
+    },
+    {
+      "file": "remove-dev-code.js",
+      "dependencies": []
+    },
+    {
+      "file": "rollup.config.js",
+      "dependencies": []
+    },
+    {
+      "file": "server-with-headers.js",
+      "dependencies": []
+    },
+    {
+      "file": "test/ComponentPlayground.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "01-core/Registry.js",
+        "02-performance/10-ThemeSystem.js",
+        "test/ComponentTestHarness.js",
+        "index.js"
+      ]
+    },
+    {
+      "file": "test/ComponentTestHarness.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "01-core/Registry.js"
+      ]
+    },
+    {
+      "file": "test/EnhancedTestHarness.js",
+      "dependencies": [
+        "test/ComponentTestHarness.js"
+      ]
+    },
+    {
+      "file": "test/UnifiedTestSystem.js",
+      "dependencies": []
+    },
+    {
+      "file": "test/archived/ConsolidatedTestSystem.js",
+      "dependencies": []
+    },
+    {
+      "file": "test/archived/test-orchestrator.js",
+      "dependencies": []
+    },
+    {
+      "file": "test/archived/test-suite.js",
+      "dependencies": []
+    },
+    {
+      "file": "test/archived/verify-100-percent.js",
+      "dependencies": []
+    },
+    {
+      "file": "test-modal-validation.mjs",
+      "dependencies": []
+    },
+    {
+      "file": "tests/01-test-component.js",
+      "dependencies": [
+        "01-core/Component.js",
+        "tests/TestUtils.js"
+      ]
+    },
+    {
+      "file": "tests/02-test-state.js",
+      "dependencies": [
+        "01-core/State.js",
+        "test/archived/test-suite.js"
+      ]
+    },
+    {
+      "file": "tests/03-test-router.js",
+      "dependencies": [
+        "01-core/Router.js",
+        "test/archived/test-suite.js"
+      ]
+    },
+    {
+      "file": "tests/04-test-performance-gems.js",
+      "dependencies": [
+        "02-performance/index.js",
+        "test/archived/test-suite.js"
+      ]
+    },
+    {
+      "file": "tests/05-test-visual-debug.js",
+      "dependencies": [
+        "test/archived/test-suite.js",
+        "03-visual/debug/VisualDebugLayer.js",
+        "03-visual/debug/ComponentMonitor.js",
+        "03-visual/debug/DataFlowRenderer.js",
+        "03-visual/debug/PerformanceHUD.js",
+        "03-visual/debug/AutomatedVisualTester.js",
+        "03-visual/gpu/ParticleEngine.js",
+        "03-visual/gpu/GPUComponent.js",
+        "03-visual/effects/ParticleEffects.js",
+        "03-visual/gpu/ShaderLibrary.js"
+      ]
+    },
+    {
+      "file": "tests/TestUtils.js",
+      "dependencies": []
+    },
+    {
+      "file": "tests/components/DragDropZone.test.js",
+      "dependencies": [
+        "tests/TestUtils.js",
+        "04-components/advanced/DragDropZone.js",
+        "tests/TestUtils.js"
+      ]
+    },
+    {
+      "file": "tests/components/HeroSection.test.js",
+      "dependencies": [
+        "tests/TestUtils.js",
+        "04-components/core/HeroSection.js",
+        "tests/TestUtils.js"
+      ]
+    },
+    {
+      "file": "tests/integration/component-matrix.js",
+      "dependencies": []
+    },
+    {
+      "file": "tests/integration/cross-browser-test.js",
+      "dependencies": []
+    },
+    {
+      "file": "tests/integration/mobile-optimization-test.js",
+      "dependencies": []
+    },
+    {
+      "file": "tests/integration/performance-baseline.js",
+      "dependencies": []
+    },
+    {
+      "file": "tests/integration/react-comparison.js",
+      "dependencies": [
+        "04-components/core/Button.js",
+        "04-components/data/Table.js",
+        "03-visual/gpu/ParticleSystem.js"
+      ]
+    },
+    {
+      "file": "tests/integration/test-orchestrator.js",
+      "dependencies": [
+        "tests/integration/component-matrix.js",
+        "tests/integration/performance-baseline.js",
+        "04-components/core/Button.js",
+        "04-components/core/Input.js",
+        "04-components/core/Card.js",
+        "04-components/core/Select.js",
+        "04-components/data/Table.js",
+        "04-components/data/List.js",
+        "04-components/feedback/Alert.js",
+        "04-components/feedback/Toast.js",
+        "04-components/navigation/Menu.js",
+        "04-components/navigation/Breadcrumb.js",
+        "04-components/navigation/Sidebar.js"
+      ]
+    },
+    {
+      "file": "tests/run-tests.js",
+      "dependencies": [
+        "tests/TestUtils.js"
+      ]
+    },
+    {
+      "file": "tests/test-float64-atomics.js",
+      "dependencies": [
+        "01-core/Float64Atomics.js"
+      ]
+    },
+    {
+      "file": "v8-optimization-check.js",
+      "dependencies": []
+    },
+    {
+      "file": "verify-cli.js",
+      "dependencies": []
+    },
+    {
+      "file": "visual-verification.js",
+      "dependencies": []
+    }
+  ]
+}

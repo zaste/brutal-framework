@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Framework v2 - Enhanced Hero Component Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+    }
+    
+    .demo-header {
+      background: white;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .demo-header h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #111827;
+    }
+    
+    .variant-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .variant-btn {
+      padding: 0.5rem 1.5rem;
+      border: 2px solid #e5e7eb;
+      background: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+    
+    .variant-btn:hover {
+      border-color: #3b82f6;
+      color: #3b82f6;
+    }
+    
+    .variant-btn.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+    
+    .demo-container {
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .performance-badge {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    
+    .metric-value {
+      color: #10b981;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-header">
+    <h1>🚀 Enhanced Hero Component - Live Demo</h1>
+    <div class="variant-buttons">
+      <button class="variant-btn active" onclick="setVariant('default')">Default</button>
+      <button class="variant-btn" onclick="setVariant('gradient')">Gradient</button>
+      <button class="variant-btn" onclick="setVariant('minimal')">Minimal</button>
+      <button class="variant-btn" onclick="setVariant('split')">Split Layout</button>
+      <button class="variant-btn" onclick="setVariant('fullscreen')">Fullscreen</button>
+      <button class="variant-btn" onclick="setVariant('animated')">Animated</button>
+    </div>
+  </div>
+  
+  <div class="demo-container">
+    <hero-section id="hero"></hero-section>
+  </div>
+  
+  <div class="performance-badge">
+    <div class="metric">
+      <span>Render Time:</span>
+      <span class="metric-value" id="render-time">0.00ms</span>
+    </div>
+    <div class="metric">
+      <span>Update Time:</span>
+      <span class="metric-value" id="update-time">0.00ms</span>
+    </div>
+    <div class="metric">
+      <span>Memory Used:</span>
+      <span class="metric-value" id="memory">0MB</span>
+    </div>
+    <div class="metric">
+      <span>Component Size:</span>
+      <span class="metric-value">~15KB</span>
+    </div>
+  </div>
+
+  <script>
+    // Complete Enhanced Component System - Inline Implementation
+    
+    // Base Component Class
+    class Component extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this._state = {};
+        this._initialized = false;
+      }
+      
+      connectedCallback() {
+        if (!this._initialized) {
+          this._initialized = true;
+          this.init();
+        }
+        this.render();
+      }
+      
+      init() {}
+      
+      render() {
+        const start = performance.now();
+        this.shadowRoot.innerHTML = `
+          <style>
+            :host { display: block; }
+            ${this.styles()}
+          </style>
+          ${this.template()}
+        `;
+        const renderTime = performance.now() - start;
+        document.getElementById('render-time').textContent = renderTime.toFixed(2) + 'ms';
+      }
+      
+      template() { return ''; }
+      styles() { return ''; }
+      
+      setState(updates) {
+        Object.assign(this._state, updates);
+        this.render();
+      }
+    }
+    
+    // Enhanced Component Class
+    class EnhancedComponent extends Component {
+      constructor(config = {}) {
+        super();
+        this.config = {
+          variant: 'default',
+          ...config
+        };
+      }
+      
+      updateVariant(variantName) {
+        const start = performance.now();
+        this.config.variant = variantName;
+        this.render();
+        const updateTime = performance.now() - start;
+        document.getElementById('update-time').textContent = updateTime.toFixed(2) + 'ms';
+      }
+      
+      updateContent(content) {
+        Object.assign(this._state, content);
+        this.render();
+      }
+    }
+    
+    // Hero Section Component
+    class HeroSection extends EnhancedComponent {
+      constructor() {
+        super();
+        this._state = {
+          title: 'Framework v2 Enhanced Components',
+          subtitle: 'Zero dependencies. Maximum performance. Beautiful components.',
+          primaryBtn: { text: 'Get Started', href: '#' },
+          secondaryBtn: { text: 'Learn More', href: '#' }
+        };
+      }
+      
+      template() {
+        const variant = this.config.variant;
+        
+        switch(variant) {
+          case 'gradient':
+            return `
+              <div class="hero hero-gradient">
+                <div class="gradient-bg"></div>
+                <div class="content">
+                  <h1>${this._state.title}</h1>
+                  <p>${this._state.subtitle}</p>
+                  <div class="actions">
+                    <a href="${this._state.primaryBtn.href}" class="btn btn-primary">${this._state.primaryBtn.text}</a>
+                    <a href="${this._state.secondaryBtn.href}" class="btn btn-secondary">${this._state.secondaryBtn.text}</a>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+          case 'minimal':
+            return `
+              <div class="hero hero-minimal">
+                <h1>${this._state.title}</h1>
+                <p>${this._state.subtitle}</p>
+                <a href="${this._state.primaryBtn.href}" class="btn btn-primary">${this._state.primaryBtn.text}</a>
+              </div>
+            `;
+            
+          case 'split':
+            return `
+              <div class="hero hero-split">
+                <div class="content-section">
+                  <h1>${this._state.title}</h1>
+                  <p>${this._state.subtitle}</p>
+                  <div class="actions">
+                    <a href="${this._state.primaryBtn.href}" class="btn btn-primary">${this._state.primaryBtn.text}</a>
+                  </div>
+                </div>
+                <div class="image-section">
+                  <div class="image-placeholder"></div>
+                </div>
+              </div>
+            `;
+            
+          case 'fullscreen':
+            return `
+              <div class="hero hero-fullscreen">
+                <div class="overlay"></div>
+                <div class="content">
+                  <h1 class="hero-title-large">${this._state.title}</h1>
+                  <p>${this._state.subtitle}</p>
+                  <a href="${this._state.primaryBtn.href}" class="btn btn-primary btn-large">${this._state.primaryBtn.text}</a>
+                </div>
+              </div>
+            `;
+            
+          case 'animated':
+            return `
+              <div class="hero hero-animated">
+                <h1 class="animated-title">${this._state.title}</h1>
+                <p class="animated-subtitle">${this._state.subtitle}</p>
+                <div class="animated-actions">
+                  <a href="${this._state.primaryBtn.href}" class="btn btn-primary">${this._state.primaryBtn.text}</a>
+                </div>
+                <div class="animated-shapes">
+                  <div class="shape shape-1"></div>
+                  <div class="shape shape-2"></div>
+                </div>
+              </div>
+            `;
+            
+          default:
+            return `
+              <div class="hero hero-default">
+                <div class="content">
+                  <h1>${this._state.title}</h1>
+                  <p>${this._state.subtitle}</p>
+                  <div class="actions">
+                    <a href="${this._state.primaryBtn.href}" class="btn btn-primary">${this._state.primaryBtn.text}</a>
+                    <a href="${this._state.secondaryBtn.href}" class="btn btn-secondary">${this._state.secondaryBtn.text}</a>
+                  </div>
+                </div>
+              </div>
+            `;
+        }
+      }
+      
+      styles() {
+        return `
+          .hero {
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .content {
+            text-align: center;
+            max-width: 800px;
+            z-index: 2;
+            position: relative;
+          }
+          
+          h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+          }
+          
+          p {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: #666;
+          }
+          
+          .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+          }
+          
+          .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+          }
+          
+          .btn-primary {
+            background: #3b82f6;
+            color: white;
+          }
+          
+          .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+          }
+          
+          .btn-secondary {
+            background: transparent;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+          }
+          
+          .btn-secondary:hover {
+            background: #3b82f6;
+            color: white;
+          }
+          
+          /* Gradient Variant */
+          .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          }
+          
+          .hero-gradient h1,
+          .hero-gradient p {
+            color: white;
+          }
+          
+          /* Minimal Variant */
+          .hero-minimal {
+            padding: 6rem 2rem;
+          }
+          
+          .hero-minimal h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
+          }
+          
+          /* Split Variant */
+          .hero-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+          }
+          
+          .hero-split .content-section {
+            text-align: left;
+          }
+          
+          .hero-split .actions {
+            justify-content: flex-start;
+          }
+          
+          .image-placeholder {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+            border-radius: 1rem;
+          }
+          
+          /* Fullscreen Variant */
+          .hero-fullscreen {
+            min-height: 100vh;
+            background: #1e293b;
+          }
+          
+          .hero-fullscreen h1,
+          .hero-fullscreen p {
+            color: white;
+          }
+          
+          .hero-title-large {
+            font-size: 4rem;
+          }
+          
+          .btn-large {
+            padding: 1rem 3rem;
+            font-size: 1.125rem;
+          }
+          
+          /* Animated Variant */
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .animated-title {
+            animation: fadeInUp 0.8s ease-out;
+          }
+          
+          .animated-subtitle {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+          }
+          
+          .animated-actions {
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+          }
+          
+          .animated-shapes {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 1;
+          }
+          
+          .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.5;
+          }
+          
+          .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: #3b82f6;
+            top: -200px;
+            right: -100px;
+          }
+          
+          .shape-2 {
+            width: 300px;
+            height: 300px;
+            background: #8b5cf6;
+            bottom: -150px;
+            left: -100px;
+          }
+          
+          @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            p { font-size: 1.125rem; }
+            .hero-split { grid-template-columns: 1fr; }
+            .hero-split .content-section { text-align: center; }
+            .hero-split .actions { justify-content: center; }
+          }
+        `;
+      }
+    }
+    
+    // Register the component
+    customElements.define('hero-section', HeroSection);
+    
+    // Demo controls
+    const hero = document.getElementById('hero');
+    
+    window.setVariant = function(variant) {
+      // Update button states
+      document.querySelectorAll('.variant-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Update variant
+      hero.updateVariant(variant);
+      
+      // Update content based on variant
+      const content = {
+        default: {
+          title: 'Framework v2 Enhanced Components',
+          subtitle: 'Zero dependencies. Maximum performance. Beautiful components.'
+        },
+        gradient: {
+          title: 'Beautiful Gradient Backgrounds',
+          subtitle: 'Modern, vibrant designs that capture attention instantly.'
+        },
+        minimal: {
+          title: 'Less is More',
+          subtitle: 'Clean, focused, and impactful design.'
+        },
+        split: {
+          title: 'Perfect Split Layouts',
+          subtitle: 'Showcase your content alongside stunning visuals.'
+        },
+        fullscreen: {
+          title: 'Go Big or Go Home',
+          subtitle: 'Full viewport impact for maximum engagement.'
+        },
+        animated: {
+          title: 'Smooth Motion Design',
+          subtitle: 'Delight users with polished animations.'
+        }
+      };
+      
+      if (content[variant]) {
+        hero.updateContent(content[variant]);
+      }
+    };
+    
+    // Update memory usage
+    setInterval(() => {
+      if (performance.memory) {
+        const mb = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+        document.getElementById('memory').textContent = mb + 'MB';
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

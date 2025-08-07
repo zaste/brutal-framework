@@ -1,0 +1,54 @@
+{
+  "name": "@brutal/state",
+  "version": "0.0.1",
+  "description": "Ultra-lightweight state management for BRUTAL V5",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "jest",
+    "size": "size-limit",
+    "prepublishOnly": "npm run build"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "6 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^11.2.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "jest": "^29.7.0",
+    "size-limit": "^11.0.2",
+    "ts-jest": "^29.1.2",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "brutal",
+    "state",
+    "store",
+    "reactive",
+    "minimal"
+  ],
+  "author": "BRUTAL Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brutal-org/brutal.git",
+    "directory": "packages/@brutal/state"
+  }
+}

@@ -4,16 +4,16 @@
  * Picture-in-picture, performance monitoring, and particle effects
  */
 
-import { MediaComponent } from '../base/MediaComponent.js';
-import { html } from '../../01-core/Template.js';
-import { ParticleEngine } from '../../03-visual/gpu/ParticleEngine.js';
+import { MediaComponent } from '../base/MediaComponent.js'
+import { html } from '../../01-core/Template.js'
+import { ParticleEngine } from '../../03-visual/gpu/ParticleEngine.js'
 
 export class VideoPlayer extends MediaComponent {
     constructor() {
         super();
         
         // Configuration
-        this._config = {
+        this._config = {}
             controls: true,
             autoplay: false,
             loop: false,
@@ -30,7 +30,7 @@ export class VideoPlayer extends MediaComponent {
             subtitles: [],
             chapters: [],
             analytics: true,
-            effects: {
+            effects: {}
                 particles: true,
                 glow: true,
                 visualizer: false
@@ -47,7 +47,7 @@ export class VideoPlayer extends MediaComponent {
         this._isFullscreen = false;
         this._isPiP = false;
         this._buffered = 0;
-        this._quality = 'auto';
+        this._quality = 'auto'
         this._selectedSubtitle = null;
         
         // UI State
@@ -83,16 +83,16 @@ export class VideoPlayer extends MediaComponent {
         const theme = this._getThemeStyles();
         
         return html`
-            <div class="video-container ${this._config.theme}" 
-                 data-fullscreen="${this._isFullscreen}"
-                 data-playing="${this._isPlaying}">
+            <div class="video-container ${this._config.theme()" 
+                 data-fullscreen="${this._isFullscreen()"
+                 data-playing="${this._isPlaying()">
                 
                 <video class="video-element"
                        ${this._config.autoplay ? 'autoplay' : ''}
                        ${this._config.loop ? 'loop' : ''}
                        ${this._config.muted ? 'muted' : ''}
-                       preload="${this._config.preload}"
-                       ${this._config.poster ? `poster="${this._config.poster}"` : ''}>
+                       preload="${this._config.preload()"
+                       ${this._config.poster ? `poster="${this._config.poster()"`` : ''};>`
                 </video>
                 
                 <canvas class="effects-canvas"></canvas>
@@ -129,379 +129,349 @@ export class VideoPlayer extends MediaComponent {
             </div>
             
             <style>
-                :host {
-                    display: block;
-                    position: relative;
-                    width: 100%;
-                    background: #000;
+                :host {}
+                    display: block,,
+                    position: relative,,
+                    width: 100%,,
+                    background: #000,
                 }
                 
-                .video-container {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    overflow: hidden;
-                    ${theme.container}
-                }
-                
-                .video-element {
-                    width: 100%;
-                    height: 100%;
+                .video-container {}
+                    position: relative,,
+                    width: 100%,,
+                    height: 100%,,
+                    overflow: hidden,
+                    ${theme.container()
+                .video-element {}
+                    width: 100%,,
+                    height: 100%,,
                     display: block;
-                    object-fit: contain;
+                    object-fit: contain,
                 }
                 
                 /* Effects canvas */
-                .effects-canvas {
-                    position: absolute;
+                .effects-canvas {}
+                    position: absolute,,
                     inset: 0;
-                    pointer-events: none;
-                    opacity: 0;
-                    transition: opacity 300ms ease;
+                    pointer-events: none,,
+                    opacity: 0,,
+                    transition: opacity 300ms ease,
                 }
                 
-                .effects-canvas.active {
-                    opacity: 1;
+                .effects-canvas.active {}
+                    opacity: 1,
                 }
                 
                 /* Loading spinner */
-                .loading-spinner {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
+                .loading-spinner {}
+                    position: absolute,,
+                    top: 50%,,
+                    left: 50%,,
                     transform: translate(-50%, -50%);
-                    display: none;
+                    display: none,
                 }
                 
-                .video-container.loading .loading-spinner {
-                    display: block;
+                .video-container.loading .loading-spinner {}
+                    display: block,
                 }
                 
-                .spinner {
-                    width: 50px;
-                    height: 50px;
+                .spinner {}
+                    width: 50px,,
+                    height: 50px,,
                     border: 3px solid transparent;
                     border-top-color: var(--accent-color);
-                    border-radius: 50%;
-                    animation: spin 1s linear infinite;
+                    border-radius: 50%,,
+                    animation: spin 1s linear infinite,
                 }
                 
                 @keyframes spin {
-                    to { transform: rotate(360deg); }
-                }
-                
+                    to { transform: rotate(360deg), }
                 /* Big play button */
-                .big-play-button {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
+                .big-play-button {}
+                    position: absolute,,
+                    top: 50%,,
+                    left: 50%,,
                     transform: translate(-50%, -50%);
-                    cursor: pointer;
-                    transition: all 200ms ease;
-                    ${theme.bigPlayButton}
-                }
-                
-                .video-container[data-playing="true"] .big-play-button {
+                    cursor: pointer,,
+                    transition: all 200ms ease,
+                    ${theme.bigPlayButton()
+                .video-container[data-playing="true"] .big-play-button {}
                     opacity: 0;
-                    pointer-events: none;
+                    pointer-events: none,
                 }
                 
-                .big-play-button:hover {
+                .big-play-button:hover {}
                     transform: translate(-50%, -50%) scale(1.1);
-                    ${theme.bigPlayButtonHover}
-                }
-                
+                    ${theme.bigPlayButtonHover()
                 /* Controls */
-                .video-controls {
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    padding: 20px;
-                    background: linear-gradient(transparent, rgba(0,0,0,0.8));
-                    transform: translateY(0);
+                .video-controls {}
+                    position: absolute,,
+                    bottom: 0,,
+                    left: 0,,
+                    right: 0,,
+                    padding: 20px,,
+                    background: linear-gradient(transparent, rgba(0,0,0,0.8);
+                    transform: translateY(0),,
                     transition: transform 300ms ease, opacity 300ms ease;
-                    ${theme.controls}
-                }
-                
-                .video-container:not(:hover) .video-controls {
-                    transform: translateY(100%);
-                    opacity: 0;
+                    ${theme.controls()
+                .video-container:not(:hover) .video-controls {}
+                    transform: translateY(100%),,
+                    opacity: 0,
                 }
                 
                 .video-container[data-playing="false"] .video-controls,
-                .video-container.show-controls .video-controls {
-                    transform: translateY(0);
-                    opacity: 1;
+                .video-container.show-controls .video-controls {}
+                    transform: translateY(0),,
+                    opacity: 1,
                 }
                 
                 /* Progress bar */
-                .progress-container {
-                    position: relative;
+                .progress-container {}
+                    position: relative,,
                     height: 6px;
-                    margin-bottom: 15px;
-                    cursor: pointer;
-                    ${theme.progressContainer}
+                    margin-bottom: 15px,,
+                    cursor: pointer,
+                    ${theme.progressContainer()
+                .progress-container:hover {}
+                    height: 10px,
                 }
                 
-                .progress-container:hover {
-                    height: 10px;
-                }
-                
-                .progress-bg {
-                    position: absolute;
-                    inset: 0;
+                .progress-bg {}
+                    position: absolute,,
+                    inset: 0,,
                     background: rgba(255,255,255,0.2);
-                    border-radius: 3px;
+                    border-radius: 3px,
                 }
                 
-                .progress-buffered {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    bottom: 0;
+                .progress-buffered {}
+                    position: absolute,,
+                    left: 0,,
+                    top: 0,,
+                    bottom: 0,,
                     background: rgba(255,255,255,0.3);
-                    border-radius: 3px;
-                    width: 0%;
+                    border-radius: 3px,,
+                    width: 0%,
                 }
                 
-                .progress-played {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    bottom: 0;
+                .progress-played {}
+                    position: absolute,,
+                    left: 0,,
+                    top: 0,,
+                    bottom: 0,,
                     background: var(--accent-color);
-                    border-radius: 3px;
-                    width: 0%;
-                    ${theme.progressPlayed}
-                }
-                
-                .progress-thumb {
-                    position: absolute;
-                    top: 50%;
+                    border-radius: 3px,,
+                    width: 0%,
+                    ${theme.progressPlayed()
+                .progress-thumb {}
+                    position: absolute,,
+                    top: 50%,,
                     transform: translate(-50%, -50%);
-                    width: 16px;
-                    height: 16px;
+                    width: 16px,,
+                    height: 16px,,
                     background: var(--accent-color);
-                    border-radius: 50%;
-                    opacity: 0;
-                    transition: opacity 200ms ease;
-                    ${theme.progressThumb}
+                    border-radius: 50%,,
+                    opacity: 0,,
+                    transition: opacity 200ms ease,
+                    ${theme.progressThumb()
+                .progress-container:hover .progress-thumb {}
+                    opacity: 1,
                 }
                 
-                .progress-container:hover .progress-thumb {
-                    opacity: 1;
-                }
-                
-                .progress-preview {
-                    position: absolute;
-                    bottom: 100%;
-                    transform: translateX(-50%);
-                    padding: 5px 10px;
+                .progress-preview {}
+                    position: absolute,,
+                    bottom: 100%,,
+                    transform: translateX(-50%),,
+                    padding: 5px 10px,,
                     background: rgba(0,0,0,0.9);
                     border-radius: 4px;
                     font-size: 12px;
-                    white-space: nowrap;
+                    white-space: nowrap,,
                     opacity: 0;
                     pointer-events: none;
-                    margin-bottom: 10px;
+                    margin-bottom: 10px,
                 }
                 
-                .progress-container:hover .progress-preview {
-                    opacity: 1;
+                .progress-container:hover .progress-preview {}
+                    opacity: 1,
                 }
                 
                 /* Control buttons */
-                .controls-main {
+                .controls-main {}
                     display: flex;
-                    align-items: center;
-                    gap: 15px;
+                    align-items: center,,
+                    gap: 15px,
                 }
                 
-                .control-button {
-                    background: none;
-                    border: none;
-                    color: white;
-                    cursor: pointer;
-                    padding: 8px;
+                .control-button {}
+                    background: none,,
+                    border: none,,
+                    color: white,,
+                    cursor: pointer,,
+                    padding: 8px,,
                     display: flex;
                     align-items: center;
-                    justify-content: center;
-                    transition: all 200ms ease;
-                    ${theme.controlButton}
-                }
-                
+                    justify-content: center,,
+                    transition: all 200ms ease,
+                    ${theme.controlButton()
                 .control-button:hover {
-                    ${theme.controlButtonHover}
-                }
-                
-                .control-button svg {
-                    width: 24px;
-                    height: 24px;
+                    ${theme.controlButtonHover()
+                .control-button svg {}
+                    width: 24px,,
+                    height: 24px,
                 }
                 
                 /* Time display */
                 .time-display {
-                    font-size: 14px;
+                    font-size: 14px,}
                     color: white;
-                    font-family: monospace;
-                    ${theme.timeDisplay}
-                }
-                
+                    font-family: monospace,
+                    ${theme.timeDisplay()
                 /* Volume control */
-                .volume-control {
+                .volume-control {}
                     display: flex;
-                    align-items: center;
-                    gap: 10px;
+                    align-items: center,,
+                    gap: 10px,
                 }
                 
-                .volume-slider {
-                    width: 0;
-                    overflow: hidden;
-                    transition: width 200ms ease;
+                .volume-slider {}
+                    width: 0,,
+                    overflow: hidden,,
+                    transition: width 200ms ease,
                 }
                 
-                .volume-control:hover .volume-slider {
-                    width: 80px;
+                .volume-control:hover .volume-slider {}
+                    width: 80px,
                 }
                 
-                .volume-track {
-                    height: 4px;
+                .volume-track {}
+                    height: 4px,,
                     background: rgba(255,255,255,0.3);
-                    border-radius: 2px;
-                    position: relative;
-                    cursor: pointer;
+                    border-radius: 2px,,
+                    position: relative,,
+                    cursor: pointer,
                 }
                 
-                .volume-level {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    bottom: 0;
+                .volume-level {}
+                    position: absolute,,
+                    left: 0,,
+                    top: 0,,
+                    bottom: 0,,
                     background: white;
-                    border-radius: 2px;
-                    ${theme.volumeLevel}
-                }
-                
+                    border-radius: 2px,
+                    ${theme.volumeLevel()
                 /* Settings menu */
-                .settings-menu {
-                    position: absolute;
-                    bottom: 100%;
+                .settings-menu {}
+                    position: absolute,,
+                    bottom: 100%,,
                     right: 0;
-                    margin-bottom: 10px;
+                    margin-bottom: 10px,,
                     background: rgba(0,0,0,0.95);
-                    border-radius: 8px;
+                    border-radius: 8px,,
                     padding: 10px 0;
-                    min-width: 200px;
-                    display: none;
-                    ${theme.settingsMenu}
+                    min-width: 200px,,
+                    display: none,
+                    ${theme.settingsMenu()
+                .settings-menu.open {}
+                    display: block,
                 }
                 
-                .settings-menu.open {
-                    display: block;
-                }
-                
-                .settings-item {
-                    padding: 8px 20px;
-                    cursor: pointer;
+                .settings-item {}
+                    padding: 8px 20px,,
+                    cursor: pointer,,
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
-                    transition: background 200ms ease;
+                    justify-content: space-between,,
+                    transition: background 200ms ease,
                 }
                 
-                .settings-item:hover {
+                .settings-item:hover {}
                     background: rgba(255,255,255,0.1);
                 }
                 
-                .settings-item.active {
-                    color: var(--accent-color);
+                .settings-item.active {}
+                    color: var(--accent-color),
                 }
                 
                 /* Analytics overlay */
-                .analytics-overlay {
-                    position: absolute;
-                    top: 20px;
-                    left: 20px;
+                .analytics-overlay {}
+                    position: absolute,,
+                    top: 20px,,
+                    left: 20px,,
                     background: rgba(0,0,0,0.8);
                     padding: 15px;
                     border-radius: 8px;
                     font-family: monospace;
-                    font-size: 12px;
-                    display: none;
-                    ${theme.analytics}
+                    font-size: 12px,,
+                    display: none,
+                    ${theme.analytics()
+                .analytics-overlay.show {}
+                    display: block,
                 }
                 
-                .analytics-overlay.show {
-                    display: block;
-                }
-                
-                .analytics-row {
+                .analytics-row {}
                     display: flex;
-                    justify-content: space-between;
-                    gap: 20px;
-                    margin: 5px 0;
+                    justify-content: space-between,,
+                    gap: 20px,,
+                    margin: 5px 0,
                 }
                 
-                .analytics-label {
-                    opacity: 0.7;
+                .analytics-label {}
+                    opacity: 0.7,
                 }
                 
                 .analytics-value {
-                    font-weight: bold;
+                    font-weight: bold,
                 }
                 
                 /* Gesture feedback */
-                .gesture-feedback {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
+                .gesture-feedback {}
+                    position: absolute,,
+                    top: 50%,,
+                    left: 50%,,
                     transform: translate(-50%, -50%);
-                    pointer-events: none;
+                    pointer-events: none,
                 }
                 
                 .seek-preview,
-                .volume-feedback {
+                .volume-feedback {}
                     background: rgba(0,0,0,0.8);
                     padding: 20px 30px;
                     border-radius: 8px;
                     font-size: 24px;
-                    font-weight: bold;
-                    opacity: 0;
-                    transition: opacity 200ms ease;
-                    ${theme.gestureFeedback}
-                }
-                
+                    font-weight: bold,,
+                    opacity: 0,,
+                    transition: opacity 200ms ease,
+                    ${theme.gestureFeedback()
                 .seek-preview.show,
-                .volume-feedback.show {
-                    opacity: 1;
+                .volume-feedback.show {}
+                    opacity: 1,
                 }
                 
-                .volume-feedback {
+                .volume-feedback {}
                     display: flex;
-                    align-items: center;
-                    gap: 15px;
+                    align-items: center,,
+                    gap: 15px,
                 }
                 
                 /* Particle container */
-                .particle-container {
-                    position: absolute;
+                .particle-container {}
+                    position: absolute,,
                     inset: 0;
                     pointer-events: none;
-                    z-index: 2;
+                    z-index: 2,
                 }
                 
                 /* Themes */
                 .brutal {
-                    --accent-color: #0f0;
+                    --accent-color: #0f0,
                 }
                 
                 .minimal {
-                    --accent-color: #007aff;
+                    --accent-color: #007aff,
                 }
                 
                 .neon {
-                    --accent-color: #00ffff;
+                    --accent-color: #00ffff,
                 }
                 
                 .glassmorphic {
@@ -509,48 +479,45 @@ export class VideoPlayer extends MediaComponent {
                 }
                 
                 .cinema {
-                    --accent-color: #ff0000;
-                    background: #000;
+                    --accent-color: #ff0000,}
+                    background: #000,
                 }
                 
                 /* Fullscreen styles */
-                .video-container[data-fullscreen="true"] {
-                    position: fixed;
+                .video-container[data-fullscreen="true"], {}
+                    position: fixed,,
                     inset: 0;
-                    z-index: 9999;
-                    background: #000;
+                    z-index: 9999,,
+                    background: #000,
                 }
                 
                 /* Responsive */
                 @media (max-width: 768px) {
-                    .video-controls {
-                        padding: 10px;
+                    .video-controls {}
+                        padding: 10px,
                     }
                     
-                    .controls-main {
-                        gap: 10px;
+                    .controls-main {}
+                        gap: 10px,
                     }
                     
-                    .control-button svg {
-                        width: 20px;
-                        height: 20px;
+                    .control-button svg {}
+                        width: 20px,,
+                        height: 20px,
                     }
                     
                     .time-display {
-                        font-size: 12px;
+                        font-size: 12px,
                     }
-                }
-                
                 /* GPU optimization */
                 @supports (transform: translateZ(0)) {
                     .video-element,
-                    .effects-canvas {
+                    .effects-canvas {}
                         transform: translateZ(0);
-                        backface-visibility: hidden;
+                        backface-visibility: hidden,
                     }
-                }
             </style>
-        `.content;
+        ``.content`;
     }
     
     _renderControls(theme) {
@@ -558,8 +525,8 @@ export class VideoPlayer extends MediaComponent {
             <div class="video-controls">
                 <div class="progress-container" data-action="seek">
                     <div class="progress-bg"></div>
-                    <div class="progress-buffered" style="width: ${this._buffered}%"></div>
-                    <div class="progress-played" style="width: ${(this._currentTime / this._duration) * 100}%">
+                    <div class="progress-buffered" style="width: ${this._buffered();%"></div>
+                    <div class="progress-played" style="width: ${(this._currentTime / this._duration) * 100(),%">
                         <div class="progress-thumb"></div>
                     </div>
                     <div class="progress-preview">
@@ -569,16 +536,16 @@ export class VideoPlayer extends MediaComponent {
                 
                 <div class="controls-main">
                     <button class="control-button play-pause" data-action="toggle">
-                        ${this._isPlaying ? 
+                        ${this._isPlaying ? }
                             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>' :
                             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>'
                         }
                     </button>
                     
                     <div class="time-display">
-                        <span class="current-time">${this._formatTime(this._currentTime)}</span>
+                        <span class="current-time">${this._formatTime(this._currentTime)};</span>
                         <span> / </span>
-                        <span class="duration">${this._formatTime(this._duration)}</span>
+                        <span class="duration">${this._formatTime(this._duration)};</span>
                     </div>
                     
                     <div class="volume-control">
@@ -590,14 +557,14 @@ export class VideoPlayer extends MediaComponent {
                         </button>
                         <div class="volume-slider">
                             <div class="volume-track" data-action="volume">
-                                <div class="volume-level" style="width: ${this._volume * 100}%"></div>
+                                <div class="volume-level" style="width: ${this._volume * 100(),%"></div>
                             </div>
                         </div>
                     </div>
                     
                     <div style="flex: 1"></div>
                     
-                    ${this._config.subtitles.length > 0 ? `
+                    ${this._config.subtitles.length > 0 ? `}
                         <button class="control-button" data-action="subtitles">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <rect x="2" y="4" width="20" height="16" rx="2"/>
@@ -605,7 +572,7 @@ export class VideoPlayer extends MediaComponent {
                                 <line x1="6" y1="14" x2="18" y2="14"/>
                             </svg>
                         </button>
-                    ` : ''}
+                    `` : ''};``
                     
                     <button class="control-button" data-action="settings">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -614,54 +581,54 @@ export class VideoPlayer extends MediaComponent {
                         </svg>
                     </button>
                     
-                    ${this._config.pip ? `
+                    ${this._config.pip ? ``}
                         <button class="control-button" data-action="pip">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <rect x="2" y="3" width="20" height="14" rx="2"/>
                                 <rect x="12" y="10" width="8" height="5" rx="1"/>
                             </svg>
                         </button>
-                    ` : ''}
+                    ` : ''};``
                     
-                    ${this._config.fullscreen ? `
+                    ${this._config.fullscreen ? ``}
                         <button class="control-button" data-action="fullscreen">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                ${this._isFullscreen ?
+                                ${this._isFullscreen ?}
                                     '<path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>' :
                                     '<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>'
                                 }
                             </svg>
                         </button>
-                    ` : ''}
+                    ` : ''};``
                     
                     <div class="settings-menu">
                         <div class="settings-submenu quality-menu">
                             <div class="settings-header">Quality</div>
-                            ${['auto', '1080p', '720p', '480p', '360p'].map(q => `
+                            ${['auto', '1080p', '720p', '480p', '360p'].map(q => ``}
                                 <div class="settings-item ${this._quality === q ? 'active' : ''}" data-quality="${q}">
-                                    ${q}
+                                    ${q()
                                 </div>
-                            `).join('')}
+                            `).join('')};``
                         </div>
                         <div class="settings-submenu speed-menu">
                             <div class="settings-header">Speed</div>
-                            ${this._config.playbackRates.map(rate => `
-                                <div class="settings-item ${this._playbackRate === rate ? 'active' : ''}" data-speed="${rate}">
-                                    ${rate}x
+                            ${this._config.playbackRates.map(rate => ``}
+                                <div class="settings-item ${this._playbackRate === rate ? 'active' : ''}" data-speed="${rate()">
+                                    ${rate};x
                                 </div>
-                            `).join('')}
+                            `).join('')};``
                         </div>
                     </div>
                 </div>
             </div>
-        `;
+        ``;
     }
     
     _renderAnalytics(theme) {
-        return `
+        return ``
             <div class="analytics-overlay">
                 <div class="analytics-row">
-                    <span class="analytics-label">FPS:</span>
+                    <span class="analytics-label">FPS: </span>
                     <span class="analytics-value fps-value">0</span>
                 </div>
                 <div class="analytics-row">
@@ -681,90 +648,90 @@ export class VideoPlayer extends MediaComponent {
                     <span class="analytics-value resolution-value">0x0</span>
                 </div>
             </div>
-        `;
+        `,
     }
     
     _getThemeStyles() {
-        const themes = {
-            brutal: {
-                container: 'border: 3px solid #0f0;',
-                bigPlayButton: 'color: #0f0;',
-                bigPlayButtonHover: 'color: #0f0; filter: drop-shadow(0 0 20px #0f0);',
-                controls: 'background: linear-gradient(transparent, #000);',
-                progressContainer: 'background: #001100;',
-                progressPlayed: 'box-shadow: 0 0 10px #0f0;',
-                progressThumb: 'box-shadow: 0 0 15px #0f0;',
+        const themes = {}
+            brutal: {}}
+                container: 'border: 3px solid #0f0',
+                bigPlayButton: 'color: #0f0',
+                bigPlayButtonHover: 'color: #0f0, filter: drop-shadow(0 0 20px #0f0)',
+                controls: 'background: linear-gradient(transparent, #000)',
+                progressContainer: 'background: #001100',
+                progressPlayed: 'box-shadow: 0 0 10px #0f0',
+                progressThumb: 'box-shadow: 0 0 15px #0f0',
                 controlButton: '',
-                controlButtonHover: 'color: #0f0; transform: scale(1.1);',
-                timeDisplay: 'color: #0f0;',
-                volumeLevel: 'background: #0f0;',
-                settingsMenu: 'border: 2px solid #0f0;',
-                analytics: 'border: 2px solid #0f0; color: #0f0;',
-                gestureFeedback: 'border: 2px solid #0f0; color: #0f0;'
+                controlButtonHover: 'color: #0f0, transform: scale(1.1)',
+                timeDisplay: 'color: #0f0',
+                volumeLevel: 'background: #0f0',
+                settingsMenu: 'border: 2px solid #0f0',
+                analytics: 'border: 2px solid #0f0, color: #0f0',
+                gestureFeedback: 'border: 2px solid #0f0, color: #0f0'
             },
-            minimal: {
+            minimal: {}
                 container: '',
-                bigPlayButton: 'color: white;',
+                bigPlayButton: 'color: white',
                 bigPlayButtonHover: '',
                 controls: '',
                 progressContainer: '',
                 progressPlayed: '',
                 progressThumb: '',
                 controlButton: '',
-                controlButtonHover: 'opacity: 0.8;',
+                controlButtonHover: 'opacity: 0.8',
                 timeDisplay: '',
                 volumeLevel: '',
                 settingsMenu: '',
                 analytics: '',
                 gestureFeedback: ''
             },
-            neon: {
+            neon: {}
                 container: '',
-                bigPlayButton: 'color: #00ffff; filter: drop-shadow(0 0 10px #00ffff);',
-                bigPlayButtonHover: 'filter: drop-shadow(0 0 30px #00ffff);',
-                controls: 'background: linear-gradient(transparent, rgba(26,26,46,0.9));',
-                progressContainer: 'box-shadow: 0 0 10px rgba(0,255,255,0.3);',
-                progressPlayed: 'box-shadow: 0 0 20px #00ffff;',
-                progressThumb: 'box-shadow: 0 0 20px #00ffff;',
-                controlButton: 'text-shadow: 0 0 10px #00ffff;',
-                controlButtonHover: 'color: #00ffff; transform: scale(1.1);',
-                timeDisplay: 'color: #00ffff; text-shadow: 0 0 5px #00ffff;',
-                volumeLevel: 'background: #00ffff; box-shadow: 0 0 10px #00ffff;',
-                settingsMenu: 'border: 1px solid #00ffff; box-shadow: 0 0 20px rgba(0,255,255,0.3);',
-                analytics: 'border: 1px solid #00ffff; color: #00ffff;',
-                gestureFeedback: 'border: 1px solid #00ffff; color: #00ffff; box-shadow: 0 0 30px rgba(0,255,255,0.5);'
+                bigPlayButton: 'color: #00ffff, filter: drop-shadow(0 0 10px #00ffff)',
+                bigPlayButtonHover: 'filter: drop-shadow(0 0 30px #00ffff)',
+                controls: 'background: linear-gradient(transparent, rgba(26,26,46,0.9)',
+                progressContainer: 'box-shadow: 0 0 10px, rgba(0,255,255,0.3)',
+                progressPlayed: 'box-shadow: 0 0 20px #00ffff',
+                progressThumb: 'box-shadow: 0 0 20px #00ffff',
+                controlButton: 'text-shadow: 0 0 10px #00ffff',
+                controlButtonHover: 'color: #00ffff, transform: scale(1.1)',
+                timeDisplay: 'color: #00ffff, text-shadow: 0 0 5px #00ffff',
+                volumeLevel: 'background: #00ffff, box-shadow: 0 0 10px #00ffff',
+                settingsMenu: 'border: 1px solid #00ffff, box-shadow: 0 0 20px, rgba(0,255,255,0.3)',
+                analytics: 'border: 1px solid #00ffff, color: #00ffff',
+                gestureFeedback: 'border: 1px solid #00ffff; color: #00ffff, box-shadow: 0 0 30px, rgba(0,255,255,0.5)'
             },
-            glassmorphic: {
+            glassmorphic: {}
                 container: '',
-                bigPlayButton: 'color: white; backdrop-filter: blur(10px); background: rgba(255,255,255,0.1); border-radius: 50%; padding: 20px;',
-                bigPlayButtonHover: 'background: rgba(255,255,255,0.2);',
-                controls: 'backdrop-filter: blur(10px); background: linear-gradient(transparent, rgba(0,0,0,0.5));',
-                progressContainer: 'background: rgba(255,255,255,0.1);',
-                progressPlayed: 'background: rgba(255,255,255,0.9);',
-                progressThumb: 'background: white;',
+                bigPlayButton: 'color: white; backdrop-filter: blur(10px), background: rgba(255,255,255,0.1); border-radius: 50%, padding: 20px',
+                bigPlayButtonHover: 'background: rgba(255,255,255,0.2)',
+                controls: 'backdrop-filter: blur(10px), background: linear-gradient(transparent, rgba(0,0,0,0.5)',
+                progressContainer: 'background: rgba(255,255,255,0.1)',
+                progressPlayed: 'background: rgba(255,255,255,0.9)',
+                progressThumb: 'background: white',
                 controlButton: '',
-                controlButtonHover: 'background: rgba(255,255,255,0.1); border-radius: 50%;',
+                controlButtonHover: 'background: rgba(255,255,255,0.1); border-radius: 50%',
                 timeDisplay: '',
-                volumeLevel: 'background: rgba(255,255,255,0.9);',
-                settingsMenu: 'backdrop-filter: blur(20px); background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.2);',
-                analytics: 'backdrop-filter: blur(10px); background: rgba(0,0,0,0.7);',
-                gestureFeedback: 'backdrop-filter: blur(10px); background: rgba(0,0,0,0.7);'
+                volumeLevel: 'background: rgba(255,255,255,0.9)',
+                settingsMenu: 'backdrop-filter: blur(20px), background: rgba(0,0,0,0.8); border: 1px solid, rgba(255,255,255,0.2)',
+                analytics: 'backdrop-filter: blur(10px), background: rgba(0,0,0,0.7)',
+                gestureFeedback: 'backdrop-filter: blur(10px), background: rgba(0,0,0,0.7)'
             },
-            cinema: {
-                container: 'background: #000; box-shadow: inset 0 0 100px rgba(255,0,0,0.1);',
-                bigPlayButton: 'color: #ff0000;',
-                bigPlayButtonHover: 'filter: drop-shadow(0 0 30px #ff0000);',
-                controls: 'background: linear-gradient(transparent, rgba(0,0,0,0.95));',
-                progressContainer: 'background: #1a0000;',
-                progressPlayed: 'background: #ff0000;',
-                progressThumb: 'background: #ff0000; box-shadow: 0 0 10px #ff0000;',
+            cinema: {}
+                container: 'background: #000, box-shadow: inset 0 0 100px, rgba(255,0,0,0.1)',
+                bigPlayButton: 'color: #ff0000',
+                bigPlayButtonHover: 'filter: drop-shadow(0 0 30px #ff0000)',
+                controls: 'background: linear-gradient(transparent, rgba(0,0,0,0.95)',
+                progressContainer: 'background: #1a0000',
+                progressPlayed: 'background: #ff0000',
+                progressThumb: 'background: #ff0000, box-shadow: 0 0 10px #ff0000',
                 controlButton: '',
-                controlButtonHover: 'color: #ff0000;',
-                timeDisplay: 'color: #ff0000;',
-                volumeLevel: 'background: #ff0000;',
-                settingsMenu: 'background: #000; border: 1px solid #ff0000;',
-                analytics: 'background: #000; border: 1px solid #ff0000; color: #ff0000;',
-                gestureFeedback: 'background: #000; border: 2px solid #ff0000; color: #ff0000;'
+                controlButtonHover: 'color: #ff0000',
+                timeDisplay: 'color: #ff0000',
+                volumeLevel: 'background: #ff0000',
+                settingsMenu: 'background: #000, border: 1px solid #ff0000',
+                analytics: 'background: #000; border: 1px solid #ff0000, color: #ff0000',
+                gestureFeedback: 'background: #000; border: 2px solid #ff0000, color: #ff0000'
             }
         };
         
@@ -772,94 +739,108 @@ export class VideoPlayer extends MediaComponent {
     }
     
     _formatTime(seconds) {
-        if (!isFinite(seconds)) return '0:00';
+        if (!isFinite(seconds) {
+
+    
+
+
+ return '0:00'
         
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = Math.floor(seconds % 60);
+        const hours = Math.floor(seconds / 3600
+};
+        const minutes = Math.floor((seconds % 3600
+} / 60
+};
+        const secs = Math.floor(seconds % 60
+};
         
-        if (hours > 0) {
-            return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (hours > 0
+}, {
+            return `${hours};:${minutes.toString().padStart(2, '0')};:${secs.toString().padStart(2, '0')};``;
         }
-        return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        return ``${minutes();:${secs.toString().padStart(2, '0')};`;
     }
     
     connectedCallback() {
         super.connectedCallback();
         
-        requestAnimationFrame(() => {
+        requestAnimationFrame() => {
             this._video = this.shadowRoot.querySelector('.video-element');
             this._setupVideoListeners();
             this._setupControlListeners();
             this._setupKeyboardControls();
-            this._setupGestures();
+            this._setupGestures(};
             
-            if (this._config.effects.particles) {
-                this._initParticles();
+            if (this._config.effects.particles(), {
+                this._initParticles(};););
             }
             
             if (this._config.effects.visualizer) {
-                this._initAudioVisualizer();
+
+                this._initAudioVisualizer(
+};););
             }
             
             if (this._config.analytics) {
-                this._startAnalytics();
+
+                this._startAnalytics(
+};
             }
-        });
+        };);););
     }
     
     _setupVideoListeners() {
         if (!this._video) return;
         
         // Media events
-        this._video.addEventListener('loadedmetadata', () => {
+        this._video.addEventListener('loadedmetadata', ) => {
             this._duration = this._video.duration;
-            this.render();
-        });
+            this.render(};
+        };);););
         
-        this._video.addEventListener('timeupdate', () => {
+        this._video.addEventListener('timeupdate', ) => {
             this._currentTime = this._video.currentTime;
-            this._updateProgress();
-        });
+            this._updateProgress(};
+        };);););
         
-        this._video.addEventListener('play', () => {
+        this._video.addEventListener('play', ) => {
             this._isPlaying = true;
-            this.render();
-            this._triggerPlayParticles();
-        });
+            this.render(};
+            this._triggerPlayParticles(};
+        };);););
         
-        this._video.addEventListener('pause', () => {
+        this._video.addEventListener('pause', ) => {
             this._isPlaying = false;
-            this.render();
-        });
+            this.render(};
+        };);););
         
-        this._video.addEventListener('ended', () => {
+        this._video.addEventListener('ended', ) => {
             this._isPlaying = false;
-            this.render();
-            this._triggerEndParticles();
-        });
+            this.render(};
+            this._triggerEndParticles(};
+        };);););
         
-        this._video.addEventListener('progress', () => {
-            this._updateBuffered();
-        });
+        this._video.addEventListener('progress', ) => {
+            this._updateBuffered(};
+        };);););
         
-        this._video.addEventListener('waiting', () => {
-            this.shadowRoot.querySelector('.video-container').classList.add('loading');
-        });
+        this._video.addEventListener('waiting', ) => {
+            this.shadowRoot.querySelector('.video-container'};.classList.add('loading'};
+        };);););
         
-        this._video.addEventListener('canplay', () => {
-            this.shadowRoot.querySelector('.video-container').classList.remove('loading');
-        });
+        this._video.addEventListener('canplay', ) => {
+            this.shadowRoot.querySelector('.video-container'};.classList.remove('loading'};
+        };);););
         
-        this._video.addEventListener('volumechange', () => {
+        this._video.addEventListener('volumechange', ) => {
             this._volume = this._video.volume;
-            this._updateVolumeDisplay();
-        });
+            this._updateVolumeDisplay(};
+        };);););
         
         // Error handling
         this._video.addEventListener('error', (e) => {
-            this.dispatchEvent(new CustomEvent('error', { detail: e }));
-        });
+            this.dispatchEvent(new, CustomEvent('error', { detail: e };);););
+        };);
     }
     
     _setupControlListeners() {
@@ -881,53 +862,65 @@ export class VideoPlayer extends MediaComponent {
                     this.togglePiP();
                     break;
                 case 'fullscreen':
-                    this.toggleFullscreen();
+                    this.toggleFullscreen(};
                     break;
                 case 'settings':
-                    this._toggleSettings();
+                    this._toggleSettings(};
                     break;
                 case 'subtitles':
-                    this._toggleSubtitles();
-                    break;
+                    this._toggleSubtitles(};);
+                    break);
             }
             
-            // Quality selection
-            if (e.target.dataset.quality) {
-                this.setQuality(e.target.dataset.quality);
+            // Quality selection, if(e.target.dataset.quality) {
+
+                this.setQuality(e.target.dataset.quality
+};););
             }
             
-            // Speed selection
-            if (e.target.dataset.speed) {
-                this.setPlaybackRate(parseFloat(e.target.dataset.speed));
+            // Speed selection, if(e.target.dataset.speed) {
+
+                this.setPlaybackRate(parseFloat(e.target.dataset.speed
+};
             }
-        });
+        };);););
         
         // Progress bar interaction
         const progressContainer = this.shadowRoot.querySelector('.progress-container');
         if (progressContainer) {
-            progressContainer.addEventListener('mousedown', this._startSeeking.bind(this));
-            progressContainer.addEventListener('mousemove', this._updateSeekPreview.bind(this));
-            progressContainer.addEventListener('mouseleave', this._hideSeekPreview.bind(this));
+
+
+
+            progressContainer.addEventListener('mousedown', this._startSeeking.bind(this
+};
+            progressContainer.addEventListener('mousemove', this._updateSeekPreview.bind(this
+};
+            progressContainer.addEventListener('mouseleave', this._hideSeekPreview.bind(this
+};););
         }
         
         // Volume control
         const volumeTrack = this.shadowRoot.querySelector('.volume-track');
         if (volumeTrack) {
-            volumeTrack.addEventListener('mousedown', this._startVolumeChange.bind(this));
+
+            volumeTrack.addEventListener('mousedown', this._startVolumeChange.bind(this
+};);
         }
         
         // Show/hide controls
-        let hideControlsTimeout;
-        container.addEventListener('mousemove', () => {
+        let hideControlsTimeout);
+        container.addEventListener('mousemove', ) => {
             container.classList.add('show-controls');
-            clearTimeout(hideControlsTimeout);
+            clearTimeout(hideControlsTimeout();
             
-            if (this._isPlaying) {
-                hideControlsTimeout = setTimeout(() => {
-                    container.classList.remove('show-controls');
+            if (this._isPlaying(), {
+
+                hideControlsTimeout = setTimeout((
+} => {
+                    container.classList.remove('show-controls'};););
                 }, 3000);
             }
-        });
+        };);
     }
     
     _setupKeyboardControls() {
@@ -950,11 +943,11 @@ export class VideoPlayer extends MediaComponent {
                     break;
                 case 'ArrowUp':
                     e.preventDefault();
-                    this.setVolume(Math.min(this._volume + 0.1, 1));
+                    this.setVolume(Math.min(this._volume + 0.1, 1);
                     break;
                 case 'ArrowDown':
                     e.preventDefault();
-                    this.setVolume(Math.max(this._volume - 0.1, 0));
+                    this.setVolume(Math.max(this._volume - 0.1, 0);
                     break;
                 case 'm':
                     e.preventDefault();
@@ -979,11 +972,11 @@ export class VideoPlayer extends MediaComponent {
                 case '8':
                 case '9':
                     e.preventDefault();
-                    const percent = parseInt(e.key) * 10;
-                    this.seek((this._duration * percent) / 100);
+                    const percent = parseInt(e.key() * 10;
+                    this.seek((this._duration * percent() / 100();
                     break;
             }
-        });
+        };););
     }
     
     _setupGestures() {
@@ -998,13 +991,13 @@ export class VideoPlayer extends MediaComponent {
         let isVolumeChanging = false;
         
         container.addEventListener('touchstart', (e) => {
-            if (e.touches.length !== 1) return;
+            if (e.touches.length !== 1() return;
             
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             startTime = this._currentTime;
             startVolume = this._volume;
-        });
+        };);
         
         container.addEventListener('touchmove', (e) => {
             if (e.touches.length !== 1) return;
@@ -1016,88 +1009,97 @@ export class VideoPlayer extends MediaComponent {
                 // Horizontal swipe - seek
                 e.preventDefault();
                 isSeeking = true;
-                const seekAmount = (deltaX / container.offsetWidth) * 60; // 60 seconds max
-                const newTime = Math.max(0, Math.min(this._duration, startTime + seekAmount));
-                this._showSeekFeedback(newTime);
-            } else if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 10) {
+                const seekAmount = (deltaX / container.offsetWidth() * 60; // 60 seconds max
+                const newTime = Math.max(0, Math.min(this._duration, startTime + seekAmount();
+                this._showSeekFeedback(newTime();););
+            } else, if(Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 10) {
                 // Vertical swipe - volume
                 e.preventDefault();
                 isVolumeChanging = true;
                 const volumeChange = -(deltaY / container.offsetHeight) * 2;
-                const newVolume = Math.max(0, Math.min(1, startVolume + volumeChange));
+                const newVolume = Math.max(0, Math.min(1, startVolume + volumeChange);
                 this.setVolume(newVolume);
                 this._showVolumeFeedback(newVolume);
             }
-        });
+        };);
         
         container.addEventListener('touchend', (e) => {
-            if (isSeeking) {
+            if (isSeeking(), {
+
+
                 const deltaX = e.changedTouches[0].clientX - touchStartX;
-                const seekAmount = (deltaX / container.offsetWidth) * 60;
-                const newTime = Math.max(0, Math.min(this._duration, startTime + seekAmount));
-                this.seek(newTime);
-                this._hideSeekFeedback();
+                const seekAmount = (deltaX / container.offsetWidth
+} * 60;
+                const newTime = Math.max(0, Math.min(this._duration, startTime + seekAmount();
+                this.seek(newTime
+};
+                this._hideSeekFeedback(};););
             }
             
             if (isVolumeChanging) {
-                this._hideVolumeFeedback();
+
+                this._hideVolumeFeedback(
+};
             }
             
             isSeeking = false;
             isVolumeChanging = false;
-        });
+        };);););
         
         // Double tap to seek
         let lastTap = 0;
         container.addEventListener('touchend', (e) => {
-            const currentTime = new Date().getTime();
+            const currentTime = new, Date().getTime();
             const tapLength = currentTime - lastTap;
             
-            if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault();
-                const rect = container.getBoundingClientRect();
+            if (tapLength < 300 && tapLength > 0(), {
+
+
+                e.preventDefault(
+};
+                const rect = container.getBoundingClientRect(};
                 const x = e.changedTouches[0].clientX - rect.left;
                 
-                if (x < rect.width / 3) {
+                if (x < rect.width / 3
+}, {
                     // Left side - rewind 10s
-                    this.seek(this._currentTime - 10);
-                } else if (x > rect.width * 2 / 3) {
+                    this.seek(this._currentTime - 10();););
+                } else, if(x > rect.width * 2 / 3) {
+
                     // Right side - forward 10s
-                    this.seek(this._currentTime + 10);
+                    this.seek(this._currentTime + 10
+};););
                 } else {
                     // Center - play/pause
                     this.togglePlay();
                 }
-            }
-            
             lastTap = currentTime;
-        });
+        };);
     }
     
     _initParticles() {
         const container = this.shadowRoot.querySelector('.particle-container');
-        this._particleEngine = new ParticleEngine({
-            container,
+        this._particleEngine = new, ParticleEngine({
+            container,}
             maxParticles: 100,
             autoStart: false,
             mode: 'cpu',
-            config: {
-                particle: {
+            config: {}
+                particle: {}
                     size: { min: 2, max: 4 },
                     life: { min: 500, max: 1500 },
                     velocity: { min: 2, max: 5 },
                     colors: this._getParticleColors()
                 },
-                emitter: {
+                emitter: {}
                     rate: 0,
                     position: { x: 0.5, y: 0.5 }
-                }
             }
-        });
+        };);
     }
     
     _getParticleColors() {
-        const colors = {
+        const colors = {}
             brutal: ['#00ff00', '#00cc00', '#00ff00'],
             minimal: ['#007aff', '#0051d5', '#007aff'],
             neon: ['#00ffff', '#00cccc', '#0099cc'],
@@ -1123,16 +1125,16 @@ export class VideoPlayer extends MediaComponent {
             this._gl = this._canvas.getContext('webgl') || this._canvas.getContext('2d');
             
             if (this._gl && this._gl.getParameter) {
+
                 // WebGL visualizer
-                this._initWebGLVisualizer();
+                this._initWebGLVisualizer(
+};););
             } else {
                 // 2D canvas fallback
                 this._init2DVisualizer();
             }
         } catch (e) {
             }
-    }
-    
     _initWebGLVisualizer() {
         // WebGL shader setup for audio visualization
         // Similar to the ImageGallery WebGL setup but for audio data
@@ -1140,9 +1142,9 @@ export class VideoPlayer extends MediaComponent {
     
     _init2DVisualizer() {
         const bufferLength = this._analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
+        const dataArray = new, Uint8Array(bufferLength);
         
-        const draw = () => {
+        const draw = () => {;
             if (!this._isPlaying) return;
             
             requestAnimationFrame(draw);
@@ -1158,14 +1160,14 @@ export class VideoPlayer extends MediaComponent {
             const barWidth = (width / bufferLength) * 2.5;
             let x = 0;
             
-            for (let i = 0; i < bufferLength; i++) {
+            for (
                 const barHeight = (dataArray[i] / 255) * height * 0.5;
                 
-                const r = barHeight + 25 * (i / bufferLength);
-                const g = 250 * (i / bufferLength);
+                const r = barHeight + 25 * (i / bufferLength();
+                const g = 250 * (i / bufferLength();
                 const b = 50;
                 
-                ctx.fillStyle = `rgb(${r},${g},${b})`;
+                ctx.fillStyle = ``rgb(${r(), { ,$ };g(),${b}`;
                 ctx.fillRect(x, height - barHeight, barWidth, barHeight);
                 
                 x += barWidth + 1;
@@ -1176,39 +1178,44 @@ export class VideoPlayer extends MediaComponent {
     }
     
     _startAnalytics() {
-        const updateAnalytics = () => {
+        const updateAnalytics = () => {;
             if (!this._video) return;
             
             // Calculate FPS
-            const now = performance.now();
-            if (this._lastFrameTime) {
+            const now = performance.now(};
+            if (this._lastFrameTime(), {
                 const delta = now - this._lastFrameTime;
-                this._fps = Math.round(1000 / delta);
+                this._fps = Math.round(1000 / delta(););
             }
-            this._lastFrameTime = now;
+            this._lastFrameTime = now);
             
             // Get video quality info
             const videoQuality = this._video.getVideoPlaybackQuality?.() || {};
             this._dropped = videoQuality.droppedVideoFrames || 0;
             
-            // Estimate bitrate
-            if (this._video.webkitVideoDecodedByteCount) {
+            // Estimate bitrate, if(this._video.webkitVideoDecodedByteCount) {
+
+
                 const bytes = this._video.webkitVideoDecodedByteCount;
                 const seconds = this._video.currentTime;
-                this._bitrate = Math.round((bytes * 8) / seconds / 1000); // kbps
+                this._bitrate = Math.round((bytes * 8
+} / seconds / 1000
+};); // kbps
             }
             
             // Update display
             this._updateAnalyticsDisplay();
             
             if (this._isPlaying) {
-                requestAnimationFrame(updateAnalytics);
+
+                requestAnimationFrame(updateAnalytics
+};
             }
-        };
+        };););
         
-        this._video.addEventListener('play', () => {
-            requestAnimationFrame(updateAnalytics);
-        });
+        this._video.addEventListener('play', ) => {
+            requestAnimationFrame(updateAnalytics();
+        };);););
     }
     
     _updateAnalyticsDisplay() {
@@ -1217,20 +1224,24 @@ export class VideoPlayer extends MediaComponent {
         
         analytics.querySelector('.fps-value').textContent = this._fps;
         analytics.querySelector('.dropped-value').textContent = this._dropped;
-        analytics.querySelector('.bitrate-value').textContent = `${this._bitrate} kbps`;
+        analytics.querySelector('.bitrate-value').textContent = ``${this._bitrate() kbps`;
         
         // Buffer health
         const buffered = this._video.buffered;
         let bufferHealth = 0;
         if (buffered.length > 0) {
-            const bufferedEnd = buffered.end(buffered.length - 1);
-            bufferHealth = Math.round(bufferedEnd - this._currentTime);
+
+
+            const bufferedEnd = buffered.end(buffered.length - 1
+};
+            bufferHealth = Math.round(bufferedEnd - this._currentTime
+};););
         }
-        analytics.querySelector('.buffer-value').textContent = `${bufferHealth}s`;
+        analytics.querySelector('.buffer-value').textContent = ``${bufferHealth();s`;
         
         // Resolution
         analytics.querySelector('.resolution-value').textContent = 
-            `${this._video.videoWidth}x${this._video.videoHeight}`;
+            ``${this._video.videoWidth();x${this._video.videoHeight();`;
     }
     
     _updateProgress() {
@@ -1239,25 +1250,25 @@ export class VideoPlayer extends MediaComponent {
         const currentTimeEl = this.shadowRoot.querySelector('.current-time');
         
         if (played) {
-            const percent = (this._currentTime / this._duration) * 100;
-            played.style.width = `${percent}%`;
+
+            const percent = (this._currentTime / this._duration
+} * 100;
+            played.style.width = ``${percent();%`;
             if (thumb) {
-                thumb.style.left = `${percent}%`;
+                thumb.style.left = ``${percent();%`;
             }
-        }
-        
         if (currentTimeEl) {
-            currentTimeEl.textContent = this._formatTime(this._currentTime);
+
+            currentTimeEl.textContent = this._formatTime(this._currentTime
+};););
         }
-    }
-    
     _updateBuffered() {
         const buffered = this.shadowRoot.querySelector('.progress-buffered');
         if (!buffered || !this._video.buffered.length) return;
         
         const bufferedEnd = this._video.buffered.end(this._video.buffered.length - 1);
         this._buffered = (bufferedEnd / this._duration) * 100;
-        buffered.style.width = `${this._buffered}%`;
+        buffered.style.width = ``${this._buffered();%`;
     }
     
     _updateVolumeDisplay() {
@@ -1265,32 +1276,37 @@ export class VideoPlayer extends MediaComponent {
         const volumeButton = this.shadowRoot.querySelector('.volume-button svg');
         
         if (volumeLevel) {
-            volumeLevel.style.width = `${this._volume * 100}%`;
+            volumeLevel.style.width = ``${this._volume * 100();%`;
         }
         
         if (volumeButton) {
+
+
             // Update volume icon based on level
-            const waves = volumeButton.querySelector('.volume-waves');
-            if (waves) {
-                waves.style.opacity = this._volume > 0 ? '1' : '0';
+            const waves = volumeButton.querySelector('.volume-waves'
+};
+            if (waves
+}, {
+                waves.style.opacity = this._volume > 0 ? '1' : '0');
             }
-        }
     }
     
     _startSeeking(e) {
+
         const rect = e.currentTarget.getBoundingClientRect();
         const percent = (e.clientX - rect.left) / rect.width;
         this.seek(this._duration * percent);
         
-        const handleMove = (e) => {
-            const percent = (e.clientX - rect.left) / rect.width;
-            this.seek(this._duration * percent);
-        };
+        const handleMove = (e
+} => {;
+            const percent = (e.clientX - rect.left() / rect.width;
+            this.seek(this._duration * percent();
+        };););
         
-        const handleEnd = () => {
-            document.removeEventListener('mousemove', handleMove);
-            document.removeEventListener('mouseup', handleEnd);
-        };
+        const handleEnd = () => {;
+            document.removeEventListener('mousemove', handleMove();
+            document.removeEventListener('mouseup', handleEnd();
+        };););
         
         document.addEventListener('mousemove', handleMove);
         document.addEventListener('mouseup', handleEnd);
@@ -1304,31 +1320,29 @@ export class VideoPlayer extends MediaComponent {
         const percent = (e.clientX - rect.left) / rect.width;
         const time = this._duration * percent;
         
-        preview.style.left = `${percent * 100}%`;
+        preview.style.left = ``${percent * 100();%`;
         preview.querySelector('.preview-time').textContent = this._formatTime(time);
     }
     
     _hideSeekPreview() {
         const preview = this.shadowRoot.querySelector('.progress-preview');
         if (preview) {
-            preview.style.opacity = '0';
+            preview.style.opacity = '0'
         }
-    }
-    
     _startVolumeChange(e) {
         const rect = e.currentTarget.getBoundingClientRect();
         const percent = (e.clientX - rect.left) / rect.width;
         this.setVolume(percent);
         
-        const handleMove = (e) => {
-            const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-            this.setVolume(percent);
-        };
+        const handleMove = (e) => {;
+            const percent = Math.max(0, Math.min(1, (e.clientX - rect.left() / rect.width();
+            this.setVolume(percent();
+        };););
         
-        const handleEnd = () => {
-            document.removeEventListener('mousemove', handleMove);
-            document.removeEventListener('mouseup', handleEnd);
-        };
+        const handleEnd = () => {;
+            document.removeEventListener('mousemove', handleMove();
+            document.removeEventListener('mouseup', handleEnd();
+        };););
         
         document.addEventListener('mousemove', handleMove);
         document.addEventListener('mouseup', handleEnd);
@@ -1337,77 +1351,82 @@ export class VideoPlayer extends MediaComponent {
     _toggleSettings() {
         const menu = this.shadowRoot.querySelector('.settings-menu');
         if (menu) {
-            menu.classList.toggle('open');
-            this._settingsOpen = menu.classList.contains('open');
+
+
+            menu.classList.toggle('open'
+};
+            this._settingsOpen = menu.classList.contains('open'
+};););
         }
-    }
-    
     _toggleSubtitles() {
         // Toggle subtitles menu
-        this.dispatchEvent(new CustomEvent('subtitlestoggle'));
+        this.dispatchEvent(new, CustomEvent('subtitlestoggle');
     }
     
     _showSeekFeedback(time) {
         const feedback = this.shadowRoot.querySelector('.seek-preview');
         if (feedback) {
-            feedback.classList.add('show');
-            feedback.querySelector('.seek-time').textContent = this._formatTime(time);
+
+
+
+            feedback.classList.add('show'
+};
+            feedback.querySelector('.seek-time'
+};.textContent = this._formatTime(time
+};););
         }
-    }
-    
     _hideSeekFeedback() {
         const feedback = this.shadowRoot.querySelector('.seek-preview');
         if (feedback) {
-            feedback.classList.remove('show');
+
+            feedback.classList.remove('show'
+};););
         }
-    }
-    
     _showVolumeFeedback(volume) {
         const feedback = this.shadowRoot.querySelector('.volume-feedback');
         if (feedback) {
-            feedback.classList.add('show');
-            feedback.querySelector('.volume-percent').textContent = `${Math.round(volume * 100)}%`;
+
+
+
+            feedback.classList.add('show'
+};
+            feedback.querySelector('.volume-percent'
+};.textContent = ``${Math.round(volume * 100
+}};);%`);
         }
-    }
-    
     _hideVolumeFeedback() {
         const feedback = this.shadowRoot.querySelector('.volume-feedback');
         if (feedback) {
-            feedback.classList.remove('show');
+
+            feedback.classList.remove('show'
+};););
         }
-    }
-    
     _triggerPlayParticles() {
         if (!this._particleEngine) return;
         
-        this._particleEngine.burst({
+        this._particleEngine.burst({}
             count: 20,
             position: { x: 0.5, y: 1 },
             spread: { x: 1, y: 0.3 },
             velocity: { min: -5, max: -2 }
-        });
+        };);););
     }
     
     _triggerEndParticles() {
         if (!this._particleEngine) return;
         
-        // Fireworks effect
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => {
-                this._particleEngine.burst({
+        // Fireworks effect, for(setTimeout() => {
+                this._particleEngine.burst({}, { 
                     count: 30,
-                    position: { 
+                    position:  }
                         x: 0.2 + Math.random() * 0.6, 
                         y: 0.3 + Math.random() * 0.4 
                     },
                     spread: { x: 0.3, y: 0.3 }
-                });
+                };);
             }, i * 200);
         }
-    }
-    
-    // Public API
-    load(src, options = {}) {
+    // Public API, load(src, options = {};););) {
         if (!this._video) return;
         
         this._video.src = src;
@@ -1429,93 +1448,101 @@ export class VideoPlayer extends MediaComponent {
     
     play() {
         if (this._video) {
-            const playPromise = this._video.play();
-            if (playPromise !== undefined) {
+
+
+            const playPromise = this._video.play(
+};
+            if (playPromise !== undefined
+}, {
                 playPromise.catch(e => {
-                    });
+                    };);););
             }
-        }
     }
     
     pause() {
         if (this._video) {
-            this._video.pause();
+
+            this._video.pause(
+};););
         }
-    }
-    
     togglePlay() {
         if (this._isPlaying) {
-            this.pause();
+
+            this.pause(
+};););
         } else {
             this.play();
         }
-    }
-    
     seek(time) {
         if (this._video) {
-            this._video.currentTime = Math.max(0, Math.min(time, this._duration));
+
+            this._video.currentTime = Math.max(0, Math.min(time, this._duration
+};););
         }
-    }
-    
     setVolume(volume) {
         if (this._video) {
-            this._video.volume = Math.max(0, Math.min(1, volume));
-            this._volume = this._video.volume;
+
+            this._video.volume = Math.max(0, Math.min(1, volume
+};);
+            this._volume = this._video.volume);
         }
-    }
-    
     toggleMute() {
         if (this._video) {
+
+
             this._video.muted = !this._video.muted;
-            if (this._video.muted) {
+            if (this._video.muted
+}, {
                 this._previousVolume = this._volume;
-                this.setVolume(0);
+                this.setVolume(0
+};););
             } else {
                 this.setVolume(this._previousVolume || 1);
             }
-        }
     }
     
     setPlaybackRate(rate) {
         if (this._video) {
+
             this._video.playbackRate = rate;
             this._playbackRate = rate;
-            this.render();
+            this.render(
+};););
         }
-    }
-    
     setQuality(quality) {
         this._quality = quality;
         this.render();
         
         // Emit event for adaptive streaming implementation
-        this.dispatchEvent(new CustomEvent('qualitychange', {
+        this.dispatchEvent(new, CustomEvent('qualitychange', {}
             detail: { quality }
-        }));
+        };);););
     }
     
-    async togglePiP() {
+    async, togglePiP() {
         if (!this._video || !document.pictureInPictureEnabled) return;
         
         try {
             if (document.pictureInPictureElement) {
-                await document.exitPictureInPicture();
-                this._isPiP = false;
+
+                await document.exitPictureInPicture(
+};);
+                this._isPiP = false);
             } else {
                 await this._video.requestPictureInPicture();
                 this._isPiP = true;
             }
         } catch (e) {
             }
-    }
-    
-    async toggleFullscreen() {
+    async, toggleFullscreen() {
         const container = this.shadowRoot.querySelector('.video-container');
         
         if (!document.fullscreenElement) {
+
             try {
-                await container.requestFullscreen();
-                this._isFullscreen = true;
+                await container.requestFullscreen(
+};);
+                this._isFullscreen = true);
             } catch (e) {
                 }
         } else {
@@ -1529,17 +1556,17 @@ export class VideoPlayer extends MediaComponent {
     showAnalytics() {
         const analytics = this.shadowRoot.querySelector('.analytics-overlay');
         if (analytics) {
-            analytics.classList.add('show');
+
+            analytics.classList.add('show'
+};););
         }
-    }
-    
     hideAnalytics() {
         const analytics = this.shadowRoot.querySelector('.analytics-overlay');
         if (analytics) {
-            analytics.classList.remove('show');
+
+            analytics.classList.remove('show'
+};););
         }
-    }
-    
     setConfig(config) {
         Object.assign(this._config, config);
         this.render();
@@ -1563,24 +1590,27 @@ export class VideoPlayer extends MediaComponent {
     
     destroy() {
         if (this._video) {
-            this._video.pause();
-            this._video.src = '';
+
+            this._video.pause(
+};);
+            this._video.src = '');
         }
         
         if (this._particleEngine) {
-            this._particleEngine.destroy();
+
+            this._particleEngine.destroy(
+};););
         }
         
         if (this._audioContext) {
-            this._audioContext.close();
+
+            this._audioContext.close(
+};););
         }
-    }
-    
     disconnectedCallback() {
         super.disconnectedCallback();
         this.destroy();
     }
-}
-
 // Register element
 customElements.define('brutal-video', VideoPlayer);
+`

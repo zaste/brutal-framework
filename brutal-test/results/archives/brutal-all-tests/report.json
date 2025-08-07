@@ -1,0 +1,93 @@
+{
+  "timestamp": "2025-07-11T12:22:36.763Z",
+  "config": {
+    "mode": "quick",
+    "browsers": [
+      "chrome"
+    ],
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "headless": true,
+    "outputDir": "./brutal-all-tests"
+  },
+  "environment": {},
+  "errors": [],
+  "performance": {},
+  "visual": {},
+  "coverage": {},
+  "suggestions": [],
+  "analysis": {
+    "errors": {
+      "total": 0,
+      "byType": {},
+      "bySeverity": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "patterns": {},
+      "recommendations": [],
+      "rootCauses": []
+    },
+    "performance": {
+      "metrics": {},
+      "scores": {
+        "loading": 0,
+        "interactivity": 0,
+        "stability": 0,
+        "smoothness": 0,
+        "overall": 0
+      },
+      "issues": [],
+      "bottlenecks": [],
+      "trends": {},
+      "recommendations": [
+        {
+          "category": "loading",
+          "priority": "high",
+          "title": "Improve Initial Load Performance",
+          "suggestions": [
+            "Implement code splitting to reduce initial bundle size",
+            "Use resource hints (preconnect, prefetch) for critical resources",
+            "Enable text compression (gzip/brotli)",
+            "Optimize server response time"
+          ]
+        },
+        {
+          "category": "interactivity",
+          "priority": "high",
+          "title": "Enhance Interactivity",
+          "suggestions": [
+            "Break up long tasks using requestIdleCallback",
+            "Implement web workers for heavy computations",
+            "Defer non-critical JavaScript",
+            "Use passive event listeners"
+          ]
+        },
+        {
+          "category": "stability",
+          "priority": "high",
+          "title": "Improve Visual Stability",
+          "suggestions": [
+            "Always include size attributes on images and videos",
+            "Reserve space for ad slots",
+            "Avoid inserting content above existing content",
+            "Use CSS transforms instead of layout properties for animations"
+          ]
+        }
+      ],
+      "grade": "F"
+    },
+    "rootCauses": {
+      "rootCauses": [],
+      "correlations": [],
+      "timeline": [],
+      "primaryCause": null,
+      "affectedAreas": {},
+      "fixPlan": []
+    }
+  }
+}

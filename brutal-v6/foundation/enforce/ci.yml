@@ -1,0 +1,76 @@
+name: BRUTAL Foundation Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Foundation Validation
+    runs-on: ubuntu-latest
+    
+    # No permissions to bypass
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+    
+    - name: Compile Foundation
+      run: |
+        cd foundation
+        npx tsc *.ts --module commonjs --target es2020
+    
+    - name: Run Foundation Validation
+      id: validate
+      run: |
+        node -e "
+        const { validate } = require('./foundation');
+        
+        (async () => {
+          const result = await validate('.', { verbose: true });
+          
+          if (!result.valid) {
+            console.error(result.summary);
+            
+            // Set output for PR comment
+            const output = result.summary.replace(/'/g, \"'\\\\''\");
+            console.log(\`::set-output name=violations::\${output}\`);
+            
+            process.exit(1);
+          } else {
+            console.log('✅ All validations passed');
+          }
+        })();
+        "
+    
+    - name: Comment PR on Failure
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const violations = '${{ steps.validate.outputs.violations }}';
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## ❌ Foundation Validation Failed\n\n\`\`\`\n${violations}\n\`\`\`\n\n### 🔧 How to Fix\n\n1. Run \`npm run foundation:fix\` to auto-fix violations\n2. Run \`npm run foundation:validate\` to check locally\n3. Commit the fixes and push again`
+          });
+    
+    # Required status check - cannot be bypassed
+    - name: Set Status
+      if: always()
+      run: |
+        if [ "${{ steps.validate.outcome }}" == "failure" ]; then
+          echo "::error::Foundation validation failed. This is a required check."
+          exit 1
+        fi

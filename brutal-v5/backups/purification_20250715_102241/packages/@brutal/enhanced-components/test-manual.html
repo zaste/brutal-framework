@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manual Test - Enhanced Components</title>
+  <style>
+    #modal {
+      border: 2px solid blue;
+      padding: 20px;
+      margin: 20px;
+      min-height: 100px;
+    }
+    #modal::before {
+      content: "Modal Container:";
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Manual Test - Enhanced Components</h1>
+  
+  <div id="test-container">
+    <h2>Portal Test</h2>
+    <p>This content is in the main container.</p>
+    <brutal-portal target="#modal">
+      <div class="portal-content">Hello from Portal!</div>
+    </brutal-portal>
+  </div>
+  
+  <div id="modal"></div>
+
+  <script type="module">
+    // For this test, we'll use the actual built files
+    // In a real test, these would be served by the test server
+    console.log('Loading enhanced components...');
+    
+    // Since we can't import the workspace modules directly in this simple test,
+    // we'll define a minimal Portal implementation for testing
+    class Portal extends HTMLElement {
+      constructor() {
+        super();
+        this.targetElement = null;
+        this.portalContent = null;
+      }
+      
+      connectedCallback() {
+        const target = this.getAttribute('target');
+        if (target) {
+          this.targetElement = document.querySelector(target);
+          if (this.targetElement) {
+            this.portalContent = document.createElement('div');
+            this.portalContent.setAttribute('data-portal', 'true');
+            this.portalContent.innerHTML = this.innerHTML;
+            this.targetElement.appendChild(this.portalContent);
+          }
+        }
+      }
+      
+      disconnectedCallback() {
+        if (this.portalContent && this.portalContent.parentNode) {
+          this.portalContent.parentNode.removeChild(this.portalContent);
+        }
+      }
+    }
+    
+    customElements.define('brutal-portal', Portal);
+    console.log('Portal component defined');
+  </script>
+</body>
+</html>

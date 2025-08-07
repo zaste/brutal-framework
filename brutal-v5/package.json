@@ -1,0 +1,78 @@
+{
+  "name": "brutal-v5",
+  "version": "0.0.0",
+  "private": true,
+  "description": "BRUTAL V5 - Zero-dependency web framework",
+  "type": "module",
+  "scripts": {
+    "build": "turbo build",
+    "test": "turbo test",
+    "test:watch": "turbo test:watch",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "size": "turbo size",
+    "clean": "turbo clean && rm -rf node_modules",
+    "dev": "turbo dev",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "turbo build && changeset publish",
+    "create:package": "node scripts/create-package.js",
+    "validate:structure": "node scripts/validate-structure.js",
+    "check:dependencies": "node scripts/check-dependencies.js",
+    "check:architecture": "node scripts/check-architecture.js",
+    "validate:all": "npm run validate:structure && npm run check:dependencies && npm run check:architecture",
+    "build:bundles": "rollup -c config/rollup.config.js",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.5",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.29.1",
+    "husky": "^8.0.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prettier": "^3.1.1",
+    "rollup": "^4.45.0",
+    "size-limit": "^11.0.1",
+    "ts-jest": "^29.1.1",
+    "tsup": "^8.0.1",
+    "turbo": "^1.11.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.14.0",
+  "size-limit": [
+    {
+      "name": "brutal-lite",
+      "path": "bundles/brutal-lite.js",
+      "limit": "15KB"
+    },
+    {
+      "name": "brutal-core",
+      "path": "bundles/brutal-core.js",
+      "limit": "35KB"
+    },
+    {
+      "name": "brutal-enhanced",
+      "path": "bundles/brutal-enhanced.js",
+      "limit": "55KB"
+    },
+    {
+      "name": "brutal-ui",
+      "path": "bundles/brutal-ui.js",
+      "limit": "85KB"
+    },
+    {
+      "name": "brutal-full",
+      "path": "bundles/brutal-full.js",
+      "limit": "155KB"
+    }
+  ]
+}

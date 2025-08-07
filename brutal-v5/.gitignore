@@ -1,0 +1,74 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+*.lcov
+.nyc_output
+
+# Production
+dist/
+build/
+*.tsbuildinfo
+
+# Cache
+.turbo
+.cache
+.parcel-cache
+.next
+.nuxt
+.vuepress/dist
+.docusaurus
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# BRUTAL specific
+size-report.json
+benchmark-results.json
+.brutal-cache/
+*.brutal.tmp
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Misc
+.eslintcache
+.stylelintcache
+*.tgz
+.yarn-integrity

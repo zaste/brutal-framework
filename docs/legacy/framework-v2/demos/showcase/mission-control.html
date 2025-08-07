@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 MISSION CONTROL - Native Web Components Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #000000 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* NASA MISSION CONTROL HEADER */
+        .mission-header {
+            background: linear-gradient(90deg, #001122 0%, #003366 50%, #001122 100%);
+            padding: 10px 0;
+            border-bottom: 2px solid #00ffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .header-content {
+            max-width: 1920px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mission-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .mission-stats {
+            display: flex;
+            gap: 30px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #00ff00;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        /* MAIN CONTROL PANEL */
+        .control-panel {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+
+        /* SYSTEM STATUS */
+        .system-status {
+            background: rgba(0, 50, 100, 0.2);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-title {
+            font-size: 1.2rem;
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-indicator.warning {
+            background: #ffaa00;
+            box-shadow: 0 0 10px rgba(255, 170, 0, 0.8);
+        }
+
+        .status-indicator.critical {
+            background: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+        }
+
+        /* MAIN DISPLAY */
+        .main-display {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .display-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .display-title {
+            font-size: 1.5rem;
+            color: #00ffff;
+            text-transform: uppercase;
+        }
+
+        /* PERFORMANCE GRAPH */
+        .performance-graph {
+            background: rgba(0, 50, 50, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 300px;
+            position: relative;
+        }
+
+        /* CONSOLE OUTPUT */
+        .console-output {
+            background: #000;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        .console-entry {
+            margin: 2px 0;
+            padding: 2px 5px;
+        }
+
+        .console-entry.success {
+            color: #00ff00;
+        }
+
+        .console-entry.warning {
+            color: #ffaa00;
+        }
+
+        .console-entry.error {
+            color: #ff0000;
+        }
+
+        .console-entry.info {
+            color: #00ffff;
+        }
+
+        /* CONTROL BUTTONS */
+        .control-section {
+            background: rgba(0, 50, 100, 0.2);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: linear-gradient(135deg, #003366, #004488);
+            border: 1px solid #00ffff;
+            color: #ffffff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-button:hover {
+            background: linear-gradient(135deg, #004488, #0055aa);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .control-button:active {
+            transform: translateY(0);
+        }
+
+        .control-button.danger {
+            background: linear-gradient(135deg, #660000, #880000);
+            border-color: #ff0000;
+        }
+
+        .control-button.danger:hover {
+            background: linear-gradient(135deg, #880000, #aa0000);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        /* METRICS DISPLAY */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background: rgba(0, 100, 100, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #aaa;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        /* ANIMATIONS */
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: scanline 3s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(300px); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* GLITCH EFFECT */
+        .glitch {
+            animation: glitch 0.5s ease-in-out;
+        }
+
+        @keyframes glitch {
+            0%, 100% {
+                text-shadow: 
+                    0 0 5px rgba(0, 255, 255, 0.5),
+                    0 0 10px rgba(0, 255, 255, 0.5);
+            }
+            25% {
+                text-shadow: 
+                    -2px 0 #ff0000,
+                    2px 0 #00ffff,
+                    0 0 5px rgba(0, 255, 255, 0.5);
+            }
+            50% {
+                text-shadow: 
+                    2px 0 #ff0000,
+                    -2px 0 #00ffff,
+                    0 0 10px rgba(0, 255, 255, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div style="background: #001122; padding: 10px; text-align: center; border-bottom: 1px solid #00ffff;">
+        <a href="../gallery.html" style="color: #00ffff; text-decoration: none; font-weight: bold;">← Back to Gallery</a>
+    </div>
+    
+    <!-- MISSION HEADER -->
+    <header class="mission-header">
+        <div class="header-content">
+            <h1 class="mission-title">🚀 MISSION CONTROL</h1>
+            <div class="mission-stats">
+                <div class="stat">
+                    <span class="stat-value" id="mission-time">00:00:00</span>
+                    <span class="stat-label">Mission Time</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="performance-mult">52.3x</span>
+                    <span class="stat-label">React Advantage</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="system-health">100%</span>
+                    <span class="stat-label">System Health</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTROL PANEL -->
+    <main class="control-panel">
+        <!-- LEFT PANEL - SYSTEM STATUS -->
+        <section class="system-status">
+            <h2 class="status-title">System Status</h2>
+            
+            <div class="status-item">
+                <span>Shadow Pool Efficiency</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="shadow-efficiency">87%</span>
+                    <div class="status-indicator"></div>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <span>Template Cache</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="template-cache">98.7%</span>
+                    <div class="status-indicator"></div>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <span>Event Queue</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="event-queue">3</span>
+                    <div class="status-indicator warning"></div>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <span>Security Score</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="security-score">98/100</span>
+                    <div class="status-indicator"></div>
+                </div>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="components-active">847</div>
+                    <div class="metric-label">Active Components</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="memory-usage">2.1MB</div>
+                    <div class="metric-label">Memory Usage</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="render-time">0.8ms</div>
+                    <div class="metric-label">Render Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="fps-counter">60</div>
+                    <div class="metric-label">FPS</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CENTER PANEL - MAIN DISPLAY -->
+        <section class="main-display">
+            <div class="scanline"></div>
+            <div class="display-header">
+                <h2 class="display-title">Performance Monitor</h2>
+                <span id="last-update">Last Update: Just now</span>
+            </div>
+            
+            <div class="performance-graph">
+                <canvas id="performance-chart"></canvas>
+            </div>
+            
+            <div class="console-output" id="console-output">
+                <div class="console-entry info">[INFO] Mission Control initialized</div>
+                <div class="console-entry success">[SUCCESS] All systems operational</div>
+                <div class="console-entry info">[INFO] Performance monitoring active</div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL - CONTROLS -->
+        <section class="control-section">
+            <h2 class="status-title">Mission Controls</h2>
+            
+            <button class="control-button" onclick="runBenchmark()">
+                🚀 Run Performance Benchmark
+            </button>
+            
+            <button class="control-button" onclick="runStressTest()">
+                💪 Execute Stress Test
+            </button>
+            
+            <button class="control-button" onclick="loadExtension()">
+                🔌 Load Extension Module
+            </button>
+            
+            <button class="control-button" onclick="testSecurity()">
+                🔒 Test Security Systems
+            </button>
+            
+            <button class="control-button danger" onclick="simulateCrash()">
+                ⚠️ Simulate Component Crash
+            </button>
+            
+            <button class="control-button" onclick="exportMetrics()">
+                📊 Export Metrics Report
+            </button>
+            
+            <button class="control-button" onclick="toggleRealtime()">
+                ⏱️ Toggle Real-time Updates
+            </button>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="./mission-control.js"></script>
+</body>
+</html>

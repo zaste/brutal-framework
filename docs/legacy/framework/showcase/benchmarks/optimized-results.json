@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-07-08T09:10:01.957Z",
+  "iterations": 1000,
+  "environment": {
+    "node": "v22.16.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "performance": {
+    "optimizedElement": {
+      "totalTime": 297.298304,
+      "avgTime": 0.29729830399999996,
+      "opsPerSec": 3363.6249737906346
+    },
+    "preCompiledElement": {
+      "totalTime": 125.856485,
+      "avgTime": 0.12585648500000002,
+      "opsPerSec": 7945.557990118665
+    },
+    "pooledElement": {
+      "totalTime": 120.891752,
+      "avgTime": 0.12089175199999999,
+      "opsPerSec": 8271.862914187894
+    },
+    "react": {
+      "totalTime": 91.102669,
+      "avgTime": 0.09110266900000001,
+      "opsPerSec": 10976.626820889296
+    }
+  },
+  "memory": {
+    "optimizedElement": {
+      "heapUsed": -2368880,
+      "heapTotal": 1310720,
+      "external": 40
+    },
+    "react": {
+      "heapUsed": 1609144,
+      "heapTotal": 0,
+      "external": 0
+    }
+  },
+  "bundleSize": {
+    "customElements": 1024,
+    "react": 42000,
+    "vue": 34000
+  }
+}

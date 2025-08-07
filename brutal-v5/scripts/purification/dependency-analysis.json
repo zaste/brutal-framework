@@ -1,0 +1,164 @@
+{
+  "packages": {
+    "@brutal/a11y": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/animation": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/cache": {
+      "dependencies": [
+        "@brutal/shared"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/components": {
+      "dependencies": [
+        "@brutal/foundation",
+        "@brutal/templates",
+        "@brutal/events"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/enhanced-components": {
+      "dependencies": [
+        "@brutal/components"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/enhanced-routing": {
+      "dependencies": [
+        "@brutal/routing"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/enhanced-state": {
+      "dependencies": [
+        "@brutal/state"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/events": {
+      "dependencies": [
+        "@brutal/shared"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/foundation": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/http": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/plugins": {
+      "dependencies": [
+        "@brutal/events",
+        "@brutal/shared"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/routing": {
+      "dependencies": [
+        "@brutal/events",
+        "@brutal/shared"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/scheduling": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/shared": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/state": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/templates": {
+      "dependencies": [
+        "@brutal/shared"
+      ],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/test-extractor": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/testing": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    },
+    "@brutal/validation": {
+      "dependencies": [],
+      "devDependencies": [],
+      "peerDependencies": []
+    }
+  },
+  "violations": [],
+  "bundleSizes": {
+    "@brutal/a11y": 1325,
+    "@brutal/animation": 2360,
+    "@brutal/cache": 6271,
+    "@brutal/components": 9274,
+    "@brutal/enhanced-components": 26694,
+    "@brutal/enhanced-routing": 16050,
+    "@brutal/enhanced-state": 14759,
+    "@brutal/events": 16240,
+    "@brutal/foundation": 4570,
+    "@brutal/http": 3988,
+    "@brutal/plugins": 1331,
+    "@brutal/routing": 1942,
+    "@brutal/scheduling": 1337,
+    "@brutal/shared": 12319,
+    "@brutal/state": 3230,
+    "@brutal/templates": 7063,
+    "@brutal/test-extractor": 21704,
+    "@brutal/testing": 2219,
+    "@brutal/validation": 3500
+  },
+  "minimalFiles": {
+    "@brutal/a11y": false,
+    "@brutal/animation": true,
+    "@brutal/cache": false,
+    "@brutal/components": true,
+    "@brutal/enhanced-components": false,
+    "@brutal/enhanced-routing": false,
+    "@brutal/enhanced-state": false,
+    "@brutal/events": false,
+    "@brutal/foundation": true,
+    "@brutal/http": true,
+    "@brutal/plugins": false,
+    "@brutal/routing": true,
+    "@brutal/scheduling": false,
+    "@brutal/shared": false,
+    "@brutal/state": true,
+    "@brutal/templates": true,
+    "@brutal/test-extractor": false,
+    "@brutal/testing": true,
+    "@brutal/validation": true
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "@brutal/testing",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Ultra-minimal testing utilities for BRUTAL",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "test": "node tests/test.js",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "size": "size-limit"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "3KB"
+    }
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

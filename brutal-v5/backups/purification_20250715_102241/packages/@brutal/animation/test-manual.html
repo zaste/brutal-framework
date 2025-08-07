@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animation Test - Manual</title>
+  <style>
+    body {
+      font-family: system-ui;
+      padding: 20px;
+      background: #111;
+      color: #fff;
+    }
+    
+    .box {
+      width: 100px;
+      height: 100px;
+      background: #00ff00;
+      margin: 20px 0;
+    }
+    
+    button {
+      background: #00ff00;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .log {
+      background: #1a1a1a;
+      padding: 10px;
+      margin-top: 20px;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Animation Manual Test</h1>
+  
+  <div class="box" id="test-box"></div>
+  
+  <button onclick="testOpacity()">Test Opacity</button>
+  <button onclick="testTransform()">Test Transform</button>
+  <button onclick="testEasing()">Test Easing</button>
+  <button onclick="testTimeline()">Test Timeline</button>
+  <button onclick="clearLog()">Clear Log</button>
+  
+  <div class="log" id="log"></div>
+
+  <script type="module">
+    import { animate, timeline } from './dist/index.js';
+    
+    const box = document.getElementById('test-box');
+    const logEl = document.getElementById('log');
+    
+    function log(msg) {
+      logEl.innerHTML += `${new Date().toISOString().slice(11, 23)} - ${msg}<br>`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+    
+    window.clearLog = () => logEl.innerHTML = '';
+    
+    window.testOpacity = async () => {
+      log('Starting opacity test');
+      box.style.opacity = '1';
+      
+      const anim = animate(box, { opacity: 0 }, { 
+        duration: 1000,
+        onUpdate: (p) => log(`Progress: ${(p * 100).toFixed(1)}%`),
+        onComplete: () => log('Opacity animation complete')
+      });
+      
+      await anim.promise;
+      setTimeout(() => {
+        animate(box, { opacity: 1 }, { duration: 500 });
+      }, 500);
+    };
+    
+    window.testTransform = async () => {
+      log('Starting transform test');
+      box.style.transform = '';
+      
+      const anim = animate(box, { 
+        x: 200, 
+        y: -50, 
+        scale: 1.5, 
+        rotate: 180 
+      }, { 
+        duration: 1500,
+        easing: 'easeInOut',
+        onComplete: () => {
+          log('Transform complete');
+          setTimeout(() => {
+            animate(box, { x: 0, y: 0, scale: 1, rotate: 0 }, { duration: 1000 });
+          }, 1000);
+        }
+      });
+    };
+    
+    window.testEasing = () => {
+      log('Starting easing comparison');
+      
+      // Create 4 boxes
+      const colors = ['#ff0066', '#00ff66', '#0066ff', '#ffff00'];
+      const easings = ['linear', 'easeIn', 'easeOut', 'easeInOut'];
+      
+      const boxes = easings.map((easing, i) => {
+        const el = document.createElement('div');
+        el.style.cssText = `
+          width: 50px; 
+          height: 50px; 
+          background: ${colors[i]}; 
+          margin: 10px 0;
+          display: inline-block;
+        `;
+        box.parentElement.appendChild(el);
+        return el;
+      });
+      
+      boxes.forEach((el, i) => {
+        animate(el, { x: 300 }, {
+          duration: 2000,
+          easing: easings[i],
+          onComplete: () => {
+            log(`${easings[i]} complete`);
+            setTimeout(() => el.remove(), 1000);
+          }
+        });
+      });
+    };
+    
+    window.testTimeline = () => {
+      log('Starting timeline test');
+      
+      const boxes = [];
+      for (let i = 0; i < 4; i++) {
+        const el = document.createElement('div');
+        el.style.cssText = `
+          width: 50px; 
+          height: 50px; 
+          background: hsl(${i * 90}, 100%, 50%); 
+          margin: 5px;
+          display: inline-block;
+        `;
+        box.parentElement.appendChild(el);
+        boxes.push(el);
+      }
+      
+      timeline([
+        [boxes[0], { y: -50, scale: 1.5 }, { duration: 200 }],
+        [boxes[1], { y: -50, scale: 1.5 }, { duration: 200 }],
+        [boxes[2], { y: -50, scale: 1.5 }, { duration: 200 }],
+        [boxes[3], { y: -50, scale: 1.5 }, { duration: 200 }]
+      ]).promise.then(() => {
+        log('Timeline sequence complete');
+        setTimeout(() => boxes.forEach(el => el.remove()), 1000);
+      });
+    };
+    
+    log('Ready for testing');
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Components Demo</title>
+  <style>
+    body {
+      font-family: system-ui;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    section {
+      margin: 2rem 0;
+      padding: 1rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    .demo-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  </style>
+</head>
+<body>
+  <h1>@brutal/components Demo</h1>
+
+  <section>
+    <h2>Buttons</h2>
+    <div class="demo-grid">
+      <b-btn>Primary Button</b-btn>
+      <b-btn variant="secondary">Secondary</b-btn>
+      <b-btn variant="danger">Danger</b-btn>
+      <b-btn variant="ghost">Ghost</b-btn>
+    </div>
+    
+    <h3>Sizes</h3>
+    <div class="demo-grid">
+      <b-btn size="sm">Small</b-btn>
+      <b-btn size="md">Medium</b-btn>
+      <b-btn size="lg">Large</b-btn>
+    </div>
+    
+    <h3>States</h3>
+    <div class="demo-grid">
+      <b-btn disabled>Disabled</b-btn>
+      <b-btn loading>Loading</b-btn>
+    </div>
+  </section>
+
+  <section>
+    <h2>Inputs</h2>
+    <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
+      <b-input placeholder="Enter your name"></b-input>
+      <b-input type="email" placeholder="Enter email" value="test@example.com"></b-input>
+      <b-input type="password" placeholder="Password"></b-input>
+      <b-input placeholder="Disabled input" disabled></b-input>
+      <b-input error="This field is required" placeholder="With error"></b-input>
+    </div>
+  </section>
+
+  <section>
+    <h2>Modal</h2>
+    <b-btn id="openModal">Open Modal</b-btn>
+    
+    <b-modal id="demoModal" title="Demo Modal">
+      <p>This is a modal dialog component.</p>
+      <p>It supports custom content and can be closed by clicking the X button.</p>
+      <div slot="footer">
+        <b-btn variant="secondary" id="closeModal">Close</b-btn>
+        <b-btn>Save Changes</b-btn>
+      </div>
+    </b-modal>
+  </section>
+
+  <section>
+    <h2>Interactive Demo</h2>
+    <div id="counter">
+      <h3>Counter: <span id="count">0</span></h3>
+      <b-btn id="increment">Increment</b-btn>
+      <b-btn id="decrement" variant="secondary">Decrement</b-btn>
+      <b-btn id="reset" variant="danger">Reset</b-btn>
+    </div>
+  </section>
+
+  <script type="module">
+    import './minimal.js';
+    
+    // Modal demo
+    const modal = document.getElementById('demoModal');
+    document.getElementById('openModal').addEventListener('click', () => {
+      modal.open = true;
+    });
+    document.getElementById('closeModal').addEventListener('click', () => {
+      modal.open = false;
+    });
+    
+    // Counter demo
+    let count = 0;
+    const updateCount = () => {
+      document.getElementById('count').textContent = count;
+    };
+    
+    document.getElementById('increment').addEventListener('click', () => {
+      count++;
+      updateCount();
+    });
+    
+    document.getElementById('decrement').addEventListener('click', () => {
+      count--;
+      updateCount();
+    });
+    
+    document.getElementById('reset').addEventListener('click', () => {
+      count = 0;
+      updateCount();
+    });
+    
+    // Log component events
+    document.querySelectorAll('b-btn, b-input').forEach(el => {
+      el.addEventListener('click', (e) => {
+        console.log('Click event from:', e.target.tagName);
+      });
+      
+      if (el.tagName === 'B-INPUT') {
+        el.addEventListener('input', (e) => {
+          console.log('Input value:', e.detail);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

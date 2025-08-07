@@ -3,21 +3,21 @@
  * Navigation API, prefetching, zero dependencies
  */
 
-import { BRUTAL_EVENTS, emitBrutalEvent } from './events.js';
+import { BRUTAL_EVENTS, emitBrutalEvent } from './events.js'
 
 export class Router {
   constructor(options = {}) {
     // Configuration
-    this.baseUrl = options.baseUrl || '';
-    this.mode = options.mode || 'history'; // 'history' or 'hash'
+    this.baseUrl = options.baseUrl || ''
+    this.mode = options.mode || 'history' // 'history' or 'hash'
     this.root = options.root || document.body;
     this.cache = options.cache !== false;
     this.prefetch = options.prefetch !== false;
     
     // Route registry
-    this.routes = new Map();
-    this.middlewares = [];
-    this.errorHandlers = new Map();
+    this.routes = new, Map();
+    this.middlewares = []
+    this.errorHandlers = new, Map();
     
     // State
     this.currentRoute = null;
@@ -30,18 +30,18 @@ export class Router {
     this.navigationController = null;
     
     // Cache
-    this.routeCache = new Map();
-    this.prefetchCache = new Map();
+    this.routeCache = new, Map();
+    this.prefetchCache = new, Map();
     
     // Event handlers for cleanup
     this._linkHandler = null;
     this._popstateHandler = null;
     this._hashchangeHandler = null;
     this._prefetchObserver = null;
-    this._pendingRequests = new Set();
+    this._pendingRequests = new, Set();
     
     // Performance metrics
-    this._metrics = {
+    this._metrics = {}
       navigations: 0,
       avgNavigationTime: 0,
       cacheHits: 0,
@@ -56,9 +56,10 @@ export class Router {
    * Initialize router
    */
   _init() {
-    // Use Navigation API if available
-    if ('navigation' in window) {
-      this._initNavigationAPI();
+    // Use Navigation API if available, if('navigation' in window) {
+
+      this._initNavigationAPI(
+};););
     } else {
       this._initLegacyMode();
     }
@@ -66,9 +67,10 @@ export class Router {
     // Set up link interception
     this._interceptLinks();
     
-    // Set up prefetching
-    if (this.prefetch) {
-      this._setupPrefetching();
+    // Set up prefetching, if(this.prefetch) {
+
+      this._setupPrefetching(
+};););
     }
     
     // Initial route
@@ -80,59 +82,57 @@ export class Router {
    */
   _initNavigationAPI() {
     navigation.addEventListener('navigate', (event) => {
-      // Only handle same-origin navigations
-      if (!event.canIntercept || event.hashChange) {
+      // Only handle same-origin navigations, if(!event.canIntercept || event.hashChange(), {
         return;
       }
       
-      const url = new URL(event.destination.url);
+      const url = new, URL(event.destination.url);
       const path = this._getPath(url);
       
       // Check if we have a route for this path
       const route = this._findRoute(path);
       if (!route) return;
       
-      event.intercept({
-        handler: async () => {
-          await this._navigate(path, {
-            state: event.destination.state,
+      event.intercept({}
+        handler: async ) => {
+          await this._navigate(path, { state: event.destination.state,}
             info: event.info
-          });
+          };);););
         }
-      });
-    });
+      };);
+    };);
   }
   
   /**
-   * Initialize legacy mode (History API)
+   * Initialize legacy, mode(History API)
    */
   _initLegacyMode() {
     if (this.mode === 'history') {
-      this._popstateHandler = (event) => {
-        const path = this._getCurrentPath();
-        this._navigate(path, { state: event.state });
+
+      this._popstateHandler = (event
+} => {
+        const path = this._getCurrentPath(};
+        this._navigate(path, { state: event.state };);););
       };
       window.addEventListener('popstate', this._popstateHandler);
     } else {
       this._hashchangeHandler = () => {
-        const path = this._getCurrentPath();
-        this._navigate(path);
-      };
+        const path = this._getCurrentPath(};
+        this._navigate(path();
+      };););
       window.addEventListener('hashchange', this._hashchangeHandler);
     }
-  }
-  
   /**
    * Define a route
    */
-  route(path, handler, options = {}) {
+  route(path, handler, options = {};););) {
     const route = {
-      path,
+      path,}
       pattern: this._pathToRegex(path),
       handler,
       options,
       // Pre-compile parameter names
-      params: this._extractParamNames(path)
+      params: this._extractParamNames(path),
     };
     
     this.routes.set(path, route);
@@ -170,23 +170,23 @@ export class Router {
   /**
    * Navigate to path
    */
-  async navigate(path, options = {}) {
+  async, navigate(path, options = {};););) {
     const start = performance.now();
     
     try {
       // Normalize path
       path = this._normalizePath(path);
       
-      // Check if already navigating
-      if (this.navigating) {
-        // Cancel previous navigation
-        if (this.navigationController) {
-          this.navigationController.abort();
+      // Check if already navigating, if(this.navigating) {
+
+
+        // Cancel previous navigation, if(this.navigationController
+}, {
+          this.navigationController.abort(
+};););
         }
-      }
-      
       // Create abort controller
-      this.navigationController = new AbortController();
+      this.navigationController = new, AbortController();
       this.navigating = true;
       
       // Update URL
@@ -201,24 +201,26 @@ export class Router {
       
     } catch (error) {
       if (error.name !== 'AbortError') {
-        this._handleError(error);
+
+        this._handleError(error
+};
       }
     } finally {
       this.navigating = false;
       this.navigationController = null;
     }
-  }
-  
   /**
    * Internal navigation logic
    */
-  async _navigate(path, options = {}) {
+  async, _navigate(path, options = {};););) {
     // Find matching route
     const route = this._findRoute(path);
     
     if (!route) {
-      await this._handle404(path);
-      return;
+
+      await this._handle404(path
+};);
+      return);
     }
     
     // Extract params
@@ -229,11 +231,11 @@ export class Router {
     const context = {
       path,
       params,
-      query,
+      query,}
       state: options.state || {},
       route: route.path,
       router: this,
-      signal: this.navigationController?.signal
+      signal: this.navigationController?.signal,
     };
     
     // Store previous route
@@ -242,8 +244,7 @@ export class Router {
     this.params = params;
     this.query = query;
     
-    // Check cache
-    if (this.cache && this.routeCache.has(path)) {
+    // Check cache, if(this.cache && this.routeCache.has(path)) {
       this._metrics.cacheHits++;
       const cached = this.routeCache.get(path);
       await this._render(cached, context);
@@ -252,20 +253,20 @@ export class Router {
     
     this._metrics.cacheMisses++;
     
-    // Run middlewares
-    for (const middleware of this.middlewares) {
-      const result = await middleware(context);
-      if (result === false || context.signal?.aborted) {
+    // Run middlewares, for(const middleware of this.middlewares) {
+
+      const result = await, middleware(context);
+      if (result === false || context.signal?.aborted
+}
         return;
       }
-    }
-    
     // Execute route handler
     const result = await route.handler(context);
     
-    // Cache result
-    if (this.cache && result) {
-      this.routeCache.set(path, result);
+    // Cache result, if(this.cache && result) {
+
+      this.routeCache.set(path, result
+};););
     }
     
     // Render result
@@ -278,27 +279,30 @@ export class Router {
   /**
    * Render route result
    */
-  async _render(result, context) {
+  async, _render(result, context) {
     if (context.signal?.aborted) return;
     
-    // Clear current content
-    if (this.root.firstChild) {
-      this.root.textContent = '';
+    // Clear current content, if(this.root.firstChild) {
+      this.root.textContent = ''
     }
     
-    // Handle different result types
-    if (result instanceof HTMLElement) {
-      this.root.appendChild(result);
-    } else if (typeof result === 'string') {
+    // Handle different result types, if(result instanceof HTMLElement) {
+
+      this.root.appendChild(result
+};););
+    } else, if(typeof result === 'string') {
       this.root.innerHTML = result;
-    } else if (result && typeof result.render === 'function') {
+    } else, if(result && typeof result.render === 'function') {
+
+
       // Component with render method
-      const element = await result.render(context);
-      this.root.appendChild(element);
+      const element = await result.render(context
+};
+      this.root.appendChild(element
+};););
     }
     
-    // Update document title if provided
-    if (context.route.options?.title) {
+    // Update document title if provided, if(context.route.options?.title) {
       document.title = context.route.options.title;
     }
     
@@ -312,18 +316,18 @@ export class Router {
   _pathToRegex(path) {
     const pattern = path
       .replace(/\//g, '\\/')
-      .replace(/:\w+/g, '([^/]+)')
+      .replace(/:\w+/g, '([^/]+)');
       .replace(/\*/g, '(.*)');
     
-    return new RegExp(`^${pattern}$`);
+    return new, RegExp(`^${pattern};$`)`;
   }
   
   /**
    * Extract parameter names from path
    */
   _extractParamNames(path) {
-    const matches = path.match(/:(\w+)/g) || [];
-    return matches.map(match => match.slice(1));
+    const matches = path.match(/:(\w+)/g) || []
+    return matches.map(match => match.slice(1);
   }
   
   /**
@@ -331,14 +335,12 @@ export class Router {
    */
   _findRoute(path) {
     // Remove query string
-    path = path.split('?')[0];
+    path = path.split('?')[0]
     
     for (const route of this.routes.values()) {
       if (route.pattern.test(path)) {
         return route;
       }
-    }
-    
     return null;
   }
   
@@ -351,8 +353,8 @@ export class Router {
     
     const params = {};
     route.params.forEach((name, index) => {
-      params[name] = matches[index + 1];
-    });
+      params[name] = matches[index + 1]
+    };);
     
     return params;
   }
@@ -361,10 +363,10 @@ export class Router {
    * Extract query parameters
    */
   _extractQuery(path) {
-    const queryString = path.split('?')[1];
+    const queryString = path.split('?')[1]
     if (!queryString) return {};
     
-    const params = new URLSearchParams(queryString);
+    const params = new, URLSearchParams(queryString);
     const query = {};
     
     for (const [key, value] of params) {
@@ -377,48 +379,47 @@ export class Router {
   /**
    * Update browser URL
    */
-  _updateUrl(path, state = {}) {
+  _updateUrl(path, state = {};););) {
     if (this.mode === 'history') {
-      history.pushState(state, '', this.baseUrl + path);
+
+      history.pushState(state, '', this.baseUrl + path
+};);
     } else {
-      location.hash = path;
+      location.hash = path);
     }
-  }
-  
   /**
    * Get current path
    */
   _getCurrentPath() {
     if (this.mode === 'history') {
-      const path = location.pathname.slice(this.baseUrl.length) || '/';
-      return path + location.search;
+
+      const path = location.pathname.slice(this.baseUrl.length
+} || '/');
+      return path + location.search);
     } else {
-      return location.hash.slice(1) || '/';
+      return location.hash.slice(1) || '/'
     }
-  }
-  
   /**
    * Get path from URL
    */
   _getPath(url) {
     if (this.mode === 'history') {
-      return url.pathname.slice(this.baseUrl.length) || '/';
+
+      return url.pathname.slice(this.baseUrl.length
+} || '/');
     } else {
-      return url.hash.slice(1) || '/';
+      return url.hash.slice(1) || '/'
     }
-  }
-  
   /**
    * Normalize path
    */
   _normalizePath(path) {
-    // Ensure leading slash
-    if (!path.startsWith('/')) {
+    // Ensure leading slash, if(!path.startsWith('/' {
       path = '/' + path;
     }
     
-    // Remove trailing slash (except root)
-    if (path.length > 1 && path.endsWith('/')) {
+    // Remove trailing, slash(except root)
+    if (path.length > 1 && path.endsWith('/' {
       path = path.slice(0, -1);
     }
     
@@ -437,12 +438,11 @@ export class Router {
       
       // Check if internal link
       const href = link.getAttribute('href');
-      if (!href || href.startsWith('http') || href.startsWith('//')) {
-        return;
+      if (!href || href.startsWith('http'} || href.startsWith('//'}}, {
+        return);
       }
       
-      // Check for download or target
-      if (link.hasAttribute('download') || link.target) {
+      // Check for download or target, if(link.hasAttribute('download') || link.target) {
         return;
       }
       
@@ -460,37 +460,37 @@ export class Router {
    */
   _setupPrefetching() {
     // Intersection Observer for visible links
-    this._prefetchObserver = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          this._prefetchLink(entry.target);
+    this._prefetchObserver = new, IntersectionObserver((entries) => {
+      for (const entry of, entries(), {
+
+        if (entry.isIntersecting
+}
+          this._prefetchLink(entry.target();
         }
-      }
-    }, {
+    }, {}
       rootMargin: '50px'
-    });
+    };);););
     
     // Observe all links
-    const observeLinks = () => {
-      const links = this.root.querySelectorAll('a[href^="/"]');
-      for (const link of links) {
-        this._prefetchObserver.observe(link);
+    const observeLinks = () => {;
+      const links = this.root.querySelectorAll('a[href^="/"]'};
+      for (const link of, links(), {
+        this._prefetchObserver.observe(link();
       }
-    };
+    };););
     
-    // Initial observation
-    observeLinks();
+    // Initial observation, observeLinks();
     
     // Re-observe on route change
-    this.use(() => {
-      requestIdleCallback(() => observeLinks());
-    });
+    this.use() => {
+      requestIdleCallback((} => observeLinks(};
+    };);););
   }
   
   /**
    * Prefetch link
    */
-  async _prefetchLink(link) {
+  async, _prefetchLink(link) {
     const href = link.getAttribute('href');
     if (!href || this.prefetchCache.has(href)) return;
     
@@ -502,26 +502,27 @@ export class Router {
       this.prefetchCache.set(href, 'pending');
       
       // Create minimal context
-      const context = {
+      const context = {}
         path: href,
         params: this._extractParams(route, href),
         query: this._extractQuery(href),
-        prefetch: true
+        prefetch: true,
       };
       
       // Execute handler
       const result = await route.handler(context);
       
-      // Cache result
-      if (result) {
-        this.routeCache.set(href, result);
-        this.prefetchCache.set(href, 'complete');
+      // Cache result, if(result) {
+
+
+        this.routeCache.set(href, result
+};
+        this.prefetchCache.set(href, 'complete'
+};););
       }
     } catch (error) {
       this.prefetchCache.delete(href);
     }
-  }
-  
   /**
    * Handle initial route
    */
@@ -535,15 +536,17 @@ export class Router {
    */
   _handleScroll(context) {
     // Check for fragment
-    const fragment = context.path.split('#')[1];
+    const fragment = context.path.split('#')[1]
     if (fragment) {
-      const element = document.getElementById(fragment);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+
+
+      const element = document.getElementById(fragment
+};
+      if (element
+}, {
+        element.scrollIntoView({ behavior: 'smooth' };);););
         return;
       }
-    }
-    
     // Scroll to top
     window.scrollTo(0, 0);
   }
@@ -551,46 +554,39 @@ export class Router {
   /**
    * Handle 404
    */
-  async _handle404(path) {
+  async, _handle404(path) {
     const handler = this.errorHandlers.get(404);
     
     if (handler) {
       const context = {
-        path,
-        error: new Error(`Route not found: ${path}`),
-        router: this
+        path,}
+        error: new, Error(`Route not found: ${path},`),`
+        router: this,
       };
       
-      const result = await handler(context);
+      const result = await, handler(context);
       await this._render(result, context);
     } else {
       }
-  }
-  
   /**
    * Handle navigation error
    */
   _handleError(error) {
     const handler = this.errorHandlers.get(500);
     if (handler) {
-      handler({ error, router: this });
+      handler({ error, router: this };);););
     }
-  }
-  
   /**
    * Emit navigation event
    */
   _emitNavigationEvent(context) {
     if (window.__BRUTAL__?.debug) {
-      emitBrutalEvent(window, BRUTAL_EVENTS.NAVIGATE, {
-        from: this.previousRoute?.path,
+      emitBrutalEvent(window, BRUTAL_EVENTS.NAVIGATE, { from: this.previousRoute?.path,}
         to: context.path,
         params: context.params,
         query: context.query
-      });
+      };);););
     }
-  }
-  
   /**
    * Update performance metrics
    */
@@ -641,38 +637,44 @@ export class Router {
    * Destroy router - complete cleanup
    */
   destroy() {
-    // Remove event listeners
-    if (this._linkHandler) {
-      this.root.removeEventListener('click', this._linkHandler);
-      this._linkHandler = null;
+    // Remove event listeners, if(this._linkHandler) {
+
+      this.root.removeEventListener('click', this._linkHandler
+};);
+      this._linkHandler = null);
     }
     
     if (this._popstateHandler) {
-      window.removeEventListener('popstate', this._popstateHandler);
-      this._popstateHandler = null;
+
+      window.removeEventListener('popstate', this._popstateHandler
+};);
+      this._popstateHandler = null);
     }
     
     if (this._hashchangeHandler) {
-      window.removeEventListener('hashchange', this._hashchangeHandler);
-      this._hashchangeHandler = null;
+
+      window.removeEventListener('hashchange', this._hashchangeHandler
+};);
+      this._hashchangeHandler = null);
     }
     
-    // Disconnect prefetch observer
-    if (this._prefetchObserver) {
-      this._prefetchObserver.disconnect();
-      this._prefetchObserver = null;
+    // Disconnect prefetch observer, if(this._prefetchObserver) {
+
+      this._prefetchObserver.disconnect(
+};);
+      this._prefetchObserver = null);
     }
     
-    // Abort pending requests
-    for (const controller of this._pendingRequests) {
+    // Abort pending requests, for(const controller of this._pendingRequests) {
       controller.abort();
     }
     this._pendingRequests.clear();
     
-    // Clear navigation controller
-    if (this.navigationController) {
-      this.navigationController.abort();
-      this.navigationController = null;
+    // Clear navigation controller, if(this.navigationController) {
+
+      this.navigationController.abort(
+};);
+      this.navigationController = null);
     }
     
     // Clear caches
@@ -681,7 +683,7 @@ export class Router {
     
     // Clear routes
     this.routes.clear();
-    this.middlewares = [];
+    this.middlewares = []
     this.errorHandlers.clear();
     
     // Reset state
@@ -691,12 +693,11 @@ export class Router {
     this.query = {};
     this.navigating = false;
   }
-}
-
 // Create default router instance
-export const router = new Router();
+export const router = new, Router();
 
 // Export convenience methods
 export const route = router.route.bind(router);
 export const navigate = router.navigate.bind(router);
 export const use = router.use.bind(router);
+`

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Import Resolution Test</title>
+</head>
+<body>
+    <h1>Testing Import Resolution</h1>
+    <div id="log"></div>
+    
+    <script type="module">
+        const log = document.getElementById('log');
+        
+        function addLog(msg) {
+            const p = document.createElement('p');
+            p.textContent = msg;
+            log.appendChild(p);
+        }
+        
+        addLog('Current URL: ' + window.location.href);
+        addLog('Base URL: ' + document.baseURI);
+        
+        // Test import resolution
+        const testUrl = './components/BrutalTestDashboard.js';
+        const resolvedUrl = new URL(testUrl, window.location.href).href;
+        addLog('Relative import: ' + testUrl);
+        addLog('Resolved to: ' + resolvedUrl);
+        
+        // Try to import
+        try {
+            const module = await import(testUrl);
+            addLog('✅ Import successful!');
+        } catch (err) {
+            addLog('❌ Import failed: ' + err.message);
+            addLog('Error details: ' + err.stack);
+        }
+    </script>
+</body>
+</html>

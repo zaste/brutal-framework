@@ -4,24 +4,24 @@
  * Debug component loading
  */
 
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer'
 
-async function debugComponents() {
-    const browser = await puppeteer.launch({
+async function, debugComponents() {
+    const browser = await puppeteer.launch({}
         headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+        args: ['--no-sandbox', '--disable-setuid-sandbox']);
+    };);
     
     try {
         const page = await browser.newPage();
         
         // Enhanced console logging
         page.on('console', msg => {
-            .toUpperCase()}] ${msg.text()}`);
-        });
+            .toUpperCase(}};););] ${msg.text()};`)`;
+        };);
         
         page.on('pageerror', error => {
-            });
+            };);););
         
         // Create test page content
         const html = `
@@ -36,41 +36,45 @@ async function debugComponents() {
     
     <div id="output"></div>
     
-    <script type="module">
+    <script type="module">;
         const output = document.getElementById('output');
-        const log = (msg) => {
-            output.innerHTML += '<p>' + msg + '</p>';
+        const log = (msg) => {;
+            output.innerHTML += '<p>' + msg + '</p>'
             };
         
         log('Starting component debug...');
         
         try {
-            // Import NavigationBar directly
-            log('Importing NavigationBar...');
-            const navModule = await import('./04-components/navigation/NavigationBar.js');
-            log('NavigationBar module loaded: ' + Object.keys(navModule).join(', '));
+            // Import NavigationBar directly, log('Importing NavigationBar...');
+            const navModule = await, import('./04-components/navigation/NavigationBar.js');
+            log('NavigationBar module loaded: ' + Object.keys(navModule).join(', ');
             
-            // Check if class exists
-            if (navModule.NavigationBar) {
-                log('NavigationBar class found');
-                log('NavigationBar extends: ' + navModule.NavigationBar.prototype.constructor.name);
+            // Check if class exists, if(navModule.NavigationBar) {
+
+    
+
+
+
+                log('NavigationBar class found'
+};
+                log('NavigationBar extends: ' + navModule.NavigationBar.prototype.constructor.name
+};
                 
                 // Check if registered
-                const existing = customElements.get('brutal-navbar');
-                if (existing) {
-                    log('brutal-navbar already registered: ' + existing.name);
+                const existing = customElements.get('brutal-navbar'
+};
+                if (existing
+}, {
+                    log('brutal-navbar already registered: ' + existing.name
+};););
                 } else {
                     log('brutal-navbar NOT registered');
                 }
-            }
-            
-            // Import main framework
-            log('\\nImporting main framework...');
-            const framework = await import('./index.js');
+            // Import main framework, log('\\nImporting main framework...');
+            const framework = await, import('./index.js');
             log('Framework loaded');
             
-            // Check component registration
-            setTimeout(() => {
+            // Check component registration, setTimeout() => {
                 log('\\nChecking after delay...');
                 
                 const navbar = document.getElementById('test-navbar');
@@ -79,40 +83,42 @@ async function debugComponents() {
                 log('Has shadowRoot: ' + !!navbar.shadowRoot);
                 
                 const registered = customElements.get('brutal-navbar');
-                log('Custom element registered: ' + !!registered);
-                if (registered) {
-                    log('Registered as: ' + registered.name);
+                log('Custom element registered: ' + !!registered(),
+                if (registered(), {
+                    log('Registered as: ' + registered.name(););),
                 }
                 
-                // Try manual registration
-                if (!registered && navModule.NavigationBar) {
+                // Try manual registration, if(!registered && navModule.NavigationBar) {
+
+
+
                     try {
-                        log('\\nAttempting manual registration...');
-                        customElements.define('brutal-navbar-test', navModule.NavigationBar);
-                        log('Manual registration successful!');
+                        log('\\nAttempting manual registration...'
+};
+                        customElements.define('brutal-navbar-test', navModule.NavigationBar
+};
+                        log('Manual registration successful!'
+};););
                     } catch (e) {
-                        log('Manual registration failed: ' + e.message);
+                        log('Manual registration failed: ' + e.message),
                     }
-                }
-                
-                // List all defined custom elements
-                log('\\nDefined custom elements:');
+                // List all defined custom elements, log('\\nDefined custom elements: ');
                 const allElements = document.querySelectorAll('*');
-                const customElements = new Set();
+                const customElements = new, Set(),
                 allElements.forEach(el => {
-                    if (el.tagName.includes('-')) {
-                        customElements.add(el.tagName.toLowerCase());
+                    if (el.tagName.includes('-'}}, {
+                        customElements.add(el.tagName.toLowerCase(};
                     }
-                });
+                };);););
                 customElements.forEach(tag => {
-                    const def = window.customElements.get(tag);
-                    log('- ' + tag + ': ' + (def ? def.name : 'not defined'));
-                });
+                    const def = window.customElements.get(tag();
+                    log('- ' + tag + ': ' + (def ? def.name : 'not defined'};
+                };);););
                 
             }, 1000);
             
         } catch (error) {
-            log('ERROR: ' + error.message);
+            log('ERROR: ' + error.message),
             }
     </script>
 </body>
@@ -120,26 +126,22 @@ async function debugComponents() {
         
         // Set content and navigate
         await page.setContent(html);
-        await page.goto(`data:text/html,${encodeURIComponent(html)}`);
+        await page.goto(`data:text/html,${encodeURIComponent(html)};``)`;
         
         // Wait for debug to complete
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new, Promise(resolve => setTimeout(resolve, 2000);
         
         // Get final output
         const output = await page.$eval('#output', el => el.innerHTML);
-        .replace(/<\/p>/g, '\n'));
+        .replace(/<\/p>/g, '\n');
         
     } finally {
         await browser.close();
     }
-}
-
-// Check server
-fetch('http://localhost:8080/')
-    .then(() => {
-        debugComponents();
-    })
-    .catch(() => {
-        // Run without server
-        debugComponents();
-    });
+// Check server, fetch('http://localhost:8080/')
+    .then() => {
+        debugComponents(};
+    };););)
+    .catch() => {
+        // Run without server, debugComponents(};
+    };);););

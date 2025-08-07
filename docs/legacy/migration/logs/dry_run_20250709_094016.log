@@ -1,0 +1,4 @@
+🧪 Starting dry run validation...
+=== Phase 1: Root Directory Cleanup ===
+SIMULATE [MOVE]: /workspaces/web/STRATEGIC-PLANNING-END-TO-END.md -> /workspaces/web/docs/01-strategic/master-plans/end-to-end-strategy.md
+❌ Source missing: /workspaces/web/STRATEGIC-PLANNING-END-TO-END.md

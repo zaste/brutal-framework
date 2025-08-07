@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Build System Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .status {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .status.success {
+            background: #1a4d1a;
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+        
+        .status.error {
+            background: #4d1a1a;
+            color: #f87171;
+            border: 1px solid #f87171;
+        }
+        
+        .env-var {
+            display: inline-block;
+            background: #262626;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            font-family: monospace;
+        }
+        
+        pre {
+            background: #262626;
+            padding: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 4px;
+        }
+        
+        button:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏗️ BRUTAL V4 - Build System Test</h1>
+    
+    <div class="test-section">
+        <h2>Environment Detection</h2>
+        <div id="env-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Build Configuration Test</h2>
+        <button onclick="testBuildConfig()">Test Build Config</button>
+        <div id="build-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Debug Utilities Test</h2>
+        <button onclick="testDebugUtils()">Test Debug Utils</button>
+        <div id="debug-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Code Stripping Test</h2>
+        <button onclick="testCodeStripping()">Test Code Stripping</button>
+        <div id="strip-results"></div>
+    </div>
+    
+    <script type="module">
+        import { env, devLog, devWarn, devError, devAssert } from '../build/env.js';
+        import { 
+            ENV, 
+            DEBUG, 
+            BUILD_FLAGS, 
+            BUILD_CONSTANTS,
+            stripDebugCode,
+            minifyCode,
+            analyzeBundleSize
+        } from '../build/config.js';
+        
+        const envResults = document.getElementById('env-results');
+        const buildResults = document.getElementById('build-results');
+        const debugResults = document.getElementById('debug-results');
+        const stripResults = document.getElementById('strip-results');
+        
+        // Test environment detection
+        function testEnvironment() {
+            envResults.innerHTML = '<h3>Environment Variables:</h3>';
+            
+            // Check global vars
+            const globalVars = [
+                { name: '__DEV__', value: window.__DEV__ },
+                { name: '__PROD__', value: window.__PROD__ },
+                { name: '__TEST__', value: window.__TEST__ }
+            ];
+            
+            globalVars.forEach(({ name, value }) => {
+                envResults.innerHTML += `<div><span class="env-var">${name}: ${value}</span></div>`;
+            });
+            
+            // Check env utilities
+            envResults.innerHTML += '<h3>Environment Utilities:</h3>';
+            envResults.innerHTML += `<div class="status ${env.isDevelopment() ? 'success' : 'error'}">Development: ${env.isDevelopment()}</div>`;
+            envResults.innerHTML += `<div class="status ${env.isProduction() ? 'error' : 'success'}">Production: ${env.isProduction()}</div>`;
+            envResults.innerHTML += `<div class="status ${env.isTest() ? 'success' : 'error'}">Test: ${env.isTest()}</div>`;
+            
+            // Feature flags
+            envResults.innerHTML += '<h3>Feature Flags:</h3>';
+            envResults.innerHTML += `<div>Performance: <span class="env-var">${env.features.performance()}</span></div>`;
+            envResults.innerHTML += `<div>Debugging: <span class="env-var">${env.features.debugging()}</span></div>`;
+            envResults.innerHTML += `<div>Validation: <span class="env-var">${env.features.validation()}</span></div>`;
+        }
+        
+        // Test build configuration
+        window.testBuildConfig = function() {
+            buildResults.innerHTML = '<h3>Build Configuration:</h3>';
+            
+            // Environment detection
+            buildResults.innerHTML += `<div>Is Development: <span class="env-var">${ENV.isDevelopment()}</span></div>`;
+            buildResults.innerHTML += `<div>Is Production: <span class="env-var">${ENV.isProduction()}</span></div>`;
+            buildResults.innerHTML += `<div>Is Test: <span class="env-var">${ENV.isTest()}</span></div>`;
+            
+            // Build constants
+            buildResults.innerHTML += '<h3>Build Constants:</h3>';
+            buildResults.innerHTML += `<pre>${JSON.stringify(BUILD_CONSTANTS, null, 2)}</pre>`;
+            
+            // Build flags
+            buildResults.innerHTML += '<h3>Build Flags:</h3>';
+            buildResults.innerHTML += `<pre>${JSON.stringify(BUILD_FLAGS, null, 2)}</pre>`;
+        };
+        
+        // Test debug utilities
+        window.testDebugUtils = function() {
+            debugResults.innerHTML = '<h3>Testing Debug Utilities...</h3>';
+            
+            // Test dev logging
+            try {
+                devLog('Test log message');
+                debugResults.innerHTML += '<div class="status success">✅ devLog works (check console)</div>';
+            } catch (e) {
+                debugResults.innerHTML += `<div class="status error">❌ devLog failed: ${e.message}</div>`;
+            }
+            
+            // Test dev warning
+            try {
+                devWarn('Test warning message');
+                debugResults.innerHTML += '<div class="status success">✅ devWarn works (check console)</div>';
+            } catch (e) {
+                debugResults.innerHTML += `<div class="status error">❌ devWarn failed: ${e.message}</div>`;
+            }
+            
+            // Test dev error
+            try {
+                devError('Test error message');
+                debugResults.innerHTML += '<div class="status success">✅ devError works (check console)</div>';
+            } catch (e) {
+                debugResults.innerHTML += `<div class="status error">❌ devError failed: ${e.message}</div>`;
+            }
+            
+            // Test dev assert (should pass)
+            try {
+                devAssert(true, 'This should pass');
+                debugResults.innerHTML += '<div class="status success">✅ devAssert (true) works</div>';
+            } catch (e) {
+                debugResults.innerHTML += `<div class="status error">❌ devAssert (true) failed: ${e.message}</div>`;
+            }
+            
+            // Test dev assert (should fail in dev)
+            try {
+                devAssert(false, 'This should fail in dev');
+                if (env.isDevelopment()) {
+                    debugResults.innerHTML += '<div class="status error">❌ devAssert (false) should have thrown</div>';
+                } else {
+                    debugResults.innerHTML += '<div class="status success">✅ devAssert (false) ignored in prod</div>';
+                }
+            } catch (e) {
+                if (env.isDevelopment()) {
+                    debugResults.innerHTML += '<div class="status success">✅ devAssert (false) threw as expected</div>';
+                } else {
+                    debugResults.innerHTML += '<div class="status error">❌ devAssert (false) threw in prod</div>';
+                }
+            }
+        };
+        
+        // Test code stripping
+        window.testCodeStripping = function() {
+            stripResults.innerHTML = '<h3>Testing Code Stripping...</h3>';
+            
+            const testCode = `
+                function example() {
+                    DEBUG.log('This should be stripped');
+                    console.log('This should also be stripped');
+                    
+                    if (__DEV__) {
+                        console.log('Dev only code');
+                    }
+                    
+                    /* DEV-ONLY */
+                    const devOnlyVar = 42;
+                    /* END-DEV-ONLY */
+                    
+                    // DEV-ONLY: This comment should be removed
+                    return true;
+                }
+            `;
+            
+            const strippedCode = stripDebugCode(testCode);
+            
+            stripResults.innerHTML += '<h4>Original Code:</h4>';
+            stripResults.innerHTML += `<pre>${testCode}</pre>`;
+            
+            stripResults.innerHTML += '<h4>Stripped Code:</h4>';
+            stripResults.innerHTML += `<pre>${strippedCode}</pre>`;
+            
+            // Verify stripping
+            const checks = [
+                { test: !strippedCode.includes('DEBUG.log'), desc: 'DEBUG calls removed' },
+                { test: !strippedCode.includes('console.log'), desc: 'console.log removed' },
+                { test: !strippedCode.includes('__DEV__'), desc: '__DEV__ blocks removed' },
+                { test: !strippedCode.includes('DEV-ONLY'), desc: 'DEV-ONLY comments removed' }
+            ];
+            
+            checks.forEach(({ test, desc }) => {
+                stripResults.innerHTML += `<div class="status ${test ? 'success' : 'error'}">${test ? '✅' : '❌'} ${desc}</div>`;
+            });
+            
+            // Test minification
+            const minified = minifyCode(strippedCode);
+            stripResults.innerHTML += '<h4>Minified Code:</h4>';
+            stripResults.innerHTML += `<pre>${minified}</pre>`;
+        };
+        
+        // Run initial tests
+        testEnvironment();
+    </script>
+</body>
+</html>

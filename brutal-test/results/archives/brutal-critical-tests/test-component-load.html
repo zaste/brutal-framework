@@ -1,0 +1,37 @@
+
+<\!DOCTYPE html>
+<html>
+<head>
+    <title>Test Index</title>
+    <style>body { font-family: monospace; padding: 20px; }</style>
+</head>
+<body>
+    <h1>BRUTAL Critical Tests</h1>
+    <div id="test-results">
+        <p>Testing critical pages...</p>
+    </div>
+    <script type="module">
+        import { Component } from "../framework-v3/01-core/Component.js";
+        
+        window.__TEST_RESULTS__ = {
+            status: "complete",
+            tests: []
+        };
+        
+        // Test component loading
+        try {
+            const comp = new Component();
+            window.__TEST_RESULTS__.tests.push({
+                name: "Component Load",
+                status: "passed"
+            });
+        } catch (e) {
+            window.__TEST_RESULTS__.tests.push({
+                name: "Component Load",
+                status: "failed",
+                error: e.message
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Integration Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 0 8px 8px 0;
+            border: none;
+            border-radius: 4px;
+            background: #0066cc;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+    </style>
+</head>
+<body>
+    <h1>BRUTAL V4 - Core Base Integration Test</h1>
+    
+    <div class="controls">
+        <h3>Controls</h3>
+        <button onclick="toggleDebug()">Toggle Debug Mode</button>
+        <button onclick="toggleTheme()">Toggle Theme</button>
+        <button onclick="changeTitle()">Change Title</button>
+        <button onclick="showRegistry()">Show Registry</button>
+    </div>
+
+    <integrated-example id="example" theme="light" title="Integration Demo">
+        <p>This is a slot content showing integration with new base modules!</p>
+    </integrated-example>
+
+    <div id="output" style="margin-top: 20px; padding: 20px; background: #f0f0f0; border-radius: 8px; font-family: monospace; white-space: pre-wrap;"></div>
+
+    <script type="module">
+        import { initBrutal, ConfigLoader, Registry } from '../core/index.js';
+        import '../examples/integrated-component.js';
+
+        const output = document.getElementById('output');
+        const log = (msg) => {
+            output.textContent += msg + '\n';
+            console.log(msg);
+        };
+
+        // Initialize framework
+        (async () => {
+            log('Initializing BRUTAL V4...');
+            
+            const config = await initBrutal({
+                debug: true,
+                version: '4.0.0-alpha',
+                features: {
+                    darkMode: true,
+                    animations: true
+                }
+            });
+            
+            log('✓ Framework initialized');
+            log(`✓ Debug mode: ${ConfigLoader.get('debug')}`);
+            log(`✓ Environment: ${ConfigLoader.get('environment')}`);
+            
+            // Show registered components
+            const components = Registry.getAll();
+            log(`\n✓ Registered components: ${components.length}`);
+            components.forEach(c => {
+                log(`  - ${c.tagName} (${c.registered ? 'defined' : 'pending'})`);
+            });
+        })();
+
+        // Control functions
+        window.toggleDebug = () => {
+            const current = ConfigLoader.get('debug');
+            ConfigLoader.set('debug', !current);
+            log(`\nDebug mode: ${!current}`);
+        };
+
+        window.toggleTheme = () => {
+            const example = document.getElementById('example');
+            const current = example.getAttribute('theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            example.setAttribute('theme', newTheme);
+            log(`\nTheme changed to: ${newTheme}`);
+        };
+
+        window.changeTitle = () => {
+            const example = document.getElementById('example');
+            const newTitle = `Updated at ${new Date().toLocaleTimeString()}`;
+            example.setAttribute('title', newTitle);
+            log(`\nTitle changed to: ${newTitle}`);
+        };
+
+        window.showRegistry = () => {
+            const all = Registry.getAll();
+            log('\n=== Component Registry ===');
+            all.forEach(comp => {
+                log(`${comp.tagName}:`);
+                log(`  Class: ${comp.class.name}`);
+                log(`  Registered: ${comp.registered}`);
+                log(`  Options: ${JSON.stringify(comp.options)}`);
+            });
+        };
+    </script>
+</body>
+</html>

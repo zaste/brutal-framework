@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Native Framework v2 - Clean Architecture Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .demo-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .demo-card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .metrics {
+            background: #e9ecef;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin-right: 2rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        nav a:hover {
+            color: #764ba2;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 Native Framework v2</h1>
+        <p>Clean Architecture • Zero Dependencies • Maximum Performance</p>
+    </header>
+    
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/components">Components</a>
+        <a href="/docs">Documentation</a>
+    </nav>
+    
+    <main>
+        <div id="app">
+            <h2>Framework Demos</h2>
+            
+            <div class="demo-grid">
+                <!-- Counter Demo -->
+                <div class="demo-card">
+                    <h2>Counter Component</h2>
+                    <p>Simple counter with state management</p>
+                    <demo-counter></demo-counter>
+                    <div class="code-block">
+import { Component } from '@native/framework';
+
+class Counter extends Component {
+  init() {
+    this.setState({ count: 0 });
+  }
+  
+  template() {
+    return `
+      &lt;button id="dec"&gt;-&lt;/button&gt;
+      &lt;span&gt;${this.state.count}&lt;/span&gt;
+      &lt;button id="inc"&gt;+&lt;/button&gt;
+    `;
+  }
+}</div>
+                </div>
+                
+                <!-- Todo List Demo -->
+                <div class="demo-card">
+                    <h2>Todo List</h2>
+                    <p>Dynamic list with state management</p>
+                    <todo-list></todo-list>
+                </div>
+                
+                <!-- Timer Demo -->
+                <div class="demo-card">
+                    <h2>Timer Component</h2>
+                    <p>Real-time updates with lifecycle management</p>
+                    <demo-timer></demo-timer>
+                </div>
+                
+                <!-- Router Demo -->
+                <div class="demo-card">
+                    <h2>Router Demo</h2>
+                    <p>Client-side routing example</p>
+                    <router-outlet id="demo-outlet"></router-outlet>
+                </div>
+            </div>
+            
+            <div class="metrics" id="metrics">
+                Loading metrics...
+            </div>
+        </div>
+    </main>
+    
+    <!-- Import framework and demo -->
+    <script type="module" src="./demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+/**
+ * DESIGN TOKENS FOUNDATION
+ * Native Web Components Framework - Design System Layer 1
+ * Base variables for consistent design system
+ */
+
+:root {
+  /* ===== SPECTRUM VISUAL LANGUAGE ===== */
+  /* Colors */
+  --spectrum-blue-400: #378ef0;
+  --spectrum-blue-500: #2680eb;
+  --spectrum-blue-600: #1473e6;
+  --spectrum-blue-700: #0d5aa7;
+  --spectrum-blue-800: #095d9e;
+  
+  --spectrum-gray-50: #ffffff;
+  --spectrum-gray-100: #f5f5f5;
+  --spectrum-gray-200: #e1e1e1;
+  --spectrum-gray-300: #cacaca;
+  --spectrum-gray-400: #b3b3b3;
+  --spectrum-gray-500: #8e8e8e;
+  --spectrum-gray-600: #6e6e6e;
+  --spectrum-gray-700: #4b4b4b;
+  --spectrum-gray-800: #2c2c2c;
+  --spectrum-gray-900: #1b1b1b;
+  
+  --spectrum-red-400: #f56565;
+  --spectrum-red-500: #e53e3e;
+  --spectrum-red-600: #c53030;
+  
+  --spectrum-green-400: #48bb78;
+  --spectrum-green-500: #38a169;
+  --spectrum-green-600: #2f855a;
+
+  /* ===== NASA MISSION CONTROL ===== */
+  /* Colors */
+  --nasa-blue-dark: #001122;
+  --nasa-blue-medium: #003366;
+  --nasa-blue-light: #004488;
+  --nasa-cyan-bright: #00ffff;
+  --nasa-cyan-medium: #00cccc;
+  --nasa-cyan-dark: #008888;
+  --nasa-green-status: #00ff00;
+  --nasa-green-medium: #00cc00;
+  --nasa-yellow-warning: #ffff00;
+  --nasa-orange-caution: #ff8800;
+  --nasa-red-alert: #ff0000;
+  --nasa-red-critical: #cc0000;
+
+  /* ===== SPACING SYSTEM ===== */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* ===== TYPOGRAPHY SCALE ===== */
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-base: 1rem;    /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-2xl: 1.5rem;   /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem;  /* 36px */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* ===== BORDER RADIUS ===== */
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ===== SHADOWS ===== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+  /* NASA-specific glows */
+  --glow-cyan: 0 0 10px rgba(0, 255, 255, 0.5);
+  --glow-green: 0 0 10px rgba(0, 255, 0, 0.5);
+  --glow-red: 0 0 10px rgba(255, 0, 0, 0.5);
+  --glow-yellow: 0 0 10px rgba(255, 255, 0, 0.5);
+
+  /* ===== TRANSITIONS ===== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Performance-optimized timing functions */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ===== Z-INDEX SCALE ===== */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+
+  /* ===== BREAKPOINTS ===== */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* ===== SEMANTIC COLORS ===== */
+  /* Success */
+  --color-success-50: #f0fff4;
+  --color-success-500: var(--nasa-green-status);
+  --color-success-600: var(--nasa-green-medium);
+  --color-success-900: #065f46;
+
+  /* Warning */
+  --color-warning-50: #fffbeb;
+  --color-warning-500: var(--nasa-yellow-warning);
+  --color-warning-600: var(--nasa-orange-caution);
+  --color-warning-900: #92400e;
+
+  /* Error */
+  --color-error-50: #fef2f2;
+  --color-error-500: var(--nasa-red-alert);
+  --color-error-600: var(--nasa-red-critical);
+  --color-error-900: #7f1d1d;
+
+  /* Info */
+  --color-info-50: #eff6ff;
+  --color-info-500: var(--nasa-cyan-bright);
+  --color-info-600: var(--nasa-cyan-medium);
+  --color-info-900: #1e3a8a;
+
+  /* ===== COMPONENT TOKENS ===== */
+  /* Button */
+  --button-height-sm: 32px;
+  --button-height-md: 40px;
+  --button-height-lg: 48px;
+  --button-padding-x-sm: 12px;
+  --button-padding-x-md: 16px;
+  --button-padding-x-lg: 24px;
+
+  /* Input */
+  --input-height-sm: 32px;
+  --input-height-md: 40px;
+  --input-height-lg: 48px;
+  --input-padding-x: 12px;
+  --input-border-width: 1px;
+
+  /* Card */
+  --card-padding: var(--space-lg);
+  --card-radius: var(--radius-lg);
+  --card-shadow: var(--shadow-md);
+
+  /* ===== PERFORMANCE TOKENS ===== */
+  /* Optimized for 60fps animations */
+  --perf-transition: var(--transition-fast);
+  --perf-transform: translateZ(0); /* Force hardware acceleration */
+  --perf-will-change: transform, opacity; /* Hint browser for optimization */
+
+  /* Memory-efficient gradients */
+  --gradient-primary: linear-gradient(135deg, var(--spectrum-blue-600) 0%, var(--spectrum-blue-800) 100%);
+  --gradient-nasa: linear-gradient(135deg, var(--nasa-blue-dark) 0%, var(--nasa-blue-medium) 100%);
+  --gradient-success: linear-gradient(135deg, var(--nasa-green-medium) 0%, var(--nasa-green-status) 100%);
+  --gradient-warning: linear-gradient(135deg, var(--nasa-orange-caution) 0%, var(--nasa-yellow-warning) 100%);
+  --gradient-error: linear-gradient(135deg, var(--nasa-red-critical) 0%, var(--nasa-red-alert) 100%);
+}
+
+/* ===== DARK MODE OVERRIDES ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Enhance contrast for dark mode */
+    --spectrum-gray-50: #ffffff;
+    --spectrum-gray-100: #f8f8f8;
+    --spectrum-gray-900: #000000;
+    
+    /* Boost NASA colors for dark backgrounds */
+    --nasa-cyan-bright: #33ffff;
+    --nasa-green-status: #33ff33;
+    --nasa-yellow-warning: #ffff33;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-normal: 0ms;
+    --transition-slow: 0ms;
+    --perf-transition: 0ms;
+  }
+}

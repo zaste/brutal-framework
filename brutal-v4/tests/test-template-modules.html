@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Template Modules Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .success {
+            color: #28a745;
+        }
+        
+        .error {
+            color: #dc3545;
+        }
+        
+        .module-size {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 BRUTAL V4 - Template Modules Test</h1>
+    
+    <div class="test-section">
+        <h2>Module Import Test</h2>
+        <div id="import-test">Testing...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>HTML Template Test</h2>
+        <div id="html-test">Testing...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>CSS Template Test</h2>
+        <div id="css-test">Testing...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Cache Stats</h2>
+        <div id="cache-stats" class="module-size">Loading...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Module Sizes</h2>
+        <div id="module-sizes" class="module-size">Calculating...</div>
+    </div>
+
+    <script type="module">
+        // Test modular imports
+        const importTest = document.getElementById('import-test');
+        let testsPassed = 0;
+        let totalTests = 0;
+        
+        try {
+            // Test individual module imports
+            const { html } = await import('./core/templates/html.js');
+            const { css, CSSUtils } = await import('./core/templates/css.js');
+            const { TemplateUtils } = await import('./core/templates/utils.js');
+            const { getCacheStats } = await import('./core/templates/cache.js');
+            
+            totalTests++;
+            if (typeof html === 'function') {
+                testsPassed++;
+                importTest.innerHTML += '<div class="success">✅ HTML module imported</div>';
+            }
+            
+            totalTests++;
+            if (typeof css === 'function') {
+                testsPassed++;
+                importTest.innerHTML += '<div class="success">✅ CSS module imported</div>';
+            }
+            
+            totalTests++;
+            if (typeof TemplateUtils === 'object') {
+                testsPassed++;
+                importTest.innerHTML += '<div class="success">✅ Utils module imported</div>';
+            }
+            
+            totalTests++;
+            if (typeof getCacheStats === 'function') {
+                testsPassed++;
+                importTest.innerHTML += '<div class="success">✅ Cache module imported</div>';
+            }
+            
+            // Test barrel import
+            const templates = await import('./core/templates/index.js');
+            totalTests++;
+            if (templates.html && templates.css) {
+                testsPassed++;
+                importTest.innerHTML += '<div class="success">✅ Barrel export working</div>';
+            }
+            
+            importTest.innerHTML = `<strong>${testsPassed}/${totalTests} tests passed</strong>` + importTest.innerHTML;
+            
+            // Test HTML template functionality
+            const htmlTest = document.getElementById('html-test');
+            const testValue = 'Hello World';
+            const template = html`<div class="test">${testValue}</div>`;
+            
+            if (template.content && template.content.querySelector('.test')) {
+                htmlTest.innerHTML = '<div class="success">✅ HTML template processing works</div>';
+                htmlTest.appendChild(template.content.cloneNode(true));
+            } else {
+                htmlTest.innerHTML = '<div class="error">❌ HTML template processing failed</div>';
+            }
+            
+            // Test CSS template functionality
+            const cssTest = document.getElementById('css-test');
+            const color = '#007bff';
+            const styles = css`
+                .test-class {
+                    color: ${color};
+                    padding: ${10}px;
+                }
+            `;
+            
+            if (styles.includes(color) && styles.includes('10px')) {
+                cssTest.innerHTML = '<div class="success">✅ CSS template processing works</div>';
+                cssTest.innerHTML += `<pre>${styles}</pre>`;
+            } else {
+                cssTest.innerHTML = '<div class="error">❌ CSS template processing failed</div>';
+            }
+            
+            // Display cache stats
+            const stats = await getCacheStats();
+            document.getElementById('cache-stats').innerHTML = `
+                <div>Template Cache: ${stats.templates.count} entries</div>
+                <div>Style Cache: ${stats.styles.count} entries</div>
+                <div>Total Size: ~${(stats.memoryEstimate / 1024).toFixed(2)} KB</div>
+                <div>Cache Efficiency: ${(stats.efficiency * 100).toFixed(2)}%</div>
+            `;
+            
+            // Calculate module sizes
+            const moduleFiles = [
+                'html.js',
+                'css.js',
+                'cache.js',
+                'interpolation.js',
+                'directives.js',
+                'utils.js',
+                'index.js'
+            ];
+            
+            const sizes = await Promise.all(moduleFiles.map(async (file) => {
+                try {
+                    const response = await fetch(`./core/templates/${file}`);
+                    const text = await response.text();
+                    const lines = text.split('\n').length;
+                    const size = new Blob([text]).size;
+                    return { file, lines, size };
+                } catch (e) {
+                    return { file, lines: 0, size: 0 };
+                }
+            }));
+            
+            const totalLines = sizes.reduce((sum, s) => sum + s.lines, 0);
+            const totalSize = sizes.reduce((sum, s) => sum + s.size, 0);
+            
+            document.getElementById('module-sizes').innerHTML = `
+                <h4>Module Breakdown (was 652 lines in single file):</h4>
+                ${sizes.map(s => `<div>${s.file}: ${s.lines} lines, ${(s.size / 1024).toFixed(2)} KB</div>`).join('')}
+                <hr>
+                <div><strong>Total: ${totalLines} lines, ${(totalSize / 1024).toFixed(2)} KB</strong></div>
+                <div><strong>Largest module: ${Math.max(...sizes.map(s => s.lines))} lines ✅</strong></div>
+            `;
+            
+        } catch (error) {
+            importTest.innerHTML = `<div class="error">❌ Import failed: ${error.message}</div>`;
+            console.error(error);
+        }
+    </script>
+</body>
+</html>

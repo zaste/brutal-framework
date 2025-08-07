@@ -1,0 +1,6 @@
+# BRUTAL V5 - Monorepo Workspace Configuration
+packages:
+  # Core packages
+  - 'packages/@brutal/*'
+  # Tools
+  - 'tools/*'

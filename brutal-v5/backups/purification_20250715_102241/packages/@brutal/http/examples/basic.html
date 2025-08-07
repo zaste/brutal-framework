@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@brutal/http - Basic Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #0a0a0a;
+      color: #fff;
+    }
+    .demo-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+    button {
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 0.5rem;
+    }
+    button:hover {
+      background: #ddd;
+    }
+    .result {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #111;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .error {
+      color: #ff6b6b;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: #888;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>@brutal/http</h1>
+  <p class="subtitle">Ultra-lightweight HTTP client with interceptors, retries, and transformers</p>
+
+  <div class="demo-section">
+    <h2>Basic Requests</h2>
+    <button onclick="makeGet()">GET Request</button>
+    <button onclick="makePost()">POST Request</button>
+    <button onclick="makeWithParams()">GET with Params</button>
+    <div id="basic-result" class="result"></div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Interceptors</h2>
+    <button onclick="addAuthInterceptor()">Add Auth Interceptor</button>
+    <button onclick="addLoggingInterceptor()">Add Logging Interceptor</button>
+    <button onclick="makeInterceptedRequest()">Make Request</button>
+    <div id="interceptor-result" class="result"></div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Error Handling & Retry</h2>
+    <button onclick="makeFailingRequest()">Failing Request</button>
+    <button onclick="makeRetryRequest()">Request with Retry</button>
+    <button onclick="makeTimeoutRequest()">Timeout Request</button>
+    <div id="error-result" class="result"></div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Transformers</h2>
+    <button onclick="makeTransformedRequest()">Transform Response</button>
+    <button onclick="makeChainedTransform()">Chained Transforms</button>
+    <div id="transform-result" class="result"></div>
+  </div>
+
+  <script type="module">
+    import { createHttp } from '../dist/index.js';
+
+    // Create HTTP client
+    const http = createHttp();
+    window.http = http;
+
+    // Basic requests
+    window.makeGet = async () => {
+      const result = document.getElementById('basic-result');
+      try {
+        result.textContent = 'Loading...';
+        const response = await http.get('https://jsonplaceholder.typicode.com/posts/1');
+        result.textContent = JSON.stringify(response.data, null, 2);
+      } catch (error) {
+        result.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    };
+
+    window.makePost = async () => {
+      const result = document.getElementById('basic-result');
+      try {
+        result.textContent = 'Loading...';
+        const response = await http.post('https://jsonplaceholder.typicode.com/posts', {
+          title: 'Test Post',
+          body: 'This is a test post created with @brutal/http',
+          userId: 1
+        });
+        result.textContent = JSON.stringify(response.data, null, 2);
+      } catch (error) {
+        result.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    };
+
+    window.makeWithParams = async () => {
+      const result = document.getElementById('basic-result');
+      try {
+        result.textContent = 'Loading...';
+        const response = await http.get('https://jsonplaceholder.typicode.com/posts', {
+          params: { userId: 1, _limit: 3 }
+        });
+        result.textContent = JSON.stringify(response.data, null, 2);
+      } catch (error) {
+        result.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    };
+
+    // Interceptors
+    let authInterceptorId;
+    let loggingInterceptorId;
+
+    window.addAuthInterceptor = () => {
+      const result = document.getElementById('interceptor-result');
+      authInterceptorId = http.interceptors.request.use((config) => {
+        config.headers = config.headers || {};
+        config.headers['Authorization'] = 'Bearer fake-jwt-token';
+        result.textContent = 'Auth interceptor added! All requests will now include Authorization header.';
+        return config;
+      });
+    };
+
+    window.addLoggingInterceptor = () => {
+      const result = document.getElementById('interceptor-result');
+      loggingInterceptorId = http.interceptors.response.use((response) => {
+        console.log('Response intercepted:', response);
+        result.textContent = `Logging interceptor added! Check console for response logs.\nStatus: ${response.status}\nURL: ${response.config.url}`;
+        return response;
+      });
+    };
+
+    window.makeInterceptedRequest = async () => {
+      const result = document.getElementById('interceptor-result');
+      try {
+        result.textContent = 'Making request with interceptors...';
+        const response = await http.get('https://jsonplaceholder.typicode.com/posts/1');
+        result.textContent = `Request completed!\n\nHeaders sent:\n${JSON.stringify(response.config.headers, null, 2)}\n\nResponse:\n${JSON.stringify(response.data, null, 2)}`;
+      } catch (error) {
+        result.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    };
+
+    // Error handling
+    window.makeFailingRequest = async () => {
+      const result = document.getElementById('error-result');
+      try {
+        result.textContent = 'Making request to non-existent endpoint...';
+        await http.get('https://jsonplaceholder.typicode.com/posts/999999');
+      } catch (error) {
+        result.innerHTML = `<span class="error">Error caught!\nMessage: ${error.message}\nStatus: ${error.response?.status}\nData: ${JSON.stringify(error.response?.data)}</span>`;
+      }
+    };
+
+    window.makeRetryRequest = async () => {
+      const result = document.getElementById('error-result');
+      let attempts = 0;
+      
+      try {
+        result.textContent = 'Making request with retry logic...';
+        const response = await http.get('https://jsonplaceholder.typicode.com/posts/1', {
+          retry: {
+            count: 3,
+            delay: 1000,
+            shouldRetry: (error, attempt) => {
+              attempts = attempt + 1;
+              result.textContent = `Retry attempt ${attempts}...`;
+              return true;
+            }
+          }
+        });
+        result.textContent = `Success after ${attempts} attempts!\n${JSON.stringify(response.data, null, 2)}`;
+      } catch (error) {
+        result.innerHTML = `<span class="error">Failed after ${attempts} attempts: ${error.message}</span>`;
+      }
+    };
+
+    window.makeTimeoutRequest = async () => {
+      const result = document.getElementById('error-result');
+      try {
+        result.textContent = 'Making request with 1ms timeout (will fail)...';
+        await http.get('https://jsonplaceholder.typicode.com/posts/1', {
+          timeout: 1
+        });
+      } catch (error) {
+        result.innerHTML = `<span class="error">Timeout error caught!\n${error.message}</span>`;
+      }
+    };
+
+    // Transformers
+    window.makeTransformedRequest = async () => {
+      const result = document.getElementById('transform-result');
+      try {
+        result.textContent = 'Loading with response transformer...';
+        const response = await http.get('https://jsonplaceholder.typicode.com/posts/1', {
+          transformResponse: (data) => ({
+            ...data,
+            transformed: true,
+            transformedAt: new Date().toISOString()
+          })
+        });
+        result.textContent = JSON.stringify(response.data, null, 2);
+      } catch (error) {
+        result.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    };
+
+    window.makeChainedTransform = async () => {
+      const result = document.getElementById('transform-result');
+      try {
+        result.textContent = 'Loading with chained transformers...';
+        const response = await http.get('https://jsonplaceholder.typicode.com/posts/1', {
+          transformResponse: [
+            // First transformer: Add metadata
+            (data) => ({ original: data, metadata: { fetched: true } }),
+            // Second transformer: Add timestamp
+            (data) => ({ ...data, timestamp: Date.now() }),
+            // Third transformer: Format for display
+            (data) => ({
+              title: data.original.title,
+              body: data.original.body,
+              meta: {
+                ...data.metadata,
+                timestamp: data.timestamp,
+                formatted: true
+              }
+            })
+          ]
+        });
+        result.textContent = JSON.stringify(response.data, null, 2);
+      } catch (error) {
+        result.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    };
+
+    // Initial message
+    document.getElementById('basic-result').textContent = 'Click a button to make a request';
+  </script>
+</body>
+</html>

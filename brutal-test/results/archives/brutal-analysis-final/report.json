@@ -1,0 +1,959 @@
+{
+  "timestamp": "2025-07-11T11:59:31.932Z",
+  "config": {
+    "mode": "quick",
+    "browsers": [
+      "chrome"
+    ],
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "headless": true,
+    "outputDir": "./brutal-analysis-final"
+  },
+  "environment": {},
+  "errors": [
+    {
+      "test": "test-modal.html",
+      "source": "runtime",
+      "type": "runtime",
+      "message": "Script error.",
+      "filename": "",
+      "line": 0,
+      "column": 0,
+      "timestamp": 1752235172343
+    },
+    {
+      "test": "test-modal.html",
+      "source": "type",
+      "type": "selector_not_found",
+      "selector": ".test-results, #test-results, [data-test-results]",
+      "timestamp": 1752235174963
+    }
+  ],
+  "performance": {},
+  "visual": {},
+  "coverage": {},
+  "suggestions": [],
+  "tests": [
+    {
+      "name": "test-modal.html",
+      "path": "./framework-v3/test-modal.html",
+      "type": "general",
+      "format": ".html",
+      "components": [],
+      "dependencies": [
+        "./04-components/ui/Modal.js"
+      ],
+      "assertions": 2,
+      "priority": 55,
+      "result": {
+        "status": "failed",
+        "message": "No test results found",
+        "capturedErrors": {
+          "total": 2,
+          "bySource": {
+            "runtime": [
+              {
+                "type": "runtime",
+                "message": "Script error.",
+                "filename": "",
+                "line": 0,
+                "column": 0,
+                "timestamp": 1752235172343
+              }
+            ],
+            "console": [],
+            "network": [],
+            "promise": [],
+            "syntax": [],
+            "resource": [],
+            "security": [],
+            "type": [
+              {
+                "type": "selector_not_found",
+                "selector": ".test-results, #test-results, [data-test-results]",
+                "timestamp": 1752235174963
+              }
+            ]
+          },
+          "timeline": [
+            {
+              "source": "runtime",
+              "type": "runtime",
+              "message": "Script error.",
+              "filename": "",
+              "line": 0,
+              "column": 0,
+              "timestamp": 1752235172343
+            },
+            {
+              "source": "type",
+              "type": "selector_not_found",
+              "selector": ".test-results, #test-results, [data-test-results]",
+              "timestamp": 1752235174963
+            }
+          ],
+          "summary": {
+            "total": 2,
+            "critical": 2,
+            "warnings": 0,
+            "byType": {
+              "runtime": 1,
+              "selector_not_found": 1
+            },
+            "topErrors": [
+              {
+                "error": "Script error.",
+                "count": 1
+              },
+              {
+                "error": "selector_not_found",
+                "count": 1
+              }
+            ]
+          }
+        }
+      },
+      "capture": {
+        "errors": {
+          "total": 2,
+          "bySource": {
+            "runtime": [
+              {
+                "type": "runtime",
+                "message": "Script error.",
+                "filename": "",
+                "line": 0,
+                "column": 0,
+                "timestamp": 1752235172343
+              }
+            ],
+            "console": [],
+            "network": [],
+            "promise": [],
+            "syntax": [],
+            "resource": [],
+            "security": [],
+            "type": [
+              {
+                "type": "selector_not_found",
+                "selector": ".test-results, #test-results, [data-test-results]",
+                "timestamp": 1752235174963
+              }
+            ]
+          },
+          "timeline": [
+            {
+              "source": "runtime",
+              "type": "runtime",
+              "message": "Script error.",
+              "filename": "",
+              "line": 0,
+              "column": 0,
+              "timestamp": 1752235172343
+            },
+            {
+              "source": "type",
+              "type": "selector_not_found",
+              "selector": ".test-results, #test-results, [data-test-results]",
+              "timestamp": 1752235174963
+            }
+          ],
+          "summary": {
+            "total": 2,
+            "critical": 2,
+            "warnings": 0,
+            "byType": {
+              "runtime": 1,
+              "selector_not_found": 1
+            },
+            "topErrors": [
+              {
+                "error": "Script error.",
+                "count": 1
+              },
+              {
+                "error": "selector_not_found",
+                "count": 1
+              }
+            ]
+          }
+        },
+        "performance": {
+          "duration": 1062,
+          "observations": {
+            "navigation": {},
+            "resources": [
+              {
+                "name": "http://localhost:3333/favicon.ico",
+                "type": "other",
+                "startTime": 103.48499999940395,
+                "duration": 24.365000002086163,
+                "transferSize": 0,
+                "encodedBodySize": 0,
+                "decodedBodySize": 0
+              }
+            ],
+            "paint": [],
+            "longtasks": [],
+            "layout": [],
+            "fps": [
+              {
+                "timestamp": 1081.785000000149,
+                "fps": 59
+              },
+              {
+                "timestamp": 2081.804999999702,
+                "fps": 60
+              }
+            ]
+          },
+          "marks": {},
+          "measures": {},
+          "runtime": [
+            {
+              "timestamp": 1752235173971,
+              "metrics": {
+                "Timestamp": 17608.417558,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.027608,
+                "ScriptDuration": 0.006001,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.092474,
+                "TaskOtherDuration": 0.040888,
+                "ThreadTime": 0.041692,
+                "ProcessTime": 0.09,
+                "JSHeapUsedSize": 1523880,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174072,
+              "metrics": {
+                "Timestamp": 17608.517799,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.027901,
+                "ScriptDuration": 0.006136,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.093447,
+                "TaskOtherDuration": 0.041433,
+                "ThreadTime": 0.042855,
+                "ProcessTime": 0.09,
+                "JSHeapUsedSize": 1525040,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174171,
+              "metrics": {
+                "Timestamp": 17608.617713,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.028213,
+                "ScriptDuration": 0.006256,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.094349,
+                "TaskOtherDuration": 0.041903,
+                "ThreadTime": 0.043978,
+                "ProcessTime": 0.09,
+                "JSHeapUsedSize": 1526040,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174272,
+              "metrics": {
+                "Timestamp": 17608.71855,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.028511,
+                "ScriptDuration": 0.006405,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.095366,
+                "TaskOtherDuration": 0.042473,
+                "ThreadTime": 0.04519,
+                "ProcessTime": 0.09,
+                "JSHeapUsedSize": 1527040,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174373,
+              "metrics": {
+                "Timestamp": 17608.819517,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.028823,
+                "ScriptDuration": 0.006736,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.097001,
+                "TaskOtherDuration": 0.043465,
+                "ThreadTime": 0.046408,
+                "ProcessTime": 0.09,
+                "JSHeapUsedSize": 1528280,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174474,
+              "metrics": {
+                "Timestamp": 17608.919911,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.029391,
+                "ScriptDuration": 0.006873,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.098268,
+                "TaskOtherDuration": 0.044027,
+                "ThreadTime": 0.047543,
+                "ProcessTime": 0.1,
+                "JSHeapUsedSize": 1529280,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174574,
+              "metrics": {
+                "Timestamp": 17609.020251,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.029728,
+                "ScriptDuration": 0.007077,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.099647,
+                "TaskOtherDuration": 0.044865,
+                "ThreadTime": 0.048512,
+                "ProcessTime": 0.1,
+                "JSHeapUsedSize": 1530280,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174674,
+              "metrics": {
+                "Timestamp": 17609.120143,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.03004,
+                "ScriptDuration": 0.007179,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.100549,
+                "TaskOtherDuration": 0.045353,
+                "ThreadTime": 0.049563,
+                "ProcessTime": 0.11,
+                "JSHeapUsedSize": 1531280,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174774,
+              "metrics": {
+                "Timestamp": 17609.220145,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.030365,
+                "ScriptDuration": 0.00728,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.101485,
+                "TaskOtherDuration": 0.045863,
+                "ThreadTime": 0.050569,
+                "ProcessTime": 0.11,
+                "JSHeapUsedSize": 1532280,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            },
+            {
+              "timestamp": 1752235174874,
+              "metrics": {
+                "Timestamp": 17609.320184,
+                "AudioHandlers": 0,
+                "AudioWorkletProcessors": 0,
+                "Documents": 2,
+                "Frames": 2,
+                "JSEventListeners": 4,
+                "LayoutObjects": 40,
+                "MediaKeySessions": 0,
+                "MediaKeys": 0,
+                "Nodes": 85,
+                "Resources": 2,
+                "ContextLifecycleStateObservers": 8,
+                "V8PerContextDatas": 2,
+                "WorkerGlobalScopes": 0,
+                "UACSSResources": 0,
+                "RTCPeerConnections": 0,
+                "ResourceFetchers": 2,
+                "AdSubframes": 0,
+                "DetachedScriptStates": 0,
+                "ArrayBufferContents": 0,
+                "LayoutCount": 1,
+                "RecalcStyleCount": 2,
+                "LayoutDuration": 0.016467,
+                "RecalcStyleDuration": 0.000603,
+                "DevToolsCommandDuration": 0.030695,
+                "ScriptDuration": 0.007392,
+                "V8CompileDuration": 0.000907,
+                "TaskDuration": 0.10242,
+                "TaskOtherDuration": 0.046356,
+                "ThreadTime": 0.051661,
+                "ProcessTime": 0.11,
+                "JSHeapUsedSize": 1533280,
+                "JSHeapTotalSize": 2269184,
+                "FirstMeaningfulPaint": 17606.850843,
+                "DomContentLoaded": 17606.792303,
+                "NavigationStart": 17606.714128
+              }
+            }
+          ],
+          "memory": [
+            {
+              "timestamp": 1752235173973
+            },
+            {
+              "timestamp": 1752235174072
+            },
+            {
+              "timestamp": 1752235174172
+            },
+            {
+              "timestamp": 1752235174273
+            },
+            {
+              "timestamp": 1752235174375
+            },
+            {
+              "timestamp": 1752235174475
+            },
+            {
+              "timestamp": 1752235174575
+            },
+            {
+              "timestamp": 1752235174675
+            },
+            {
+              "timestamp": 1752235174775
+            },
+            {
+              "timestamp": 1752235174875
+            }
+          ],
+          "coverage": {
+            "js": [],
+            "css": [
+              {
+                "url": "http://localhost:3333/framework-v3/test-modal.html",
+                "ranges": [
+                  {
+                    "start": 9,
+                    "end": 173
+                  },
+                  {
+                    "start": 182,
+                    "end": 201
+                  },
+                  {
+                    "start": 210,
+                    "end": 339
+                  },
+                  {
+                    "start": 396,
+                    "end": 507
+                  }
+                ],
+                "text": "\n        body {\n            font-family: monospace;\n            background: #000;\n            color: #0f0;\n            padding: 20px;\n            line-height: 1.6;\n        }\n        h1 { color: #f00; }\n        a {\n            color: #0ff;\n            text-decoration: none;\n            display: block;\n            margin: 10px 0;\n        }\n        a:hover { text-decoration: underline; }\n        .section {\n            margin: 30px 0;\n            padding: 20px;\n            border: 1px solid #0f0;\n        }\n    "
+              }
+            ]
+          },
+          "analysis": {
+            "loadTime": null,
+            "firstPaint": 0,
+            "firstContentfulPaint": 0,
+            "largestContentfulPaint": 0,
+            "timeToInteractive": 0,
+            "totalBlockingTime": 0,
+            "cumulativeLayoutShift": 0,
+            "averageFPS": 59.5,
+            "memoryLeaks": false,
+            "performanceScore": 100,
+            "domContentLoaded": null,
+            "timeToFirstByte": null,
+            "minFPS": 59,
+            "maxFPS": 60,
+            "memoryGrowth": {
+              "absolute": null,
+              "percentage": "NaN"
+            }
+          },
+          "summary": {
+            "score": 100,
+            "metrics": {
+              "FCP": "0ms",
+              "TBT": "0ms",
+              "CLS": "0.000",
+              "FPS": "60 avg"
+            },
+            "issues": []
+          }
+        },
+        "visual": {
+          "screenshots": [],
+          "videoPath": null,
+          "report": {
+            "totalScreenshots": 0,
+            "comparisons": {
+              "total": 0,
+              "matched": 0,
+              "different": 0,
+              "new": 0
+            },
+            "issues": []
+          },
+          "summary": {
+            "captured": 0,
+            "regressions": 0,
+            "newBaselines": 0
+          }
+        },
+        "state": {
+          "snapshots": [
+            {
+              "type": "initial",
+              "timestamp": 1752235173961,
+              "state": {
+                "page": {
+                  "timestamp": 1752235173921,
+                  "brutal": {
+                    "initialized": false
+                  },
+                  "dom": {
+                    "readyState": "complete",
+                    "elements": 27,
+                    "brutalComponents": 0,
+                    "images": {
+                      "total": 0,
+                      "loaded": 0
+                    },
+                    "scripts": {
+                      "total": 0,
+                      "loaded": 0
+                    }
+                  },
+                  "events": {
+                    "available": false
+                  },
+                  "workers": {
+                    "supported": true,
+                    "sharedArrayBuffer": true
+                  },
+                  "gpu": {
+                    "webgl": true,
+                    "webgl2": true,
+                    "webgpu": true
+                  },
+                  "memory": {
+                    "usedJSHeapSize": 10000000,
+                    "totalJSHeapSize": 10000000,
+                    "jsHeapSizeLimit": 2190000000
+                  }
+                },
+                "browser": {
+                  "url": "http://localhost:3333/framework-v3/test-modal.html",
+                  "title": "BRUTAL V3 Framework",
+                  "viewport": {
+                    "width": 1920,
+                    "height": 1080
+                  },
+                  "cookies": [],
+                  "localStorage": {},
+                  "sessionStorage": {}
+                },
+                "network": {
+                  "requestCount": 0,
+                  "failedRequests": 0,
+                  "pendingRequests": 0
+                }
+              }
+            },
+            {
+              "type": "final",
+              "timestamp": 1752235174982,
+              "state": {
+                "page": {
+                  "timestamp": 1752235174970,
+                  "brutal": {
+                    "initialized": false
+                  },
+                  "dom": {
+                    "readyState": "complete",
+                    "elements": 27,
+                    "brutalComponents": 0,
+                    "images": {
+                      "total": 0,
+                      "loaded": 0
+                    },
+                    "scripts": {
+                      "total": 0,
+                      "loaded": 0
+                    }
+                  },
+                  "events": {
+                    "available": false
+                  },
+                  "workers": {
+                    "supported": true,
+                    "sharedArrayBuffer": true
+                  },
+                  "gpu": {
+                    "webgl": true,
+                    "webgl2": true,
+                    "webgpu": true
+                  },
+                  "memory": {
+                    "usedJSHeapSize": 10000000,
+                    "totalJSHeapSize": 10000000,
+                    "jsHeapSizeLimit": 2190000000
+                  }
+                },
+                "browser": {
+                  "url": "http://localhost:3333/framework-v3/test-modal.html",
+                  "title": "BRUTAL V3 Framework",
+                  "viewport": {
+                    "width": 1920,
+                    "height": 1080
+                  },
+                  "cookies": [],
+                  "localStorage": {},
+                  "sessionStorage": {}
+                },
+                "network": {
+                  "requestCount": 0,
+                  "failedRequests": 0,
+                  "pendingRequests": 0
+                }
+              }
+            }
+          ],
+          "changes": [],
+          "analysis": {
+            "totalChanges": 0,
+            "changesByType": {},
+            "significantChanges": [],
+            "stateProgression": []
+          },
+          "summary": {
+            "stateChanges": 0,
+            "significantEvents": 0,
+            "mostCommonChange": "none",
+            "brutalFramework": false
+          }
+        }
+      }
+    }
+  ],
+  "analysis": {
+    "errors": {
+      "total": 2,
+      "byType": {
+        "runtime": 1
+      },
+      "bySeverity": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 1
+      },
+      "patterns": {},
+      "recommendations": [],
+      "rootCauses": []
+    },
+    "performance": {
+      "metrics": {},
+      "scores": {
+        "loading": 0,
+        "interactivity": 0,
+        "stability": 0,
+        "smoothness": 0,
+        "overall": 0
+      },
+      "issues": [],
+      "bottlenecks": [],
+      "trends": {},
+      "recommendations": [
+        {
+          "category": "loading",
+          "priority": "high",
+          "title": "Improve Initial Load Performance",
+          "suggestions": [
+            "Implement code splitting to reduce initial bundle size",
+            "Use resource hints (preconnect, prefetch) for critical resources",
+            "Enable text compression (gzip/brotli)",
+            "Optimize server response time"
+          ]
+        },
+        {
+          "category": "interactivity",
+          "priority": "high",
+          "title": "Enhance Interactivity",
+          "suggestions": [
+            "Break up long tasks using requestIdleCallback",
+            "Implement web workers for heavy computations",
+            "Defer non-critical JavaScript",
+            "Use passive event listeners"
+          ]
+        },
+        {
+          "category": "stability",
+          "priority": "high",
+          "title": "Improve Visual Stability",
+          "suggestions": [
+            "Always include size attributes on images and videos",
+            "Reserve space for ad slots",
+            "Avoid inserting content above existing content",
+            "Use CSS transforms instead of layout properties for animations"
+          ]
+        }
+      ],
+      "grade": "F"
+    },
+    "rootCauses": {
+      "rootCauses": [],
+      "correlations": [],
+      "timeline": [
+        {
+          "time": 0,
+          "type": "error",
+          "message": "Script error.",
+          "source": "runtime"
+        },
+        {
+          "time": 2620,
+          "type": "error",
+          "message": "[object Object]",
+          "source": "type"
+        }
+      ],
+      "primaryCause": null,
+      "affectedAreas": {},
+      "fixPlan": []
+    }
+  }
+}

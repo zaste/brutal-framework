@@ -1,0 +1,44 @@
+{
+  "name": "@brutal/templates",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "BRUTAL V5 - templates package",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "build:watch": "tsup --watch",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "size": "size-limit",
+    "validate:structure": "node ../../scripts/validate-structure.js ."
+  },
+  "dependencies": {
+    "@brutal/shared": "workspace:*"
+  },
+  "devDependencies": {},
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "7KB"
+    }
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,159 @@
+{
+  "name": "@brutal/events",
+  "timestamp": "2025-07-15T10:24:04.652Z",
+  "exports": {
+    "BusOptions": {
+      "file": "bus/index.ts",
+      "type": "interface"
+    },
+    "EventBus": {
+      "file": "bus/index.ts",
+      "type": "class"
+    },
+    "globalBus": {
+      "file": "bus/index.ts",
+      "type": "const"
+    },
+    "VERSION": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "DEFAULT_CONFIG": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "LIMITS": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "EVENTS": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "EmitterOptions": {
+      "file": "emitter/EventEmitter.ts",
+      "type": "interface"
+    },
+    "EventEmitter": {
+      "file": "emitter/EventEmitter.ts",
+      "type": "class"
+    },
+    "DelegationHandler": {
+      "file": "handlers/index.ts",
+      "type": "interface"
+    },
+    "DOMEventManager": {
+      "file": "handlers/index.ts",
+      "type": "class"
+    },
+    "domEvents": {
+      "file": "handlers/index.ts",
+      "type": "const"
+    },
+    "emit": {
+      "file": "handlers/index.ts",
+      "type": "function"
+    },
+    "createEvent": {
+      "file": "handlers/index.ts",
+      "type": "function"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "EventHandler": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "WildcardHandler": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "EventMap": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "ListenerOptions": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "EventTarget": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "DOMEventOptions": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "CustomEventDefinition": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "EventBusMessage": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "EventSubscription": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "EventFilter": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "EventTransformer": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "EventMiddleware": {
+      "file": "types/index.ts",
+      "type": "type"
+    },
+    "EventChannel": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "ReplayOptions": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "EventMetrics": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "CommonEvents": {
+      "file": "types/index.ts",
+      "type": "interface"
+    },
+    "ExampleOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ExampleResult": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ExampleCallback": {
+      "file": "types.ts",
+      "type": "type"
+    }
+  },
+  "files": [
+    "bus/index.ts",
+    "constants.ts",
+    "emitter/EventEmitter.ts",
+    "emitter/index.ts",
+    "handlers/index.ts",
+    "index.ts",
+    "types/index.ts",
+    "types.ts"
+  ],
+  "bundleSize": 16240,
+  "dependencies": {
+    "@brutal/shared": "workspace:*"
+  },
+  "consumers": [
+    "@brutal/components"
+  ]
+}

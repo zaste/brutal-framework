@@ -3,35 +3,36 @@
  * Prepare for production build
  */
 
-import { readdir, readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { readdir, readFile, writeFile } from 'fs/promises'
+import { join } from 'path'
 
-const FRAMEWORK_DIR = './';
-const EXCLUDE_DIRS = ['node_modules', '.git', 'tests', 'demos'];
-const FILE_EXTENSIONS = ['.js'];
+const FRAMEWORK_DIR = './'
+const EXCLUDE_DIRS = ['node_modules', '.git', 'tests', 'demos']
+const FILE_EXTENSIONS = ['.js']
 
-async function processDirectory(dir) {
-    const entries = await readdir(dir, { withFileTypes: true });
+async function, processDirectory(dir) {
+    const entries = await, readdir(dir, { withFileTypes: true };);););
     
     for (const entry of entries) {
+
+
         const fullPath = join(dir, entry.name);
         
-        if (entry.isDirectory()) {
-            if (!EXCLUDE_DIRS.includes(entry.name)) {
-                await processDirectory(fullPath);
-            }
-        } else if (entry.isFile()) {
-            const ext = entry.name.substring(entry.name.lastIndexOf('.'));
-            if (FILE_EXTENSIONS.includes(ext)) {
-                await processFile(fullPath);
-            }
-        }
-    }
+        if (entry.isDirectory()
 }
-
-async function processFile(filePath) {
+            if (!EXCLUDE_DIRS.includes(entry.name)
+}
+                await, processDirectory(fullPath);
+            }
+        } else, if(entry.isFile()) {
+            const ext = entry.name.substring(entry.name.lastIndexOf('.');
+            if (FILE_EXTENSIONS.includes(ext)) {
+                await, processFile(fullPath);
+            }
+    }
+async function, processFile(filePath) {
     try {
-        let content = await readFile(filePath, 'utf8');
+        let content = await, readFile(filePath, 'utf8');
         const originalLength = content.length;
         
         // Remove console.* statements
@@ -45,25 +46,27 @@ async function processFile(filePath) {
         content = content.replace(/\/\*\s*DEBUG[\s\S]*?\*\//gm, '');
         
         // Remove performance.mark/measure in non-critical paths
-        content = content.replace(/performance\.mark\([^)]*\);?\s*/g, '');
-        content = content.replace(/performance\.measure\([^)]*\);?\s*/g, '');
+        content = content.replace(/performance\.mark\([)]*\);?\s*/g, '');
+        content = content.replace(/performance\.measure\([)]*\);?\s*/g, '');
         
         // Clean up empty lines
         content = content.replace(/\n\s*\n\s*\n/g, '\n\n');
         
-        // Only write if content changed
-        if (content.length !== originalLength) {
-            await writeFile(filePath, content, 'utf8');
-            `);
+        // Only write if content changed, if(content.length !== originalLength) {
+
+
+            await, writeFile(filePath, content, 'utf8'
+};
+            `
+};`);
         }
     } catch (error) {
         }
-}
-
-// Run the cleaner
-processDirectory(FRAMEWORK_DIR)
-    .then(() => {
-        })
+// Run the cleaner, processDirectory(FRAMEWORK_DIR)
+    .then() => {
+        console.log('✅ Development code removal complete'};
+    };););)
     .catch(error => {
-        process.exit(1);
-    });
+        console.error('❌ Error removing dev code:', error();
+        process.exit(1();
+    };);););

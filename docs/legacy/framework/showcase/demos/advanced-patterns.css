@@ -1,0 +1,717 @@
+/**
+ * ADVANCED PATTERNS - Layer 3
+ * Native Web Components Framework - Enterprise Design System
+ * Advanced CSS patterns, layouts, and utilities for maximum power
+ */
+
+/* ===== RESPONSIVE GRID SYSTEM ===== */
+.mission-grid {
+    display: grid;
+    gap: var(--space-lg);
+    width: 100%;
+}
+
+.mission-grid.auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.mission-grid.auto-fill {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.mission-grid.control-room {
+    grid-template-areas: 
+        "header header header"
+        "sidebar main metrics"
+        "console console console";
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+}
+
+.mission-grid.dashboard {
+    grid-template-areas:
+        "nav nav nav"
+        "sidebar content metrics"
+        "footer footer footer";
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: auto 1fr auto;
+}
+
+/* Grid Areas */
+.grid-header { grid-area: header; }
+.grid-sidebar { grid-area: sidebar; }
+.grid-main { grid-area: main; }
+.grid-content { grid-area: content; }
+.grid-metrics { grid-area: metrics; }
+.grid-console { grid-area: console; }
+.grid-nav { grid-area: nav; }
+.grid-footer { grid-area: footer; }
+
+/* Responsive Grid Breakpoints */
+@media (max-width: 1200px) {
+    .mission-grid.control-room {
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar"
+            "metrics"
+            "console";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto;
+    }
+    
+    .mission-grid.dashboard {
+        grid-template-areas:
+            "nav"
+            "content"
+            "sidebar"
+            "metrics"
+            "footer";
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== FLEXIBLE LAYOUTS ===== */
+.mission-flex {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.mission-flex.center {
+    align-items: center;
+    justify-content: center;
+}
+
+.mission-flex.between {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mission-flex.column {
+    flex-direction: column;
+}
+
+.mission-flex.wrap {
+    flex-wrap: wrap;
+}
+
+.mission-flex.stretch {
+    align-items: stretch;
+}
+
+/* Flex Item Utilities */
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+.flex-3 { flex: 3; }
+.flex-none { flex: none; }
+.flex-auto { flex: auto; }
+
+/* ===== ADVANCED ANIMATIONS ===== */
+@keyframes missionPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes missionGlow {
+    0%, 100% {
+        box-shadow: 0 0 5px var(--nasa-cyan-bright);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--nasa-cyan-bright), 0 0 30px var(--nasa-cyan-medium);
+    }
+}
+
+@keyframes missionSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes missionFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes missionBounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40%, 43% {
+        transform: translateY(-10px);
+    }
+    70% {
+        transform: translateY(-5px);
+    }
+    90% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes missionMatrix {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+/* Animation Classes */
+.animate-pulse {
+    animation: missionPulse 2s infinite;
+}
+
+.animate-glow {
+    animation: missionGlow 3s infinite;
+}
+
+.animate-slide-in {
+    animation: missionSlideIn 0.5s ease-out;
+}
+
+.animate-fade-in {
+    animation: missionFadeIn 0.3s ease-in;
+}
+
+.animate-bounce {
+    animation: missionBounce 1s infinite;
+}
+
+.animate-matrix {
+    background: linear-gradient(45deg, 
+        var(--nasa-blue-dark) 0%, 
+        var(--nasa-cyan-dark) 25%, 
+        var(--nasa-blue-dark) 50%, 
+        var(--nasa-cyan-dark) 75%, 
+        var(--nasa-blue-dark) 100%);
+    background-size: 400% 400%;
+    animation: missionMatrix 4s ease infinite;
+}
+
+/* Performance Optimized Animations */
+.animate-hardware {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* ===== ADVANCED BUTTON PATTERNS ===== */
+.mission-button-group {
+    display: inline-flex;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--nasa-cyan-bright);
+}
+
+.mission-button-group .mission-button {
+    border-radius: 0;
+    border: none;
+    border-right: 1px solid var(--nasa-cyan-dark);
+}
+
+.mission-button-group .mission-button:last-child {
+    border-right: none;
+}
+
+.mission-button-group .mission-button:hover {
+    background: var(--nasa-cyan-medium);
+    color: var(--nasa-blue-dark);
+    z-index: 1;
+    position: relative;
+}
+
+/* Floating Action Button */
+.mission-fab {
+    position: fixed;
+    bottom: var(--space-xl);
+    right: var(--space-xl);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    border: 2px solid var(--nasa-cyan-bright);
+    color: white;
+    font-size: var(--font-size-xl);
+    cursor: pointer;
+    box-shadow: var(--shadow-xl);
+    transition: all var(--perf-transition);
+    z-index: var(--z-fixed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mission-fab:hover {
+    transform: scale(1.1);
+    box-shadow: var(--glow-cyan);
+}
+
+/* ===== ADVANCED CARD PATTERNS ===== */
+.mission-card {
+    background: var(--gradient-nasa);
+    border: 1px solid var(--nasa-cyan-dark);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--perf-transition);
+    position: relative;
+}
+
+.mission-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform var(--perf-transition);
+}
+
+.mission-card:hover::before {
+    transform: scaleX(1);
+}
+
+.mission-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glow-cyan);
+    border-color: var(--nasa-cyan-bright);
+}
+
+.mission-card.status-operational {
+    border-left: 4px solid var(--nasa-green-status);
+}
+
+.mission-card.status-warning {
+    border-left: 4px solid var(--nasa-yellow-warning);
+}
+
+.mission-card.status-critical {
+    border-left: 4px solid var(--nasa-red-alert);
+}
+
+/* Card Header */
+.mission-card-header {
+    padding: var(--space-lg);
+    background: linear-gradient(90deg, 
+        rgba(0, 255, 255, 0.1) 0%, 
+        rgba(0, 255, 255, 0.05) 100%);
+    border-bottom: 1px solid var(--nasa-cyan-dark);
+}
+
+.mission-card-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--nasa-cyan-bright);
+    margin: 0;
+}
+
+.mission-card-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--spectrum-gray-400);
+    margin: var(--space-xs) 0 0 0;
+}
+
+/* Card Body */
+.mission-card-body {
+    padding: var(--space-lg);
+}
+
+/* Card Footer */
+.mission-card-footer {
+    padding: var(--space-lg);
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid var(--nasa-cyan-dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ===== ADVANCED NAVIGATION ===== */
+.mission-nav {
+    background: var(--gradient-nasa);
+    border-bottom: 2px solid var(--nasa-cyan-bright);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    backdrop-filter: blur(10px);
+}
+
+.mission-nav-container {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+}
+
+.mission-nav-brand {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--nasa-cyan-bright);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.mission-nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--space-lg);
+}
+
+.mission-nav-item {
+    position: relative;
+}
+
+.mission-nav-link {
+    color: var(--spectrum-gray-300);
+    text-decoration: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    transition: all var(--perf-transition);
+    position: relative;
+    text-transform: uppercase;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.5px;
+}
+
+.mission-nav-link:hover {
+    color: var(--nasa-cyan-bright);
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.mission-nav-link.active {
+    color: var(--nasa-cyan-bright);
+    background: rgba(0, 255, 255, 0.2);
+}
+
+/* ===== ADVANCED STATUS INDICATORS ===== */
+.mission-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mission-status.operational {
+    background: rgba(0, 255, 0, 0.1);
+    color: var(--nasa-green-status);
+    border: 1px solid var(--nasa-green-status);
+}
+
+.mission-status.warning {
+    background: rgba(255, 255, 0, 0.1);
+    color: var(--nasa-yellow-warning);
+    border: 1px solid var(--nasa-yellow-warning);
+}
+
+.mission-status.critical {
+    background: rgba(255, 0, 0, 0.1);
+    color: var(--nasa-red-alert);
+    border: 1px solid var(--nasa-red-alert);
+}
+
+.mission-status.offline {
+    background: rgba(128, 128, 128, 0.1);
+    color: var(--spectrum-gray-500);
+    border: 1px solid var(--spectrum-gray-500);
+}
+
+.mission-status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: missionPulse 2s infinite;
+}
+
+.mission-status.operational .mission-status-indicator {
+    background: var(--nasa-green-status);
+}
+
+.mission-status.warning .mission-status-indicator {
+    background: var(--nasa-yellow-warning);
+}
+
+.mission-status.critical .mission-status-indicator {
+    background: var(--nasa-red-alert);
+}
+
+/* ===== ADVANCED PROGRESS INDICATORS ===== */
+.mission-progress {
+    width: 100%;
+    height: 8px;
+    background: var(--spectrum-gray-800);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+}
+
+.mission-progress-bar {
+    height: 100%;
+    background: var(--gradient-success);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.mission-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 40px 40px;
+    animation: missionProgress 2s linear infinite;
+}
+
+@keyframes missionProgress {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 40px 40px;
+    }
+}
+
+.mission-progress.warning .mission-progress-bar {
+    background: var(--gradient-warning);
+}
+
+.mission-progress.danger .mission-progress-bar {
+    background: var(--gradient-error);
+}
+
+/* Circular Progress */
+.mission-progress-circle {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    display: inline-block;
+}
+
+.mission-progress-circle svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.mission-progress-circle .background {
+    fill: none;
+    stroke: var(--spectrum-gray-800);
+    stroke-width: 4;
+}
+
+.mission-progress-circle .progress {
+    fill: none;
+    stroke: var(--nasa-cyan-bright);
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dasharray var(--transition-normal);
+}
+
+.mission-progress-circle .text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--nasa-cyan-bright);
+}
+
+/* ===== UTILITY CLASSES ===== */
+/* Spacing */
+.m-0 { margin: 0; }
+.m-xs { margin: var(--space-xs); }
+.m-sm { margin: var(--space-sm); }
+.m-md { margin: var(--space-md); }
+.m-lg { margin: var(--space-lg); }
+.m-xl { margin: var(--space-xl); }
+
+.p-0 { padding: 0; }
+.p-xs { padding: var(--space-xs); }
+.p-sm { padding: var(--space-sm); }
+.p-md { padding: var(--space-md); }
+.p-lg { padding: var(--space-lg); }
+.p-xl { padding: var(--space-xl); }
+
+/* Text */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+/* Colors */
+.text-primary { color: var(--spectrum-blue-600); }
+.text-success { color: var(--nasa-green-status); }
+.text-warning { color: var(--nasa-yellow-warning); }
+.text-danger { color: var(--nasa-red-alert); }
+.text-info { color: var(--nasa-cyan-bright); }
+.text-muted { color: var(--spectrum-gray-500); }
+
+/* Backgrounds */
+.bg-primary { background: var(--gradient-primary); }
+.bg-success { background: var(--gradient-success); }
+.bg-warning { background: var(--gradient-warning); }
+.bg-danger { background: var(--gradient-error); }
+.bg-nasa { background: var(--gradient-nasa); }
+
+/* Display */
+.d-none { display: none; }
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-inline-block { display: inline-block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+/* Position */
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+.position-fixed { position: fixed; }
+.position-sticky { position: sticky; }
+
+/* Visibility */
+.invisible { visibility: hidden; }
+.visible { visibility: visible; }
+
+/* Overflow */
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+.overflow-scroll { overflow: scroll; }
+
+/* Cursor */
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+.cursor-wait { cursor: wait; }
+
+/* ===== RESPONSIVE UTILITIES ===== */
+@media (max-width: 768px) {
+    .mobile-hidden { display: none !important; }
+    .mobile-full-width { width: 100% !important; }
+    
+    .mission-grid.control-room,
+    .mission-grid.dashboard {
+        gap: var(--space-md);
+        padding: var(--space-sm);
+    }
+    
+    .mission-nav-menu {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+    
+    .mission-fab {
+        width: 50px;
+        height: 50px;
+        bottom: var(--space-lg);
+        right: var(--space-lg);
+    }
+}
+
+@media (min-width: 769px) {
+    .desktop-hidden { display: none !important; }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .no-print { display: none !important; }
+    
+    .mission-card,
+    .mission-nav,
+    .mission-button {
+        background: white !important;
+        color: black !important;
+        border: 1px solid black !important;
+        box-shadow: none !important;
+    }
+    
+    .animate-pulse,
+    .animate-glow,
+    .animate-bounce {
+        animation: none !important;
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    .animate-pulse,
+    .animate-glow,
+    .animate-slide-in,
+    .animate-fade-in,
+    .animate-bounce,
+    .animate-matrix {
+        animation: none !important;
+    }
+    
+    .mission-progress-bar::after {
+        animation: none !important;
+    }
+}
+
+/* Focus styles for accessibility */
+.mission-button:focus,
+.mission-nav-link:focus {
+    outline: 2px solid var(--nasa-cyan-bright);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .mission-card,
+    .mission-button,
+    .mission-nav {
+        border-width: 2px;
+    }
+    
+    .mission-status {
+        border-width: 2px;
+    }
+}

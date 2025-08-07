@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Test - Enhanced Components</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f3f4f6;
+    }
+    .status {
+      padding: 2rem;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .success {
+      color: #059669;
+      font-weight: bold;
+    }
+    .error {
+      color: #dc2626;
+      font-weight: bold;
+    }
+    .log {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      background: #f9fafb;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="status">
+    <h1>Enhanced Components Test</h1>
+    <div id="logs"></div>
+  </div>
+  
+  <div id="demo-container"></div>
+  
+  <script type="module">
+    const logs = document.getElementById('logs');
+    
+    function log(message, isError = false) {
+      const div = document.createElement('div');
+      div.className = 'log';
+      div.innerHTML = `<span class="${isError ? 'error' : 'success'}">${isError ? '✗' : '✓'}</span> ${message}`;
+      logs.appendChild(div);
+    }
+    
+    async function test() {
+      try {
+        // Test 1: Import base component
+        log('Importing base Component...');
+        const { Component } = await import('../../src/core/component.js');
+        log('Base Component imported successfully');
+        
+        // Test 2: Import enhanced component
+        log('Importing EnhancedComponent...');
+        const { EnhancedComponent } = await import('../../src/core/enhanced-component.js');
+        log('EnhancedComponent imported successfully');
+        
+        // Test 3: Import registry
+        log('Importing ComponentRegistry...');
+        const { ComponentRegistry } = await import('../../src/core/component-registry.js');
+        log('ComponentRegistry imported successfully');
+        
+        // Test 4: Import hero section
+        log('Importing HeroSection...');
+        await import('../../src/components/sections/hero-section.js');
+        log('HeroSection imported and registered');
+        
+        // Test 5: Create hero instance
+        log('Creating hero instance...');
+        const container = document.getElementById('demo-container');
+        const hero = document.createElement('hero-section');
+        container.appendChild(hero);
+        log('Hero instance created and added to DOM');
+        
+        // Test 6: Test variant switching
+        log('Testing variant switching...');
+        setTimeout(() => {
+          hero.updateVariant('gradient');
+          log('Switched to gradient variant');
+          
+          setTimeout(() => {
+            hero.updateVariant('minimal');
+            log('Switched to minimal variant');
+          }, 1000);
+        }, 1000);
+        
+      } catch (error) {
+        log(`Error: ${error.message}`, true);
+        console.error(error);
+      }
+    }
+    
+    test();
+  </script>
+</body>
+</html>

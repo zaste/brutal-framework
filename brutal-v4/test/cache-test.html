@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - Cache Manager Test</title>
+    <style>
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+        }
+        .test-container {
+            background: #111;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success { background: #1a3a1a; color: #4ade80; }
+        .status.error { background: #3a1a1a; color: #f87171; }
+        .status.info { background: #1a1a3a; color: #60a5fa; }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #333;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #444;
+        }
+        pre {
+            background: #222;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 BRUTAL V4 - Cache Manager Test</h1>
+    
+    <div class="controls">
+        <button onclick="testL1()">Test L1 (Memory)</button>
+        <button onclick="testL2()">Test L2 (IndexedDB)</button>
+        <button onclick="testL3()">Test L3 (Cache API)</button>
+        <button onclick="testAll()">Test All Layers</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+
+    <div class="test-container">
+        <h2>Test Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>Cache Stats</h2>
+        <pre id="stats">Waiting for tests...</pre>
+    </div>
+
+    <script type="module">
+        import { CacheManager } from '../core/cache/CacheManager.js';
+        import { globalEventBus } from '../core/events/EventBus.js';
+
+        const cache = new CacheManager({ 
+            name: 'test-cache',
+            maxSize: 10,
+            ttl: 5000 // 5 seconds
+        });
+
+        let testResults = [];
+
+        // Make functions global
+        window.log = (message, type = 'info') => {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        };
+
+        window.updateStats = async () => {
+            const stats = {
+                l1: cache.getStats(),
+                l2Available: cache.l2Available,
+                l3Available: cache.l3Available
+            };
+            document.getElementById('stats').textContent = JSON.stringify(stats, null, 2);
+        };
+
+        window.testL1 = async () => {
+            log('Testing L1 (Memory) cache...');
+            
+            // Test set/get
+            cache._setL1('test-key', { data: 'test-value' }, 2000);
+            const value = cache._getFromL1('test-key');
+            
+            if (value && value.data === 'test-value') {
+                log('✓ L1 set/get working', 'success');
+            } else {
+                log('✗ L1 set/get failed', 'error');
+            }
+
+            // Test expiration
+            setTimeout(() => {
+                const expired = cache._getFromL1('test-key');
+                if (!expired) {
+                    log('✓ L1 expiration working', 'success');
+                } else {
+                    log('✗ L1 expiration failed', 'error');
+                }
+                updateStats();
+            }, 2100);
+
+            updateStats();
+        };
+
+        window.testL2 = async () => {
+            log('Testing L2 (IndexedDB) cache...');
+            
+            if (!cache.l2Available) {
+                log('✗ L2 not available', 'error');
+                return;
+            }
+
+            // Test set/get
+            await cache._setL2('test-l2-key', { data: 'l2-value' }, 3000);
+            const value = await cache._getFromL2('test-l2-key');
+            
+            if (value && value.data === 'l2-value') {
+                log('✓ L2 set/get working', 'success');
+            } else {
+                log('✗ L2 set/get failed', 'error');
+            }
+
+            // Test clear
+            await cache._clearL2();
+            const cleared = await cache._getFromL2('test-l2-key');
+            
+            if (!cleared) {
+                log('✓ L2 clear working', 'success');
+            } else {
+                log('✗ L2 clear failed', 'error');
+            }
+
+            updateStats();
+        };
+
+        window.testL3 = async () => {
+            log('Testing L3 (Cache API) cache...');
+            
+            if (!cache.l3Available) {
+                log('✗ L3 not available', 'error');
+                return;
+            }
+
+            // Test set/get
+            await cache._setL3('test-l3-key', { data: 'l3-value' }, 4000);
+            const value = await cache._getFromL3('test-l3-key');
+            
+            if (value && value.data === 'l3-value') {
+                log('✓ L3 set/get working', 'success');
+            } else {
+                log('✗ L3 set/get failed', 'error');
+            }
+
+            // Test delete
+            await cache._deleteFromL3('test-l3-key');
+            const deleted = await cache._getFromL3('test-l3-key');
+            
+            if (!deleted) {
+                log('✓ L3 delete working', 'success');
+            } else {
+                log('✗ L3 delete failed', 'error');
+            }
+
+            updateStats();
+        };
+
+        window.testAll = async () => {
+            log('Testing all cache layers...');
+            
+            // Test high priority (all layers)
+            await cache.set('high-priority-key', { importance: 'high' }, { 
+                priority: 'high',
+                ttl: 10000 
+            });
+            
+            const highValue = await cache.get('high-priority-key');
+            if (highValue && highValue.importance === 'high') {
+                log('✓ High priority caching working', 'success');
+            } else {
+                log('✗ High priority caching failed', 'error');
+            }
+
+            // Test normal priority (L1 + L2)
+            await cache.set('normal-priority-key', { importance: 'normal' }, { 
+                priority: 'normal',
+                ttl: 10000 
+            });
+            
+            const normalValue = await cache.get('normal-priority-key');
+            if (normalValue && normalValue.importance === 'normal') {
+                log('✓ Normal priority caching working', 'success');
+            } else {
+                log('✗ Normal priority caching failed', 'error');
+            }
+
+            // Test waterfall get
+            cache.l1.delete('high-priority-key'); // Remove from L1
+            const fromL2 = await cache.get('high-priority-key');
+            
+            if (fromL2 && fromL2.importance === 'high') {
+                log('✓ Waterfall get from L2 working', 'success');
+            } else {
+                log('✗ Waterfall get failed', 'error');
+            }
+
+            updateStats();
+        };
+
+        window.clearLogs = () => {
+            document.getElementById('results').innerHTML = '';
+            log('Logs cleared');
+        };
+
+        // Listen to cache events
+        globalEventBus.on('cache:hit', (data) => {
+            log(`Cache hit at ${data.level} for key: ${data.key}`, 'success');
+        });
+
+        globalEventBus.on('cache:miss', (data) => {
+            log(`Cache miss for key: ${data.key}`, 'info');
+        });
+
+        // Initialize
+        await cache.init();
+        log('Cache Manager initialized');
+        log(`L2 Available: ${cache.l2Available}`);
+        log(`L3 Available: ${cache.l3Available}`);
+        updateStats();
+    </script>
+</body>
+</html>

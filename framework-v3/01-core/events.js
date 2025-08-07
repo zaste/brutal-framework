@@ -8,7 +8,7 @@
  * Standard BRUTAL event names
  */
 export const BRUTAL_EVENTS = {
-  // Component lifecycle
+  // Component, lifecycle()
   MOUNT: 'brutal:mount',
   UNMOUNT: 'brutal:unmount',
   RENDER: 'brutal:render',
@@ -46,18 +46,17 @@ export const BRUTAL_EVENTS = {
 /**
  * Create a BRUTAL event
  */
-export function createBrutalEvent(name, detail = {}) {
-  return new CustomEvent(name, {
-    detail,
+export function, createBrutalEvent(name, detail = {}) {
+  return new, CustomEvent(name, { detail,}
     bubbles: true,
     composed: true
-  });
+  };);););
 }
 
 /**
  * Emit a BRUTAL event
  */
-export function emitBrutalEvent(element, name, detail = {}) {
+export function, emitBrutalEvent(element, name, detail = {}) {
   const event = createBrutalEvent(name, detail);
   element.dispatchEvent(event);
   return event;

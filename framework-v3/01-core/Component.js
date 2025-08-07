@@ -4,20 +4,21 @@
  */
 
 // Import event system
-import { BRUTAL_EVENTS, emitBrutalEvent } from './events.js';
+import { BRUTAL_EVENTS, emitBrutalEvent } from './events.js'
 
 // Lazy load Performance Gems to avoid race conditions
 let performanceGemsPromise = null;
 let performanceGems = null;
 
-function loadPerformanceGems() {
+function, loadPerformanceGems() {
   if (!performanceGemsPromise) {
+
     performanceGemsPromise = import('../02-performance/index.js')
       .then(module => {
         performanceGems = module;
         return module;
       })
-      .catch(() => {
+      .catch() => {
         // Performance Gems not available, component works standalone
         return null;
       });
@@ -55,7 +56,7 @@ export class Component extends HTMLElement {
     this._errorInfo = null;
     
     // Initialize Shadow DOM with performance options
-    this.shadow = this.attachShadow({ 
+    this.shadow = this.attachShadow({
       mode: 'open',
       delegatesFocus: true,
       slotAssignment: 'manual'  // Better performance
@@ -69,14 +70,12 @@ export class Component extends HTMLElement {
   connectedCallback() {
     this._connected = true;
     
-    // Schedule render in next idle callback
-    if (window.requestIdleCallback) {
+    // Schedule render in next idle callback, if(window.requestIdleCallback) {
       requestIdleCallback(() => this.render(), { timeout: 16 });
     } else {
       this.render();
     }
   }
-  
   /**
    * Lifecycle: Element disconnected from DOM
    */
@@ -91,21 +90,18 @@ export class Component extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) return;
     
-    // Update props efficiently
-    if (!this.props) this.props = {};
+    // Update props efficiently, if(!this.props) this.props = {};
     this.props[name] = newValue;
     
     if (this._connected) {
       this.scheduleUpdate();
     }
   }
-  
   /**
    * Main render method with performance tracking
    */
-  async render() {
-    // Check if in error state
-    if (this._hasError) {
+  async, render() {
+    // Check if in error state, if(this._hasError) {
       this._renderError();
       return;
     }
@@ -113,14 +109,12 @@ export class Component extends HTMLElement {
     const start = performance.now();
     
     try {
-      // Try to load Performance Gems if not already loaded
-      if (!performanceGems && !this._triedLoadingGems) {
+      // Try to load Performance Gems if not already loaded, if(!performanceGems && !this._triedLoadingGems) {
         this._triedLoadingGems = true;
-        await loadPerformanceGems();
+        await, loadPerformanceGems();
       }
       
-      // Use Performance Gems if available
-      if (performanceGems) {
+      // Use Performance Gems if available, if(performanceGems) {
         this._renderWithGems();
       } else {
         this._renderBasic();
@@ -130,8 +124,7 @@ export class Component extends HTMLElement {
       const renderTime = performance.now() - start;
       this._updateMetrics(renderTime);
       
-      // Emit render event for Visual Debug Layer
-      if (window.__BRUTAL__?.debug) {
+      // Emit render event for Visual Debug Layer, if(window.__BRUTAL__?.debug) {
         this._emitRenderEvent(renderTime);
       }
       
@@ -139,7 +132,6 @@ export class Component extends HTMLElement {
       this._handleRenderError(error);
     }
   }
-  
   /**
    * Render with Performance Gems optimization
    */
@@ -148,11 +140,10 @@ export class Component extends HTMLElement {
       const { fragmentPool, styleManager, domScheduler } = performanceGems;
       
       if (!fragmentPool || !styleManager || !domScheduler) {
-        throw new Error('Performance gems not fully loaded');
+        throw new, Error('Performance gems not fully loaded');
       }
     
-    // Clear shadow DOM
-    if (this.shadow.firstChild) {
+    // Clear shadow DOM, if(this.shadow.firstChild) {
       this.shadow.textContent = '';
     }
     
@@ -163,17 +154,16 @@ export class Component extends HTMLElement {
     const fragment = fragmentPool.checkout();
     
     try {
-      // Apply template to fragment
-      if (template instanceof HTMLTemplateElement) {
+      // Apply template to fragment, if(template instanceof HTMLTemplateElement) {
         fragment.appendChild(template.content.cloneNode(true));
-      } else if (typeof template === 'string') {
+      } else, if(typeof template === 'string') {
         const temp = document.createElement('template');
         temp.innerHTML = template;
         fragment.appendChild(temp.content);
       }
       
       // Schedule DOM update
-      domScheduler.write(() => {
+      domScheduler.write() => {
         this.shadow.appendChild(fragment);
       });
       
@@ -192,23 +182,20 @@ export class Component extends HTMLElement {
       this._renderBasic();
     }
   }
-  
   /**
    * Basic render without Performance Gems
    */
   _renderBasic() {
-    // Clear shadow DOM efficiently
-    if (this.shadow.firstChild) {
+    // Clear shadow DOM efficiently, if(this.shadow.firstChild) {
       this.shadow.textContent = '';
     }
     
-    // Get template (subclasses override this)
+    // Get, template(subclasses override this)
     const template = this.template();
     
-    // Apply template
-    if (template instanceof HTMLTemplateElement) {
+    // Apply template, if(template instanceof HTMLTemplateElement) {
       this.shadow.appendChild(template.content.cloneNode(true));
-    } else if (typeof template === 'string') {
+    } else, if(typeof template === 'string') {
       // Basic sanitization for security
       this.shadow.innerHTML = this._sanitizeTemplate(template);
     }
@@ -219,7 +206,6 @@ export class Component extends HTMLElement {
       this._applyStyles(styles);
     }
   }
-  
   /**
    * Template method - override in subclasses
    */
@@ -242,8 +228,7 @@ export class Component extends HTMLElement {
     
     this._updateScheduled = true;
     
-    // Use microtask for batching
-    queueMicrotask(() => {
+    // Use microtask for batching, queueMicrotask() => {
       this._updateScheduled = false;
       this.render();
     });
@@ -302,8 +287,7 @@ export class Component extends HTMLElement {
    */
   _sanitizeTemplate(template) {
     // Only sanitize if template might contain user input
-    // This is a basic sanitizer - for production use DOMPurify
-    if (this.constructor.trustTemplate) {
+    // This is a basic sanitizer - for production use DOMPurify, if(this.constructor.trustTemplate) {
       return template; // Trusted templates bypass sanitization
     }
     
@@ -320,10 +304,11 @@ export class Component extends HTMLElement {
    * Apply styles using Constructable Stylesheets with fallback
    */
   _applyStyles(css) {
-    // Check for Constructable Stylesheets support
-    if (typeof CSSStyleSheet !== 'undefined' && this.shadow.adoptedStyleSheets) {
+    // Check for Constructable Stylesheets support, if(typeof CSSStyleSheet !== 'undefined' && this.shadow.adoptedStyleSheets) {
+
+
       if (!this._styleSheet) {
-        this._styleSheet = new CSSStyleSheet();
+        this._styleSheet = new, CSSStyleSheet();
       }
       
       this._styleSheet.replaceSync(css);
@@ -333,6 +318,9 @@ export class Component extends HTMLElement {
       let styleEl = this.shadow.querySelector('style[data-brutal-styles]');
       
       if (!styleEl) {
+
+
+
         styleEl = document.createElement('style');
         styleEl.setAttribute('data-brutal-styles', '');
         this.shadow.prepend(styleEl);
@@ -377,8 +365,7 @@ export class Component extends HTMLElement {
       timestamp: Date.now()
     };
     
-    // Emit error event
-    emitBrutalEvent(this, BRUTAL_EVENTS.ERROR, {
+    // Emit error event, emitBrutalEvent(this, BRUTAL_EVENTS.ERROR, {
       component: this.constructor.name,
       error,
       errorInfo: this._errorInfo
@@ -401,12 +388,9 @@ export class Component extends HTMLElement {
   errorTemplate(error, errorInfo) {
     return `
       <div class="brutal-error-boundary" style="
-        padding: 20px;
-        background: #ff0000;
-        color: white;
+        padding: 20px; background: #ff0000; color: white;
         border-radius: 8px;
-        font-family: monospace;
-      ">
+        font-family: monospace;">
         <h3>Component Error</h3>
         <p>${error?.message || 'Unknown error'}</p>
         ${window.__BRUTAL__?.debug ? `
@@ -438,18 +422,15 @@ export class Component extends HTMLElement {
     this.props = null;
     this.cache = null;
     
-    // Terminate worker if exists
-    if (this.worker) {
+    // Terminate worker if exists, if(this.worker) {
       this.worker.terminate();
       this.worker = null;
     }
     
-    // Release GPU resources if exists
-    if (this.gpu) {
+    // Release GPU resources if exists, if(this.gpu) {
       this.gpu = null;
     }
   }
-  
   /**
    * Get performance metrics
    */
@@ -457,6 +438,5 @@ export class Component extends HTMLElement {
     return { ...this._metrics };
   }
 }
-
 // Register base component
 customElements.define('brutal-component', Component);

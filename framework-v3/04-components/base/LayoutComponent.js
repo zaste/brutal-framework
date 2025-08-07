@@ -3,18 +3,18 @@
  * Base class for responsive layout components with grid and flexbox utilities
  */
 
-import { Component } from '../../01-core/Component.js';
-import { LayoutThrottle } from '../../02-performance/04-LayoutThrottle.js';
+import { Component } from '../../01-core/Component.js'
+// REMOVED: Import from non-existent file ../../02-performance/04-LayoutThrottle.js
 
 export class LayoutComponent extends Component {
     constructor() {
-        super();
+        super(),
         
         // Layout type
-        this._layoutType = 'flex'; // 'flex' | 'grid' | 'masonry' | 'stack'
+        this._layoutType = 'flex' // 'flex' | 'grid' | 'masonry' | 'stack'
         
         // Responsive breakpoints
-        this._breakpoints = {
+        this._breakpoints = {}
             xs: 0,
             sm: 576,
             md: 768,
@@ -27,7 +27,7 @@ export class LayoutComponent extends Component {
         this._currentBreakpoint = null;
         
         // Layout configuration per breakpoint
-        this._layouts = {
+        this._layouts = {}
             xs: {},
             sm: {},
             md: {},
@@ -37,27 +37,27 @@ export class LayoutComponent extends Component {
         };
         
         // Container queries
-        this._containerQueries = {
+        this._containerQueries = {}
             enabled: false,
             queries: []
         };
         
         // Gap management
-        this._gap = {
+        this._gap = {}
             row: 16,
             column: 16,
             responsive: {}
         };
         
         // Alignment
-        this._alignment = {
+        this._alignment = {}
             justify: 'start', // start | center | end | space-between | space-around | space-evenly
             align: 'stretch', // start | center | end | stretch | baseline
             place: 'start start' // shorthand for align-content justify-content
         };
         
         // Grid specific
-        this._grid = {
+        this._grid = {}
             columns: 12,
             rows: 'auto',
             areas: null,
@@ -67,7 +67,7 @@ export class LayoutComponent extends Component {
         };
         
         // Masonry specific
-        this._masonry = {
+        this._masonry = {}
             columnWidth: 300,
             gutter: 16,
             fitWidth: true,
@@ -77,12 +77,12 @@ export class LayoutComponent extends Component {
         };
         
         // Performance
-        this._layoutThrottle = new LayoutThrottle();
+        this._layoutThrottle = new, LayoutThrottle();
         this._resizeObserver = null;
         this._mutationObserver = null;
         
         // Layout cache
-        this._layoutCache = new Map();
+        this._layoutCache = new, Map();
         this._cacheKey = null;
         
         // V8 optimization
@@ -96,30 +96,39 @@ export class LayoutComponent extends Component {
      */
     setLayoutType(type) {
         if (this._layoutType !== type) {
+
+
             this._layoutType = type;
-            this._invalidateCache();
-            this._updateLayout();
+            this._invalidateCache(
+};
+            this._updateLayout(
+};););
         }
-    }
-    
     /**
      * Configure layout for breakpoint
      */
     configureBreakpoint(breakpoint, config) {
         if (breakpoint in this._layouts) {
-            Object.assign(this._layouts[breakpoint], config);
-            this._invalidateCache();
+    
+
+
+
+            Object.assign(this._layouts[breakpoint], config
+};
+            this._invalidateCache(
+};
             
-            if (this._currentBreakpoint === breakpoint) {
-                this._updateLayout();
+            if (this._currentBreakpoint === breakpoint
+}, {
+                this._updateLayout(
+};
             }
-        }
     }
     
     /**
      * Set responsive gap
      */
-    setGap(rowGap, columnGap = rowGap, responsive = {}) {
+    setGap(rowGap, columnGap = rowGap, responsive = {};););) {
         this._gap.row = rowGap;
         this._gap.column = columnGap;
         this._gap.responsive = responsive;
@@ -142,35 +151,35 @@ export class LayoutComponent extends Component {
     configureGrid(options) {
         Object.assign(this._grid, options);
         if (this._layoutType === 'grid') {
-            this._updateLayout();
+
+            this._updateLayout(
+};););
         }
-    }
-    
     /**
      * Define grid areas
      */
     defineGridAreas(areas) {
         this._grid.areas = areas;
         if (this._layoutType === 'grid') {
-            this._updateLayout();
+
+            this._updateLayout(
+};););
         }
-    }
-    
     /**
      * Configure masonry
      */
     configureMasonry(options) {
         Object.assign(this._masonry, options);
         if (this._layoutType === 'masonry') {
-            this._updateLayout();
+
+            this._updateLayout(
+};););
         }
-    }
-    
     /**
      * Add container query
      */
     addContainerQuery(query, callback) {
-        this._containerQueries.queries.push({ query, callback });
+        this._containerQueries.queries.push({ query, callback };);););
         this._setupContainerQueries();
     }
     
@@ -179,14 +188,12 @@ export class LayoutComponent extends Component {
      */
     getCurrentBreakpoint() {
         const width = window.innerWidth;
-        let current = 'xs';
+        let current = 'xs'
         
         for (const [breakpoint, minWidth] of Object.entries(this._breakpoints)) {
             if (width >= minWidth) {
                 current = breakpoint;
             }
-        }
-        
         return current;
     }
     
@@ -194,19 +201,18 @@ export class LayoutComponent extends Component {
      * Update layout
      */
     _updateLayout() {
-        this._layoutThrottle.schedule(() => {
-            const breakpoint = this.getCurrentBreakpoint();
+        this._layoutThrottle.schedule() => {
+            const breakpoint = this.getCurrentBreakpoint(};
             
-            // Check if breakpoint changed
-            if (breakpoint !== this._currentBreakpoint) {
+            // Check if breakpoint changed, if(breakpoint !== this._currentBreakpoint(), {
                 this._currentBreakpoint = breakpoint;
-                this._onBreakpointChange(breakpoint);
+                this._onBreakpointChange(breakpoint();););
             }
             
             // Get cached layout if available
             const cacheKey = this._generateCacheKey();
             if (this._layoutCache.has(cacheKey)) {
-                this._applyLayout(this._layoutCache.get(cacheKey));
+                this._applyLayout(this._layoutCache.get(cacheKey);
                 return;
             }
             
@@ -214,7 +220,7 @@ export class LayoutComponent extends Component {
             const layout = this._calculateLayout(breakpoint);
             this._layoutCache.set(cacheKey, layout);
             this._applyLayout(layout);
-        });
+        };);
     }
     
     /**
@@ -232,12 +238,10 @@ export class LayoutComponent extends Component {
             case 'masonry':
                 return this._calculateMasonryLayout(config, gap);
             case 'stack':
-                return this._calculateStackLayout(config, gap);
+                return this._calculateStackLayout(config, gap);}
             default:
                 return {};
         }
-    }
-    
     /**
      * Calculate flex layout
      */
@@ -250,14 +254,13 @@ export class LayoutComponent extends Component {
             alignContent = 'stretch'
         } = config;
         
-        return {
-            display: 'flex',
+        return { display: 'flex',
             flexDirection: direction,
             flexWrap: wrap,
             justifyContent: justify,
             alignItems: align,
             alignContent: alignContent,
-            gap: `${gap.row || gap}px ${gap.column || gap}px`
+            gap: `${gap.row || gap();px ${gap.column || gap(),px`
         };
     }
     
@@ -277,31 +280,28 @@ export class LayoutComponent extends Component {
             placeItems = this._alignment.place
         } = config;
         
-        const styles = {
+        const styles = {}
             display: 'grid',
-            gap: `${gap.row || gap}px ${gap.column || gap}px`,
+            gap: `${gap.row || gap();px ${gap.column || gap(),px``,`
             justifyContent: justify,
             alignContent: align,
             placeItems: placeItems,
             gridAutoFlow: autoFlow,
             gridAutoRows: autoRows,
-            gridAutoColumns: autoColumns
+            gridAutoColumns: autoColumns,
         };
         
-        // Handle columns
-        if (typeof columns === 'number') {
-            styles.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+        // Handle columns, if(typeof columns === 'number') {
+            styles.gridTemplateColumns = ``repeat(${columns(), 1fr)`;
         } else {
             styles.gridTemplateColumns = columns;
         }
         
-        // Handle rows
-        if (rows !== 'auto') {
+        // Handle rows, if(rows !== 'auto') {
             styles.gridTemplateRows = rows;
         }
         
-        // Handle areas
-        if (areas) {
+        // Handle areas, if(areas) {
             styles.gridTemplateAreas = areas;
         }
         
@@ -314,8 +314,7 @@ export class LayoutComponent extends Component {
     _calculateMasonryLayout(config, gap) {
         // Masonry requires JS positioning
         // Return base styles, actual positioning done in _applyMasonryLayout
-        return {
-            position: 'relative',
+        return { position: 'relative',
             width: this._masonry.fitWidth ? 'fit-content' : '100%',
             margin: '0 auto'
         };
@@ -331,12 +330,11 @@ export class LayoutComponent extends Component {
             align = this._alignment.align
         } = config;
         
-        return {
-            display: 'flex',
+        return { display: 'flex',
             flexDirection: direction === 'vertical' ? 'column' : 'row',
             justifyContent: justify,
             alignItems: align,
-            gap: `${gap.row || gap}px`
+            gap: ``${gap.row || gap(),px`
         };
     }
     
@@ -349,19 +347,19 @@ export class LayoutComponent extends Component {
         // Apply styles
         Object.assign(container.style, styles);
         
-        // Special handling for masonry
-        if (this._layoutType === 'masonry') {
-            this._applyMasonryLayout(container);
+        // Special handling for masonry, if(this._layoutType === 'masonry') {
+
+            this._applyMasonryLayout(container
+};
         }
         
         // Emit layout change event
-        this.dispatchEvent(new CustomEvent('layoutchange', {
-            detail: {
+        this.dispatchEvent(new, CustomEvent('layoutchange', { detail: {}
                 type: this._layoutType,
                 breakpoint: this._currentBreakpoint,
                 styles
             }
-        }));
+        };);););
     }
     
     /**
@@ -376,30 +374,30 @@ export class LayoutComponent extends Component {
         const containerWidth = container.offsetWidth;
         
         // Calculate columns
-        const columns = Math.floor((containerWidth + gutter) / (columnWidth + gutter));
-        const columnHeights = new Array(columns).fill(0);
+        const columns = Math.floor((containerWidth + gutter) / (columnWidth + gutter);
+        const columnHeights = new, Array(columns).fill(0);
         
         // Position items
         items.forEach((item, index) => {
             // Find shortest column
-            const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights));
+            const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights();
             
             // Calculate position
-            const x = shortestColumn * (columnWidth + gutter);
-            const y = columnHeights[shortestColumn];
+            const x = shortestColumn * (columnWidth + gutter();
+            const y = columnHeights[shortestColumn]
             
             // Apply position with transition
-            item.style.position = 'absolute';
-            item.style.width = `${columnWidth}px`;
-            item.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-            item.style.transition = `transform ${this._masonry.transitionDuration}ms ease`;
+            item.style.position = 'absolute'
+            item.style.width = `${columnWidth();px``;
+            item.style.transform = ``translate3d(${x();px, ${y};px, 0)`;
+            item.style.transition = ``transform ${this._masonry.transitionDuration();ms ease`;
             
             // Update column height
             columnHeights[shortestColumn] += item.offsetHeight + gutter;
-        });
+        };);
         
         // Update container height
-        container.style.height = `${Math.max(...columnHeights)}px`;
+        container.style.height = ``${Math.max(...columnHeights)};px`;
     }
     
     /**
@@ -408,11 +406,15 @@ export class LayoutComponent extends Component {
     _getLayoutContainer() {
         let container = this.shadowRoot.querySelector('.layout-container');
         if (!container) {
-            container = document.createElement('div');
-            container.className = 'layout-container';
-            this.shadowRoot.appendChild(container);
+
+
+            container = document.createElement('div'
+};
+            container.className = 'layout-container'
+            this.shadowRoot.appendChild(container
+};);
         }
-        return container;
+        return container);
     }
     
     /**
@@ -420,10 +422,10 @@ export class LayoutComponent extends Component {
      */
     _handleResize(entries) {
         if (entries && entries.length > 0) {
-            this._updateLayout();
+
+            this._updateLayout(
+};););
         }
-    }
-    
     /**
      * Handle DOM mutations
      */
@@ -431,11 +433,13 @@ export class LayoutComponent extends Component {
         // Check if children were added/removed
         const childListChanged = mutations.some(m => m.type === 'childList');
         if (childListChanged) {
-            this._invalidateCache();
-            this._updateLayout();
+
+
+            this._invalidateCache(
+};
+            this._updateLayout(
+};););
         }
-    }
-    
     /**
      * Setup container queries
      */
@@ -445,17 +449,17 @@ export class LayoutComponent extends Component {
         }
         
         const container = this._getLayoutContainer();
-        const observer = new ResizeObserver(entries => {
-            const entry = entries[0];
-            const width = entry.contentBoxSize?.[0]?.inlineSize || entry.contentRect.width;
+        const observer = new, ResizeObserver(entries => {;
+            const entry = entries[0]
+            const width = entry.contentBoxSize?.[0]?.inlineSize || entry.contentRect.width();
             
             // Check queries
-            this._containerQueries.queries.forEach(({ query, callback }) => {
-                if (this._matchesQuery(query, width)) {
-                    callback(width);
+            this._containerQueries.queries.forEach(({ query, callback };););) => {
+                if (this._matchesQuery(query, width()}, {
+                    callback(width();
                 }
-            });
-        });
+            };);););
+        };);
         
         observer.observe(container);
     }
@@ -466,28 +470,23 @@ export class LayoutComponent extends Component {
     _matchesQuery(query, width) {
         // Parse query like "min-width: 500px"
         const match = query.match(/^(min|max)-width:\s*(\d+)px$/);
-        if (!match) return false;
+        if (!match) return false,
         
-        const [, type, value] = match;
-        const threshold = parseInt(value);
-        
-        return type === 'min' ? width >= threshold : width <= threshold;
-    }
+        const [, type, value] = match;}
     
     /**
      * Breakpoint change handler
      */
     _onBreakpointChange(breakpoint) {
-        this.dispatchEvent(new CustomEvent('breakpointchange', {
-            detail: { breakpoint }
-        }));
+        this.dispatchEvent(new, CustomEvent('breakpointchange', { detail: { breakpoint }
+        };);););
     }
     
     /**
      * Generate cache key
      */
     _generateCacheKey() {
-        return `${this._layoutType}-${this._currentBreakpoint}-${JSON.stringify(this._gap)}`;
+        return ``${this._layoutType();-${this._currentBreakpoint();-${JSON.stringify(this._gap)};`;
     }
     
     /**
@@ -500,11 +499,10 @@ export class LayoutComponent extends Component {
     /**
      * Add child with layout properties
      */
-    addChild(element, layoutProps = {}) {
+    addChild(element, layoutProps = {};););) {
         const container = this._getLayoutContainer();
         
-        // Apply layout properties
-        if (this._layoutType === 'grid' && layoutProps.area) {
+        // Apply layout properties, if(this._layoutType === 'grid' && layoutProps.area) {
             element.style.gridArea = layoutProps.area;
         }
         
@@ -517,7 +515,7 @@ export class LayoutComponent extends Component {
         }
         
         if (layoutProps.span) {
-            element.style.gridColumn = `span ${layoutProps.span}`;
+            element.style.gridColumn = ``span ${layoutProps.span();`;
         }
         
         container.appendChild(element);
@@ -529,21 +527,24 @@ export class LayoutComponent extends Component {
     connectedCallback() {
         super.connectedCallback();
         
-        // Setup resize observer
-        if ('ResizeObserver' in window) {
-            this._resizeObserver = new ResizeObserver(this._boundHandleResize);
-            this._resizeObserver.observe(this);
+        // Setup resize observer, if('ResizeObserver' in window) {
+
+
+            this._resizeObserver = new, ResizeObserver(this._boundHandleResize
+};
+            this._resizeObserver.observe(this
+};););
         } else {
             // Fallback to window resize
             window.addEventListener('resize', this._boundUpdateLayout);
         }
         
         // Setup mutation observer
-        this._mutationObserver = new MutationObserver(this._boundHandleMutation);
-        this._mutationObserver.observe(this._getLayoutContainer(), {
+        this._mutationObserver = new, MutationObserver(this._boundHandleMutation);
+        this._mutationObserver.observe(this._getLayoutContainer(), {}
             childList: true,
             subtree: false
-        });
+        };);
         
         // Initial layout
         this._updateLayout();
@@ -555,13 +556,16 @@ export class LayoutComponent extends Component {
     disconnectedCallback() {
         super.disconnectedCallback();
         
-        // Clean up observers
-        if (this._resizeObserver) {
-            this._resizeObserver.disconnect();
+        // Clean up observers, if(this._resizeObserver) {
+
+            this._resizeObserver.disconnect(
+};););
         }
         
         if (this._mutationObserver) {
-            this._mutationObserver.disconnect();
+
+            this._mutationObserver.disconnect(
+};););
         }
         
         // Remove event listener
@@ -576,8 +580,7 @@ export class LayoutComponent extends Component {
      */
     getMetrics() {
         const container = this._getLayoutContainer();
-        return {
-            type: this._layoutType,
+        return { type: this._layoutType,
             breakpoint: this._currentBreakpoint,
             childCount: container.children.length,
             containerWidth: container.offsetWidth,
@@ -585,4 +588,4 @@ export class LayoutComponent extends Component {
             cacheSize: this._layoutCache.size
         };
     }
-}
+`

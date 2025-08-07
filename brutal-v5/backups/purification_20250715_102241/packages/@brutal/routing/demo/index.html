@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@brutal/routing Demo</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+    
+    nav {
+      border-bottom: 2px solid #333;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    nav a:hover {
+      color: #0066cc;
+    }
+    
+    nav a.active {
+      color: #0066cc;
+      font-weight: 700;
+    }
+    
+    #content {
+      min-height: 300px;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 4px;
+    }
+    
+    .route-info {
+      background: white;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    
+    .route-info h3 {
+      margin-top: 0;
+    }
+    
+    .route-info pre {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    
+    button {
+      background: #0066cc;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    
+    button:hover {
+      background: #0052a3;
+    }
+    
+    .guard-demo {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>@brutal/routing Demo</h1>
+  
+  <nav id="nav">
+    <a href="/" data-route="/">Home</a>
+    <a href="/about" data-route="/about">About</a>
+    <a href="/products" data-route="/products">Products</a>
+    <a href="/products/123" data-route="/products/123">Product #123</a>
+    <a href="/user/john" data-route="/user/john">User: john</a>
+    <a href="/search?q=brutal" data-route="/search?q=brutal">Search</a>
+    <a href="/protected" data-route="/protected">Protected (requires auth)</a>
+  </nav>
+  
+  <div id="content">
+    <p>Loading...</p>
+  </div>
+  
+  <div class="route-info">
+    <h3>Current Route Info</h3>
+    <pre id="route-info">Loading...</pre>
+  </div>
+  
+  <div class="guard-demo">
+    <h3>Navigation Guard Demo</h3>
+    <p>Authenticated: <span id="auth-status">false</span></p>
+    <button id="toggle-auth">Toggle Authentication</button>
+    <button id="nav-protected">Navigate to Protected</button>
+  </div>
+  
+  <script type="module">
+    import { createRouter } from '../dist/index.js';
+    
+    // Demo authentication state
+    let isAuthenticated = false;
+    
+    // Page components
+    const pages = {
+      Home: () => `
+        <h2>Welcome to BRUTAL Router!</h2>
+        <p>This is a demo of the ultra-lightweight @brutal/routing package.</p>
+        <ul>
+          <li>✅ Route matching with parameters</li>
+          <li>✅ Query string parsing</li>
+          <li>✅ Navigation guards</li>
+          <li>✅ History API support</li>
+          <li>✅ Hash mode fallback</li>
+          <li>✅ Only 6KB!</li>
+        </ul>
+      `,
+      
+      About: () => `
+        <h2>About</h2>
+        <p>@brutal/routing is a minimal client-side router that provides all essential features in a tiny package.</p>
+        <p>Perfect for SPAs that need routing without the bloat.</p>
+      `,
+      
+      Products: () => `
+        <h2>Products</h2>
+        <p>Browse our product catalog.</p>
+        <ul>
+          <li><a href="/products/101" data-route="/products/101">Product 101</a></li>
+          <li><a href="/products/102" data-route="/products/102">Product 102</a></li>
+          <li><a href="/products/103" data-route="/products/103">Product 103</a></li>
+        </ul>
+      `,
+      
+      Product: (params) => `
+        <h2>Product Details</h2>
+        <p>Viewing product ID: <strong>${params.id}</strong></p>
+        <p><a href="/products" data-route="/products">← Back to products</a></p>
+      `,
+      
+      User: (params) => `
+        <h2>User Profile</h2>
+        <p>Username: <strong>${params.username}</strong></p>
+        <p>This route demonstrates dynamic parameters.</p>
+      `,
+      
+      Search: (query) => `
+        <h2>Search Results</h2>
+        <p>Searching for: <strong>${query.q || '(empty)'}</strong></p>
+        <p>Query parameters: <code>${JSON.stringify(query)}</code></p>
+      `,
+      
+      Protected: () => `
+        <h2>Protected Area</h2>
+        <p>🔒 You can only see this because you're authenticated!</p>
+        <p>Try logging out and navigating here again.</p>
+      `,
+      
+      NotFound: () => `
+        <h2>404 - Not Found</h2>
+        <p>The requested page could not be found.</p>
+        <p><a href="/" data-route="/">Go home</a></p>
+      `
+    };
+    
+    // Create router
+    const router = createRouter({
+      r: [
+        { p: '/', c: pages.Home, n: 'home' },
+        { p: '/about', c: pages.About, n: 'about' },
+        { p: '/products', c: pages.Products, n: 'products' },
+        { p: '/products/:id', c: pages.Product, n: 'product' },
+        { p: '/user/:username', c: pages.User, n: 'user' },
+        { p: '/search', c: pages.Search, n: 'search' },
+        { 
+          p: '/protected',
+          c: pages.Protected,
+          n: 'protected',
+          g: [(to, from, next) => {
+            if (!isAuthenticated) {
+              alert('You must be authenticated to access this page!');
+              next(false);
+            } else {
+              next();
+            }
+          }]
+        }
+      ]
+    });
+    
+    // Global navigation guard for logging
+    router.bg((to, from, next) => {
+      console.log('Navigation:', from.p, '->', to.p);
+      next();
+    });
+    
+    // After navigation hook
+    router.ag((to, from) => {
+      // Update active nav link
+      document.querySelectorAll('nav a').forEach(link => {
+        const route = link.getAttribute('data-route');
+        link.classList.toggle('active', route === to.p);
+      });
+      
+      // Render content
+      const content = document.getElementById('content');
+      const current = router.c();
+      
+      if (current.r && current.r.c) {
+        // Extract params from the matched route
+        const params = {};
+        if (current.r.p.includes(':')) {
+          const pathParts = current.p.split('/');
+          const routeParts = current.r.p.split('/');
+          routeParts.forEach((part, i) => {
+            if (part.startsWith(':')) {
+              params[part.slice(1)] = pathParts[i];
+            }
+          });
+        }
+        
+        content.innerHTML = current.r.c(params.id || params.username ? params : current.q);
+      } else {
+        content.innerHTML = pages.NotFound();
+      }
+      
+      // Update route info
+      document.getElementById('route-info').textContent = JSON.stringify({
+        path: current.p,
+        query: current.q,
+        hash: current.h,
+        route: current.r ? current.r.n : null
+      }, null, 2);
+    });
+    
+    // Handle link clicks
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-route]');
+      if (link) {
+        e.preventDefault();
+        const route = link.getAttribute('data-route');
+        router.p(route);
+      }
+    });
+    
+    // Authentication demo
+    const authStatus = document.getElementById('auth-status');
+    const toggleAuth = document.getElementById('toggle-auth');
+    const navProtected = document.getElementById('nav-protected');
+    
+    toggleAuth.addEventListener('click', () => {
+      isAuthenticated = !isAuthenticated;
+      authStatus.textContent = isAuthenticated ? 'true' : 'false';
+      authStatus.style.color = isAuthenticated ? 'green' : 'red';
+    });
+    
+    navProtected.addEventListener('click', () => {
+      router.p('/protected');
+    });
+    
+    // Trigger initial route
+    router.ag((to) => {
+      console.log('Router ready! Current route:', to.p);
+    });
+  </script>
+</body>
+</html>

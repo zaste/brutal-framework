@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Framework Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .demo-component {
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f7fafc;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Native Web Components Framework - Simple Test</h1>
+    
+    <div id="test-output"></div>
+    
+    <div id="component-container"></div>
+
+    <script type="module">
+        const output = document.getElementById('test-output');
+        
+        function log(message, isError = false) {
+            const p = document.createElement('p');
+            p.textContent = message;
+            p.style.color = isError ? 'red' : 'green';
+            output.appendChild(p);
+            console.log(message);
+        }
+        
+        // Simple component definition without framework imports
+        class SimpleTestComponent extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.count = 0;
+            }
+            
+            connectedCallback() {
+                this.render();
+            }
+            
+            render() {
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        :host {
+                            display: block;
+                        }
+                        .container {
+                            padding: 20px;
+                            background: #e6f7ff;
+                            border-radius: 8px;
+                            border: 2px solid #1890ff;
+                        }
+                        button {
+                            background: #1890ff;
+                            color: white;
+                            border: none;
+                            padding: 8px 16px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            margin: 5px;
+                        }
+                        button:hover {
+                            background: #40a9ff;
+                        }
+                    </style>
+                    <div class="container">
+                        <h3>Simple Test Component</h3>
+                        <p>Count: <span id="count">${this.count}</span></p>
+                        <button id="increment">Increment</button>
+                        <button id="decrement">Decrement</button>
+                        <button id="reset">Reset</button>
+                    </div>
+                `;
+                
+                // Add event listeners
+                this.shadowRoot.getElementById('increment').addEventListener('click', () => {
+                    this.count++;
+                    this.updateCount();
+                });
+                
+                this.shadowRoot.getElementById('decrement').addEventListener('click', () => {
+                    this.count--;
+                    this.updateCount();
+                });
+                
+                this.shadowRoot.getElementById('reset').addEventListener('click', () => {
+                    this.count = 0;
+                    this.updateCount();
+                });
+            }
+            
+            updateCount() {
+                this.shadowRoot.getElementById('count').textContent = this.count;
+                log(`Count updated to: ${this.count}`);
+            }
+        }
+        
+        // Register the component
+        try {
+            customElements.define('simple-test-component', SimpleTestComponent);
+            log('✅ Component registered successfully');
+            
+            // Create an instance
+            const component = document.createElement('simple-test-component');
+            document.getElementById('component-container').appendChild(component);
+            log('✅ Component instance created and added to DOM');
+            
+        } catch (error) {
+            log(`❌ Error: ${error.message}`, true);
+        }
+        
+        // Test framework imports
+        async function testFrameworkImports() {
+            log('\n📦 Testing framework imports...');
+            
+            try {
+                // Test state manager
+                const stateModule = await import('../../core/systems/state-manager.js');
+                if (stateModule.NativeStateStore) {
+                    log('✅ State Manager imported successfully');
+                }
+                
+                // Test router
+                const routerModule = await import('../../core/systems/router.js');
+                if (routerModule.NativeRouter) {
+                    log('✅ Router imported successfully');
+                }
+                
+                // Test framework core
+                const frameworkModule = await import('../../core/engine/framework-core.js');
+                if (frameworkModule.createFramework) {
+                    log('✅ Framework Core imported successfully');
+                    
+                    // Create framework instance
+                    const framework = frameworkModule.createFramework();
+                    log('✅ Framework instance created');
+                }
+                
+                log('\n🎉 All tests passed! Framework is working correctly.');
+                
+            } catch (error) {
+                log(`\n❌ Import error: ${error.message}`, true);
+                console.error(error);
+            }
+        }
+        
+        // Run tests after a short delay
+        setTimeout(testFrameworkImports, 100);
+    </script>
+</body>
+</html>

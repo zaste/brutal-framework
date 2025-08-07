@@ -1,0 +1,379 @@
+{
+  "name": "@brutal/foundation",
+  "timestamp": "2025-07-15T10:24:04.582Z",
+  "exports": {
+    "BrutalConfig": {
+      "file": "config/loader.ts",
+      "type": "interface"
+    },
+    "configLoader": {
+      "file": "config/loader.ts",
+      "type": "const"
+    },
+    "VERSION": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "DEFAULT_CONFIG": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "INTERNAL": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "DebugLevels": {
+      "file": "debug/index.ts",
+      "type": "const"
+    },
+    "DebugLevel": {
+      "file": "debug/index.ts",
+      "type": "type"
+    },
+    "configureDebug": {
+      "file": "debug/index.ts",
+      "type": "function"
+    },
+    "createDebug": {
+      "file": "debug/index.ts",
+      "type": "function"
+    },
+    "debug": {
+      "file": "debug/index.ts",
+      "type": "const"
+    },
+    "PerformanceMeasure": {
+      "file": "debug/index.ts",
+      "type": "class"
+    },
+    "getMemoryUsage": {
+      "file": "debug/index.ts",
+      "type": "function"
+    },
+    "getStackTrace": {
+      "file": "debug/index.ts",
+      "type": "function"
+    },
+    "inspect": {
+      "file": "debug/index.ts",
+      "type": "function"
+    },
+    "debugAPI": {
+      "file": "debug/index.ts",
+      "type": "const"
+    },
+    "envProfiles": {
+      "file": "env/profiles.ts",
+      "type": "const"
+    },
+    "ErrorCodes": {
+      "file": "errors/index.ts",
+      "type": "const"
+    },
+    "ErrorCode": {
+      "file": "errors/index.ts",
+      "type": "type"
+    },
+    "BrutalError": {
+      "file": "errors/index.ts",
+      "type": "class"
+    },
+    "ConfigError": {
+      "file": "errors/index.ts",
+      "type": "class"
+    },
+    "RegistryError": {
+      "file": "errors/index.ts",
+      "type": "class"
+    },
+    "createError": {
+      "file": "errors/index.ts",
+      "type": "const"
+    },
+    "errorHandlers": {
+      "file": "errors/index.ts",
+      "type": "const"
+    },
+    "assert": {
+      "file": "errors/index.ts",
+      "type": "function"
+    },
+    "trySync": {
+      "file": "errors/index.ts",
+      "type": "function"
+    },
+    "errorBoundary": {
+      "file": "errors/index.ts",
+      "type": "function"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "registry": {
+      "file": "registry/registry.ts",
+      "type": "const"
+    },
+    "config": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "polyfills": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "errors": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "env": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "utils": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "foundation": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "PolyfillConfig": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "polyfillStrategy": {
+      "file": "polyfills/strategy.ts",
+      "type": "const"
+    },
+    "EventEmitter": {
+      "file": "primitives/index.ts",
+      "type": "class"
+    },
+    "Observable": {
+      "file": "primitives/index.ts",
+      "type": "class"
+    },
+    "AsyncQueue": {
+      "file": "primitives/index.ts",
+      "type": "class"
+    },
+    "Deferred": {
+      "file": "primitives/index.ts",
+      "type": "class"
+    },
+    "Cache": {
+      "file": "primitives/index.ts",
+      "type": "class"
+    },
+    "ObjectPool": {
+      "file": "primitives/index.ts",
+      "type": "class"
+    },
+    "StateMachine": {
+      "file": "primitives/index.ts",
+      "type": "class"
+    },
+    "primitives": {
+      "file": "primitives/index.ts",
+      "type": "const"
+    },
+    "FoundationConfig": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "PackageInfo": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "EnvironmentProfile": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ConfigOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ErrorInfo": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "DebugInfo": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "Nullable": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "Optional": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "MaybePromise": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "Fn": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "AsyncFn": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "PlainObject": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "DeepPartial": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "DeepReadonly": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "isObject": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isArray": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isFunction": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isString": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isNumber": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isBoolean": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isNull": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isUndefined": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isNullish": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "isDefined": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "hasOwn": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "keys": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "values": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "entries": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "fromEntries": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "assign": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "freeze": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "compact": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "unique": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "flatten": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "noop": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "once": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "debounce": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "throttle": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "delay": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "nextTick": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "deepClone": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "deepMerge": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "uniqueId": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "camelCase": {
+      "file": "utils/index.ts",
+      "type": "const"
+    },
+    "kebabCase": {
+      "file": "utils/index.ts",
+      "type": "const"
+    }
+  },
+  "files": [
+    "config/loader.ts",
+    "constants.ts",
+    "debug/index.ts",
+    "env/profiles.ts",
+    "errors/index.ts",
+    "index.ts",
+    "minimal.ts",
+    "polyfills/strategy.ts",
+    "primitives/index.ts",
+    "registry/registry.ts",
+    "types.ts",
+    "utils/index.ts"
+  ],
+  "bundleSize": 4570,
+  "dependencies": {},
+  "consumers": []
+}

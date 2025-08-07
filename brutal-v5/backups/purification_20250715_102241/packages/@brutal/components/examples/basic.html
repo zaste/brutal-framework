@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@brutal/components - Basic Example</title>
+</head>
+<body>
+  <h1>@brutal/components Basic Example</h1>
+  
+  <form id="example-form">
+    <input type="text" id="input" placeholder="Enter text" />
+    <button type="submit">Process</button>
+  </form>
+  
+  <div id="result"></div>
+
+  <script type="module">
+    import { ExampleFeature } from '../dist/index.js';
+    
+    const feature = new ExampleFeature({ debug: true });
+    const form = document.getElementById('example-form');
+    const input = document.getElementById('input');
+    const result = document.getElementById('result');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const value = input.value;
+      const res = await feature.execute(value);
+      
+      if (res.success) {
+        result.textContent = `Success: ${res.data}`;
+        result.style.color = 'green';
+      } else {
+        result.textContent = `Error: ${res.error?.message}`;
+        result.style.color = 'red';
+      }
+    });
+  </script>
+</body>
+</html>

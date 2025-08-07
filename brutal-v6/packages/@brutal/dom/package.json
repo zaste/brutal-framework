@@ -1,0 +1,27 @@
+{
+  "name": "@brutal/dom",
+  "version": "0.0.1",
+  "description": "BRUTAL DOM - Template rendering and manipulation",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "size": "node ../../build/check-size.js dist/index.js 2048"
+  },
+  "keywords": [
+    "brutal",
+    "dom",
+    "template",
+    "render"
+  ],
+  "author": "BRUTAL",
+  "license": "MIT",
+  "devDependencies": {
+    "terser": "^5.43.1",
+    "typescript": "^5.0.0"
+  },
+  "sizeLimit": 2048
+}

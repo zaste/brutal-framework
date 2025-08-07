@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTAL V5 Browser Integration Test</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .success { color: green; }
+    .error { color: red; }
+    .info { color: #0066cc; }
+    #results {
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>BRUTAL V5 Browser Integration Test</h1>
+  
+  <div class="test-section">
+    <h2>Bundle Loading</h2>
+    <div id="bundle-status"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>Component Testing</h2>
+    <div id="component-test"></div>
+    <brutal-test-component></brutal-test-component>
+  </div>
+  
+  <div class="test-section">
+    <h2>Router Testing</h2>
+    <div id="router-test"></div>
+    <div>
+      <button onclick="testNavigation('/home')">Navigate to /home</button>
+      <button onclick="testNavigation('/users/123')">Navigate to /users/123</button>
+      <button onclick="testNavigation('/about')">Navigate to /about</button>
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h2>Real-time Features</h2>
+    <div id="realtime-test">
+      <button onclick="incrementCounter()">Increment Counter</button>
+      <span id="counter-display">0</span>
+    </div>
+  </div>
+  
+  <div id="results">
+    <h3>Test Results</h3>
+    <pre id="test-output"></pre>
+  </div>
+  
+  <script type="module">
+    import * as brutal from './dist/brutal-core.js';
+    
+    window.brutal = brutal; // For console debugging
+    
+    const output = document.getElementById('test-output');
+    let testResults = [];
+    
+    function log(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const entry = `[${timestamp}] ${message}`;
+      testResults.push(entry);
+      output.textContent = testResults.join('\n');
+      console.log(`[${type}]`, message);
+    }
+    
+    // Test 1: Bundle Loading
+    function testBundleLoading() {
+      const status = document.getElementById('bundle-status');
+      try {
+        const modules = Object.keys(brutal);
+        status.innerHTML = `
+          <p class="success">✅ Bundle loaded successfully</p>
+          <p>Modules available: ${modules.join(', ')}</p>
+        `;
+        log('Bundle loaded with ' + modules.length + ' modules', 'success');
+      } catch (error) {
+        status.innerHTML = `<p class="error">❌ Bundle loading failed: ${error.message}</p>`;
+        log('Bundle loading failed: ' + error.message, 'error');
+      }
+    }
+    
+    // Test 2: Component System
+    function testComponentSystem() {
+      const componentTest = document.getElementById('component-test');
+      
+      try {
+        // Define a test component
+        class BrutalTestComponent extends brutal.components.BrutalComponent {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+          }
+          
+          init() {
+            const template = brutal.templates.compile(`
+              <div style="padding: 10px; border: 2px solid #0066cc; border-radius: 5px;">
+                <h3>BRUTAL Component Works!</h3>
+                <p>Current time: \${time}</p>
+                <button id="update-btn">Update Time</button>
+              </div>
+            `);
+            
+            this.render(template);
+            
+            this.shadowRoot.getElementById('update-btn').addEventListener('click', () => {
+              this.render(template);
+            });
+          }
+          
+          render(template) {
+            this.shadowRoot.innerHTML = template.render({ 
+              time: new Date().toLocaleTimeString() 
+            });
+          }
+        }
+        
+        customElements.define('brutal-test-component', BrutalTestComponent);
+        componentTest.innerHTML = '<p class="success">✅ Component system initialized</p>';
+        log('Component system working', 'success');
+      } catch (error) {
+        componentTest.innerHTML = `<p class="error">❌ Component error: ${error.message}</p>`;
+        log('Component error: ' + error.message, 'error');
+      }
+    }
+    
+    // Test 3: Router
+    const router = new brutal.routing.Router();
+    
+    router.addRoute({
+      path: '/home',
+      component: () => {
+        log('Navigated to /home');
+        return 'Home Page';
+      }
+    });
+    
+    router.addRoute({
+      path: '/users/:id',
+      component: (params) => {
+        log(`Navigated to /users/${params.id}`);
+        return `User ${params.id}`;
+      }
+    });
+    
+    router.addRoute({
+      path: '/about',
+      component: () => {
+        log('Navigated to /about');
+        return 'About Page';
+      }
+    });
+    
+    window.testNavigation = (path) => {
+      router.navigate(path);
+      document.getElementById('router-test').innerHTML = 
+        `<p class="info">Navigated to: ${path}</p>`;
+    };
+    
+    // Test 4: State Management + Events
+    const store = brutal.state.createStore({ count: 0 });
+    const events = new brutal.events.EventEmitter();
+    
+    // Subscribe to store changes
+    store.subscribe((state) => {
+      document.getElementById('counter-display').textContent = state.count;
+      events.emit('count-changed', state.count);
+    });
+    
+    // Listen for count changes
+    events.on('count-changed', (count) => {
+      log(`Counter changed to: ${count}`);
+    });
+    
+    window.incrementCounter = () => {
+      const current = store.getState();
+      store.setState({ count: current.count + 1 });
+    };
+    
+    // Test 5: Cache
+    const cache = new brutal.cache.MemoryCache();
+    cache.set('test-key', { value: 'cached data' });
+    log('Cache test: ' + JSON.stringify(cache.get('test-key')));
+    
+    // Test 6: Templates with complex data
+    const userCardTemplate = brutal.templates.html.template`
+      <div class="user-card">
+        <h4>\${name}</h4>
+        <p>Email: \${email}</p>
+      </div>
+    `;
+    
+    const userData = { name: 'BRUTAL User', email: 'user@brutal.dev' };
+    const renderedCard = userCardTemplate(userData);
+    log('Template rendering: ' + (renderedCard.includes('BRUTAL User') ? 'SUCCESS' : 'FAILED'));
+    
+    // Run all tests
+    testBundleLoading();
+    testComponentSystem();
+    
+    // Final summary
+    setTimeout(() => {
+      const totalTests = 6;
+      const successCount = testResults.filter(r => !r.includes('error')).length;
+      log(`\n=== SUMMARY ===\nTests completed: ${totalTests}\nSuccess rate: ${(successCount/totalTests*100).toFixed(1)}%`);
+    }, 1000);
+  </script>
+</body>
+</html>

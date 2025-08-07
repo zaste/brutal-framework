@@ -1,0 +1,70 @@
+{
+  "name": "@brutal/animation",
+  "timestamp": "2025-07-15T10:24:04.998Z",
+  "exports": {
+    "VERSION": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "easings": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "a": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "tl": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "animate": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "timeline": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "AnimatableProperties": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "EasingFunction": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "EasingName": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "AnimationOptions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "Animation": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "TimelineItem": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "TimelineSequence": {
+      "file": "types.ts",
+      "type": "type"
+    }
+  },
+  "files": [
+    "index.ts",
+    "minimal.ts",
+    "types.ts"
+  ],
+  "bundleSize": 2360,
+  "dependencies": {},
+  "consumers": []
+}

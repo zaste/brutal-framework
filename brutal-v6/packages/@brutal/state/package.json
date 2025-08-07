@@ -1,0 +1,27 @@
+{
+  "name": "@brutal/state",
+  "version": "0.0.1",
+  "description": "BRUTAL State - Zero-ceremony global state",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "size": "node ../../build/check-size.js dist/index.js 1024"
+  },
+  "keywords": [
+    "brutal",
+    "state",
+    "store",
+    "reactive"
+  ],
+  "author": "BRUTAL",
+  "license": "MIT",
+  "devDependencies": {
+    "terser": "^5.43.1",
+    "typescript": "^5.0.0"
+  },
+  "sizeLimit": 1024
+}

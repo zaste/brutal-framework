@@ -1,0 +1,77 @@
+{
+  "name": "@brutal/tools",
+  "version": "5.0.0",
+  "description": "Zero-dependency development tools for BRUTAL V5",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./compatibility": {
+      "import": "./compatibility/index.js",
+      "types": "./compatibility/index.d.ts"
+    },
+    "./performance": {
+      "import": "./performance/index.js",
+      "types": "./performance/index.d.ts"
+    },
+    "./migration": {
+      "import": "./migration/index.js",
+      "types": "./migration/index.d.ts"
+    },
+    "./security": {
+      "import": "./security/index.js",
+      "types": "./security/index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "npm run test:compatibility && npm run test:performance && npm run test:migration && npm run test:security",
+    "test:compatibility": "cd compatibility && npm test",
+    "test:performance": "cd performance && npm test",
+    "test:migration": "cd migration && npm test",
+    "test:security": "cd security && npm test",
+    "test:integration": "tsx integration-tests.ts",
+    "build": "tsc && npm run build:all",
+    "build:all": "cd compatibility && npm run build && cd ../performance && npm run build && cd ../migration && npm run build && cd ../security && npm run build",
+    "clean": "rm -rf dist && npm run clean:all",
+    "clean:all": "cd compatibility && npm run clean && cd ../performance && npm run clean && cd ../migration && npm run clean && cd ../security && npm run clean",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.ts\""
+  },
+  "keywords": [
+    "brutal",
+    "tools",
+    "zero-dependency",
+    "performance",
+    "security",
+    "migration",
+    "compatibility"
+  ],
+  "author": "BRUTAL Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "tsx": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brutal/v5.git",
+    "directory": "tools"
+  },
+  "files": [
+    "dist",
+    "compatibility/dist",
+    "performance/dist",
+    "migration/dist",
+    "security/dist",
+    "README.md",
+    "LICENSE"
+  ]
+}

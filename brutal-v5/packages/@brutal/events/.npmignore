@@ -1,0 +1,25 @@
+# Source
+src/
+tests/
+types/internal.d.ts
+
+# Config
+tsconfig.json
+jest.config.js
+.eslintrc.js
+rollup.config.js
+
+# Development
+*.test.ts
+*.bench.ts
+examples/
+docs/MIGRATION.md
+
+# Build artifacts
+*.tsbuildinfo
+coverage/
+.turbo/
+
+# Misc
+.DS_Store
+*.log

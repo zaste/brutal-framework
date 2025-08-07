@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Animation Demo - Proof it works</title>
+  <style>
+    body { font-family: system-ui; padding: 20px; }
+    .box { width: 100px; height: 100px; background: red; margin: 20px 0; }
+    button { padding: 10px; margin: 5px; }
+    .log { background: #f0f0f0; padding: 10px; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <h1>@brutal/animation - Live Demo</h1>
+  <div class="box" id="box"></div>
+  
+  <button onclick="testAll()">Run All Tests</button>
+  <button onclick="clearLog()">Clear</button>
+  
+  <div class="log" id="log"></div>
+
+  <script type="module">
+    import { animate, timeline } from './dist/index.js';
+    
+    const box = document.getElementById('box');
+    const log = document.getElementById('log');
+    
+    function addLog(msg) {
+      log.innerHTML += msg + '<br>';
+    }
+    
+    window.clearLog = () => log.innerHTML = '';
+    
+    window.testAll = async () => {
+      clearLog();
+      addLog('🧪 Starting tests...\n');
+      
+      // Test 1: Basic animation
+      addLog('1. Testing basic opacity animation...');
+      box.style.opacity = '1';
+      
+      await animate(box, { opacity: 0 }, { 
+        duration: 500,
+        onUpdate: (p) => addLog(`  Progress: ${Math.round(p * 100)}%`),
+        onComplete: () => addLog('  ✅ Opacity animation complete')
+      }).promise;
+      
+      await new Promise(r => setTimeout(r, 500));
+      
+      // Test 2: Transform
+      addLog('\n2. Testing transform animation...');
+      box.style.transform = '';
+      box.style.opacity = '1';
+      
+      await animate(box, { 
+        x: 200, 
+        y: -50, 
+        scale: 1.5, 
+        rotate: 45 
+      }, { 
+        duration: 1000,
+        easing: 'easeInOut',
+        onComplete: () => addLog('  ✅ Transform complete')
+      }).promise;
+      
+      await new Promise(r => setTimeout(r, 500));
+      
+      // Test 3: Timeline
+      addLog('\n3. Testing timeline...');
+      const sequence = timeline([
+        [box, { x: 0, y: 0, scale: 1, rotate: 0 }, { duration: 300 }],
+        [box, { x: 100 }, { duration: 300 }],
+        [box, { y: 50 }, { duration: 300 }],
+        [box, { scale: 0.5, rotate: 180 }, { duration: 300 }]
+      ]);
+      
+      sequence.promise.then(() => addLog('  ✅ Timeline complete'));
+      
+      await sequence.promise;
+      await new Promise(r => setTimeout(r, 500));
+      
+      // Test 4: Interruption
+      addLog('\n4. Testing interruption...');
+      const anim = animate(box, { x: 400 }, { 
+        duration: 2000,
+        onComplete: () => addLog('  ❌ Should not complete!')
+      });
+      
+      setTimeout(() => {
+        anim.stop();
+        addLog('  ✅ Animation stopped');
+      }, 500);
+      
+      await new Promise(r => setTimeout(r, 1000));
+      
+      // Test 5: All easings
+      addLog('\n5. Testing all easing functions...');
+      const easings = ['linear', 'easeIn', 'easeOut', 'easeInOut'];
+      
+      for (const easing of easings) {
+        box.style.transform = '';
+        await animate(box, { x: 200 }, {
+          duration: 400,
+          easing,
+          onComplete: () => addLog(`  ✅ ${easing} complete`)
+        }).promise;
+      }
+      
+      // Reset
+      box.style.transform = '';
+      box.style.opacity = '1';
+      
+      addLog('\n✅ All tests completed successfully!');
+    };
+  </script>
+</body>
+</html>

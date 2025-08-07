@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>@brutal/state - TODO App</title>
+  <style>
+    body { font-family: system-ui; padding: 2rem; max-width: 600px; margin: 0 auto; }
+    input { width: 100%; padding: 0.5rem; font-size: 1rem; }
+    .todo { padding: 0.5rem; border-bottom: 1px solid #eee; cursor: pointer; }
+    .todo.done { text-decoration: line-through; opacity: 0.5; }
+    nav { margin-top: 1rem; }
+    nav a { margin-right: 1rem; cursor: pointer; color: blue; }
+    nav a.active { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>TODO App - @brutal/state</h1>
+  <div id="app"></div>
+  
+  <script type="module">
+    import { compose, withEvents } from '../../core/dist/index.js';
+    import { html, render } from '../../dom/dist/brutal-dom.min.js';
+    import { createStore, withStore } from '../dist/index.js';
+    
+    // Create TODO store (10 lines)
+    const todoStore = createStore({
+      todos: [],
+      filter: 'all',
+      
+      add(state, text) {
+        return { 
+          todos: [...state.todos, { id: Date.now(), text, done: false }] 
+        };
+      },
+      
+      toggle(state, id) {
+        return {
+          todos: state.todos.map(t => 
+            t.id === id ? { ...t, done: !t.done } : t
+          )
+        };
+      },
+      
+      remove(state, id) {
+        return { 
+          todos: state.todos.filter(t => t.id !== id) 
+        };
+      },
+      
+      setFilter(state, filter) {
+        return { filter };
+      },
+      
+      clearCompleted(state) {
+        return { 
+          todos: state.todos.filter(t => !t.done) 
+        };
+      }
+    });
+    
+    // TODO App Component (25 lines)
+    function TodoApp() {
+      const element = document.createElement('div');
+      
+      const update = () => {
+        const { todos, filter, add, toggle, remove, setFilter, clearCompleted } = todoStore;
+        
+        const filteredTodos = todos.filter(t => 
+          filter === 'all' || (filter === 'active' ? !t.done : t.done)
+        );
+        
+        render(html`
+          <div>
+            <input 
+              id="newTodo"
+              placeholder="What needs to be done?" 
+              onkeypress=${(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  add(e.target.value.trim());
+                  e.target.value = '';
+                }
+              }}
+            />
+            
+            <div>
+              ${filteredTodos.map(todo => html`
+                <div class="todo ${todo.done ? 'done' : ''}" onclick=${() => toggle(todo.id)}>
+                  ${todo.text}
+                  <button onclick=${(e) => { e.stopPropagation(); remove(todo.id); }}>×</button>
+                </div>
+              `)}
+            </div>
+            
+            ${todos.length > 0 ? html`
+              <nav>
+                <a class=${filter === 'all' ? 'active' : ''} onclick=${() => setFilter('all')}>
+                  All (${todos.length})
+                </a>
+                <a class=${filter === 'active' ? 'active' : ''} onclick=${() => setFilter('active')}>
+                  Active (${todos.filter(t => !t.done).length})
+                </a>
+                <a class=${filter === 'done' ? 'active' : ''} onclick=${() => setFilter('done')}>
+                  Completed (${todos.filter(t => t.done).length})
+                </a>
+                ${todos.some(t => t.done) ? html`
+                  <a onclick=${() => clearCompleted()}>Clear completed</a>
+                ` : ''}
+              </nav>
+            ` : ''}
+          </div>
+        `, element);
+      };
+      
+      // Subscribe to store changes
+      todoStore.subscribe(update);
+      
+      return element;
+    }
+    
+    // Mount the app
+    document.getElementById('app').appendChild(TodoApp());
+    
+    // Add some initial todos
+    todoStore.add('Learn BRUTAL');
+    todoStore.add('Build something amazing');
+    todoStore.add('Ship it!');
+    
+    // Log store info
+    console.log('TODO Store:', todoStore);
+    console.log('Total lines of code: ~35');
+  </script>
+</body>
+</html>

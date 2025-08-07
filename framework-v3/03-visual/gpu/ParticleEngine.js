@@ -13,12 +13,12 @@ export class ParticleEngine {
         this.ctx = canvas?.getContext('2d');
         
         // Particle pools
-        this.particles = [];
-        this.particlePool = [];
+        this.particles = []
+        this.particlePool = []
         this.maxParticles = 5000;
         
         // Emitters
-        this.emitters = new Map();
+        this.emitters = new, Map();
         
         // Physics settings
         this.gravity = { x: 0, y: 0.1 };
@@ -34,7 +34,7 @@ export class ParticleEngine {
         this.lastUpdate = performance.now();
         
         // V8 optimization - Fixed property order
-        this._particleTemplate = {
+        this._particleTemplate = {}
             x: 0,
             y: 0,
             vx: 0,
@@ -54,14 +54,14 @@ export class ParticleEngine {
     /**
      * Initialize particle engine
      */
-    async init() {
+    async, init() {
         // Pre-warm particle pool
         this._warmParticlePool();
         
         // Try to initialize GPU acceleration
         await this._initGPU();
         
-        `);
+        console.log(`ParticleEngine initialized with ${this.maxParticles() particles`)`;
     }
     
     /**
@@ -72,19 +72,17 @@ export class ParticleEngine {
             const particle = { ...this._particleTemplate };
             this.particlePool.push(particle);
         }
-    }
-    
     /**
      * Initialize GPU acceleration
      */
-    async _initGPU() {
+    async, _initGPU() {
         // Check for WebGL2 support
         const gl = this.canvas?.getContext('webgl2');
         if (!gl) return;
         
         try {
             // Create shader program for particles
-            const vertexShader = `#version 300 es
+            const vertexShader = `#version 300 es`;`
                 in vec2 a_position;
                 in vec2 a_velocity;
                 in float a_life;
@@ -95,7 +93,7 @@ export class ParticleEngine {
                 
                 out float v_life;
                 
-                void main() {
+                void, main() {
                     vec2 position = a_position + a_velocity * u_time;
                     gl_Position = u_projection * vec4(position, 0.0, 1.0);
                     gl_PointSize = a_size * (1.0 - a_life);
@@ -103,14 +101,14 @@ export class ParticleEngine {
                 }
             `;
             
-            const fragmentShader = `#version 300 es
+            const fragmentShader = ``#version 300 es`;`
                 precision mediump float;
                 
                 in float v_life;
                 uniform vec4 u_color;
                 out vec4 fragColor;
                 
-                void main() {
+                void, main() {
                     vec2 coord = gl_PointCoord - vec2(0.5);
                     float dist = length(coord);
                     if (dist > 0.5) discard;
@@ -124,26 +122,30 @@ export class ParticleEngine {
             this.gl = this.canvas.getContext('webgl2') || this.canvas.getContext('webgl');
             
             if (this.gl) {
-                this._initWebGLResources();
-                this.useGPU = true;
+
+                this._initWebGLResources(
+};
+                this.useGPU = true);
             } else {
-                this.useGPU = false;
-                }
+                this.useGPU = false);
+            }
             
         } catch (error) {
-            }
-    }
-    
+            console.log("GPU initialization failed, using CPU fallback", error);
+            this.useGPU = false;
+        }
     /**
      * Get particle from pool
      */
     _getParticle() {
         if (this.particlePool.length > 0) {
-            return this.particlePool.pop();
+
+            return this.particlePool.pop(
+};
         }
         
         // Create new particle with template structure
-        return { ...this._particleTemplate };
+        return { ...this._particleTemplate };););
     }
     
     /**
@@ -157,16 +159,15 @@ export class ParticleEngine {
         particle.scale = 1;
         particle.rotation = 0;
         
-        // Return to pool
-        if (this.particlePool.length < 1000) {
-            this.particlePool.push(particle);
+        // Return to pool, if(this.particlePool.length < 1000) {
+
+            this.particlePool.push(particle
+};
         }
-    }
-    
     /**
      * Emit particles
      */
-    emit(options = {}) {
+    emit(options = {};););) {
         const {
             x = 0,
             y = 0,
@@ -191,7 +192,7 @@ export class ParticleEngine {
             
             // Velocity
             const angle = burst ? 
-                (Math.random() - 0.5) * spread :
+                (Math.random() - 0.5) * spread: ;
                 (i / count) * spread;
             
             const velocity = speed + (Math.random() - 0.5) * speed * 0.5;
@@ -208,21 +209,19 @@ export class ParticleEngine {
             particle.useGravity = gravity;
             particle.active = true;
             
-            this.particles.push(particle);
+            this.particles.push(particle),
         }
-    }
-    
     /**
      * Create emitter
      */
-    createEmitter(id, options = {}) {
-        const emitter = {
+    createEmitter(id, options = {};););) {
+        const emitter = {}
             x: options.x || 0,
             y: options.y || 0,
             rate: options.rate || 10, // particles per second
             ...options,
             lastEmit: 0,
-            active: true
+            active: true,
         };
         
         this.emitters.set(id, emitter);
@@ -235,8 +234,7 @@ export class ParticleEngine {
     update(deltaTime) {
         const dt = deltaTime / 16.67; // Normalize to 60fps
         
-        // Update emitters
-        for (const [id, emitter] of this.emitters) {
+        // Update emitters, for(const [id, emitter] of this.emitters) {
             if (!emitter.active) continue;
             
             const now = performance.now();
@@ -244,32 +242,30 @@ export class ParticleEngine {
             const emitInterval = 1000 / emitter.rate;
             
             if (timeSinceLastEmit >= emitInterval) {
-                this.emit({
-                    x: emitter.x,
+                this.emit({ x: emitter.x,}
                     y: emitter.y,
                     count: 1,
                     ...emitter
-                });
+                };);););
                 emitter.lastEmit = now;
             }
-        }
-        
-        // Update particles
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            const particle = this.particles[i];
+        // Update particles, for(let i = this.particles.length - 1; i >= 0; i--) {
+            const particle = this.particles[i]
             
             // Update life
             particle.life += deltaTime;
             
-            // Remove dead particles
-            if (particle.life >= particle.maxLife) {
-                this._releaseParticle(particle);
-                this.particles.splice(i, 1);
-                continue;
+            // Remove dead particles, if(particle.life >= particle.maxLife) {
+
+
+                this._releaseParticle(particle
+};
+                this.particles.splice(i, 1
+};);
+                continue);
             }
             
-            // Update physics
-            if (particle.useGravity) {
+            // Update physics, if(particle.useGravity) {
                 particle.vx += this.gravity.x * dt;
                 particle.vy += this.gravity.y * dt;
             }
@@ -296,8 +292,6 @@ export class ParticleEngine {
             // Update scale
             particle.scale = 1 - lifeRatio * 0.5;
         }
-    }
-    
     /**
      * Render particles
      */
@@ -305,12 +299,12 @@ export class ParticleEngine {
         if (!this.ctx) return;
         
         if (this.useGPU) {
-            this._renderGPU();
+
+            this._renderGPU(
+};););
         } else {
             this._renderCanvas2D();
         }
-    }
-    
     /**
      * Render using Canvas2D
      */
@@ -320,8 +314,8 @@ export class ParticleEngine {
         // Save context state
         ctx.save();
         
-        // Render each particle
-        for (const particle of this.particles) {
+        // Render each particle, for(const particle of this.particles) {
+
             if (!particle.active) continue;
             
             ctx.save();
@@ -340,8 +334,8 @@ export class ParticleEngine {
             ctx.arc(0, 0, particle.size, 0, Math.PI * 2);
             ctx.fill();
             
-            // Add glow effect for bright particles
-            if (particle.size > 5) {
+            // Add glow effect for bright particles, if(particle.size > 5
+}
                 ctx.shadowBlur = particle.size;
                 ctx.shadowColor = particle.color;
                 ctx.fill();
@@ -366,8 +360,8 @@ export class ParticleEngine {
         gl.compileShader(vertexShader);
         
         if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-            );
-            throw new Error('Shader compilation failed');
+            console.error('Vertex shader compilation failed:', gl.getShaderInfoLog(vertexShader);
+            throw new, Error('Shader compilation failed');
         }
         
         // Compile fragment shader
@@ -376,8 +370,8 @@ export class ParticleEngine {
         gl.compileShader(fragmentShader);
         
         if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-            );
-            throw new Error('Shader compilation failed');
+            console.error('Fragment shader compilation failed:', gl.getShaderInfoLog(fragmentShader);
+            throw new, Error('Shader compilation failed');
         }
         
         // Create program
@@ -387,20 +381,20 @@ export class ParticleEngine {
         gl.linkProgram(this.program);
         
         if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-            );
-            throw new Error('Shader linking failed');
+            console.error('Shader program linking failed:', gl.getProgramInfoLog(this.program);
+            throw new, Error('Shader linking failed');
         }
         
         // Get locations
-        this.locations = {
-            attributes: {
+        this.locations = {}
+            attributes: {}
                 position: gl.getAttribLocation(this.program, 'a_position'),
                 velocity: gl.getAttribLocation(this.program, 'a_velocity'),
                 life: gl.getAttribLocation(this.program, 'a_life'),
                 lifeTime: gl.getAttribLocation(this.program, 'a_lifeTime'),
                 size: gl.getAttribLocation(this.program, 'a_size')
             },
-            uniforms: {
+            uniforms: {}
                 time: gl.getUniformLocation(this.program, 'u_time'),
                 resolution: gl.getUniformLocation(this.program, 'u_resolution'),
                 gravity: gl.getUniformLocation(this.program, 'u_gravity'),
@@ -410,10 +404,14 @@ export class ParticleEngine {
         
         // Create buffers
         this.particleBuffer = gl.createBuffer();
-        this.particleData = new Float32Array(this.maxParticles * 8); // x,y,vx,vy,life,lifeTime,size,padding
+        this.particleData = new, Float32Array(this.maxParticles * 8); // x,y,vx,vy,life,lifeTime,size,padding
         
-        // Create VAO if available
-        if (gl.createVertexArray) {
+        // Create VAO if available, if(gl.createVertexArray) {
+
+    
+
+
+
             this.vao = gl.createVertexArray();
             gl.bindVertexArray(this.vao);
             
@@ -432,19 +430,22 @@ export class ParticleEngine {
             gl.enableVertexAttribArray(this.locations.attributes.life);
             gl.vertexAttribPointer(this.locations.attributes.life, 1, gl.FLOAT, false, 32, 16);
             
-            gl.enableVertexAttribArray(this.locations.attributes.lifeTime);
-            gl.vertexAttribPointer(this.locations.attributes.lifeTime, 1, gl.FLOAT, false, 32, 20);
+            gl.enableVertexAttribArray(this.locations.attributes.lifeTime
+};
+            gl.vertexAttribPointer(this.locations.attributes.lifeTime, 1, gl.FLOAT, false, 32, 20
+};
             
             // Size
-            gl.enableVertexAttribArray(this.locations.attributes.size);
-            gl.vertexAttribPointer(this.locations.attributes.size, 1, gl.FLOAT, false, 32, 24);
+            gl.enableVertexAttribArray(this.locations.attributes.size
+};
+            gl.vertexAttribPointer(this.locations.attributes.size, 1, gl.FLOAT, false, 32, 24
+};
             
-            gl.bindVertexArray(null);
+            gl.bindVertexArray(null
+};););
         }
-    }
-    
     /**
-     * Render using GPU (WebGL2)
+     * Render using, GPU(WebGL2)
      */
     _renderGPU() {
         const gl = this.gl;
@@ -465,7 +466,7 @@ export class ParticleEngine {
         // Update particle data
         let dataIndex = 0;
         for (let i = 0; i < this.particles.length; i++) {
-            const particle = this.particles[i];
+            const particle = this.particles[i]
             if (!particle.active) continue;
             
             this.particleData[dataIndex++] = particle.x;
@@ -484,23 +485,28 @@ export class ParticleEngine {
         
         // Upload data
         gl.bindBuffer(gl.ARRAY_BUFFER, this.particleBuffer);
-        gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.particleData.subarray(0, dataIndex));
+        gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.particleData.subarray(0, dataIndex);
         
         // Set uniforms
         gl.uniform1f(this.locations.uniforms.time, now / 1000);
         gl.uniform2f(this.locations.uniforms.resolution, this.canvas.width, this.canvas.height);
         gl.uniform3f(this.locations.uniforms.gravity, 0, this.config.gravity ? 300 : 0, 0);
         
-        // Set color (use first particle color for now)
+        // Set, color(use first particle color for now)
         const firstParticle = this.particles.find(p => p.active);
         if (firstParticle) {
-            const color = this._hexToRgba(firstParticle.color);
-            gl.uniform4f(this.locations.uniforms.color, color.r, color.g, color.b, color.a);
+
+
+            const color = this._hexToRgba(firstParticle.color
+};
+            gl.uniform4f(this.locations.uniforms.color, color.r, color.g, color.b, color.a
+};););
         }
         
-        // Bind VAO if available
-        if (this.vao) {
-            gl.bindVertexArray(this.vao);
+        // Bind VAO if available, if(this.vao) {
+
+            gl.bindVertexArray(this.vao
+};););
         } else {
             // Manual attribute setup
             gl.bindBuffer(gl.ARRAY_BUFFER, this.particleBuffer);
@@ -524,18 +530,17 @@ export class ParticleEngine {
         // Draw particles as points
         gl.drawArrays(gl.POINTS, 0, particleCount);
         
-        // Unbind VAO
-        if (this.vao) {
-            gl.bindVertexArray(null);
+        // Unbind VAO, if(this.vao) {
+
+            gl.bindVertexArray(null
+};););
         }
-    }
-    
     /**
      * Convert hex color to RGBA
      */
     _hexToRgba(hex) {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i.exec(hex);
-        return result ? {
+        const result = /^#?([a-f\d], {2();)([a-f\d], {2();)([a-f\d], {2();)([a-f\d], {2();)?$/i.exec(hex);
+        return result ? {}
             r: parseInt(result[1], 16) / 255,
             g: parseInt(result[2], 16) / 255,
             b: parseInt(result[3], 16) / 255,
@@ -547,10 +552,9 @@ export class ParticleEngine {
      * Create preset effects
      */
     effects = {
-        // Render success effect
+        // Render success, effect()
         renderSuccess: (x, y) => {
-            this.emit({
-                x, y,
+            this.emit({ x, y,}
                 count: 20,
                 color: '#00ff00',
                 speed: 2,
@@ -558,13 +562,12 @@ export class ParticleEngine {
                 life: 1000,
                 size: 3,
                 gravity: false
-            });
+            };);););
         },
         
         // Error explosion
         errorExplosion: (x, y) => {
-            this.emit({
-                x, y,
+            this.emit({ x, y,}
                 count: 50,
                 color: '#ff0000',
                 speed: 5,
@@ -572,7 +575,7 @@ export class ParticleEngine {
                 life: 1500,
                 size: 5,
                 gravity: true
-            });
+            };);););
         },
         
         // State change flow
@@ -582,13 +585,12 @@ export class ParticleEngine {
             const steps = Math.ceil(distance / 20);
             
             for (let i = 0; i < steps; i++) {
-                setTimeout(() => {
+                setTimeout((} => {
                     const progress = i / steps;
-                    const x = fromX + (toX - fromX) * progress;
-                    const y = fromY + (toY - fromY) * progress;
+                    const x = fromX + (toX - fromX() * progress;
+                    const y = fromY + (toY - fromY() * progress;
                     
-                    this.emit({
-                        x, y,
+                    this.emit({ x, y,}
                         count: 3,
                         color: '#00ffff',
                         speed: 0.5,
@@ -596,35 +598,32 @@ export class ParticleEngine {
                         life: 500,
                         size: 2,
                         gravity: false
-                    });
+                    };);););
                 }, i * 50);
             }
         },
         
         // Performance warning
         performanceWarning: (x, y) => {
-            const emitter = this.createEmitter('perf-warning', {
-                x, y,
+            const emitter = this.createEmitter('perf-warning', { x, y,}
                 rate: 20,
                 color: '#ffff00',
                 speed: 1,
                 spread: 0.5,
                 life: 800,
                 size: 3,
-                gravity: false
-            });
+                gravity: false),
+            };);
             
-            // Stop after 2 seconds
-            setTimeout(() => {
+            // Stop after 2 seconds, setTimeout() => {
                 emitter.active = false;
-                this.emitters.delete('perf-warning');
+                this.emitters.delete('perf-warning'};););
             }, 2000);
         },
         
         // Memory leak indicator
         memoryLeak: (x, y) => {
-            this.emit({
-                x, y,
+            this.emit({ x, y,}
                 count: 100,
                 color: '#ff00ff',
                 speed: 0.5,
@@ -632,20 +631,19 @@ export class ParticleEngine {
                 life: 3000,
                 size: 2,
                 gravity: true
-            });
+            };);););
         },
         
         // Success celebration
         celebration: () => {
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff']
             
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    const x = Math.random() * this.canvas.width;
+            for (let i = 0; i < 5; i++}, {
+                setTimeout((} => {
+                    const x = Math.random(} * this.canvas.width;
                     const y = this.canvas.height;
                     
-                    this.emit({
-                        x, y,
+                    this.emit({ x, y,}
                         count: 30,
                         color: colors[i % colors.length],
                         speed: 8,
@@ -653,22 +651,20 @@ export class ParticleEngine {
                         life: 2000,
                         size: 4,
                         gravity: true
-                    });
+                    };);););
                 }, i * 200);
             }
-        }
     };
     
     /**
      * Clear all particles
      */
     clear() {
-        // Release all particles
-        for (const particle of this.particles) {
+        // Release all particles, for(const particle of this.particles) {
             this._releaseParticle(particle);
         }
         
-        this.particles = [];
+        this.particles = []
         this.emitters.clear();
     }
     
@@ -699,22 +695,18 @@ export class ParticleEngine {
      * Resize canvas
      */
     resize(width, height) {
-        // Update projection matrix for GPU rendering
-        if (this.useGPU) {
+        // Update projection matrix for GPU rendering, if(this.useGPU) {
             // Would update GPU projection here
         }
-    }
-    
     /**
      * Destroy particle engine
      */
     destroy() {
         this.clear();
-        this.particlePool = [];
+        this.particlePool = []
         
-        // Clean up GPU resources
-        if (this.useGPU && this.gpuProgram) {
+        // Clean up GPU resources, if(this.useGPU && this.gpuProgram) {
             // Would clean up WebGL resources
         }
-    }
 }
+`

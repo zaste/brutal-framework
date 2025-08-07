@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V3 - Detailed Error Test</title>
+</head>
+<body>
+    <h1>BRUTAL Framework V3 - Detailed Error Test</h1>
+    <div id="status">Testing imports one by one...</div>
+    
+    <script type="module">
+        const status = document.getElementById('status');
+        let results = [];
+        
+        // Test imports individually
+        async function testImport(path, name) {
+            try {
+                const module = await import(path);
+                results.push(`✅ ${name}: Loaded successfully (${Object.keys(module).length} exports)`);
+                return module;
+            } catch (error) {
+                results.push(`❌ ${name}: ${error.message}`);
+                console.error(`Error loading ${path}:`, error);
+                return null;
+            }
+        }
+        
+        // Test core modules
+        await testImport('./01-core/index.js', 'Core');
+        await testImport('./02-performance/index.js', 'Performance');
+        await testImport('./03-visual/index.js', 'Visual');
+        
+        // Test individual core files
+        await testImport('./01-core/Component.js', 'Component');
+        await testImport('./01-core/State.js', 'State');
+        await testImport('./01-core/Router.js', 'Router');
+        await testImport('./01-core/Registry.js', 'Registry');
+        await testImport('./01-core/Template.js', 'Template');
+        await testImport('./01-core/events.js', 'Events');
+        await testImport('./01-core/Float64Atomics.js', 'Float64Atomics');
+        
+        // Test main index
+        const main = await testImport('./index.js', 'Main Index');
+        
+        // Display results
+        status.innerHTML = `
+            <h2>Import Test Results</h2>
+            <pre>${results.join('\n')}</pre>
+            ${main ? `
+                <h3>Framework Info</h3>
+                <p>Version: ${main.VERSION || 'N/A'}</p>
+                <p>Build: ${main.BUILD || 'N/A'}</p>
+                <p>window.__BRUTAL__: ${window.__BRUTAL__ ? 'Available' : 'Not available'}</p>
+            ` : ''}
+        `;
+    </script>
+</body>
+</html>

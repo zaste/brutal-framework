@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>@brutal/dom - Basic Example</title>
+  <style>
+    body { font-family: system-ui; padding: 2rem; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; }
+    .card { 
+      border: 2px solid #000; 
+      padding: 1rem; 
+      margin: 1rem 0;
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>@brutal/dom Examples</h1>
+  
+  <div id="example1"></div>
+  <div id="example2"></div>
+  <div id="example3"></div>
+  
+  <script type="module">
+    import { html, render, mount, query } from '../dist/index.js';
+    
+    // Example 1: Basic template
+    const greeting = name => html`
+      <div class="card">
+        <h2>Hello, ${name}!</h2>
+        <p>This is a basic template example.</p>
+      </div>
+    `;
+    
+    render(greeting('BRUTAL'), { 
+      target: query('#example1'),
+      position: 'append' 
+    });
+    
+    // Example 2: Interactive counter
+    function Counter() {
+      let count = 0;
+      
+      const increment = () => {
+        count++;
+        update();
+      };
+      
+      const view = () => html`
+        <div class="card">
+          <h3>Counter: ${count}</h3>
+          <button onclick=${increment}>Increment</button>
+        </div>
+      `;
+      
+      const update = () => {
+        render(view(), { target: element });
+      };
+      
+      const element = render(view(), {
+        target: query('#example2'),
+        position: 'append'
+      });
+      
+      return { view, update };
+    }
+    
+    mount(Counter, query('#example2'));
+    
+    // Example 3: Dynamic list
+    function TodoList() {
+      const todos = ['Learn BRUTAL', 'Build something', 'Ship it'];
+      
+      const view = () => html`
+        <div class="card">
+          <h3>Todo List</h3>
+          <ul>
+            ${todos.map((todo, i) => html`
+              <li>${todo} <button onclick=${() => removeTodo(i)}>×</button></li>
+            `)}
+          </ul>
+          <input id="newTodo" placeholder="Add todo..." />
+          <button onclick=${addTodo}>Add</button>
+        </div>
+      `;
+      
+      const addTodo = () => {
+        const input = query('#newTodo');
+        if (input?.value) {
+          todos.push(input.value);
+          input.value = '';
+          update();
+        }
+      };
+      
+      const removeTodo = (index) => {
+        todos.splice(index, 1);
+        update();
+      };
+      
+      const update = () => {
+        render(view(), { target: element });
+      };
+      
+      const element = render(view(), {
+        target: query('#example3'),
+        position: 'append'
+      });
+      
+      return { view, update };
+    }
+    
+    mount(TodoList, query('#example3'));
+    
+    // Log package info
+    console.log('@brutal/dom loaded successfully');
+  </script>
+</body>
+</html>

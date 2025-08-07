@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTAL V5 - Counter App</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .counter {
+      text-align: center;
+      padding: 40px;
+      border: 2px solid #333;
+      border-radius: 8px;
+    }
+    .count {
+      font-size: 48px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 0 10px;
+      cursor: pointer;
+      border: 2px solid #333;
+      background: white;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #333;
+      color: white;
+    }
+    .log {
+      margin-top: 40px;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>BRUTAL V5 - Counter App Demo</h1>
+  <p>Zero dependencies. Pure web platform.</p>
+  
+  <div id="app"></div>
+  
+  <div class="log" id="log">
+    <strong>Event Log:</strong><br>
+  </div>
+
+  <script type="module">
+    // Import from built packages
+    import { registry, configLoader } from '../packages/@brutal/foundation/dist/index.js';
+    import { BrutalError } from '../packages/@brutal/shared/dist/index.js';
+    import { EventEmitter } from '../packages/@brutal/events/dist/index.js';
+    import { BrutalComponent } from '../packages/@brutal/components/dist/index.js';
+    import { createStore } from '../packages/@brutal/state/dist/index.js';
+    
+    // Logging helper
+    const log = (msg) => {
+      const logEl = document.getElementById('log');
+      logEl.innerHTML += `${new Date().toLocaleTimeString()}: ${msg}<br>`;
+      logEl.scrollTop = logEl.scrollHeight;
+    };
+    
+    // Initialize BRUTAL
+    log('🚀 Initializing BRUTAL V5...');
+    
+    configLoader.load({ debug: true });
+    registry.register('@brutal/counter-app', '1.0.0');
+    
+    // Create global event bus
+    const eventBus = new EventEmitter();
+    
+    // Create state store
+    const store = createStore({ 
+      count: 0,
+      history: []
+    });
+    
+    // Subscribe to state changes
+    store.subscribe((state) => {
+      log(`📊 State updated: count = ${state.count}`);
+      eventBus.emit('state:changed', state);
+    });
+    
+    // Counter Component
+    class CounterComponent extends BrutalComponent {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+      }
+      
+      init() {
+        log('🎯 Counter component initialized');
+        
+        // Listen for state changes
+        eventBus.on('state:changed', (state) => {
+          this.updateCount(state.count);
+        });
+        
+        this.render();
+        this.attachEvents();
+      }
+      
+      render() {
+        this.shadowRoot.innerHTML = `
+          <style>
+            :host {
+              display: block;
+            }
+            .counter {
+              text-align: center;
+              padding: 40px;
+              border: 2px solid #333;
+              border-radius: 8px;
+            }
+            .count {
+              font-size: 48px;
+              font-weight: bold;
+              margin: 20px 0;
+            }
+            button {
+              font-size: 18px;
+              padding: 10px 20px;
+              margin: 0 10px;
+              cursor: pointer;
+              border: 2px solid #333;
+              background: white;
+              border-radius: 4px;
+            }
+            button:hover {
+              background: #333;
+              color: white;
+            }
+          </style>
+          <div class="counter">
+            <h2>BRUTAL Counter</h2>
+            <div class="count" id="count">0</div>
+            <div>
+              <button id="decrement">-1</button>
+              <button id="increment">+1</button>
+              <button id="reset">Reset</button>
+            </div>
+          </div>
+        `;
+      }
+      
+      attachEvents() {
+        const increment = this.shadowRoot.getElementById('increment');
+        const decrement = this.shadowRoot.getElementById('decrement');
+        const reset = this.shadowRoot.getElementById('reset');
+        
+        increment.addEventListener('click', () => {
+          const state = store.getState();
+          store.setState({ 
+            count: state.count + 1,
+            history: [...state.history, '+1']
+          });
+          log('➕ Increment clicked');
+        });
+        
+        decrement.addEventListener('click', () => {
+          const state = store.getState();
+          store.setState({ 
+            count: state.count - 1,
+            history: [...state.history, '-1']
+          });
+          log('➖ Decrement clicked');
+        });
+        
+        reset.addEventListener('click', () => {
+          store.setState({ 
+            count: 0,
+            history: []
+          });
+          log('🔄 Reset clicked');
+        });
+      }
+      
+      updateCount(count) {
+        const countEl = this.shadowRoot.getElementById('count');
+        if (countEl) {
+          countEl.textContent = count;
+        }
+      }
+    }
+    
+    // Register component
+    customElements.define('brutal-counter', CounterComponent);
+    log('✅ Component registered: brutal-counter');
+    
+    // Mount app
+    const app = document.getElementById('app');
+    const counter = document.createElement('brutal-counter');
+    app.appendChild(counter);
+    
+    log('✨ BRUTAL V5 Counter App ready!');
+    
+    // Test error handling
+    try {
+      throw new BrutalError('Test error', 'DEMO_001');
+    } catch (error) {
+      log(`⚠️ Caught error: ${error.message} (${error.code})`);
+    }
+  </script>
+</body>
+</html>

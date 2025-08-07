@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Animation Test Suite - Real Browser</title>
+  <style>
+    body { 
+      font-family: system-ui; 
+      max-width: 800px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .test-area {
+      border: 2px solid #ccc;
+      padding: 20px;
+      margin: 20px 0;
+      min-height: 150px;
+      position: relative;
+    }
+    .box {
+      width: 50px;
+      height: 50px;
+      background: #007bff;
+      position: absolute;
+      top: 50px;
+      left: 0;
+    }
+    .result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .pass { background: #d4edda; color: #155724; }
+    .fail { background: #f8d7da; color: #721c24; }
+    .running { background: #fff3cd; color: #856404; }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover { background: #0056b3; }
+    code { 
+      background: #f8f9fa; 
+      padding: 2px 5px; 
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <h1>@brutal/animation - Complete Test Suite</h1>
+  <p>This proves all functionality works 100% in real browser environment.</p>
+  
+  <button onclick="runAllTests()">Run All Tests</button>
+  
+  <div id="results"></div>
+  
+  <div class="test-area">
+    <div class="box" id="test-box"></div>
+  </div>
+
+  <script type="module">
+    import { animate, timeline, easings } from './dist/index.js';
+    
+    const results = document.getElementById('results');
+    const box = document.getElementById('test-box');
+    let testCount = 0;
+    let passCount = 0;
+    
+    function assert(condition, message) {
+      testCount++;
+      const result = document.createElement('div');
+      result.className = condition ? 'result pass' : 'result fail';
+      result.innerHTML = `${condition ? '✅' : '❌'} ${message}`;
+      results.appendChild(result);
+      if (condition) passCount++;
+      return condition;
+    }
+    
+    function resetBox() {
+      box.style.transform = '';
+      box.style.opacity = '1';
+      box.style.willChange = 'auto';
+    }
+    
+    async function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    window.runAllTests = async () => {
+      results.innerHTML = '<div class="result running">🔄 Running tests...</div>';
+      testCount = 0;
+      passCount = 0;
+      
+      // Test 1: API exists
+      assert(typeof animate === 'function', 'animate function exists');
+      assert(typeof timeline === 'function', 'timeline function exists');
+      assert(typeof easings === 'object', 'easings object exists');
+      
+      // Test 2: Easing functions
+      assert(easings.linear(0.5) === 0.5, 'linear easing works');
+      assert(easings.easeIn(0.5) === 0.25, 'easeIn easing works');
+      assert(easings.easeOut(0.5) === 0.75, 'easeOut easing works');
+      assert(Math.abs(easings.easeInOut(0.5) - 0.5) < 0.01, 'easeInOut easing works');
+      
+      // Test 3: Return value structure
+      resetBox();
+      const anim = animate(box, { x: 100 }, { duration: 100 });
+      assert(typeof anim.stop === 'function', 'animate returns stop function');
+      assert(anim.promise instanceof Promise, 'animate returns promise');
+      anim.stop();
+      await wait(150);
+      
+      // Test 4: Basic animation works
+      resetBox();
+      const startTime = Date.now();
+      await animate(box, { x: 100 }, { duration: 200 }).promise;
+      const duration = Date.now() - startTime;
+      assert(duration >= 180 && duration <= 250, `Animation duration correct (${duration}ms)`);
+      assert(box.style.transform.includes('100px'), 'Transform applied correctly');
+      
+      // Test 5: Opacity animation
+      resetBox();
+      await animate(box, { opacity: 0.5 }, { duration: 100 }).promise;
+      assert(box.style.opacity === '0.5', 'Opacity animated correctly');
+      
+      // Test 6: Multiple properties
+      resetBox();
+      await animate(box, { 
+        x: 50, 
+        y: 25, 
+        scale: 1.5, 
+        rotate: 90 
+      }, { duration: 200 }).promise;
+      
+      const transform = box.style.transform;
+      assert(transform.includes('translate(50px'), 'X translation applied');
+      assert(transform.includes('25px)'), 'Y translation applied');
+      assert(transform.includes('scale(1.5)'), 'Scale applied');
+      assert(transform.includes('rotate(90deg)'), 'Rotation applied');
+      
+      // Test 7: Callbacks
+      resetBox();
+      let updateCount = 0;
+      let completeCalled = false;
+      
+      await animate(box, { x: 100 }, {
+        duration: 200,
+        onUpdate: (progress) => {
+          updateCount++;
+          assert(progress >= 0 && progress <= 1, `Progress in range: ${progress}`);
+        },
+        onComplete: () => {
+          completeCalled = true;
+        }
+      }).promise;
+      
+      assert(updateCount > 5, `onUpdate called multiple times (${updateCount})`);
+      assert(completeCalled, 'onComplete called');
+      
+      // Test 8: Delay
+      resetBox();
+      const delayStart = Date.now();
+      await animate(box, { x: 100 }, { 
+        duration: 100, 
+        delay: 100 
+      }).promise;
+      const totalTime = Date.now() - delayStart;
+      assert(totalTime >= 180 && totalTime <= 250, `Delay works (${totalTime}ms total)`);
+      
+      // Test 9: Stop functionality
+      resetBox();
+      const stoppableAnim = animate(box, { x: 200 }, { duration: 500 });
+      await wait(100);
+      stoppableAnim.stop();
+      const stoppedX = box.style.transform;
+      await wait(500);
+      assert(box.style.transform === stoppedX, 'Animation stopped correctly');
+      
+      // Test 10: Custom easing
+      resetBox();
+      let customEasingCalled = false;
+      await animate(box, { x: 100 }, {
+        duration: 100,
+        easing: (t) => {
+          customEasingCalled = true;
+          return t * t;
+        }
+      }).promise;
+      assert(customEasingCalled, 'Custom easing function called');
+      
+      // Test 11: Timeline
+      resetBox();
+      const timelineStart = Date.now();
+      await timeline([
+        [box, { x: 50 }, { duration: 100 }],
+        [box, { y: 50 }, { duration: 100 }],
+        [box, { scale: 1.5 }, { duration: 100 }]
+      ]).promise;
+      const timelineDuration = Date.now() - timelineStart;
+      
+      assert(timelineDuration >= 280 && timelineDuration <= 350, `Timeline sequential (${timelineDuration}ms)`);
+      assert(box.style.transform.includes('50px'), 'Timeline X applied');
+      assert(box.style.transform.includes('scale(1.5)'), 'Timeline scale applied');
+      
+      // Test 12: Timeline stop
+      resetBox();
+      const tl = timeline([
+        [box, { x: 100 }, { duration: 200 }],
+        [box, { y: 100 }, { duration: 200 }]
+      ]);
+      await wait(100);
+      tl.stop();
+      await wait(400);
+      assert(!box.style.transform.includes('100px, 100px'), 'Timeline stopped correctly');
+      
+      // Test 13: Will-change optimization
+      resetBox();
+      const willChangeAnim = animate(box, { x: 100 }, { duration: 100 });
+      await wait(50);
+      assert(box.style.willChange === 'transform', 'Will-change applied during animation');
+      await willChangeAnim.promise;
+      assert(box.style.willChange === 'auto', 'Will-change removed after animation');
+      
+      // Test 14: Empty animation
+      resetBox();
+      try {
+        await animate(box, {}, { duration: 100 }).promise;
+        assert(true, 'Empty animation handled gracefully');
+      } catch (e) {
+        assert(false, 'Empty animation should not throw');
+      }
+      
+      // Test 15: Promise rejection on stop
+      resetBox();
+      let promiseResolved = false;
+      const stoppedAnim = animate(box, { x: 100 }, { duration: 200 });
+      stoppedAnim.promise.then(() => { promiseResolved = true; });
+      await wait(50);
+      stoppedAnim.stop();
+      await wait(200);
+      assert(!promiseResolved, 'Promise does not resolve when stopped');
+      
+      // Summary
+      resetBox();
+      results.innerHTML = '';
+      
+      const summary = document.createElement('div');
+      summary.className = passCount === testCount ? 'result pass' : 'result fail';
+      summary.innerHTML = `<h2>Test Results: ${passCount}/${testCount} passed</h2>`;
+      results.appendChild(summary);
+      
+      if (passCount === testCount) {
+        summary.innerHTML += '<p>🎉 <strong>All tests passed! The animation library works 100%!</strong></p>';
+      }
+    };
+  </script>
+</body>
+</html>

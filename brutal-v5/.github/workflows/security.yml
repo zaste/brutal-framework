@@ -1,0 +1,122 @@
+name: Security
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 1' # Weekly on Monday
+
+jobs:
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript, typescript
+          
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+        
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  dependency-check:
+    name: Dependency Security Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          
+      - name: Check for security vulnerabilities
+        run: pnpm audit --audit-level moderate
+        
+      - name: Check for outdated dependencies
+        run: pnpm outdated || true
+
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          
+      - run: pnpm install --frozen-lockfile
+      
+      - name: Check licenses
+        run: npx license-checker --production --onlyAllow 'MIT;Apache-2.0;BSD-3-Clause;BSD-2-Clause;ISC;CC0-1.0'
+
+  eslint-security:
+    name: ESLint Security Plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          
+      - run: pnpm install --frozen-lockfile
+      
+      - name: Run ESLint with security plugin
+        run: pnpm lint:security
+
+  zero-dependency-check:
+    name: Zero Runtime Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check for runtime dependencies
+        run: |
+          echo "🔍 Checking for runtime dependencies..."
+          
+          # Check each package
+          for pkg in packages/@brutal/*/package.json; do
+            if [ -f "$pkg" ]; then
+              echo "Checking $pkg..."
+              
+              # Extract dependencies
+              deps=$(jq -r '.dependencies // {} | keys[]' "$pkg" 2>/dev/null)
+              
+              # Check each dependency
+              for dep in $deps; do
+                if [[ ! "$dep" =~ ^@brutal/ ]]; then
+                  echo "❌ External dependency found in $pkg: $dep"
+                  exit 1
+                fi
+              done
+            fi
+          done
+          
+          echo "✅ No external runtime dependencies found!"

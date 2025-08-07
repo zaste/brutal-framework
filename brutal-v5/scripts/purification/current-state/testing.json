@@ -1,0 +1,78 @@
+{
+  "name": "@brutal/testing",
+  "timestamp": "2025-07-15T10:24:05.034Z",
+  "exports": {
+    "test": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "suite": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "run": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "clear": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "assert": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "mock": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "spy": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "dom": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "async": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "TestResult": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "TestFunction": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "Suite": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "MockFunction": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "Assertions": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "DOMHelpers": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "AsyncHelpers": {
+      "file": "types.ts",
+      "type": "interface"
+    }
+  },
+  "files": [
+    "index.ts",
+    "minimal.ts",
+    "types.ts"
+  ],
+  "bundleSize": 2219,
+  "dependencies": {},
+  "consumers": []
+}

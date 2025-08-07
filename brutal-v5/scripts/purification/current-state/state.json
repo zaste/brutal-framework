@@ -1,0 +1,213 @@
+{
+  "name": "@brutal/state",
+  "timestamp": "2025-07-15T10:24:04.751Z",
+  "exports": {
+    "actions": {
+      "file": "actions/index.ts",
+      "type": "const"
+    },
+    "VERSION": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "DEFAULT_CONFIG": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "INTERNAL": {
+      "file": "constants.ts",
+      "type": "const"
+    },
+    "ExampleFeature": {
+      "file": "example-feature/example-feature.ts",
+      "type": "class"
+    },
+    "FeatureState": {
+      "file": "example-feature/example-feature.types.ts",
+      "type": "interface"
+    },
+    "ProcessOptions": {
+      "file": "example-feature/example-feature.types.ts",
+      "type": "interface"
+    },
+    "validateOptions": {
+      "file": "example-feature/helpers/validate.ts",
+      "type": "function"
+    },
+    "formatError": {
+      "file": "example-feature/helpers/validate.ts",
+      "type": "function"
+    },
+    "PACKAGE_NAME": {
+      "file": "index.ts",
+      "type": "const"
+    },
+    "devtools": {
+      "file": "middleware/devtools.ts",
+      "type": "const"
+    },
+    "middleware": {
+      "file": "middleware/index.ts",
+      "type": "const"
+    },
+    "persist": {
+      "file": "middleware/persist.ts",
+      "type": "const"
+    },
+    "clearPersistedState": {
+      "file": "middleware/persist.ts",
+      "type": "const"
+    },
+    "timeTravel": {
+      "file": "middleware/timeTravel.ts",
+      "type": "const"
+    },
+    "c": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "h": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "l": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "d": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "p": {
+      "file": "minimal.ts",
+      "type": "const"
+    },
+    "createUseStore": {
+      "file": "react/index.ts",
+      "type": "const"
+    },
+    "useShallow": {
+      "file": "react/index.ts",
+      "type": "const"
+    },
+    "selectors": {
+      "file": "selectors/index.ts",
+      "type": "const"
+    },
+    "createStore": {
+      "file": "store/store.ts",
+      "type": "function"
+    },
+    "shallow": {
+      "file": "store/core.ts",
+      "type": "const"
+    },
+    "store": {
+      "file": "store/index.ts",
+      "type": "const"
+    },
+    "subscribeWithSelector": {
+      "file": "store/selectors.ts",
+      "type": "const"
+    },
+    "createSelector": {
+      "file": "store/selectors.ts",
+      "type": "const"
+    },
+    "combineSelectors": {
+      "file": "store/selectors.ts",
+      "type": "const"
+    },
+    "computed": {
+      "file": "store/selectors.ts",
+      "type": "const"
+    },
+    "Store": {
+      "file": "store/store.ts",
+      "type": "interface"
+    },
+    "StoreApi": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "State": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "StateListener": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "StateSelector": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "EqualityFn": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "StoreCreator": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "StateMiddleware": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "MiddlewareConfig": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "DevtoolsConfig": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "PersistConfig": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "ComputedValue": {
+      "file": "types.ts",
+      "type": "type"
+    },
+    "UseBoundStore": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "SubscribeWithSelector": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "TimeTravelState": {
+      "file": "types.ts",
+      "type": "interface"
+    },
+    "TimeTravelActions": {
+      "file": "types.ts",
+      "type": "interface"
+    }
+  },
+  "files": [
+    "actions/index.ts",
+    "constants.ts",
+    "example-feature/example-feature.ts",
+    "example-feature/example-feature.types.ts",
+    "example-feature/helpers/validate.ts",
+    "index.ts",
+    "middleware/devtools.ts",
+    "middleware/index.ts",
+    "middleware/persist.ts",
+    "middleware/timeTravel.ts",
+    "minimal.ts",
+    "react/index.ts",
+    "selectors/index.ts",
+    "store/core.ts",
+    "store/index.ts",
+    "store/selectors.ts",
+    "store/store.ts",
+    "types.ts"
+  ],
+  "bundleSize": 1634,
+  "dependencies": {},
+  "consumers": []
+}

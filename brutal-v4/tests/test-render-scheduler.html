@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL V4 - RenderScheduler Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .metrics {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        test-component {
+            background: #e0e0e0;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+            transition: background 0.3s;
+        }
+        
+        test-component[rendering] {
+            background: #ffeb3b;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 BRUTAL V4 - RenderScheduler Test</h1>
+    
+    <div class="test-section">
+        <h2>Scheduler Metrics</h2>
+        <div id="metrics" class="metrics">Loading...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Component Render Test</h2>
+        <button id="spawn-components">Spawn 50 Components</button>
+        <button id="update-all">Update All Components</button>
+        <button id="clear-all">Clear All</button>
+        <div id="component-container" class="test-grid"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Priority Test</h2>
+        <button id="test-user-input">Test User Input Priority</button>
+        <button id="test-animation">Test Animation Priority</button>
+        <button id="test-background">Test Background Priority</button>
+        <button id="test-idle">Test Idle Priority</button>
+        <div id="priority-log" class="metrics"></div>
+    </div>
+
+    <script type="module">
+        import { BrutalComponent, renderScheduler, RenderPriority } from './core/index.js';
+        
+        // Test component that tracks renders
+        class TestComponent extends BrutalComponent {
+            static counter = 0;
+            
+            constructor() {
+                super();
+                this.id = TestComponent.counter++;
+                this.renderCount = 0;
+            }
+            
+            createTemplate() {
+                this._template = document.createElement('template');
+                this._template.innerHTML = `
+                    <style>
+                        :host {
+                            display: block;
+                        }
+                        .content {
+                            font-size: 14px;
+                        }
+                    </style>
+                    <div class="content">
+                        <div>ID: ${this.id}</div>
+                        <div>Renders: <span id="count">0</span></div>
+                    </div>
+                `;
+            }
+            
+            render() {
+                this.setAttribute('rendering', '');
+                super.render();
+                this.renderCount++;
+                
+                // Update render count
+                setTimeout(() => {
+                    const countEl = this.shadowRoot?.querySelector('#count');
+                    if (countEl) {
+                        countEl.textContent = this.renderCount;
+                    }
+                    this.removeAttribute('rendering');
+                }, 50);
+            }
+        }
+        
+        customElements.define('test-component', TestComponent);
+        
+        // Metrics update
+        function updateMetrics() {
+            const metrics = renderScheduler.getMetrics();
+            document.getElementById('metrics').innerHTML = `
+                <div>Total Renders: ${metrics.totalRenders}</div>
+                <div>Batched Renders: ${metrics.batchedRenders}</div>
+                <div>Average Frame Time: ${metrics.frameTime.toFixed(2)}ms</div>
+                <div>Queue Sizes:</div>
+                <div>  - User Input: ${metrics.queues.userInput}</div>
+                <div>  - Animation: ${metrics.queues.animation}</div>
+                <div>  - Background: ${metrics.queues.background}</div>
+                <div>  - Idle: ${metrics.queues.idle}</div>
+            `;
+        }
+        
+        setInterval(updateMetrics, 100);
+        
+        // Component spawning
+        const container = document.getElementById('component-container');
+        const components = [];
+        
+        document.getElementById('spawn-components').addEventListener('click', () => {
+            for (let i = 0; i < 50; i++) {
+                const component = document.createElement('test-component');
+                container.appendChild(component);
+                components.push(component);
+            }
+        });
+        
+        document.getElementById('update-all').addEventListener('click', () => {
+            components.forEach((comp, index) => {
+                // Stagger updates to test batching
+                setTimeout(() => {
+                    comp.scheduleRender(RenderPriority.BACKGROUND);
+                }, index * 2);
+            });
+        });
+        
+        document.getElementById('clear-all').addEventListener('click', () => {
+            container.innerHTML = '';
+            components.length = 0;
+            TestComponent.counter = 0;
+        });
+        
+        // Priority testing
+        const priorityLog = document.getElementById('priority-log');
+        let logEntries = [];
+        
+        function addLog(message) {
+            const timestamp = new Date().toISOString().split('T')[1].slice(0, -1);
+            logEntries.push(`[${timestamp}] ${message}`);
+            if (logEntries.length > 10) logEntries.shift();
+            priorityLog.innerHTML = logEntries.join('<br>');
+        }
+        
+        // Listen for scheduler events
+        window.addEventListener('brutal:scheduler:frame', (e) => {
+            addLog(`Frame completed: ${e.detail.componentsRendered} components in ${e.detail.frameTime.toFixed(2)}ms`);
+        });
+        
+        // Priority test buttons
+        document.getElementById('test-user-input').addEventListener('click', () => {
+            const comp = document.createElement('test-component');
+            container.appendChild(comp);
+            comp.scheduleRender(RenderPriority.USER_INPUT);
+            addLog('Scheduled USER_INPUT priority render');
+        });
+        
+        document.getElementById('test-animation').addEventListener('click', () => {
+            const comp = document.createElement('test-component');
+            container.appendChild(comp);
+            comp.scheduleRender(RenderPriority.ANIMATION);
+            addLog('Scheduled ANIMATION priority render');
+        });
+        
+        document.getElementById('test-background').addEventListener('click', () => {
+            const comp = document.createElement('test-component');
+            container.appendChild(comp);
+            comp.scheduleRender(RenderPriority.BACKGROUND);
+            addLog('Scheduled BACKGROUND priority render');
+        });
+        
+        document.getElementById('test-idle').addEventListener('click', () => {
+            const comp = document.createElement('test-component');
+            container.appendChild(comp);
+            renderScheduler.scheduleIdle(comp);
+            addLog('Scheduled IDLE priority render');
+        });
+        
+        // Enable debug mode
+        window.BRUTAL_DEBUG = true;
+    </script>
+</body>
+</html>

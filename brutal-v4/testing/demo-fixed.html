@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Test V4 - Fixed Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        
+        h1 {
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .info {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #333;
+        }
+        
+        .info h2 {
+            color: #f39c12;
+            margin-top: 0;
+        }
+        
+        .info code {
+            background: #0a0a0a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #f39c12;
+        }
+        
+        .status {
+            background: #1a1a1a;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #333;
+        }
+        
+        .status.loading { border-color: #f39c12; }
+        .status.ready { border-color: #27ae60; }
+        .status.error { border-color: #e74c3c; }
+        
+        #test-container {
+            min-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 BRUTAL Test V4 - Fixed</h1>
+        
+        <div class="info">
+            <h2>Fixed Import Loading</h2>
+            <p>
+                This version properly loads components before using them in the DOM.
+                Watch the status below to see the loading process.
+            </p>
+        </div>
+        
+        <div id="status" class="status loading">
+            Loading test components...
+        </div>
+        
+        <div class="test-area">
+            <h2>Live Test Runner</h2>
+            <div id="test-container">
+                <!-- Components will be added here after loading -->
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        const status = document.getElementById('status');
+        const container = document.getElementById('test-container');
+        
+        function updateStatus(message, type = 'loading') {
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        try {
+            // Import components FIRST
+            updateStatus('Importing BrutalTestDashboard...');
+            const { BrutalTestDashboard } = await import('./components/BrutalTestDashboard.js');
+            
+            updateStatus('Importing BrutalTestRunner...');
+            const { BrutalTestRunner } = await import('./components/BrutalTestRunner.js');
+            
+            updateStatus('Importing RenderSchedulerTest...');
+            const { RenderSchedulerTest } = await import('./tests/core/RenderSchedulerTest.js');
+            
+            updateStatus('Importing MemorySafetyTest...');
+            const { MemorySafetyTest } = await import('./tests/core/MemorySafetyTest.js');
+            
+            updateStatus('All components loaded! Creating UI...', 'ready');
+            
+            // NOW create the elements after imports are complete
+            const dashboard = document.createElement('brutal-test-dashboard');
+            dashboard.id = 'testDashboard';
+            
+            const runner = document.createElement('brutal-test-runner');
+            runner.id = 'testRunner';
+            
+            const renderTest = document.createElement('brutal-test-render-scheduler');
+            const memoryTest = document.createElement('brutal-test-memory-safety');
+            
+            // Build the component tree
+            runner.appendChild(renderTest);
+            runner.appendChild(memoryTest);
+            dashboard.appendChild(runner);
+            container.appendChild(dashboard);
+            
+            // Set up event listeners
+            runner.addEventListener('test:complete', (e) => {
+                console.log('Test completed:', e.detail);
+            });
+            
+            runner.addEventListener('runner:complete', (e) => {
+                console.log('All tests completed:', e.detail);
+                const { passed, failed, duration } = e.detail;
+                updateStatus(
+                    `✅ Passed: ${passed}, ❌ Failed: ${failed}, ⏱️ Duration: ${duration.toFixed(2)}ms`,
+                    failed > 0 ? 'error' : 'ready'
+                );
+            });
+            
+            updateStatus('✅ Test system ready! Click "Run All" to execute tests.', 'ready');
+            
+        } catch (error) {
+            updateStatus(`❌ Error loading components: ${error.message}`, 'error');
+            console.error('Import error:', error);
+            
+            // Show detailed error info
+            const errorInfo = document.createElement('pre');
+            errorInfo.style.color = '#e74c3c';
+            errorInfo.style.background = '#1a1a1a';
+            errorInfo.style.padding = '20px';
+            errorInfo.style.borderRadius = '8px';
+            errorInfo.style.marginTop = '20px';
+            errorInfo.textContent = error.stack;
+            container.appendChild(errorInfo);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+# BRUTAL AI Boundaries - Machine-Readable Constraints
+# This file defines what AI can and cannot do
+
+version: 1.0
+last_updated: 2025-07-15
+
+# Things AI must NEVER do
+never:
+  - action: create_new_principles
+    reason: Only humans can define core principles
+    
+  - action: override_architecture_decisions  
+    reason: Architecture decisions are final once accepted
+    
+  - action: ignore_performance_budgets
+    reason: Size limits are non-negotiable
+    
+  - action: bypass_security_rules
+    reason: Security is paramount
+    
+  - action: delete_decision_history
+    reason: History is immutable
+    
+  - action: modify_foundation_constraints
+    reason: Constraints can only be updated through review
+    
+  - action: suggest_external_dependencies
+    reason: Zero dependencies is core principle
+
+# Things AI must ALWAYS do
+always:
+  - action: validate_against_constraints
+    implementation: Check all constraints before suggesting
+    
+  - action: suggest_within_patterns
+    implementation: Only use approved patterns from foundation/patterns
+    
+  - action: escalate_uncertainty
+    implementation: Ask for clarification instead of guessing
+    
+  - action: preserve_decision_history
+    implementation: Reference past decisions in suggestions
+    
+  - action: enforce_size_budgets
+    implementation: Calculate size impact before changes
+    
+  - action: prefer_composition
+    implementation: Never suggest inheritance except HTMLElement
+    
+  - action: maintain_consistency
+    implementation: Follow established patterns in codebase
+
+# Escalation triggers
+escalation_triggers:
+  - condition: constraint_violation
+    action: Show violation and ask for explicit override
+    
+  - condition: pattern_not_found
+    action: Ask if new pattern should be created
+    
+  - condition: ambiguous_requirement  
+    action: Request clarification with options
+    
+  - condition: performance_regression
+    action: Show impact and get approval
+    
+  - condition: breaking_change
+    action: Require explicit confirmation
+
+# Approved patterns AI can use
+approved_patterns:
+  component_creation:
+    - composition_factory
+    - web_component_minimal
+    
+  state_management:
+    - proxy_based_store
+    - event_emitter
+    
+  async_handling:
+    - promise_based
+    - async_await
+    
+  error_handling:
+    - error_boundaries
+    - validation_first
+
+# Context preservation requirements
+context_preservation:
+  must_track:
+    - Current objective
+    - Active constraints
+    - Previous decisions
+    - Violation history
+    
+  must_reference:
+    - When suggesting alternatives
+    - When pattern matching
+    - When making tradeoffs
+
+# Safe exploration space
+exploration_boundaries:
+  allowed:
+    - Optimize within size budget
+    - Refactor using approved patterns
+    - Suggest better composition
+    - Improve performance
+    
+  forbidden:
+    - Add new dependencies
+    - Create new abstractions
+    - Increase complexity
+    - Break existing APIs

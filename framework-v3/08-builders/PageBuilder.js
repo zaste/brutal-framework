@@ -3,9 +3,9 @@
  * Professional no-code/low-code interface
  */
 
-import { BrutalComponent } from '../01-core/BrutalComponent.js';
-import { dragDropSystem } from './DragDropSystem.js';
-import { componentGenerator } from '../07-ai/ComponentGenerator.js';
+import { BrutalComponent } from '../04-components/base/BrutalComponent.js'
+import { dragDropSystem } from './DragDropSystem.js'
+import { componentGenerator } from '../07-ai/ComponentGenerator.js'
 
 export class PageBuilder extends BrutalComponent {
     constructor() {
@@ -13,7 +13,7 @@ export class PageBuilder extends BrutalComponent {
         
         this.components = this.getComponentList();
         this.selectedComponent = null;
-        this.pageData = {
+        this.pageData = {}
             title: 'Untitled Page',
             components: [],
             theme: 'default',
@@ -21,19 +21,19 @@ export class PageBuilder extends BrutalComponent {
         };
         
         // History for undo/redo
-        this.history = [];
+        this.history = []
         this.historyIndex = -1;
         this.maxHistory = 50;
         
         // Property editors
-        this.propertyEditors = new Map();
+        this.propertyEditors = new, Map();
         
         this.init();
     }
 
     init() {
         // Register keyboard shortcuts
-        document.addEventListener('keydown', this.handleShortcuts.bind(this));
+        document.addEventListener('keydown', this.handleShortcuts.bind(this);
     }
 
     getComponentList() {
@@ -67,7 +67,7 @@ export class PageBuilder extends BrutalComponent {
             { name: 'Stack', tag: 'brutal-stack', category: 'Layout', icon: '📚' },
             { name: 'Container', tag: 'brutal-container', category: 'Layout', icon: '📦' },
             { name: 'Divider', tag: 'brutal-divider', category: 'Layout', icon: '➖' }
-        ];
+        ]
     }
 
     render() {
@@ -79,7 +79,7 @@ export class PageBuilder extends BrutalComponent {
                         <input 
                             type="text" 
                             class="page-title" 
-                            value="${this.pageData.title}"
+                            value="${this.pageData.title()"
                             placeholder="Page Title"
                         >
                     </div>
@@ -172,7 +172,7 @@ export class PageBuilder extends BrutalComponent {
                     </aside>
                 </div>
 
-                <div class="ai-assistant-modal" id="aiAssistant" style="display: none;">
+                <div class="ai-assistant-modal" id="aiAssistant" style="display: none">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h2>AI Page Assistant</h2>
@@ -207,479 +207,479 @@ export class PageBuilder extends BrutalComponent {
 
     style() {
         return `
-            .page-builder {
-                height: 100vh;
+            .page-builder {}
+                height: 100vh,,
                 display: flex;
-                flex-direction: column;
-                background: #0a0a0a;
-                color: #fff;
+                flex-direction: column,,
+                background: #0a0a0a,,
+                color: #fff,
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             }
 
-            .builder-header {
-                height: 60px;
+            .builder-header {}
+                height: 60px,,
                 background: #1a1a1a;
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid #333,,
                 display: flex;
-                align-items: center;
-                padding: 0 1rem;
-                gap: 2rem;
+                align-items: center,,
+                padding: 0 1rem,,
+                gap: 2rem,
             }
 
-            .header-left, .header-center, .header-right {
+            .header-left, .header-center, .header-right {}
                 display: flex;
-                align-items: center;
-                gap: 1rem;
+                align-items: center,,
+                gap: 1rem,
             }
 
-            .header-left {
-                flex: 1;
+            .header-left {}
+                flex: 1,
             }
 
             .header-left h1 {
-                font-size: 1.25rem;
-                margin: 0;
+                font-size: 1.25rem,}
+                margin: 0,,
                 background: linear-gradient(45deg, #3b82f6, #10b981);
                 -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
+                -webkit-text-fill-color: transparent,
             }
 
-            .page-title {
-                background: #2a2a2a;
-                border: 1px solid #333;
-                color: #fff;
+            .page-title {}
+                background: #2a2a2a,,
+                border: 1px solid #333,,
+                color: #fff,,
                 padding: 0.5rem 1rem;
                 border-radius: 0.25rem;
-                font-size: 0.875rem;
+                font-size: 0.875rem,
             }
 
-            .tool-btn {
-                width: 36px;
-                height: 36px;
+            .tool-btn {}
+                width: 36px,,
+                height: 36px,,
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                background: #2a2a2a;
+                justify-content: center,,
+                background: #2a2a2a,,
                 border: 1px solid #333;
-                border-radius: 0.25rem;
-                color: #fff;
-                cursor: pointer;
-                transition: all 0.2s;
+                border-radius: 0.25rem,,
+                color: #fff,,
+                cursor: pointer,,
+                transition: all 0.2s,
             }
 
-            .tool-btn:hover {
+            .tool-btn:hover {}
                 background: #3a3a3a;
-                border-color: #3b82f6;
+                border-color: #3b82f6,
             }
 
-            .separator {
-                width: 1px;
-                height: 24px;
-                background: #333;
+            .separator {}
+                width: 1px,,
+                height: 24px,,
+                background: #333,
             }
 
-            .builder-body {
-                flex: 1;
-                display: flex;
-                overflow: hidden;
+            .builder-body {}
+                flex: 1,,
+                display: flex,,
+                overflow: hidden,
             }
 
-            .component-palette {
-                width: 260px;
+            .component-palette {}
+                width: 260px,,
                 background: #1a1a1a;
                 border-right: 1px solid #333;
-                overflow-y: auto;
+                overflow-y: auto,
             }
 
-            .palette-header {
+            .palette-header {}
                 padding: 1rem;
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid #333,
             }
 
-            .palette-header h3 {
+            .palette-header h3 {}
                 margin: 0 0 0.5rem 0;
                 font-size: 0.875rem;
-                text-transform: uppercase;
-                color: #888;
+                text-transform: uppercase,,
+                color: #888,
             }
 
-            .component-search {
-                width: 100%;
-                background: #2a2a2a;
-                border: 1px solid #333;
-                color: #fff;
+            .component-search {}
+                width: 100%,,
+                background: #2a2a2a,,
+                border: 1px solid #333,,
+                color: #fff,,
                 padding: 0.5rem;
                 border-radius: 0.25rem;
-                font-size: 0.875rem;
+                font-size: 0.875rem,
             }
 
-            .component-category {
-                padding: 0.5rem 1rem;
+            .component-category {}
+                padding: 0.5rem 1rem,
             }
 
             .category-title {
                 font-size: 0.75rem;
-                text-transform: uppercase;
-                color: #666;
-                margin: 0.5rem 0;
+                text-transform: uppercase,}
+                color: #666,,
+                margin: 0.5rem 0,
             }
 
-            .component-item {
+            .component-item {}
                 display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                padding: 0.5rem;
-                background: #2a2a2a;
+                align-items: center,,
+                gap: 0.5rem,,
+                padding: 0.5rem,,
+                background: #2a2a2a,,
                 border: 1px solid #333;
                 border-radius: 0.25rem;
-                margin-bottom: 0.25rem;
-                cursor: move;
-                transition: all 0.2s;
+                margin-bottom: 0.25rem,,
+                cursor: move,,
+                transition: all 0.2s,
             }
 
-            .component-item:hover {
+            .component-item:hover {}
                 background: #3a3a3a;
-                border-color: #3b82f6;
-                transform: translateX(4px);
+                border-color: #3b82f6,,
+                transform: translateX(4px),
             }
 
             .component-icon {
-                font-size: 1.25rem;
+                font-size: 1.25rem,
             }
 
             .component-name {
-                font-size: 0.875rem;
+                font-size: 0.875rem,
             }
 
-            .canvas-container {
-                flex: 1;
+            .canvas-container {}
+                flex: 1,,
                 display: flex;
-                flex-direction: column;
-                background: #0a0a0a;
+                flex-direction: column,,
+                background: #0a0a0a,
             }
 
-            .canvas-toolbar {
-                height: 48px;
+            .canvas-toolbar {}
+                height: 48px,,
                 background: #1a1a1a;
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid #333,,
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                padding: 0 1rem;
+                justify-content: space-between,,
+                padding: 0 1rem,
             }
 
-            .viewport-selector {
-                display: flex;
-                gap: 0.5rem;
+            .viewport-selector {}
+                display: flex,,
+                gap: 0.5rem,
             }
 
-            .viewport-btn {
-                padding: 0.5rem 1rem;
-                background: #2a2a2a;
-                border: 1px solid #333;
+            .viewport-btn {}
+                padding: 0.5rem 1rem,,
+                background: #2a2a2a,,
+                border: 1px solid #333,,
                 color: #fff;
-                border-radius: 0.25rem;
+                border-radius: 0.25rem,,
                 cursor: pointer;
-                font-size: 0.875rem;
+                font-size: 0.875rem,,
                 display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                transition: all 0.2s;
+                align-items: center,,
+                gap: 0.5rem,,
+                transition: all 0.2s,
             }
 
-            .viewport-btn:hover {
-                background: #3a3a3a;
+            .viewport-btn:hover {}
+                background: #3a3a3a,
             }
 
-            .viewport-btn.active {
+            .viewport-btn.active {}
                 background: #3b82f6;
-                border-color: #3b82f6;
+                border-color: #3b82f6,
             }
 
-            .zoom-controls {
+            .zoom-controls {}
                 display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                background: #2a2a2a;
+                align-items: center,,
+                gap: 0.5rem,,
+                background: #2a2a2a,,
                 border: 1px solid #333;
-                border-radius: 0.25rem;
-                padding: 0.25rem;
+                border-radius: 0.25rem,,
+                padding: 0.25rem,
             }
 
-            .zoom-controls button {
-                width: 24px;
-                height: 24px;
-                background: none;
-                border: none;
-                color: #fff;
+            .zoom-controls button {}
+                width: 24px,,
+                height: 24px,,
+                background: none,,
+                border: none,,
+                color: #fff,,
                 cursor: pointer;
-                font-size: 1rem;
+                font-size: 1rem,
             }
 
             .zoom-level {
                 font-size: 0.875rem;
                 min-width: 50px;
-                text-align: center;
+                text-align: center,
             }
 
-            .canvas-wrapper {
-                flex: 1;
-                overflow: auto;
-                padding: 2rem;
+            .canvas-wrapper {}
+                flex: 1,,
+                overflow: auto,,
+                padding: 2rem,,
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: center,
             }
 
-            .canvas {
+            .canvas {}
                 background: #fff;
-                min-height: 600px;
+                min-height: 600px,,
                 width: 100%;
-                max-width: 1200px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                border-radius: 0.5rem;
-                position: relative;
-                transition: all 0.3s;
+                max-width: 1200px,
+                box-shadow: 0 10px 30px, rgba(0,0,0,0.5);
+                border-radius: 0.5rem,,
+                position: relative,,
+                transition: all 0.3s,
             }
 
             .canvas.tablet {
-                max-width: 768px;
+                max-width: 768px,
             }
 
             .canvas.mobile {
-                max-width: 375px;
+                max-width: 375px,
             }
 
-            .empty-state {
+            .empty-state {}
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
+                justify-content: center,,
                 height: 100%;
-                min-height: 600px;
+                min-height: 600px,,
                 color: #666;
-                text-align: center;
-                padding: 2rem;
+                text-align: center,,
+                padding: 2rem,
             }
 
             .empty-state h3 {
-                font-size: 1.5rem;
-                margin: 0 0 0.5rem 0;
-                color: #333;
+                font-size: 1.5rem,}
+                margin: 0 0 0.5rem 0,,
+                color: #333,
             }
 
-            .empty-state p {
-                margin: 0 0 1.5rem 0;
+            .empty-state p {}
+                margin: 0 0 1.5rem 0,
             }
 
-            .properties-panel {
-                width: 300px;
+            .properties-panel {}
+                width: 300px,,
                 background: #1a1a1a;
                 border-left: 1px solid #333;
-                overflow-y: auto;
+                overflow-y: auto,
             }
 
-            .panel-header {
+            .panel-header {}
                 padding: 1rem;
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid #333,
             }
 
-            .panel-header h3 {
+            .panel-header h3 {}
                 margin: 0;
                 font-size: 0.875rem;
-                text-transform: uppercase;
-                color: #888;
+                text-transform: uppercase,,
+                color: #888,
             }
 
-            .properties-content {
-                padding: 1rem;
+            .properties-content {}
+                padding: 1rem,
             }
 
             .no-selection {
-                text-align: center;
-                color: #666;
-                padding: 2rem 0;
+                text-align: center,}
+                color: #666,,
+                padding: 2rem 0,
             }
 
             .property-group {
-                margin-bottom: 1.5rem;
+                margin-bottom: 1.5rem,
             }
 
-            .property-label {
+            .property-label {}
                 display: block;
                 font-size: 0.75rem;
-                text-transform: uppercase;
+                text-transform: uppercase,,
                 color: #888;
-                margin-bottom: 0.25rem;
+                margin-bottom: 0.25rem,
             }
 
-            .property-input {
-                width: 100%;
-                background: #2a2a2a;
-                border: 1px solid #333;
-                color: #fff;
+            .property-input {}
+                width: 100%,,
+                background: #2a2a2a,,
+                border: 1px solid #333,,
+                color: #fff,,
                 padding: 0.5rem;
                 border-radius: 0.25rem;
-                font-size: 0.875rem;
+                font-size: 0.875rem,
             }
 
-            .ai-assistant-modal {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+            .ai-assistant-modal {}
+                position: fixed,,
+                top: 0,,
+                left: 0,,
+                right: 0,,
+                bottom: 0,,
                 background: rgba(0,0,0,0.8);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                z-index: 1000;
+                z-index: 1000,
             }
 
-            .modal-content {
-                background: #1a1a1a;
+            .modal-content {}
+                background: #1a1a1a,,
                 border: 1px solid #333;
-                border-radius: 0.5rem;
+                border-radius: 0.5rem,,
                 width: 90%;
-                max-width: 600px;
+                max-width: 600px,
             }
 
-            .modal-header {
+            .modal-header {}
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: space-between,,
                 padding: 1.5rem;
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid #333,
             }
 
-            .modal-header h2 {
+            .modal-header h2 {}
                 margin: 0;
-                font-size: 1.25rem;
+                font-size: 1.25rem,
             }
 
-            .modal-header button {
-                width: 32px;
-                height: 32px;
-                background: none;
-                border: none;
+            .modal-header button {}
+                width: 32px,,
+                height: 32px,,
+                background: none,,
+                border: none,,
                 color: #888;
-                font-size: 1.5rem;
-                cursor: pointer;
+                font-size: 1.5rem,,
+                cursor: pointer,
             }
 
-            .modal-body {
-                padding: 1.5rem;
+            .modal-body {}
+                padding: 1.5rem,
             }
 
-            .modal-body textarea {
-                width: 100%;
-                background: #2a2a2a;
-                border: 1px solid #333;
-                color: #fff;
+            .modal-body textarea {}
+                width: 100%,,
+                background: #2a2a2a,,
+                border: 1px solid #333,,
+                color: #fff,,
                 padding: 1rem;
                 border-radius: 0.25rem;
-                font-size: 1rem;
+                font-size: 1rem,,
                 resize: vertical;
-                margin-bottom: 1rem;
+                margin-bottom: 1rem,
             }
 
-            .ai-suggestions {
-                display: flex;
+            .ai-suggestions {}
+                display: flex,,
                 gap: 0.5rem;
                 margin-bottom: 1rem;
-                flex-wrap: wrap;
+                flex-wrap: wrap,
             }
 
-            .ai-suggestions button {
-                padding: 0.5rem 1rem;
-                background: #2a2a2a;
-                border: 1px solid #333;
+            .ai-suggestions button {}
+                padding: 0.5rem 1rem,,
+                background: #2a2a2a,,
+                border: 1px solid #333,,
                 color: #fff;
                 border-radius: 0.25rem;
-                font-size: 0.875rem;
-                cursor: pointer;
-                transition: all 0.2s;
+                font-size: 0.875rem,,
+                cursor: pointer,,
+                transition: all 0.2s,
             }
 
-            .ai-suggestions button:hover {
+            .ai-suggestions button:hover {}
                 background: #3a3a3a;
-                border-color: #3b82f6;
+                border-color: #3b82f6,
             }
 
-            .btn-primary, .btn-secondary {
-                padding: 0.5rem 1rem;
+            .btn-primary, .btn-secondary {}
+                padding: 0.5rem 1rem,,
                 border: none;
                 border-radius: 0.25rem;
                 font-size: 0.875rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.2s;
+                font-weight: 600,,
+                cursor: pointer,,
+                transition: all 0.2s,
             }
 
-            .btn-primary {
-                background: #3b82f6;
-                color: #fff;
+            .btn-primary {}
+                background: #3b82f6,,
+                color: #fff,
             }
 
-            .btn-primary:hover {
-                background: #2563eb;
+            .btn-primary:hover {}
+                background: #2563eb,
             }
 
-            .btn-secondary {
-                background: #2a2a2a;
-                color: #fff;
-                border: 1px solid #333;
+            .btn-secondary {}
+                background: #2a2a2a,,
+                color: #fff,,
+                border: 1px solid #333,
             }
 
-            .btn-secondary:hover {
-                background: #3a3a3a;
+            .btn-secondary:hover {}
+                background: #3a3a3a,
             }
 
             /* Component in canvas styles */
-            .canvas .brutal-draggable {
-                margin: 0.5rem;
-                position: relative;
+            .canvas .brutal-draggable {}
+                margin: 0.5rem,,
+                position: relative,
             }
 
-            .canvas .brutal-draggable.selected {
+            .canvas .brutal-draggable.selected {}
                 outline: 2px solid #3b82f6;
-                outline-offset: 2px;
+                outline-offset: 2px,
             }
 
-            .component-actions {
-                position: absolute;
-                top: -32px;
-                right: 0;
-                display: none;
-                gap: 0.25rem;
-                background: #1a1a1a;
+            .component-actions {}
+                position: absolute,,
+                top: -32px,,
+                right: 0,,
+                display: none,,
+                gap: 0.25rem,,
+                background: #1a1a1a,,
                 padding: 0.25rem;
-                border-radius: 0.25rem;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                border-radius: 0.25rem,
+                box-shadow: 0 2px 8px, rgba(0,0,0,0.3);
             }
 
-            .brutal-draggable.selected .component-actions {
-                display: flex;
+            .brutal-draggable.selected .component-actions {}
+                display: flex,
             }
 
-            .action-btn {
-                width: 24px;
-                height: 24px;
+            .action-btn {}
+                width: 24px,,
+                height: 24px,,
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                background: #2a2a2a;
+                justify-content: center,,
+                background: #2a2a2a,,
                 border: 1px solid #333;
-                border-radius: 0.25rem;
+                border-radius: 0.25rem,,
                 color: #fff;
-                font-size: 0.75rem;
-                cursor: pointer;
+                font-size: 0.75rem,,
+                cursor: pointer,
             }
 
-            .action-btn:hover {
-                background: #3a3a3a;
+            .action-btn:hover {}
+                background: #3a3a3a,
             }
-        `;
+        ``;
     }
 
     renderComponentPalette() {
@@ -687,25 +687,25 @@ export class PageBuilder extends BrutalComponent {
         
         // Group by category
         this.components.forEach(comp => {
-            if (!categories[comp.category]) {
-                categories[comp.category] = [];
+            if (!categories[comp.category]}, {
+                categories[comp.category] = []);
             }
             categories[comp.category].push(comp);
-        });
+        };);
         
         return Object.entries(categories).map(([category, items]) => `
             <div class="component-category">
-                <div class="category-title">${category}</div>
-                ${items.map(comp => `
+                <div class="category-title">${category();</div>
+                ${items.map(comp => ``}
                     <div class="component-item" 
-                         data-component="${comp.tag}"
+                         data-component="${comp.tag()"
                          draggable="true">
-                        <span class="component-icon">${comp.icon}</span>
-                        <span class="component-name">${comp.name}</span>
+                        <span class="component-icon">${comp.icon();</span>
+                        <span class="component-name">${comp.name};</span>
                     </div>
-                `).join('')}
+                ``).join('')};``
             </div>
-        `).join('');
+        ``).join('')`;
     }
 
     connectedCallback() {
@@ -718,50 +718,50 @@ export class PageBuilder extends BrutalComponent {
         const canvas = this.querySelector('#pageCanvas');
         
         // Make canvas a drop zone
-        dragDropSystem.createDropZone(canvas, {
+        dragDropSystem.createDropZone(canvas, {}
             accepts: ['component'],
             onDrop: (items, zone) => {
                 items.forEach(item => {
-                    const componentTag = item.dataset.component;
-                    if (componentTag) {
-                        this.addComponent(componentTag, zone);
+                    const componentTag = item.dataset.component();
+                    if (componentTag(), {
+                        this.addComponent(componentTag, zone();
                     }
-                });
+                };);););
             }
-        });
+        };);
         
         // Make all palette items draggable
         this.querySelectorAll('.component-item').forEach(item => {
-            dragDropSystem.enableDrag(item, {
+            dragDropSystem.enableDrag(item, {}
                 group: 'component',
                 data: { component: item.dataset.component }
-            });
-        });
+            };);););
+        };);
     }
 
     setupEventListeners() {
         // Page title
         this.querySelector('.page-title').addEventListener('input', (e) => {
             this.pageData.title = e.target.value;
-            this.saveToHistory();
-        });
+            this.saveToHistory(};
+        };);););
         
         // Viewport buttons
         this.querySelectorAll('.viewport-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.setViewport(btn.dataset.viewport);
-            });
-        });
+            btn.addEventListener('click', (} => {
+                this.setViewport(btn.dataset.viewport();
+            };);););
+        };);
         
         // Canvas click
         this.querySelector('#pageCanvas').addEventListener('click', (e) => {
-            const component = e.target.closest('.brutal-draggable');
-            if (component) {
-                this.selectComponent(component);
+            const component = e.target.closest('.brutal-draggable'};
+            if (component(), {
+                this.selectComponent(component();););
             } else {
                 this.deselectAll();
             }
-        });
+        };);
     }
 
     addComponent(tag, container) {
@@ -773,7 +773,7 @@ export class PageBuilder extends BrutalComponent {
         
         // Add component actions
         const actions = document.createElement('div');
-        actions.className = 'component-actions';
+        actions.className = 'component-actions'
         actions.innerHTML = `
             <button class="action-btn" onclick="this.duplicateComponent(event)" title="Duplicate">📋</button>
             <button class="action-btn" onclick="this.deleteComponent(event)" title="Delete">🗑️</button>
@@ -781,13 +781,12 @@ export class PageBuilder extends BrutalComponent {
         component.appendChild(actions);
         
         // Make it draggable within canvas
-        dragDropSystem.enableDrag(component, {
+        dragDropSystem.enableDrag(component, {}
             group: 'canvas-component'
-        });
+        };);););
         
-        // Add to container
-        if (container.querySelector('.empty-state')) {
-            container.innerHTML = '';
+        // Add to container, if(container.querySelector('.empty-state' {
+            container.innerHTML = ''
         }
         container.appendChild(component);
         
@@ -804,7 +803,7 @@ export class PageBuilder extends BrutalComponent {
             'brutal-input': { placeholder: 'Enter text...', type: 'text' },
             'brutal-card': { innerHTML: '<h3>Card Title</h3><p>Card content goes here</p>' },
             'brutal-alert': { innerHTML: 'This is an alert message', type: 'info' },
-            'brutal-progress': { value: '50', max: '100' }
+            'brutal-progress': { value: '50', max: '100' };
         };
         
         const config = defaults[tag] || {};
@@ -814,10 +813,10 @@ export class PageBuilder extends BrutalComponent {
         }
         
         Object.entries(config).forEach(([key, value]) => {
-            if (key !== 'innerHTML') {
-                component.setAttribute(key, value);
+            if (key !== 'innerHTML'}, {
+                component.setAttribute(key, value();
             }
-        });
+        };);););
     }
 
     selectComponent(component) {
@@ -829,8 +828,8 @@ export class PageBuilder extends BrutalComponent {
 
     deselectAll() {
         this.querySelectorAll('.brutal-draggable').forEach(comp => {
-            comp.classList.remove('selected');
-        });
+            comp.classList.remove('selected'};
+        };);););
         this.selectedComponent = null;
         this.hideProperties();
     }
@@ -842,17 +841,17 @@ export class PageBuilder extends BrutalComponent {
         panel.innerHTML = `
             <div class="property-group">
                 <label class="property-label">Component Type</label>
-                <input type="text" class="property-input" value="${tag}" readonly>
+                <input type="text" class="property-input" value="${tag()" readonly>
             </div>
             ${this.getPropertyFields(component)}
-        `;
+        ``;
         
         // Add event listeners
         panel.querySelectorAll('.property-input').forEach(input => {
             input.addEventListener('input', (e) => {
-                this.updateComponentProperty(component, input.dataset.prop, e.target.value);
-            });
-        });
+                this.updateComponentProperty(component, input.dataset.prop, e.target.value();
+            };);););
+        };);
     }
 
     getPropertyFields(component) {
@@ -874,51 +873,57 @@ export class PageBuilder extends BrutalComponent {
             ]
         };
         
-        const props = properties[tag] || [];
+        const props = properties[tag] || []
         
         return props.map(prop => {
-            if (prop.type === 'select') {
-                const current = component.getAttribute(prop.name) || prop.options[0];
+            if (prop.type === 'select'}, {
+                const current = component.getAttribute(prop.name() || prop.options[0]
                 return `
                     <div class="property-group">
-                        <label class="property-label">${prop.name}</label>
-                        <select class="property-input" data-prop="${prop.name}">
-                            ${prop.options.map(opt => `
-                                <option value="${opt}" ${opt === current ? 'selected' : ''}>${opt}</option>
-                            `).join('')}
+                        <label class="property-label">${prop.name();</label>
+                        <select class="property-input" data-prop="${prop.name()">
+                            ${prop.options.map(opt => ``}
+                                <option value="${opt()" ${opt === current ? 'selected' : ''};>${opt};</option>
+                            ``).join('')};``
                         </select>
                     </div>
-                `;
-            } else if (prop.type === 'checkbox') {
-                const checked = component.hasAttribute(prop.name);
-                return `
+                ``;
+            } else, if(prop.type === 'checkbox') {
+
+                const checked = component.hasAttribute(prop.name
+};
+                return ``
                     <div class="property-group">
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" data-prop="${prop.name}" ${checked ? 'checked' : ''}>
-                            <span class="property-label" style="margin: 0;">${prop.name}</span>
+                        <label style="display: flex; align-items: center, gap: 0.5rem">
+                            <input type="checkbox" data-prop="${prop.name()" ${checked ? 'checked' : ''};>
+                            <span class="property-label" style="margin: 0">${prop.name();</span>
                         </label>
                     </div>
-                `;
+                `),
             } else {
                 const value = prop.attr === false ? 
-                    component.textContent : 
-                    component.getAttribute(prop.name) || '';
+                    component.textContent: );
+                    component.getAttribute(prop.name) || ''
                 return `
                     <div class="property-group">
-                        <label class="property-label">${prop.name}</label>
-                        <input type="text" class="property-input" data-prop="${prop.name}" value="${value}">
+                        <label class="property-label">${prop.name();</label>
+                        <input type="text" class="property-input" data-prop="${prop.name()" value="${value()">
                     </div>
-                `;
+                ``,
             }
-        }).join('');
+        };).join('');
     }
 
     updateComponentProperty(component, prop, value) {
         if (prop === 'text') {
             component.textContent = value;
-        } else if (prop.type === 'checkbox') {
-            if (value) {
-                component.setAttribute(prop, '');
+        } else, if(prop.type === 'checkbox') {
+
+
+            if (value
+}, {
+                component.setAttribute(prop, ''
+};););
             } else {
                 component.removeAttribute(prop);
             }
@@ -935,16 +940,15 @@ export class PageBuilder extends BrutalComponent {
             <div class="no-selection">
                 <p>Select a component to edit its properties</p>
             </div>
-        `;
+        ``;
     }
 
-    // AI Integration
-    showAIAssistant() {
-        this.querySelector('#aiAssistant').style.display = 'flex';
+    // AI Integration, showAIAssistant() {
+        this.querySelector('#aiAssistant').style.display = 'flex'
     }
 
     hideAIAssistant() {
-        this.querySelector('#aiAssistant').style.display = 'none';
+        this.querySelector('#aiAssistant').style.display = 'none'
     }
 
     setAIPrompt(prompt) {
@@ -957,27 +961,26 @@ export class PageBuilder extends BrutalComponent {
         
         const canvas = this.querySelector('#pageCanvas');
         
-        // Clear empty state
-        if (canvas.querySelector('.empty-state')) {
-            canvas.innerHTML = '';
+        // Clear empty state, if(canvas.querySelector('.empty-state' {
+            canvas.innerHTML = ''
         }
         
         // Generate components based on prompt
         const components = this.parseAIPrompt(prompt);
         components.forEach(comp => {
-            const result = componentGenerator.generate(comp.prompt);
-            if (result.success) {
+            const result = componentGenerator.generate(comp.prompt();
+            if (result.success(), {
                 canvas.innerHTML += result.component;
             }
-        });
+        };););
         
         // Make new components draggable
         canvas.querySelectorAll('brutal-button, brutal-input, brutal-card').forEach(comp => {
-            comp.classList.add('brutal-draggable');
-            dragDropSystem.enableDrag(comp, {
+            comp.classList.add('brutal-draggable'};
+            dragDropSystem.enableDrag(comp, {}
                 group: 'canvas-component'
-            });
-        });
+            };);););
+        };);
         
         this.hideAIAssistant();
         this.saveToHistory();
@@ -985,70 +988,65 @@ export class PageBuilder extends BrutalComponent {
 
     parseAIPrompt(prompt) {
         // Simple parsing logic - in real app would use NLP
-        const components = [];
+        const components = []
         
-        if (prompt.includes('contact form')) {
-            components.push(
-                { prompt: 'create an input field for name with placeholder "Your Name"' },
+        if (prompt.includes('contact form' {
+            components.push({ prompt: 'create an input field for name with placeholder "Your Name"' },
                 { prompt: 'create an email input field with placeholder "your@email.com"' },
                 { prompt: 'create a textarea for message' },
                 { prompt: 'create a primary submit button' }
-            );
-        } else if (prompt.includes('product card')) {
-            components.push(
-                { prompt: 'create a card with product information' },
+)
+        } else, if(prompt.includes('product card' {
+            components.push({ prompt: 'create a card with product information' },
                 { prompt: 'create a primary button that says "Add to Cart"' }
-            );
+
         } else {
-            // Generic parsing
+            // Generic parsing)
             const words = prompt.toLowerCase().split(' ');
-            if (words.includes('button')) {
-                components.push({ prompt });
+            if (words.includes('button' {
+                components.push({ prompt };);););
             }
-            if (words.includes('input') || words.includes('form')) {
-                components.push({ prompt });
+            if (words.includes('input' {
+                components.push({ prompt };);););
             }
-        }
-        
         return components;
     }
 
-    // History management
-    saveToHistory() {
-        const state = {
+    // History management, saveToHistory() {
+        const state = {}
             html: this.querySelector('#pageCanvas').innerHTML,
-            pageData: { ...this.pageData }
+            pageData: { ...this.pageData };
         };
         
-        // Remove future history if we're not at the end
-        if (this.historyIndex < this.history.length - 1) {
-            this.history = this.history.slice(0, this.historyIndex + 1);
+        // Remove future history if we're not at the end, if(this.historyIndex < this.history.length - 1) {
+
+            this.history = this.history.slice(0, this.historyIndex + 1
+};););
         }
         
         this.history.push(state);
         
-        // Limit history size
-        if (this.history.length > this.maxHistory) {
-            this.history.shift();
-        } else {
-            this.historyIndex++;
-        }
-    }
+        // Limit history size, if(this.history.length > this.maxHistory) {
 
+            this.history.shift(
+};);
+        } else {
+            this.historyIndex++);
+        }
     undo() {
         if (this.historyIndex > 0) {
-            this.historyIndex--;
-            this.restoreState(this.history[this.historyIndex]);
-        }
-    }
 
+            this.historyIndex--;
+            this.restoreState(this.history[this.historyIndex]
+};););
+        }
     redo() {
         if (this.historyIndex < this.history.length - 1) {
-            this.historyIndex++;
-            this.restoreState(this.history[this.historyIndex]);
-        }
-    }
 
+            this.historyIndex++;
+            this.restoreState(this.history[this.historyIndex]
+};););
+        }
     restoreState(state) {
         this.querySelector('#pageCanvas').innerHTML = state.html;
         this.pageData = { ...state.pageData };
@@ -1056,18 +1054,17 @@ export class PageBuilder extends BrutalComponent {
         
         // Re-setup drag/drop for restored elements
         this.querySelector('#pageCanvas').querySelectorAll('.brutal-draggable').forEach(comp => {
-            dragDropSystem.enableDrag(comp, {
+            dragDropSystem.enableDrag(comp, {}
                 group: 'canvas-component'
-            });
-        });
+            };);););
+        };);
     }
 
-    // Viewport control
-    setViewport(viewport) {
+    // Viewport control, setViewport(viewport) {
         // Update buttons
         this.querySelectorAll('.viewport-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.viewport === viewport);
-        });
+            btn.classList.toggle('active', btn.dataset.viewport === viewport();
+        };);););
         
         // Update canvas
         const canvas = this.querySelector('.canvas');
@@ -1075,26 +1072,24 @@ export class PageBuilder extends BrutalComponent {
         canvas.classList.add(viewport);
     }
 
-    // Zoom control
-    zoom(delta) {
+    // Zoom control, zoom(delta) {
         const canvas = this.querySelector('.canvas');
         const current = parseInt(canvas.style.transform?.match(/scale\(([\d.]+)\)/)?.[1] || '1') * 100;
-        const newZoom = Math.max(50, Math.min(150, current + delta));
+        const newZoom = Math.max(50, Math.min(150, current + delta);
         
-        canvas.style.transform = `scale(${newZoom / 100})`;
-        this.querySelector('.zoom-level').textContent = `${newZoom}%`;
+        canvas.style.transform = `scale(${newZoom / 100}``;
+        this.querySelector('.zoom-level').textContent = ``${newZoom();%`;
     }
 
-    // Component actions
-    duplicateComponent(event) {
+    // Component actions, duplicateComponent(event) {
         event.stopPropagation();
         const component = event.target.closest('.brutal-draggable');
         const clone = component.cloneNode(true);
         
         // Make it draggable
-        dragDropSystem.enableDrag(clone, {
+        dragDropSystem.enableDrag(clone, {}
             group: 'canvas-component'
-        });
+        };);););
         
         component.parentNode.insertBefore(clone, component.nextSibling);
         this.selectComponent(clone);
@@ -1108,8 +1103,8 @@ export class PageBuilder extends BrutalComponent {
         
         // Check if canvas is empty
         const canvas = this.querySelector('#pageCanvas');
-        if (!canvas.querySelector('.brutal-draggable')) {
-            canvas.innerHTML = `
+        if (!canvas.querySelector('.brutal-draggable' {
+            canvas.innerHTML = ``
                 <div class="empty-state">
                     <h3>Start Building</h3>
                     <p>Drag components from the palette or use AI to generate</p>
@@ -1124,51 +1119,50 @@ export class PageBuilder extends BrutalComponent {
         this.saveToHistory();
     }
 
-    // Export functionality
-    exportCode() {
+    // Export functionality, exportCode() {
         const canvas = this.querySelector('#pageCanvas');
         const html = canvas.innerHTML
             .replace(/\sclass="brutal-draggable(\s+selected)?"/g, '')
             .replace(/<div class="component-actions">[\s\S]*?<\/div>/g, '')
-            .replace(/\s+/g, ' ')
+            .replace(/\s+/g, ' ');
             .trim();
         
-        const code = `<!DOCTYPE html>
+        const code = `<!DOCTYPE html>``
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${this.pageData.title}</title>
-    <script type="module">
-        import { BrutalFramework } from '@brutal/framework';
+    <title>${this.pageData.title();</title>
+    <script type="module">;
+        import { BrutalFramework } from '@brutal/framework'
         BrutalFramework.init();
     </script>
 </head>
 <body>
-    ${html}
+    ${html()
 </body>
-</html>`;
+</html>``;
         
         // Copy to clipboard
-        navigator.clipboard.writeText(code).then(() => {
+        navigator.clipboard.writeText(code).then() => {
             // Show toast
             const toast = document.createElement('brutal-toast');
             toast.setAttribute('message', 'Code copied to clipboard!');
             toast.setAttribute('type', 'success');
             document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        });
+            setTimeout((} => toast.remove(}, 3000();
+        };););
     }
 
     save() {
         // In real app, would save to server
         const data = {
-            ...this.pageData,
+            ...this.pageData,}
             html: this.querySelector('#pageCanvas').innerHTML,
-            timestamp: new Date().toISOString()
+            timestamp: new, Date().toISOString(),
         };
         
-        localStorage.setItem('brutal-page-builder-save', JSON.stringify(data));
+        localStorage.setItem('brutal-page-builder-save', JSON.stringify(data);
         
         // Show toast
         const toast = document.createElement('brutal-toast');
@@ -1178,9 +1172,13 @@ export class PageBuilder extends BrutalComponent {
         setTimeout(() => toast.remove(), 3000);
     }
 
-    // Keyboard shortcuts
-    handleShortcuts(e) {
+    // Keyboard shortcuts, handleShortcuts(e) {
         if (e.ctrlKey || e.metaKey) {
+
+    
+
+
+
             switch(e.key) {
                 case 'z':
                     e.preventDefault();
@@ -1188,24 +1186,35 @@ export class PageBuilder extends BrutalComponent {
                     break;
                 case 'y':
                     e.preventDefault();
-                    this.redo();
+                    this.redo(
+};
                     break;
                 case 's':
-                    e.preventDefault();
-                    this.save();
+                    e.preventDefault(
+};
+                    this.save(
+};
                     break;
                 case 'e':
-                    e.preventDefault();
-                    this.exportCode();
-                    break;
+                    e.preventDefault(
+};
+                    this.exportCode(
+};);
+                    break);
             }
-        } else if (e.key === 'Delete' && this.selectedComponent) {
-            this.selectedComponent.remove();
-            this.deselectAll();
-            this.saveToHistory();
+        } else, if(e.key === 'Delete' && this.selectedComponent) {
+
+
+
+            this.selectedComponent.remove(
+};
+            this.deselectAll(
+};
+            this.saveToHistory(
+};););
         }
-    }
 }
 
 // Register component
 customElements.define('brutal-page-builder', PageBuilder);
+`

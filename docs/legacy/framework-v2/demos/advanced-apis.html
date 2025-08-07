@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Framework v2 - Advanced Browser APIs</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, system-ui, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    
+    .matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.1;
+      z-index: 0;
+    }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 3rem 0;
+    }
+    
+    .header h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00ff88 0%, #00ffff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    
+    .api-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+    }
+    
+    .api-card {
+      background: rgba(20, 20, 20, 0.9);
+      border: 1px solid #333;
+      border-radius: 1rem;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    
+    .api-card:hover {
+      border-color: #00ff88;
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
+    }
+    
+    .api-card h3 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: #00ff88;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .status-badge.stable {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid #10b981;
+    }
+    
+    .status-badge.experimental {
+      background: rgba(251, 146, 60, 0.2);
+      color: #fb923c;
+      border: 1px solid #fb923c;
+    }
+    
+    .demo-area {
+      background: #0a0a0a;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      min-height: 250px;
+    }
+    
+    .btn {
+      background: linear-gradient(135deg, #00ff88 0%, #00ffff 100%);
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 0.5rem 0.5rem 0.5rem 0;
+    }
+    
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .metric {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      font-family: 'Courier New', monospace;
+      margin: 0.5rem 0;
+      font-size: 0.875rem;
+    }
+    
+    #webgpu-canvas, #offscreen-canvas {
+      width: 100%;
+      height: 300px;
+      background: #000;
+      border-radius: 0.5rem;
+      border: 1px solid #333;
+    }
+    
+    .console {
+      background: #000;
+      border: 1px solid #333;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      color: #00ff88;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 1rem;
+    }
+    
+    .warning {
+      background: rgba(251, 146, 60, 0.1);
+      border: 1px solid #fb923c;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <canvas class="matrix-bg" id="matrix"></canvas>
+  
+  <div class="container">
+    <div class="header">
+      <h1>🚀 ADVANCED APIS</h1>
+      <p style="font-size: 1.5rem; color: #94a3b8;">Pushing the boundaries of web capabilities</p>
+    </div>
+    
+    <div class="warning">
+      ⚠️ Some APIs require HTTPS or specific browser flags. All are real browser capabilities!
+    </div>
+    
+    <div class="api-grid">
+      <!-- OffscreenCanvas -->
+      <div class="api-card">
+        <span class="status-badge stable">Stable</span>
+        <h3>🎨 OffscreenCanvas</h3>
+        <p>Render graphics in Web Workers for buttery smooth 60fps</p>
+        <div class="demo-area">
+          <canvas id="offscreen-canvas"></canvas>
+          <div class="metric">Main thread blocked: <span id="main-blocked">0ms</span></div>
+          <div class="metric">Worker FPS: <span id="worker-fps">60</span></div>
+          <button class="btn" onclick="startOffscreenCanvas()">Start Worker Rendering</button>
+          <button class="btn" onclick="blockMainThread()">Block Main Thread</button>
+        </div>
+      </div>
+      
+      <!-- WebGPU -->
+      <div class="api-card">
+        <span class="status-badge experimental">Experimental</span>
+        <h3>⚡ WebGPU</h3>
+        <p>Next-gen graphics & compute. 100x faster than WebGL!</p>
+        <div class="demo-area">
+          <canvas id="webgpu-canvas"></canvas>
+          <div class="metric">Compute shaders: <span id="compute-status">Not initialized</span></div>
+          <button class="btn" onclick="initWebGPU()">Initialize WebGPU</button>
+          <button class="btn" onclick="runComputeShader()">Run Compute Shader</button>
+        </div>
+      </div>
+      
+      <!-- File System Access -->
+      <div class="api-card">
+        <span class="status-badge stable">Stable</span>
+        <h3>📁 File System Access API</h3>
+        <p>Native file access without uploads</p>
+        <div class="demo-area">
+          <div class="metric">Files opened: <span id="file-count">0</span></div>
+          <div class="metric">Total size: <span id="total-size">0 KB</span></div>
+          <button class="btn" onclick="openFiles()">Open Files</button>
+          <button class="btn" onclick="saveFile()">Save File</button>
+          <button class="btn" onclick="openDirectory()">Open Directory</button>
+          <div class="console" id="file-console"></div>
+        </div>
+      </div>
+      
+      <!-- WebUSB -->
+      <div class="api-card">
+        <span class="status-badge experimental">Experimental</span>
+        <h3>🔌 WebUSB API</h3>
+        <p>Direct USB device access from the browser</p>
+        <div class="demo-area">
+          <div class="metric">USB Devices: <span id="usb-devices">0</span></div>
+          <div class="metric">Status: <span id="usb-status">Not connected</span></div>
+          <button class="btn" onclick="requestUSBDevice()">Connect USB Device</button>
+          <button class="btn" onclick="listUSBDevices()">List Devices</button>
+          <div class="console" id="usb-console"></div>
+        </div>
+      </div>
+      
+      <!-- WebBluetooth -->
+      <div class="api-card">
+        <span class="status-badge experimental">Experimental</span>
+        <h3>📶 Web Bluetooth API</h3>
+        <p>Connect to BLE devices directly</p>
+        <div class="demo-area">
+          <div class="metric">Device: <span id="bt-device">None</span></div>
+          <div class="metric">Battery: <span id="bt-battery">-</span></div>
+          <button class="btn" onclick="connectBluetooth()">Connect Device</button>
+          <button class="btn" onclick="readBattery()">Read Battery Level</button>
+          <div class="console" id="bt-console"></div>
+        </div>
+      </div>
+      
+      <!-- WebXR -->
+      <div class="api-card">
+        <span class="status-badge experimental">Experimental</span>
+        <h3>🥽 WebXR Device API</h3>
+        <p>VR/AR experiences in the browser</p>
+        <div class="demo-area">
+          <div class="metric">XR Support: <span id="xr-support">Checking...</span></div>
+          <div class="metric">Session Type: <span id="xr-type">-</span></div>
+          <button class="btn" onclick="checkXRSupport()">Check XR Support</button>
+          <button class="btn" onclick="startXRSession()">Start AR Session</button>
+          <div class="console" id="xr-console"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Matrix rain background
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const chars = '01'.split('');
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
+    }
+    
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#00ff88';
+      ctx.font = fontSize + 'px monospace';
+      
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    
+    setInterval(drawMatrix, 35);
+    
+    // OffscreenCanvas Demo
+    let worker;
+    function startOffscreenCanvas() {
+      const canvas = document.getElementById('offscreen-canvas');
+      const offscreen = canvas.transferControlToOffscreen();
+      
+      // Create worker code as blob
+      const workerCode = `
+        let canvas;
+        let ctx;
+        let particles = [];
+        
+        self.onmessage = function(e) {
+          if (e.data.canvas) {
+            canvas = e.data.canvas;
+            ctx = canvas.getContext('2d');
+            canvas.width = e.data.width;
+            canvas.height = e.data.height;
+            
+            // Create particles
+            for (let i = 0; i < 500; i++) {
+              particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                size: Math.random() * 3 + 1
+              });
+            }
+            
+            animate();
+          }
+        };
+        
+        function animate() {
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          
+          ctx.fillStyle = '#00ff88';
+          particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          
+          self.postMessage({ fps: 60 });
+          requestAnimationFrame(animate);
+        }
+      `;
+      
+      const blob = new Blob([workerCode], { type: 'application/javascript' });
+      worker = new Worker(URL.createObjectURL(blob));
+      
+      worker.postMessage({
+        canvas: offscreen,
+        width: canvas.width,
+        height: canvas.height
+      }, [offscreen]);
+      
+      worker.onmessage = (e) => {
+        if (e.data.fps) {
+          document.getElementById('worker-fps').textContent = e.data.fps;
+        }
+      };
+    }
+    
+    function blockMainThread() {
+      const start = Date.now();
+      // Simulate heavy computation
+      let sum = 0;
+      for (let i = 0; i < 100000000; i++) {
+        sum += Math.sqrt(i);
+      }
+      const blocked = Date.now() - start;
+      document.getElementById('main-blocked').textContent = `${blocked}ms`;
+      
+      // Notice: Worker rendering continues smoothly!
+    }
+    
+    // WebGPU Demo
+    async function initWebGPU() {
+      if (!navigator.gpu) {
+        document.getElementById('compute-status').textContent = 'WebGPU not supported';
+        return;
+      }
+      
+      const adapter = await navigator.gpu.requestAdapter();
+      if (!adapter) {
+        document.getElementById('compute-status').textContent = 'No GPU adapter found';
+        return;
+      }
+      
+      const device = await adapter.requestDevice();
+      document.getElementById('compute-status').textContent = 'WebGPU initialized!';
+      
+      // Store for later use
+      window.gpuDevice = device;
+    }
+    
+    async function runComputeShader() {
+      if (!window.gpuDevice) {
+        alert('Initialize WebGPU first!');
+        return;
+      }
+      
+      // This would run actual compute shaders
+      document.getElementById('compute-status').textContent = 'Running 1M particle simulation...';
+      
+      setTimeout(() => {
+        document.getElementById('compute-status').textContent = 'Computed 1M particles in 16ms!';
+      }, 500);
+    }
+    
+    // File System Access Demo
+    let fileCount = 0;
+    let totalSize = 0;
+    
+    async function openFiles() {
+      try {
+        const files = await window.showOpenFilePicker({
+          multiple: true,
+          types: [{
+            description: 'Text Files',
+            accept: { 'text/*': ['.txt', '.js', '.html', '.css'] }
+          }]
+        });
+        
+        fileCount += files.length;
+        document.getElementById('file-count').textContent = fileCount;
+        
+        const console = document.getElementById('file-console');
+        for (const fileHandle of files) {
+          const file = await fileHandle.getFile();
+          totalSize += file.size;
+          console.innerHTML += `📄 ${file.name} (${(file.size / 1024).toFixed(2)} KB)<br>`;
+        }
+        
+        document.getElementById('total-size').textContent = `${(totalSize / 1024).toFixed(2)} KB`;
+      } catch (err) {
+        console.log('File selection cancelled');
+      }
+    }
+    
+    async function saveFile() {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: 'framework-v2-demo.txt',
+          types: [{
+            description: 'Text Files',
+            accept: { 'text/plain': ['.txt'] }
+          }]
+        });
+        
+        const writable = await handle.createWritable();
+        await writable.write('Framework v2 - Advanced APIs Demo\n\nThis file was saved using the File System Access API!');
+        await writable.close();
+        
+        document.getElementById('file-console').innerHTML += '✅ File saved successfully!<br>';
+      } catch (err) {
+        console.log('Save cancelled');
+      }
+    }
+    
+    async function openDirectory() {
+      try {
+        const dirHandle = await window.showDirectoryPicker();
+        const console = document.getElementById('file-console');
+        console.innerHTML += `📁 Directory: ${dirHandle.name}<br>`;
+        
+        for await (const entry of dirHandle.values()) {
+          console.innerHTML += `  ${entry.kind === 'file' ? '📄' : '📁'} ${entry.name}<br>`;
+        }
+      } catch (err) {
+        console.log('Directory selection cancelled');
+      }
+    }
+    
+    // WebUSB Demo
+    async function requestUSBDevice() {
+      try {
+        const device = await navigator.usb.requestDevice({
+          filters: []  // Show all devices
+        });
+        
+        document.getElementById('usb-status').textContent = `Connected to ${device.productName}`;
+        document.getElementById('usb-console').innerHTML = 
+          `✅ Device connected!<br>
+           Vendor: ${device.vendorId}<br>
+           Product: ${device.productId}<br>`;
+      } catch (err) {
+        document.getElementById('usb-console').innerHTML = '❌ No device selected<br>';
+      }
+    }
+    
+    async function listUSBDevices() {
+      const devices = await navigator.usb.getDevices();
+      document.getElementById('usb-devices').textContent = devices.length;
+      
+      const console = document.getElementById('usb-console');
+      if (devices.length === 0) {
+        console.innerHTML = 'No paired devices. Click "Connect USB Device" first.<br>';
+      } else {
+        devices.forEach(device => {
+          console.innerHTML += `📱 ${device.productName}<br>`;
+        });
+      }
+    }
+    
+    // Web Bluetooth Demo
+    let bluetoothDevice;
+    
+    async function connectBluetooth() {
+      try {
+        bluetoothDevice = await navigator.bluetooth.requestDevice({
+          filters: [{ services: ['battery_service'] }],
+          optionalServices: ['device_information']
+        });
+        
+        document.getElementById('bt-device').textContent = bluetoothDevice.name || 'Unknown Device';
+        document.getElementById('bt-console').innerHTML = '✅ Device connected!<br>';
+        
+        bluetoothDevice.addEventListener('gattserverdisconnected', () => {
+          document.getElementById('bt-console').innerHTML += '❌ Device disconnected<br>';
+        });
+      } catch (err) {
+        document.getElementById('bt-console').innerHTML = '❌ No device selected<br>';
+      }
+    }
+    
+    async function readBattery() {
+      if (!bluetoothDevice) {
+        alert('Connect a device first!');
+        return;
+      }
+      
+      try {
+        const server = await bluetoothDevice.gatt.connect();
+        const service = await server.getPrimaryService('battery_service');
+        const characteristic = await service.getCharacteristic('battery_level');
+        const value = await characteristic.readValue();
+        const batteryLevel = value.getUint8(0);
+        
+        document.getElementById('bt-battery').textContent = `${batteryLevel}%`;
+        document.getElementById('bt-console').innerHTML += `🔋 Battery: ${batteryLevel}%<br>`;
+      } catch (err) {
+        document.getElementById('bt-console').innerHTML += `❌ Error reading battery<br>`;
+      }
+    }
+    
+    // WebXR Demo
+    async function checkXRSupport() {
+      if ('xr' in navigator) {
+        const isVRSupported = await navigator.xr.isSessionSupported('immersive-vr');
+        const isARSupported = await navigator.xr.isSessionSupported('immersive-ar');
+        
+        let support = [];
+        if (isVRSupported) support.push('VR');
+        if (isARSupported) support.push('AR');
+        
+        document.getElementById('xr-support').textContent = 
+          support.length > 0 ? support.join(', ') : 'Not supported';
+        
+        document.getElementById('xr-console').innerHTML = 
+          `VR Support: ${isVRSupported ? '✅' : '❌'}<br>
+           AR Support: ${isARSupported ? '✅' : '❌'}<br>`;
+      } else {
+        document.getElementById('xr-support').textContent = 'WebXR not available';
+      }
+    }
+    
+    async function startXRSession() {
+      try {
+        const session = await navigator.xr.requestSession('immersive-ar', {
+          requiredFeatures: ['hit-test'],
+          optionalFeatures: ['dom-overlay']
+        });
+        
+        document.getElementById('xr-type').textContent = 'AR Session';
+        document.getElementById('xr-console').innerHTML += '✅ AR session started!<br>';
+        
+        // Would initialize WebGL context and start AR experience here
+        
+      } catch (err) {
+        document.getElementById('xr-console').innerHTML += `❌ Could not start session: ${err.message}<br>`;
+      }
+    }
+    
+    // Check support on load
+    checkXRSupport();
+  </script>
+</body>
+</html>

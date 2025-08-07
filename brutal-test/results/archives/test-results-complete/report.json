@@ -1,0 +1,470 @@
+{
+  "timestamp": "2025-07-11T11:00:20.128Z",
+  "config": {
+    "mode": "quick",
+    "browsers": [
+      "chrome"
+    ],
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "headless": true,
+    "autoFix": false,
+    "dashboard": false,
+    "outputDir": "./test-results-complete"
+  },
+  "environment": {},
+  "errors": [],
+  "performance": {},
+  "visual": {},
+  "coverage": {},
+  "suggestions": [],
+  "tests": [
+    {
+      "name": "test-example.html",
+      "path": "./framework-v3/test-example.html",
+      "type": "general",
+      "format": ".html",
+      "components": [],
+      "dependencies": [],
+      "assertions": 14,
+      "priority": 60,
+      "result": {
+        "status": "failed",
+        "message": "No test results found",
+        "capturedErrors": {
+          "total": 2,
+          "bySource": {
+            "runtime": [
+              {
+                "type": "runtime",
+                "message": "Script error.",
+                "filename": "",
+                "line": 0,
+                "column": 0,
+                "timestamp": 1752231620380
+              }
+            ],
+            "console": [],
+            "network": [],
+            "promise": [],
+            "syntax": [],
+            "resource": [],
+            "security": [],
+            "type": [
+              {
+                "type": "selector_not_found",
+                "selector": ".test-results, #test-results, [data-test-results]",
+                "timestamp": 1752231622946
+              }
+            ]
+          },
+          "timeline": [
+            {
+              "source": "runtime",
+              "type": "runtime",
+              "message": "Script error.",
+              "filename": "",
+              "line": 0,
+              "column": 0,
+              "timestamp": 1752231620380
+            },
+            {
+              "source": "type",
+              "type": "selector_not_found",
+              "selector": ".test-results, #test-results, [data-test-results]",
+              "timestamp": 1752231622946
+            }
+          ],
+          "summary": {
+            "total": 2,
+            "critical": 2,
+            "warnings": 0,
+            "byType": {
+              "runtime": 1,
+              "selector_not_found": 1
+            },
+            "topErrors": [
+              {
+                "error": "Script error.",
+                "count": 1
+              },
+              {
+                "error": "selector_not_found",
+                "count": 1
+              }
+            ]
+          }
+        }
+      },
+      "capture": {
+        "errors": {
+          "total": 2,
+          "bySource": {
+            "runtime": [
+              {
+                "type": "runtime",
+                "message": "Script error.",
+                "filename": "",
+                "line": 0,
+                "column": 0,
+                "timestamp": 1752231620380
+              }
+            ],
+            "console": [],
+            "network": [],
+            "promise": [],
+            "syntax": [],
+            "resource": [],
+            "security": [],
+            "type": [
+              {
+                "type": "selector_not_found",
+                "selector": ".test-results, #test-results, [data-test-results]",
+                "timestamp": 1752231622946
+              }
+            ]
+          },
+          "timeline": [
+            {
+              "source": "runtime",
+              "type": "runtime",
+              "message": "Script error.",
+              "filename": "",
+              "line": 0,
+              "column": 0,
+              "timestamp": 1752231620380
+            },
+            {
+              "source": "type",
+              "type": "selector_not_found",
+              "selector": ".test-results, #test-results, [data-test-results]",
+              "timestamp": 1752231622946
+            }
+          ],
+          "summary": {
+            "total": 2,
+            "critical": 2,
+            "warnings": 0,
+            "byType": {
+              "runtime": 1,
+              "selector_not_found": 1
+            },
+            "topErrors": [
+              {
+                "error": "Script error.",
+                "count": 1
+              },
+              {
+                "error": "selector_not_found",
+                "count": 1
+              }
+            ]
+          }
+        },
+        "performance": {
+          "duration": 1053,
+          "observations": {
+            "navigation": {},
+            "resources": [],
+            "paint": [],
+            "longtasks": [],
+            "layout": [],
+            "fps": [
+              {
+                "timestamp": 1063.8349999990314,
+                "fps": 60
+              },
+              {
+                "timestamp": 2080.464999999851,
+                "fps": 60
+              }
+            ]
+          },
+          "marks": {},
+          "measures": {},
+          "runtime": [],
+          "memory": [],
+          "coverage": {
+            "js": [],
+            "css": [
+              {
+                "url": "http://localhost:3333/framework-v3/test-example.html",
+                "ranges": [
+                  {
+                    "start": 9,
+                    "end": 173
+                  },
+                  {
+                    "start": 182,
+                    "end": 201
+                  },
+                  {
+                    "start": 210,
+                    "end": 339
+                  },
+                  {
+                    "start": 396,
+                    "end": 507
+                  }
+                ],
+                "text": "\n        body {\n            font-family: monospace;\n            background: #000;\n            color: #0f0;\n            padding: 20px;\n            line-height: 1.6;\n        }\n        h1 { color: #f00; }\n        a {\n            color: #0ff;\n            text-decoration: none;\n            display: block;\n            margin: 10px 0;\n        }\n        a:hover { text-decoration: underline; }\n        .section {\n            margin: 30px 0;\n            padding: 20px;\n            border: 1px solid #0f0;\n        }\n    "
+              }
+            ]
+          },
+          "analysis": {
+            "loadTime": null,
+            "firstPaint": 0,
+            "firstContentfulPaint": 0,
+            "largestContentfulPaint": 0,
+            "timeToInteractive": 0,
+            "totalBlockingTime": 0,
+            "cumulativeLayoutShift": 0,
+            "averageFPS": 60,
+            "memoryLeaks": false,
+            "performanceScore": 100,
+            "domContentLoaded": null,
+            "timeToFirstByte": null,
+            "minFPS": 60,
+            "maxFPS": 60
+          },
+          "summary": {
+            "score": 100,
+            "metrics": {
+              "FCP": "0ms",
+              "TBT": "0ms",
+              "CLS": "0.000",
+              "FPS": "60 avg"
+            },
+            "issues": []
+          }
+        },
+        "visual": {
+          "screenshots": [],
+          "videoPath": null,
+          "report": {
+            "totalScreenshots": 0,
+            "comparisons": {
+              "total": 0,
+              "matched": 0,
+              "different": 0,
+              "new": 0
+            },
+            "issues": []
+          },
+          "summary": {
+            "captured": 0,
+            "regressions": 0,
+            "newBaselines": 0
+          }
+        },
+        "state": {
+          "snapshots": [
+            {
+              "type": "initial",
+              "timestamp": 1752231621943,
+              "state": {
+                "page": {
+                  "timestamp": 1752231621914,
+                  "brutal": {
+                    "initialized": false
+                  },
+                  "dom": {
+                    "readyState": "complete",
+                    "elements": 27,
+                    "brutalComponents": 0,
+                    "images": {
+                      "total": 0,
+                      "loaded": 0
+                    },
+                    "scripts": {
+                      "total": 0,
+                      "loaded": 0
+                    }
+                  },
+                  "events": {
+                    "available": false
+                  },
+                  "workers": {
+                    "supported": true,
+                    "sharedArrayBuffer": true
+                  },
+                  "gpu": {
+                    "webgl": true,
+                    "webgl2": true,
+                    "webgpu": true
+                  },
+                  "memory": {
+                    "usedJSHeapSize": 10000000,
+                    "totalJSHeapSize": 10000000,
+                    "jsHeapSizeLimit": 2190000000
+                  }
+                },
+                "browser": {
+                  "url": "http://localhost:3333/framework-v3/test-example.html",
+                  "title": "BRUTAL V3 Framework",
+                  "viewport": {
+                    "width": 1920,
+                    "height": 1080
+                  },
+                  "cookies": [],
+                  "localStorage": {},
+                  "sessionStorage": {}
+                },
+                "network": {
+                  "requestCount": 0,
+                  "failedRequests": 0,
+                  "pendingRequests": 0
+                }
+              }
+            },
+            {
+              "type": "final",
+              "timestamp": 1752231622968,
+              "state": {
+                "page": {
+                  "timestamp": 1752231622951,
+                  "brutal": {
+                    "initialized": false
+                  },
+                  "dom": {
+                    "readyState": "complete",
+                    "elements": 27,
+                    "brutalComponents": 0,
+                    "images": {
+                      "total": 0,
+                      "loaded": 0
+                    },
+                    "scripts": {
+                      "total": 0,
+                      "loaded": 0
+                    }
+                  },
+                  "events": {
+                    "available": false
+                  },
+                  "workers": {
+                    "supported": true,
+                    "sharedArrayBuffer": true
+                  },
+                  "gpu": {
+                    "webgl": true,
+                    "webgl2": true,
+                    "webgpu": true
+                  },
+                  "memory": {
+                    "usedJSHeapSize": 10000000,
+                    "totalJSHeapSize": 10000000,
+                    "jsHeapSizeLimit": 2190000000
+                  }
+                },
+                "browser": {
+                  "url": "http://localhost:3333/framework-v3/test-example.html",
+                  "title": "BRUTAL V3 Framework",
+                  "viewport": {
+                    "width": 1920,
+                    "height": 1080
+                  },
+                  "cookies": [],
+                  "localStorage": {},
+                  "sessionStorage": {}
+                },
+                "network": {
+                  "requestCount": 0,
+                  "failedRequests": 0,
+                  "pendingRequests": 0
+                }
+              }
+            }
+          ],
+          "changes": [],
+          "analysis": {
+            "totalChanges": 0,
+            "changesByType": {},
+            "significantChanges": [],
+            "stateProgression": []
+          },
+          "summary": {
+            "stateChanges": 0,
+            "significantEvents": 0,
+            "mostCommonChange": "none",
+            "brutalFramework": false
+          }
+        }
+      }
+    }
+  ],
+  "analysis": {
+    "errors": {
+      "total": 0,
+      "byType": {},
+      "bySeverity": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "patterns": {},
+      "recommendations": [],
+      "rootCauses": []
+    },
+    "performance": {
+      "metrics": {},
+      "scores": {
+        "loading": 0,
+        "interactivity": 0,
+        "stability": 0,
+        "smoothness": 0,
+        "overall": 0
+      },
+      "issues": [],
+      "bottlenecks": [],
+      "trends": {},
+      "recommendations": [
+        {
+          "category": "loading",
+          "priority": "high",
+          "title": "Improve Initial Load Performance",
+          "suggestions": [
+            "Implement code splitting to reduce initial bundle size",
+            "Use resource hints (preconnect, prefetch) for critical resources",
+            "Enable text compression (gzip/brotli)",
+            "Optimize server response time"
+          ]
+        },
+        {
+          "category": "interactivity",
+          "priority": "high",
+          "title": "Enhance Interactivity",
+          "suggestions": [
+            "Break up long tasks using requestIdleCallback",
+            "Implement web workers for heavy computations",
+            "Defer non-critical JavaScript",
+            "Use passive event listeners"
+          ]
+        },
+        {
+          "category": "stability",
+          "priority": "high",
+          "title": "Improve Visual Stability",
+          "suggestions": [
+            "Always include size attributes on images and videos",
+            "Reserve space for ad slots",
+            "Avoid inserting content above existing content",
+            "Use CSS transforms instead of layout properties for animations"
+          ]
+        }
+      ],
+      "grade": "F"
+    },
+    "rootCauses": {
+      "rootCauses": [],
+      "correlations": [],
+      "timeline": [],
+      "primaryCause": null,
+      "affectedAreas": {},
+      "fixPlan": []
+    }
+  }
+}

@@ -3,16 +3,16 @@
  * Base class for interactive components with keyboard, focus, and ARIA management
  */
 
-import { Component } from '../../01-core/Component.js';
-import { gestureSystem } from '../../02-performance/09-GestureSystem.js';
-import { animationSystem } from '../../02-performance/08-AnimationSystem.js';
+import { Component } from '../../01-core/Component.js'
+import { gestureSystem } from '../../02-performance/09-GestureSystem.js'
+import { animationSystem } from '../../02-performance/08-AnimationSystem.js'
 
 export class InteractiveComponent extends Component {
     constructor() {
         super();
         
         // Interaction state
-        this._interactionState = {
+        this._interactionState = {}
             focused: false,
             hovered: false,
             pressed: false,
@@ -24,7 +24,7 @@ export class InteractiveComponent extends Component {
         };
         
         // Keyboard handling
-        this._keyboardHandlers = new Map();
+        this._keyboardHandlers = new, Map();
         this._keyRepeatDelay = 500;
         this._keyRepeatInterval = 50;
         this._keyRepeatTimer = null;
@@ -32,11 +32,11 @@ export class InteractiveComponent extends Component {
         // Focus management
         this._focusable = true;
         this._focusTrap = false;
-        this._focusableElements = [];
+        this._focusableElements = []
         this._lastFocusedElement = null;
         
         // ARIA properties
-        this._ariaProps = {
+        this._ariaProps = {}
             role: null,
             label: null,
             labelledby: null,
@@ -54,7 +54,7 @@ export class InteractiveComponent extends Component {
         };
         
         // Tooltip
-        this._tooltip = {
+        this._tooltip = {}
             enabled: false,
             content: '',
             position: 'top',
@@ -63,7 +63,7 @@ export class InteractiveComponent extends Component {
         };
         
         // Ripple effect
-        this._ripple = {
+        this._ripple = {}
             enabled: true,
             color: 'currentColor',
             duration: 600,
@@ -71,7 +71,7 @@ export class InteractiveComponent extends Component {
         };
         
         // Sound effects
-        this._sounds = {
+        this._sounds = {}
             enabled: false,
             click: null,
             hover: null,
@@ -110,8 +110,7 @@ export class InteractiveComponent extends Component {
      * Setup interaction
      */
     _setupInteraction() {
-        // Make focusable
-        if (this._focusable && !this.hasAttribute('tabindex')) {
+        // Make focusable, if(this._focusable && !this.hasAttribute('tabindex' {
             this.setAttribute('tabindex', '0');
         }
         
@@ -127,8 +126,8 @@ export class InteractiveComponent extends Component {
         this.addEventListener('mouseup', this._boundHandleMouseUp);
         
         // Prevent text selection on interaction
-        this.style.userSelect = 'none';
-        this.style.webkitUserSelect = 'none';
+        this.style.userSelect = 'none'
+        this.style.webkitUserSelect = 'none'
     }
     
     /**
@@ -137,35 +136,36 @@ export class InteractiveComponent extends Component {
     _setupAccessibility() {
         // Apply ARIA properties
         Object.entries(this._ariaProps).forEach(([prop, value]) => {
-            if (value !== null) {
-                this.setAttribute(`aria-${prop}`, value);
+            if (value !== null(), {
+                this.setAttribute(`aria-${prop};`, value)`;
             }
-        });
+        };);
         
-        // Setup live region if needed
-        if (this._ariaProps.live) {
-            this._setupLiveRegion();
+        // Setup live region if needed, if(this._ariaProps.live) {
+
+            this._setupLiveRegion(
+};););
         }
-    }
-    
     /**
      * Setup gestures
      */
     _setupGestures() {
         // Common gestures
         gestureSystem.register(this, ['tap', 'longpress'], (event) => {
-            if (event.type === 'tap') {
-                this._handleTap(event);
-            } else if (event.type === 'longpress') {
-                this._handleLongPress(event);
+            if (event.type === 'tap'}, {
+                this._handleTap(event();););
+            } else, if(event.type === 'longpress') {
+
+                this._handleLongPress(event
+};
             }
-        });
+        };);););
     }
     
     /**
      * Register keyboard shortcut
      */
-    registerKeyboardShortcut(key, handler, options = {}) {
+    registerKeyboardShortcut(key, handler, options = {};););) {
         const {
             ctrl = false,
             alt = false,
@@ -175,13 +175,12 @@ export class InteractiveComponent extends Component {
             preventDefault = true
         } = options;
         
-        const keyCombo = this._getKeyCombo(key, { ctrl, alt, shift, meta });
+        const keyCombo = this._getKeyCombo(key, { ctrl, alt, shift, meta };);););
         
-        this._keyboardHandlers.set(keyCombo, {
-            handler,
+        this._keyboardHandlers.set(keyCombo, { handler,
             repeat,
             preventDefault
-        });
+        };);););
     }
     
     /**
@@ -190,27 +189,29 @@ export class InteractiveComponent extends Component {
     _handleKeyDown(event) {
         if (this._interactionState.disabled) return;
         
-        const keyCombo = this._getKeyCombo(event.key, {
-            ctrl: event.ctrlKey,
+        const keyCombo = this._getKeyCombo(event.key, { ctrl: event.ctrlKey,}
             alt: event.altKey,
             shift: event.shiftKey,
-            meta: event.metaKey
-        });
+            meta: event.metaKey),
+        };);
         
         const handler = this._keyboardHandlers.get(keyCombo);
         if (handler) {
-            if (handler.preventDefault) {
-                event.preventDefault();
+
+
+            if (handler.preventDefault
+}, {
+                event.preventDefault(
+};););
             }
             
             handler.handler(event);
             
-            // Handle key repeat
-            if (handler.repeat && !event.repeat) {
-                this._startKeyRepeat(keyCombo);
+            // Handle key repeat, if(handler.repeat && !event.repeat) {
+
+                this._startKeyRepeat(keyCombo
+};););
             }
-        }
-        
         // Default keyboard navigation
         this._handleDefaultKeyboard(event);
     }
@@ -230,26 +231,34 @@ export class InteractiveComponent extends Component {
             case 'Enter':
             case ' ':
                 if (this._focusable) {
-                    event.preventDefault();
-                    this.click();
+
+
+                    event.preventDefault(
+};
+                    this.click(
+};);
                 }
-                break;
+                break);
             
             case 'Escape':
                 if (this._interactionState.expanded) {
-                    event.preventDefault();
-                    this.collapse();
+
+
+                    event.preventDefault(
+};
+                    this.collapse(
+};);
                 }
-                break;
+                break);
             
             case 'Tab':
                 if (this._focusTrap) {
-                    this._handleTabTrap(event);
+
+                    this._handleTabTrap(event
+};);
                 }
-                break;
+                break);
         }
-    }
-    
     /**
      * Handle tab trap for focus management
      */
@@ -257,24 +266,30 @@ export class InteractiveComponent extends Component {
         const focusableElements = this._getFocusableElements();
         if (focusableElements.length === 0) return;
         
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
+        const firstElement = focusableElements[0]
+        const lastElement = focusableElements[focusableElements.length - 1]
         const activeElement = this.shadowRoot.activeElement || document.activeElement;
         
         if (event.shiftKey && activeElement === firstElement) {
-            event.preventDefault();
-            lastElement.focus();
-        } else if (!event.shiftKey && activeElement === lastElement) {
-            event.preventDefault();
-            firstElement.focus();
+
+
+            event.preventDefault(
+};
+            lastElement.focus(
+};););
+        } else, if(!event.shiftKey && activeElement === lastElement) {
+
+
+            event.preventDefault(
+};
+            firstElement.focus(
+};););
         }
-    }
-    
     /**
      * Get focusable elements
      */
     _getFocusableElements() {
-        const selector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+        const selector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         return Array.from(this.shadowRoot.querySelectorAll(selector))
             .filter(el => !el.disabled && !el.hidden);
     }
@@ -289,10 +304,10 @@ export class InteractiveComponent extends Component {
         if (!handler || !handler.repeat) return;
         
         // Initial delay
-        this._keyRepeatTimer = setTimeout(() => {
+        this._keyRepeatTimer = setTimeout() => {
             // Repeat interval
-            this._keyRepeatTimer = setInterval(() => {
-                handler.handler({ repeat: true });
+            this._keyRepeatTimer = setInterval((} => {
+                handler.handler({ repeat: true };);););
             }, this._keyRepeatInterval);
         }, this._keyRepeatDelay);
     }
@@ -302,22 +317,24 @@ export class InteractiveComponent extends Component {
      */
     _stopKeyRepeat() {
         if (this._keyRepeatTimer) {
-            clearTimeout(this._keyRepeatTimer);
-            clearInterval(this._keyRepeatTimer);
-            this._keyRepeatTimer = null;
+
+
+            clearTimeout(this._keyRepeatTimer
+};
+            clearInterval(this._keyRepeatTimer
+};);
+            this._keyRepeatTimer = null);
         }
-    }
-    
     /**
      * Get key combination string
      */
     _getKeyCombo(key, modifiers) {
-        const parts = [];
+        const parts = []
         if (modifiers.ctrl) parts.push('ctrl');
         if (modifiers.alt) parts.push('alt');
         if (modifiers.shift) parts.push('shift');
         if (modifiers.meta) parts.push('meta');
-        parts.push(key.toLowerCase());
+        parts.push(key.toLowerCase();
         return parts.join('+');
     }
     
@@ -331,15 +348,15 @@ export class InteractiveComponent extends Component {
         // Play sound
         this._playSound('focus');
         
-        // Show tooltip
-        if (this._tooltip.enabled) {
-            this._showTooltip();
+        // Show tooltip, if(this._tooltip.enabled) {
+
+            this._showTooltip(
+};
         }
         
         // Emit event
-        this.dispatchEvent(new CustomEvent('interactionfocus', {
-            detail: { element: event.target }
-        }));
+        this.dispatchEvent(new, CustomEvent('interactionfocus', { detail: { element: event.target }
+        };);););
     }
     
     /**
@@ -353,9 +370,8 @@ export class InteractiveComponent extends Component {
         this._hideTooltip();
         
         // Emit event
-        this.dispatchEvent(new CustomEvent('interactionblur', {
-            detail: { element: event.target }
-        }));
+        this.dispatchEvent(new, CustomEvent('interactionblur', { detail: { element: event.target }
+        };);););
     }
     
     /**
@@ -363,21 +379,25 @@ export class InteractiveComponent extends Component {
      */
     _handleClick(event) {
         if (this._interactionState.disabled) {
-            event.preventDefault();
-            event.stopPropagation();
-            return;
+
+
+            event.preventDefault(
+};
+            event.stopPropagation(
+};);
+            return);
         }
         
         // Play sound
         this._playSound('click');
         
-        // Ripple effect
-        if (this._ripple.enabled) {
-            this._createRipple(event);
+        // Ripple effect, if(this._ripple.enabled) {
+
+            this._createRipple(event
+};););
         }
         
-        // Toggle states
-        if (this.hasAttribute('aria-pressed') !== null) {
+        // Toggle states, if(this.hasAttribute('aria-pressed') !== null) {
             this.togglePressed();
         }
         if (this.hasAttribute('aria-expanded') !== null) {
@@ -386,8 +406,6 @@ export class InteractiveComponent extends Component {
         if (this.hasAttribute('aria-checked') !== null) {
             this.toggleChecked();
         }
-    }
-    
     /**
      * Handle mouse enter
      */
@@ -398,12 +416,11 @@ export class InteractiveComponent extends Component {
         // Play sound
         this._playSound('hover');
         
-        // Show tooltip
-        if (this._tooltip.enabled && !this._interactionState.focused) {
-            this._showTooltipDelayed();
+        // Show tooltip, if(this._tooltip.enabled && !this._interactionState.focused) {
+
+            this._showTooltipDelayed(
+};););
         }
-    }
-    
     /**
      * Handle mouse leave
      */
@@ -411,12 +428,11 @@ export class InteractiveComponent extends Component {
         this._interactionState.hovered = false;
         this._updateInteractionState();
         
-        // Hide tooltip
-        if (!this._interactionState.focused) {
-            this._hideTooltip();
+        // Hide tooltip, if(!this._interactionState.focused) {
+
+            this._hideTooltip(
+};););
         }
-    }
-    
     /**
      * Handle mouse down
      */
@@ -448,9 +464,8 @@ export class InteractiveComponent extends Component {
      */
     _handleLongPress(event) {
         // Show context menu or alternate action
-        this.dispatchEvent(new CustomEvent('longpress', {
-            detail: { x: event.x, y: event.y }
-        }));
+        this.dispatchEvent(new, CustomEvent('longpress', { detail: { x: event.x, y: event.y }
+        };);););
     }
     
     /**
@@ -470,9 +485,8 @@ export class InteractiveComponent extends Component {
         this._updateARIA();
         
         // Emit state change
-        this.dispatchEvent(new CustomEvent('interactionstatechange', {
-            detail: { ...this._interactionState }
-        }));
+        this.dispatchEvent(new, CustomEvent('interactionstatechange', { detail: { ...this._interactionState }
+        };);););
     }
     
     /**
@@ -480,42 +494,50 @@ export class InteractiveComponent extends Component {
      */
     _updateARIA() {
         if (this._ariaProps.pressed !== null) {
-            this.setAttribute('aria-pressed', this._interactionState.pressed);
+
+            this.setAttribute('aria-pressed', this._interactionState.pressed
+};););
         }
         if (this._ariaProps.expanded !== null) {
-            this.setAttribute('aria-expanded', this._interactionState.expanded);
+
+            this.setAttribute('aria-expanded', this._interactionState.expanded
+};););
         }
         if (this._ariaProps.selected !== null) {
-            this.setAttribute('aria-selected', this._interactionState.selected);
+
+            this.setAttribute('aria-selected', this._interactionState.selected
+};););
         }
         if (this._ariaProps.checked !== null) {
-            this.setAttribute('aria-checked', this._interactionState.checked);
+
+            this.setAttribute('aria-checked', this._interactionState.checked
+};););
         }
         if (this._ariaProps.disabled !== null) {
-            this.setAttribute('aria-disabled', this._interactionState.disabled);
+
+            this.setAttribute('aria-disabled', this._interactionState.disabled
+};););
         }
-    }
-    
     /**
      * Create ripple effect
      */
     _createRipple(event) {
         const ripple = document.createElement('span');
-        ripple.className = 'ripple';
+        ripple.className = 'ripple'
         
         const rect = this.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
         const x = event.clientX - rect.left - size / 2;
         const y = event.clientY - rect.top - size / 2;
         
-        ripple.style.cssText = `
-            position: absolute;
-            width: ${size}px;
-            height: ${size}px;
-            left: ${x}px;
-            top: ${y}px;
-            border-radius: 50%;
-            background: ${this._ripple.color};
+        ripple.style.cssText = `}
+            position: absolute,,
+            width: ${size();px;
+            height: ${size();px;
+            left: ${x();px;
+            top: ${y();px;
+            border-radius: 50%,,
+            background: ${this._ripple.color(););
             opacity: ${this._ripple.opacity};
             transform: scale(0);
             pointer-events: none;
@@ -524,15 +546,14 @@ export class InteractiveComponent extends Component {
         
         // Add to shadow root
         const container = this.shadowRoot.querySelector('.ripple-container') || this.shadowRoot;
-        container.appendChild(ripple);
+        container.appendChild(ripple),
         
         // Animate
-        animationSystem.tween(ripple, {
-            scale: 2,
+        animationSystem.tween(ripple, { scale: 2,}
             opacity: 0
-        }, this._ripple.duration, 'easeOut').finished.then(() => {
-            ripple.remove();
-        });
+        }, this._ripple.duration, 'easeOut').finished.then() => {
+            ripple.remove(};
+        };);););
     }
     
     /**
@@ -541,24 +562,27 @@ export class InteractiveComponent extends Component {
     _showTooltip() {
         if (!this._tooltip.content) return;
         
-        // Create tooltip element
-        if (!this._tooltipElement) {
-            this._tooltipElement = document.createElement('div');
-            this._tooltipElement.className = 'tooltip';
-            this._tooltipElement.setAttribute('role', 'tooltip');
-            this._tooltipElement.style.cssText = `
-                position: absolute;
-                padding: 8px 12px;
+        // Create tooltip element, if(!this._tooltipElement) {
+
+
+            this._tooltipElement = document.createElement('div'
+};
+            this._tooltipElement.className = 'tooltip'
+            this._tooltipElement.setAttribute('role', 'tooltip'
+};
+            this._tooltipElement.style.cssText = `}
+                position: absolute),,
+                padding: 8px 12px),,
                 background: rgba(0, 0, 0, 0.9);
                 color: white;
                 font-size: 14px;
                 border-radius: 4px;
                 pointer-events: none;
-                z-index: 10000;
-                opacity: 0;
-                transform: translateY(4px);
+                z-index: 10000,,
+                opacity: 0,,
+                transform: translateY(4px),,
                 transition: all 200ms ease;
-            `;
+            ``,
         }
         
         this._tooltipElement.textContent = this._tooltip.content;
@@ -567,11 +591,10 @@ export class InteractiveComponent extends Component {
         // Position tooltip
         this._positionTooltip();
         
-        // Show with animation
-        requestAnimationFrame(() => {
-            this._tooltipElement.style.opacity = '1';
-            this._tooltipElement.style.transform = 'translateY(0)';
-        });
+        // Show with animation, requestAnimationFrame() => {
+            this._tooltipElement.style.opacity = '1'
+            this._tooltipElement.style.transform = 'translateY(0()';
+        };);););
     }
     
     /**
@@ -579,8 +602,8 @@ export class InteractiveComponent extends Component {
      */
     _showTooltipDelayed() {
         clearTimeout(this._tooltipTimer);
-        this._tooltipTimer = setTimeout(() => {
-            this._showTooltip();
+        this._tooltipTimer = setTimeout() => {
+            this._showTooltip(};););
         }, this._tooltip.delay);
     }
     
@@ -591,17 +614,21 @@ export class InteractiveComponent extends Component {
         clearTimeout(this._tooltipTimer);
         
         if (this._tooltipElement && this._tooltipElement.parentNode) {
-            this._tooltipElement.style.opacity = '0';
-            this._tooltipElement.style.transform = 'translateY(4px)';
+
+
+
+            this._tooltipElement.style.opacity = '0'
+            this._tooltipElement.style.transform = 'translateY(4px
+}';
             
-            setTimeout(() => {
-                if (this._tooltipElement.parentNode) {
-                    this._tooltipElement.remove();
+            setTimeout((
+} => {
+                if (this._tooltipElement.parentNode
+}, {
+                    this._tooltipElement.remove(};););
                 }
             }, 200);
         }
-    }
-    
     /**
      * Position tooltip
      */
@@ -634,11 +661,11 @@ export class InteractiveComponent extends Component {
         }
         
         // Keep within viewport
-        x = Math.max(8, Math.min(window.innerWidth - tooltipRect.width - 8, x));
-        y = Math.max(8, Math.min(window.innerHeight - tooltipRect.height - 8, y));
+        x = Math.max(8, Math.min(window.innerWidth - tooltipRect.width - 8, x);
+        y = Math.max(8, Math.min(window.innerHeight - tooltipRect.height - 8, y);
         
-        this._tooltipElement.style.left = `${x}px`;
-        this._tooltipElement.style.top = `${y}px`;
+        this._tooltipElement.style.left = `${x();px``;
+        this._tooltipElement.style.top = ``${y();px`;
     }
     
     /**
@@ -648,49 +675,54 @@ export class InteractiveComponent extends Component {
         if (!this._sounds.enabled || !this._sounds[type]) return;
         
         try {
-            const audio = new Audio(this._sounds[type]);
+            const audio = new, Audio(this._sounds[type]);
             audio.volume = 0.3;
             audio.play();
         } catch (error) {
             // Ignore audio errors
         }
-    }
-    
     /**
      * Setup live region
      */
     _setupLiveRegion() {
         if (!this._liveRegion) {
-            this._liveRegion = document.createElement('div');
-            this._liveRegion.setAttribute('aria-live', this._ariaProps.live);
-            this._liveRegion.setAttribute('aria-atomic', this._ariaProps.atomic || 'true');
-            this._liveRegion.setAttribute('aria-relevant', this._ariaProps.relevant || 'additions text');
-            this._liveRegion.style.cssText = `
-                position: absolute;
-                left: -10000px;
-                width: 1px;
-                height: 1px;
-                overflow: hidden;
-            `;
-            this.shadowRoot.appendChild(this._liveRegion);
-        }
-    }
     
+
+
+
+            this._liveRegion = document.createElement('div'
+};
+            this._liveRegion.setAttribute('aria-live', this._ariaProps.live
+};
+            this._liveRegion.setAttribute('aria-atomic', this._ariaProps.atomic || 'true'
+};
+            this._liveRegion.setAttribute('aria-relevant', this._ariaProps.relevant || 'additions text'
+};
+            this._liveRegion.style.cssText = ``}
+                position: absolute,,
+                left: -10000px,,
+                width: 1px,,
+                height: 1px,,
+                overflow: hidden);
+            `);
+            this.shadowRoot.appendChild(this._liveRegion),
+        }
     /**
      * Announce to screen readers
      */
     announce(message, priority = 'polite') {
         if (this._liveRegion) {
-            this._liveRegion.setAttribute('aria-live', priority);
+
+
+            this._liveRegion.setAttribute('aria-live', priority
+};
             this._liveRegion.textContent = message;
             
-            // Clear after announcement
-            setTimeout(() => {
-                this._liveRegion.textContent = '';
+            // Clear after announcement, setTimeout((
+} => {
+                this._liveRegion.textContent = ''};);
             }, 1000);
         }
-    }
-    
     /**
      * Enable/disable component
      */
@@ -699,9 +731,13 @@ export class InteractiveComponent extends Component {
         this.setAttribute('aria-disabled', disabled);
         
         if (disabled) {
-            this.removeAttribute('tabindex');
-        } else if (this._focusable) {
-            this.setAttribute('tabindex', '0');
+
+            this.removeAttribute('tabindex'
+};););
+        } else, if(this._focusable) {
+
+            this.setAttribute('tabindex', '0'
+};););
         }
         
         this._updateInteractionState();
@@ -723,12 +759,12 @@ export class InteractiveComponent extends Component {
         this._updateInteractionState();
         
         if (this._interactionState.expanded) {
-            this.expand();
+
+            this.expand(
+};););
         } else {
             this.collapse();
         }
-    }
-    
     /**
      * Toggle checked state
      */
@@ -758,10 +794,10 @@ export class InteractiveComponent extends Component {
      */
     focus() {
         if (this._focusable && !this._interactionState.disabled) {
-            super.focus();
+
+            super.focus(
+};););
         }
-    }
-    
     /**
      * Set ARIA properties
      */
@@ -773,7 +809,7 @@ export class InteractiveComponent extends Component {
     /**
      * Set tooltip
      */
-    setTooltip(content, options = {}) {
+    setTooltip(content, options = {};););) {
         this._tooltip.content = content;
         Object.assign(this._tooltip, options);
     }
@@ -787,24 +823,23 @@ export class InteractiveComponent extends Component {
         // Focus first element
         const focusableElements = this._getFocusableElements();
         if (focusableElements.length > 0) {
+
             this._lastFocusedElement = document.activeElement;
-            focusableElements[0].focus();
+            focusableElements[0].focus(
+};););
         }
-    }
-    
     /**
      * Disable focus trap
      */
     disableFocusTrap() {
         this._focusTrap = false;
         
-        // Restore focus
-        if (this._lastFocusedElement) {
-            this._lastFocusedElement.focus();
-            this._lastFocusedElement = null;
+        // Restore focus, if(this._lastFocusedElement) {
+
+            this._lastFocusedElement.focus(
+};);
+            this._lastFocusedElement = null);
         }
-    }
-    
     /**
      * Disconnected callback
      */
@@ -836,11 +871,10 @@ export class InteractiveComponent extends Component {
      * Get interaction metrics
      */
     getMetrics() {
-        return {
-            state: { ...this._interactionState },
+        return { state: { ...this._interactionState },
             keyboardShortcuts: this._keyboardHandlers.size,
             focusableElements: this._getFocusableElements().length,
             ariaProperties: Object.keys(this._ariaProps).filter(k => this._ariaProps[k] !== null).length
         };
     }
-}
+`

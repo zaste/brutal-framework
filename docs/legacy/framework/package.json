@@ -1,0 +1,132 @@
+{
+  "name": "native-web-components-framework",
+  "version": "1.0.0-alpha.1",
+  "description": "Native Web Components Framework with 50x React performance advantage",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build:core && concurrently \"npm run dev:core\" \"npm run dev:extensions\"",
+    "dev:demo": "cd demo && python -m http.server 8000",
+    "dev:clean": "pkill -f 'python -m http.server' || true",
+    "bootstrap": "npm install && npm run build:core",
+    "build": "npm run build:core && npm run build:sections && npm run build:extensions",
+    "build:core": "cd packages/core && npm run build",
+    "build:sections": "cd packages/sections && npm run build",
+    "build:extensions": "npm run build:ai-ml && npm run build:dx && npm run build:performance",
+    "build:ai-ml": "cd packages/extensions/ai-ml && npm run build",
+    "build:dx": "cd packages/extensions/developer-experience && npm run build",
+    "build:performance": "cd packages/extensions/performance-scale && npm run build",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "jest --config jest.config.js",
+    "test:integration": "jest --config jest.integration.config.js",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:browser": "node tests/browser-validation.cjs",
+    "lint": "eslint packages/*/src --ext .ts,.js",
+    "typecheck": "tsc --noEmit --project tsconfig.json",
+    "benchmark": "node benchmarks/simple-benchmark.cjs",
+    "benchmark:comprehensive": "npm run benchmark:react-comparison && npm run benchmark:performance",
+    "benchmark:react-comparison": "node benchmarks/react-comparison-benchmark.cjs",
+    "benchmark:performance": "node benchmarks/performance-validation.cjs",
+    "benchmark:validate": "npm run benchmark:comprehensive && npm run performance:validate-target",
+    "performance:check": "node scripts/performance-check.js",
+    "performance:validate-target": "node scripts/validate-50x-target.js",
+    "docs:generate": "typedoc --out docs packages/core/src",
+    "docs:validate": "node scripts/validate-docs.js",
+    "docs:deploy": "node scripts/deploy-docs.js",
+    "package": "npm run build && node scripts/package-dist.js",
+    "deploy:test:cloudflare": "wrangler deploy --dry-run",
+    "deploy:test:vercel": "vercel --prebuilt --confirm",
+    "deploy:validate:cloudflare": "node scripts/validate-cloudflare-deploy.js",
+    "deploy:validate:vercel": "node scripts/validate-vercel-deploy.js",
+    "clean": "rimraf dist packages/*/dist node_modules/.cache",
+    "dev:core": "cd packages/core && npm run dev",
+    "dev:extensions": "npm run dev:dx",
+    "dev:dx": "cd packages/extensions/developer-experience && npm run dev",
+    "validate:real": "npm run test:browser && npm run benchmark:validate",
+    "pre-commit": "npm run lint && npm run typecheck && npm run test:unit",
+    "prepare": "husky install",
+    "semantic-release": "semantic-release"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.16",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
+    "benchmark.js": "^2.0.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.56.0",
+    "husky": "^9.0.10",
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
+    "jsdom": "^26.1.0",
+    "puppeteer": "^24.12.0",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.9.6",
+    "semantic-release": "^23.0.2",
+    "typedoc": "^0.25.7",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@vue/server-renderer": "^3.5.17",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "vue": "^3.5.17"
+  },
+  "keywords": [
+    "web-components",
+    "native",
+    "framework",
+    "performance",
+    "enterprise",
+    "50x-react",
+    "typescript",
+    "cloudflare",
+    "vercel"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/native-web-components/framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/native-web-components/framework/issues"
+  },
+  "homepage": "https://native-web-components.dev",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "supports es6-module"
+  ],
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "collectCoverageFrom": [
+      "packages/*/src/**/*.{ts,js}",
+      "!packages/*/src/**/*.d.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 85,
+        "functions": 85,
+        "lines": 85,
+        "statements": 85
+      }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit",
+      "pre-push": "npm run test && npm run benchmark:validate"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Import Issues</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
+        .error { color: #ff6b6b; }
+        .success { color: #51cf66; }
+        .info { color: #339af0; }
+        pre { background: #0a0a0a; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Import Resolution Debug</h1>
+    <div id="log"></div>
+    
+    <script type="module">
+        const log = document.getElementById('log');
+        
+        function addLog(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = msg;
+            log.appendChild(div);
+        }
+        
+        // Log environment info
+        addLog('<h2>Environment Info</h2>');
+        addLog(`Current URL: ${window.location.href}`);
+        addLog(`Base URI: ${document.baseURI}`);
+        addLog(`Origin: ${window.location.origin}`);
+        addLog(`Pathname: ${window.location.pathname}`);
+        
+        // Test import paths
+        addLog('<h2>Testing Import Paths</h2>');
+        
+        const testPaths = [
+            './testing/components/BrutalTestDashboard.js',
+            '/testing/components/BrutalTestDashboard.js',
+            'testing/components/BrutalTestDashboard.js',
+            './components/BrutalTestDashboard.js'
+        ];
+        
+        for (const path of testPaths) {
+            const resolved = new URL(path, window.location.href).href;
+            addLog(`<pre>Path: ${path}\nResolved: ${resolved}</pre>`);
+            
+            try {
+                const response = await fetch(resolved);
+                if (response.ok) {
+                    addLog(`✅ Found at: ${resolved}`, 'success');
+                } else {
+                    addLog(`❌ Not found (${response.status}): ${resolved}`, 'error');
+                }
+            } catch (err) {
+                addLog(`❌ Error fetching: ${err.message}`, 'error');
+            }
+        }
+        
+        // Now try actual import from testing/demo.html perspective
+        addLog('<h2>From /testing/demo.html perspective</h2>');
+        const demoUrl = new URL('/testing/demo.html', window.location.origin);
+        addLog(`Demo URL would be: ${demoUrl.href}`);
+        
+        const componentPath = './components/BrutalTestDashboard.js';
+        const resolvedFromDemo = new URL(componentPath, demoUrl).href;
+        addLog(`<pre>Relative path: ${componentPath}\nResolved from demo: ${resolvedFromDemo}</pre>`);
+        
+        // Test if file exists at resolved path
+        try {
+            const response = await fetch(resolvedFromDemo);
+            if (response.ok) {
+                addLog(`✅ Component found at: ${resolvedFromDemo}`, 'success');
+                const text = await response.text();
+                addLog(`<pre>First 200 chars:\n${text.substring(0, 200)}...</pre>`);
+            } else {
+                addLog(`❌ Component not found (${response.status})`, 'error');
+            }
+        } catch (err) {
+            addLog(`❌ Error: ${err.message}`, 'error');
+        }
+    </script>
+</body>
+</html>

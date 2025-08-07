@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15-Minute SaaS Dashboard - Framework v2</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f9fafb;
+      color: #111827;
+    }
+    
+    /* This entire app in ONE FILE - copy, paste, done! */
+  </style>
+</head>
+<body>
+  <app-root></app-root>
+
+  <script type="module">
+    // ENTIRE FRAMEWORK + APP IN ONE FILE
+    // Zero dependencies, zero build step, zero config
+    
+    // Mini Framework Core (all you need)
+    class Component extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this._state = {};
+      }
+      
+      connectedCallback() {
+        this.render();
+      }
+      
+      setState(updates) {
+        Object.assign(this._state, updates);
+        this.render();
+      }
+      
+      render() {
+        this.shadowRoot.innerHTML = `
+          <style>${this.styles()}</style>
+          ${this.template()}
+        `;
+      }
+      
+      template() { return ''; }
+      styles() { return ''; }
+    }
+    
+    // Simple Router
+    class Router {
+      constructor() {
+        this.routes = new Map();
+        this.current = null;
+        window.addEventListener('popstate', () => this.navigate());
+        document.addEventListener('click', e => {
+          const link = e.target.closest('a[href^="/"]');
+          if (link) {
+            e.preventDefault();
+            history.pushState(null, '', link.href);
+            this.navigate();
+          }
+        });
+      }
+      
+      route(path, component) {
+        this.routes.set(path, component);
+        return this;
+      }
+      
+      navigate() {
+        const path = location.pathname;
+        const Component = this.routes.get(path) || this.routes.get('*');
+        if (Component) {
+          document.querySelector('router-outlet').innerHTML = `<${Component}></${Component}>`;
+        }
+      }
+    }
+    
+    // Simple Store
+    class Store {
+      constructor(initial = {}) {
+        this.state = initial;
+        this.listeners = new Set();
+      }
+      
+      subscribe(fn) {
+        this.listeners.add(fn);
+        return () => this.listeners.delete(fn);
+      }
+      
+      setState(updates) {
+        Object.assign(this.state, updates);
+        this.listeners.forEach(fn => fn(this.state));
+      }
+    }
+    
+    // THE ACTUAL APP - Built in "15 minutes"
+    const store = new Store({
+      user: { name: 'John Doe', plan: 'Pro' },
+      stats: {
+        revenue: 52847,
+        customers: 1284,
+        growth: 23.5,
+        churn: 2.1
+      },
+      recentActivity: [
+        { id: 1, user: 'Alice', action: 'Upgraded to Pro', time: '2 hours ago', revenue: 99 },
+        { id: 2, user: 'Bob', action: 'Renewed subscription', time: '5 hours ago', revenue: 49 },
+        { id: 3, user: 'Charlie', action: 'Started trial', time: '1 day ago', revenue: 0 }
+      ]
+    });
+    
+    const router = new Router();
+    
+    // App Root Component
+    class AppRoot extends Component {
+      connectedCallback() {
+        super.connectedCallback();
+        this.unsubscribe = store.subscribe(() => this.render());
+        router.navigate();
+      }
+      
+      disconnectedCallback() {
+        this.unsubscribe?.();
+      }
+      
+      template() {
+        const { user } = store.state;
+        return `
+          <nav>
+            <div class="nav-brand">
+              <h2>SaaS Dashboard</h2>
+            </div>
+            <div class="nav-links">
+              <a href="/">Overview</a>
+              <a href="/customers">Customers</a>
+              <a href="/analytics">Analytics</a>
+            </div>
+            <div class="nav-user">
+              <span>${user.name}</span>
+              <span class="badge">${user.plan}</span>
+            </div>
+          </nav>
+          <main>
+            <router-outlet></router-outlet>
+          </main>
+        `;
+      }
+      
+      styles() {
+        return `
+          :host {
+            display: block;
+            min-height: 100vh;
+          }
+          
+          nav {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+          }
+          
+          .nav-brand h2 {
+            font-size: 1.5rem;
+            color: #3b82f6;
+          }
+          
+          .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+          }
+          
+          .nav-links a {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+          }
+          
+          .nav-links a:hover {
+            color: #3b82f6;
+          }
+          
+          .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+          }
+          
+          .badge {
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+          }
+          
+          main {
+            padding: 2rem;
+          }
+          
+          router-outlet {
+            display: block;
+          }
+        `;
+      }
+    }
+    
+    // Overview Page
+    class OverviewPage extends Component {
+      connectedCallback() {
+        super.connectedCallback();
+        this.unsubscribe = store.subscribe(() => this.render());
+      }
+      
+      disconnectedCallback() {
+        this.unsubscribe?.();
+      }
+      
+      template() {
+        const { stats, recentActivity } = store.state;
+        return `
+          <h1>Overview</h1>
+          
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>Monthly Revenue</h3>
+              <p class="stat-value">$${stats.revenue.toLocaleString()}</p>
+              <p class="stat-change positive">+${stats.growth}%</p>
+            </div>
+            <div class="stat-card">
+              <h3>Total Customers</h3>
+              <p class="stat-value">${stats.customers.toLocaleString()}</p>
+              <p class="stat-change positive">+89 this month</p>
+            </div>
+            <div class="stat-card">
+              <h3>Churn Rate</h3>
+              <p class="stat-value">${stats.churn}%</p>
+              <p class="stat-change negative">+0.3%</p>
+            </div>
+            <div class="stat-card">
+              <h3>ARPU</h3>
+              <p class="stat-value">$${Math.round(stats.revenue / stats.customers)}</p>
+              <p class="stat-change positive">+12%</p>
+            </div>
+          </div>
+          
+          <h2>Recent Activity</h2>
+          <div class="activity-list">
+            ${recentActivity.map(activity => `
+              <div class="activity-item">
+                <div>
+                  <strong>${activity.user}</strong> ${activity.action}
+                  <span class="time">${activity.time}</span>
+                </div>
+                ${activity.revenue > 0 ? `<span class="revenue">+$${activity.revenue}</span>` : ''}
+              </div>
+            `).join('')}
+          </div>
+          
+          <button class="cta-button" onclick="alert('This would open the real analytics!')">
+            View Detailed Analytics →
+          </button>
+        `;
+      }
+      
+      styles() {
+        return `
+          h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+          }
+          
+          h2 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+          }
+          
+          .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+          }
+          
+          .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          }
+          
+          .stat-card h3 {
+            color: #6b7280;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+          }
+          
+          .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111827;
+          }
+          
+          .stat-change {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+          }
+          
+          .stat-change.positive {
+            color: #10b981;
+          }
+          
+          .stat-change.negative {
+            color: #ef4444;
+          }
+          
+          .activity-list {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+          }
+          
+          .activity-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          
+          .activity-item:last-child {
+            border-bottom: none;
+          }
+          
+          .time {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-left: 1rem;
+          }
+          
+          .revenue {
+            color: #10b981;
+            font-weight: bold;
+          }
+          
+          .cta-button {
+            margin-top: 2rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+          }
+          
+          .cta-button:hover {
+            background: #2563eb;
+          }
+        `;
+      }
+    }
+    
+    // Customers Page
+    class CustomersPage extends Component {
+      template() {
+        return `
+          <h1>Customers</h1>
+          <p>Customer management would go here. This page loads instantly!</p>
+        `;
+      }
+      
+      styles() {
+        return `
+          h1 { font-size: 2rem; margin-bottom: 1rem; }
+          p { color: #6b7280; }
+        `;
+      }
+    }
+    
+    // Analytics Page
+    class AnalyticsPage extends Component {
+      template() {
+        return `
+          <h1>Analytics</h1>
+          <p>Real-time analytics would go here. Zero latency routing!</p>
+        `;
+      }
+      
+      styles() {
+        return `
+          h1 { font-size: 2rem; margin-bottom: 1rem; }
+          p { color: #6b7280; }
+        `;
+      }
+    }
+    
+    // Register all components
+    customElements.define('app-root', AppRoot);
+    customElements.define('overview-page', OverviewPage);
+    customElements.define('customers-page', CustomersPage);
+    customElements.define('analytics-page', AnalyticsPage);
+    
+    // Define routes
+    router
+      .route('/', 'overview-page')
+      .route('/customers', 'customers-page')
+      .route('/analytics', 'analytics-page')
+      .route('*', 'overview-page');
+  </script>
+</body>
+</html>

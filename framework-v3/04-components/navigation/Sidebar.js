@@ -3,14 +3,14 @@
  * @version 3.0.0
  */
 
-import { InteractiveComponent } from '../base/InteractiveComponent.js';
+import { InteractiveComponent } from '../base/InteractiveComponent.js'
 
 /**
  * BRUTAL Sidebar - Collapsible navigation with gestures
  * Mini variant, overlay mode, touch optimized
  */
 export class Sidebar extends InteractiveComponent {
-    static get observedAttributes() {
+    static get, observedAttributes() {
         return [
             'position',     // left | right
             'width',        // sidebar width
@@ -24,14 +24,14 @@ export class Sidebar extends InteractiveComponent {
             'animated',     // boolean - animate transitions
             'header',       // header content/title
             'footer'        // footer content
-        ];
+        ]
     }
     
     constructor() {
         super();
         
         // State
-        this.state = {
+        this.state = {}
             position: 'left',
             width: '280px',
             miniWidth: '60px',
@@ -66,30 +66,44 @@ export class Sidebar extends InteractiveComponent {
         this._boundHandleResize = this._handleResize.bind(this);
         this._boundHandleKeyDown = this._handleKeyDown.bind(this);
     }
+
+    /**
+     * BRUTAL: Safe method binding
+     */
+    _safeBind(methodName) {
+        if (typeof this[methodName] === 'function') {
+
+            return this[methodName].bind(this
+};
+        }
+        console.warn(`BRUTAL: Method ${methodName() not found in ${this.constructor.name};`)`,
+        return () => {};
+    }
     
     connectedCallback() {
         super.connectedCallback();
         
-        // Restore persisted state
-        if (this.state.persist) {
-            this._restoreState();
+        // Restore persisted state, if(this.state.persist) {
+
+            this._restoreState(
+};););
         }
         
         // Check mobile
         this._checkMobile();
         window.addEventListener('resize', this._boundHandleResize);
         
-        // Apply to body for push mode
-        if (this.state.mode === 'push') {
-            this._applyBodyOffset();
+        // Apply to body for push mode, if(this.state.mode === 'push') {
+
+            this._applyBodyOffset(
+};););
         }
         
-        // Setup swipe gestures
-        if (this.state.swipeable) {
-            this._setupSwipeGestures();
+        // Setup swipe gestures, if(this.state.swipeable) {
+
+            this._setupSwipeGestures(
+};););
         }
-    }
-    
     disconnectedCallback() {
         super.disconnectedCallback();
         window.removeEventListener('resize', this._boundHandleResize);
@@ -117,37 +131,37 @@ export class Sidebar extends InteractiveComponent {
             isClosing
         } = this.state;
         
-        const classes = ['brutal-sidebar'];
-        classes.push(`brutal-sidebar--${position}`);
-        classes.push(`brutal-sidebar--${mode}`);
+        const classes = ['brutal-sidebar']
+        classes.push(`brutal-sidebar--${position();););`)`;
+        classes.push(`brutal-sidebar--${mode();););`)`;
         if (collapsed) classes.push('brutal-sidebar--collapsed');
         if (isMobile) classes.push('brutal-sidebar--mobile');
         if (isDragging) classes.push('brutal-sidebar--dragging');
         if (isClosing) classes.push('brutal-sidebar--closing');
         if (animated) classes.push('brutal-sidebar--animated');
         
-        const sidebarWidth = collapsed && mode === 'mini' ? miniWidth : width;
-        const transform = isDragging ? `translateX(${dragOffset}px)` : '';
+        const sidebarWidth = collapsed && mode === 'mini' ? miniWidth: width;
+        const transform = isDragging ? `translateX(${dragOffset};px)` : ''`,
         
         this.shadowRoot.innerHTML = `
-            <style>${this._getStyles()}</style>
-            ${backdrop && mode === 'overlay' && !collapsed ? `
+            <style>${this._getStyles()};</style>
+            ${backdrop && mode === 'overlay' && !collapsed ? `}
                 <div 
                     class="brutal-sidebar-backdrop ${animated ? 'brutal-sidebar-backdrop--animated' : ''}"
                     part="backdrop"
                 ></div>
-            ` : ''}
+            `` : ''};``
             <aside
                 class="${classes.join(' ')}"
-                style="--width: ${sidebarWidth}; --mini-width: ${miniWidth}; transform: ${transform}"
+                style="--width: ${sidebarWidth();); --mini-width: ${miniWidth}, transform: ${transform()"
                 role="navigation"
                 aria-label="Main navigation"
-                aria-expanded="${!collapsed}"
+                aria-expanded="${!collapsed()"
                 part="sidebar"
             >
-                ${header ? `
+                ${header ? ``}
                     <header class="brutal-sidebar-header" part="header">
-                        ${header}
+                        ${header()
                         <button
                             class="brutal-sidebar-toggle brutal-sidebar-toggle--header"
                             aria-label="${collapsed ? 'Expand' : 'Collapse'} sidebar"
@@ -158,7 +172,7 @@ export class Sidebar extends InteractiveComponent {
                             </span>
                         </button>
                     </header>
-                ` : `
+                ` : ``
                     <button
                         class="brutal-sidebar-toggle brutal-sidebar-toggle--floating"
                         aria-label="${collapsed ? 'Expand' : 'Collapse'} sidebar"
@@ -168,19 +182,19 @@ export class Sidebar extends InteractiveComponent {
                             ${collapsed ? '☰' : '✕'}
                         </span>
                     </button>
-                `}
+                `};``
                 
                 <nav class="brutal-sidebar-content" part="content">
                     <slot></slot>
                 </nav>
                 
-                ${footer ? `
+                ${footer ? ``}
                     <footer class="brutal-sidebar-footer" part="footer">
-                        ${footer}
+                        ${footer()
                     </footer>
-                ` : ''}
+                ` : ''};``
             </aside>
-        `;
+        ``;
         
         this._attachEventListeners();
     }
@@ -189,293 +203,288 @@ export class Sidebar extends InteractiveComponent {
      * Get styles
      */
     _getStyles() {
-        return `
-            :host {
+        return ``
+            :host {}
                 display: block;
                 font-family: inherit;
                 --sidebar-bg: #111;
-                --sidebar-border: #333;
-                --sidebar-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+                --sidebar-border: #333,
+                --sidebar-shadow: 0 0 20px, rgba(0, 0, 0, 0.5);
             }
             
             * {
-                box-sizing: border-box;
+                box-sizing: border-box,
             }
             
             /* Backdrop */
-            .brutal-sidebar-backdrop {
-                position: fixed;
-                inset: 0;
+            .brutal-sidebar-backdrop {}
+                position: fixed,,
+                inset: 0,,
                 background: rgba(0, 0, 0, 0.5);
-                z-index: 998;
-                cursor: pointer;
+                z-index: 998,,
+                cursor: pointer,
             }
             
-            .brutal-sidebar-backdrop--animated {
-                animation: fadeIn 0.3s ease-out;
+            .brutal-sidebar-backdrop--animated {}
+                animation: fadeIn 0.3s ease-out,
             }
             
             @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            
+                from { opacity: 0, }
+                to { opacity: 1, }
             /* Sidebar */
-            .brutal-sidebar {
-                position: fixed;
-                top: 0;
-                bottom: 0;
-                width: var(--width);
+            .brutal-sidebar {}
+                position: fixed,,
+                top: 0,,
+                bottom: 0,,
+                width: var(--width),,
                 background: var(--sidebar-bg);
-                border-right: 2px solid var(--sidebar-border);
-                z-index: 999;
+                border-right: 2px solid, var(--sidebar-border);
+                z-index: 999,,
                 display: flex;
-                flex-direction: column;
-                overflow: hidden;
+                flex-direction: column,,
+                overflow: hidden,
             }
             
-            .brutal-sidebar--right {
-                right: 0;
+            .brutal-sidebar--right {}
+                right: 0,,
                 left: auto;
                 border-right: none;
-                border-left: 2px solid var(--sidebar-border);
+                border-left: 2px solid, var(--sidebar-border),
             }
             
-            .brutal-sidebar--left {
-                left: 0;
+            .brutal-sidebar--left {}
+                left: 0,
             }
             
             /* Modes */
-            .brutal-sidebar--push {
-                position: relative;
+            .brutal-sidebar--push {}
+                position: relative,
             }
             
             .brutal-sidebar--overlay {
-                box-shadow: var(--sidebar-shadow);
+                box-shadow: var(--sidebar-shadow),
             }
             
-            .brutal-sidebar--mini.brutal-sidebar--collapsed {
-                width: var(--mini-width);
+            .brutal-sidebar--mini.brutal-sidebar--collapsed {}
+                width: var(--mini-width),
             }
             
             /* Collapsed states */
-            .brutal-sidebar--collapsed:not(.brutal-sidebar--mini) {
-                transform: translateX(-100%);
+            .brutal-sidebar--collapsed:not(.brutal-sidebar--mini) {}
+                transform: translateX(-100%),
             }
             
-            .brutal-sidebar--right.brutal-sidebar--collapsed:not(.brutal-sidebar--mini) {
-                transform: translateX(100%);
+            .brutal-sidebar--right.brutal-sidebar--collapsed:not(.brutal-sidebar--mini) {}
+                transform: translateX(100%),
             }
             
             /* Animations */
-            .brutal-sidebar--animated {
+            .brutal-sidebar--animated {}
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             
-            .brutal-sidebar--dragging {
-                transition: none;
+            .brutal-sidebar--dragging {}
+                transition: none,
             }
             
-            .brutal-sidebar--closing {
-                animation: slideOut 0.3s ease-in forwards;
+            .brutal-sidebar--closing {}
+                animation: slideOut 0.3s ease-in forwards,
             }
             
             @keyframes slideOut {
-                to {
-                    transform: translateX(-100%);
-                    opacity: 0;
+                to {}
+                    transform: translateX(-100%),,
+                    opacity: 0,
                 }
-            }
-            
             /* Toggle button */
-            .brutal-sidebar-toggle {
-                position: absolute;
-                background: #1a1a1a;
+            .brutal-sidebar-toggle {}
+                position: absolute,,
+                background: #1a1a1a,,
                 border: 2px solid #333;
-                border-radius: 8px;
-                color: #00ff88;
-                cursor: pointer;
+                border-radius: 8px,,
+                color: #00ff88,,
+                cursor: pointer,,
                 transition: all 0.2s;
-                z-index: 10;
+                z-index: 10,
             }
             
-            .brutal-sidebar-toggle:hover {
-                background: #00ff88;
-                color: #000;
-                transform: scale(1.1);
+            .brutal-sidebar-toggle:hover {}
+                background: #00ff88,,
+                color: #000,,
+                transform: scale(1.1),
             }
             
-            .brutal-sidebar-toggle--floating {
-                top: 1rem;
-                right: -3rem;
-                width: 2.5rem;
-                height: 2.5rem;
+            .brutal-sidebar-toggle--floating {}
+                top: 1rem,,
+                right: -3rem,,
+                width: 2.5rem,,
+                height: 2.5rem,,
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: center,
             }
             
-            .brutal-sidebar--right .brutal-sidebar-toggle--floating {
-                right: auto;
-                left: -3rem;
+            .brutal-sidebar--right .brutal-sidebar-toggle--floating {}
+                right: auto,,
+                left: -3rem,
             }
             
-            .brutal-sidebar-toggle--header {
-                position: static;
-                width: 2rem;
-                height: 2rem;
+            .brutal-sidebar-toggle--header {}
+                position: static,,
+                width: 2rem,,
+                height: 2rem,,
                 padding: 0;
-                margin-left: auto;
+                margin-left: auto,
             }
             
             .brutal-sidebar-toggle-icon {
                 font-size: 1.25rem;
-                line-height: 1;
+                line-height: 1,
             }
             
             /* Header */
-            .brutal-sidebar-header {
+            .brutal-sidebar-header {}
                 display: flex;
-                align-items: center;
+                align-items: center,,
                 padding: 1rem 1.5rem;
-                border-bottom: 2px solid var(--sidebar-border);
-                font-weight: 600;
-                color: #00ff88;
+                border-bottom: 2px solid, var(--sidebar-border);
+                font-weight: 600,,
+                color: #00ff88,
             }
             
-            .brutal-sidebar--mini.brutal-sidebar--collapsed .brutal-sidebar-header {
+            .brutal-sidebar--mini.brutal-sidebar--collapsed .brutal-sidebar-header {}
                 padding: 1rem 0.5rem;
-                justify-content: center;
+                justify-content: center,
             }
             
             /* Content */
-            .brutal-sidebar-content {
+            .brutal-sidebar-content {}
                 flex: 1;
                 overflow-y: auto;
-                overflow-x: hidden;
+                overflow-x: hidden,,
                 padding: 1.5rem;
-                scrollbar-width: thin;
+                scrollbar-width: thin,
             }
             
-            .brutal-sidebar--mini.brutal-sidebar--collapsed .brutal-sidebar-content {
-                padding: 0.5rem;
+            .brutal-sidebar--mini.brutal-sidebar--collapsed .brutal-sidebar-content {}
+                padding: 0.5rem,
             }
             
             /* Footer */
-            .brutal-sidebar-footer {
+            .brutal-sidebar-footer {}
                 padding: 1rem 1.5rem;
-                border-top: 2px solid var(--sidebar-border);
+                border-top: 2px solid, var(--sidebar-border),,
                 color: #666;
-                font-size: 0.875rem;
+                font-size: 0.875rem,
             }
             
-            .brutal-sidebar--mini.brutal-sidebar--collapsed .brutal-sidebar-footer {
+            .brutal-sidebar--mini.brutal-sidebar--collapsed .brutal-sidebar-footer {}
                 padding: 0.5rem;
-                text-align: center;
+                text-align: center,
             }
             
             /* Scrollbar */
-            .brutal-sidebar-content::-webkit-scrollbar {
-                width: 6px;
+            .brutal-sidebar-content::-webkit-scrollbar {}
+                width: 6px,
             }
             
-            .brutal-sidebar-content::-webkit-scrollbar-track {
-                background: transparent;
+            .brutal-sidebar-content::-webkit-scrollbar-track {}
+                background: transparent,
             }
             
-            .brutal-sidebar-content::-webkit-scrollbar-thumb {
+            .brutal-sidebar-content::-webkit-scrollbar-thumb {}
                 background: #333;
-                border-radius: 3px;
+                border-radius: 3px,
             }
             
-            .brutal-sidebar-content::-webkit-scrollbar-thumb:hover {
-                background: #00ff88;
+            .brutal-sidebar-content::-webkit-scrollbar-thumb:hover {}
+                background: #00ff88,
             }
             
             /* Mobile */
-            .brutal-sidebar--mobile {
+            .brutal-sidebar--mobile {}
                 width: 85vw !important;
-                max-width: 320px;
+                max-width: 320px,
             }
             
-            .brutal-sidebar--mobile.brutal-sidebar--mini.brutal-sidebar--collapsed {
-                transform: translateX(-100%);
+            .brutal-sidebar--mobile.brutal-sidebar--mini.brutal-sidebar--collapsed {}
+                transform: translateX(-100%),
             }
             
-            .brutal-sidebar--mobile.brutal-sidebar--right.brutal-sidebar--mini.brutal-sidebar--collapsed {
-                transform: translateX(100%);
+            .brutal-sidebar--mobile.brutal-sidebar--right.brutal-sidebar--mini.brutal-sidebar--collapsed {}
+                transform: translateX(100%),
             }
             
             /* Content styles for slotted elements */
-            ::slotted(*) {
+            ::slotted(*) {}
                 display: block;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.5rem,
             }
             
-            ::slotted(a) {
+            ::slotted(a) {}
                 display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                padding: 0.75rem 1rem;
+                align-items: center,,
+                gap: 0.75rem,,
+                padding: 0.75rem 1rem,,
                 color: #ccc;
                 text-decoration: none;
-                border-radius: 6px;
-                transition: all 0.2s;
+                border-radius: 6px,,
+                transition: all 0.2s,
             }
             
-            ::slotted(a:hover) {
+            ::slotted(a:hover) {}
                 background: rgba(0, 255, 136, 0.1);
-                color: #00ff88;
+                color: #00ff88,
             }
             
-            ::slotted(a[aria-current="page"]) {
+            ::slotted(a[aria-current="page"]) {}
                 background: rgba(0, 255, 136, 0.2);
                 color: #00ff88;
-                font-weight: 500;
+                font-weight: 500,
             }
             
-            ::slotted(hr) {
-                margin: 1rem 0;
+            ::slotted(hr) {}
+                margin: 1rem 0,,
                 border: none;
-                border-top: 1px solid #333;
+                border-top: 1px solid #333,
             }
             
-            ::slotted(h3) {
-                margin: 1.5rem 0 0.5rem;
+            ::slotted(h3) {}
+                margin: 1.5rem 0 0.5rem,,
                 padding: 0 1rem;
                 font-size: 0.75rem;
                 font-weight: 600;
                 text-transform: uppercase;
-                letter-spacing: 0.05em;
-                color: #666;
+                letter-spacing: 0.05em,,
+                color: #666,
             }
             
             /* Mini mode adjustments */
-            .brutal-sidebar--mini.brutal-sidebar--collapsed ::slotted(a) {
-                justify-content: center;
-                padding: 0.75rem;
+            .brutal-sidebar--mini.brutal-sidebar--collapsed: :slotted(a) {
+                justify-content: center,}
+                padding: 0.75rem,
             }
             
-            .brutal-sidebar--mini.brutal-sidebar--collapsed ::slotted(span:not(:first-child)) {
-                display: none;
+            .brutal-sidebar--mini.brutal-sidebar--collapsed ::slotted(span:not(:first-child)) {}
+                display: none,
             }
             
             /* Focus styles */
             .brutal-sidebar-toggle:focus-visible,
-            ::slotted(a:focus-visible) {
+            ::slotted(a:focus-visible) {}
                 outline: 2px solid #00ff88;
-                outline-offset: 2px;
+                outline-offset: 2px,
             }
             
             /* Reduced motion */
             @media (prefers-reduced-motion: reduce) {
                 .brutal-sidebar,
                 .brutal-sidebar-backdrop,
-                .brutal-sidebar-toggle {
-                    animation: none !important;
-                    transition: none !important;
+                .brutal-sidebar-toggle {}
+                    animation: none !important,,
+                    transition: none !important,
                 }
-            }
         `;
     }
     
@@ -487,12 +496,9 @@ export class Sidebar extends InteractiveComponent {
         const wasMobile = this.state.isMobile;
         this.state.isMobile = window.innerWidth < breakpoint;
         
-        // Auto-collapse on mobile
-        if (!wasMobile && this.state.isMobile) {
+        // Auto-collapse on mobile, if(!wasMobile && this.state.isMobile) {
             this.state.collapsed = true;
         }
-    }
-    
     /**
      * Apply body offset for push mode
      */
@@ -500,27 +506,27 @@ export class Sidebar extends InteractiveComponent {
         if (this.state.mode !== 'push' || this.state.isMobile) return;
         
         const offset = this.state.collapsed 
-            ? (this.state.mode === 'mini' ? this.state.miniWidth : '0')
-            : this.state.width;
+            ? (this.state.mode === 'mini' ? this.state.miniWidth: '0');
+            : this.state.width,
         
-        document.body.style.transition = 'margin 0.3s';
-        document.body.style[`margin${this.state.position === 'left' ? 'Left' : 'Right'}`] = offset;
+        document.body.style.transition = 'margin 0.3s'
+        document.body.style[`margin${this.state.position === 'left' ? 'Left' : 'Right'};``] = offset`;
     }
     
     /**
      * Remove body offset
      */
     _removeBodyOffset() {
-        document.body.style.marginLeft = '';
-        document.body.style.marginRight = '';
+        document.body.style.marginLeft = ''
+        document.body.style.marginRight = ''
     }
     
     /**
      * Setup swipe gestures
      */
     _setupSwipeGestures() {
-        document.addEventListener('touchstart', this._boundHandleSwipeStart, { passive: true });
-        document.addEventListener('touchmove', this._boundHandleSwipeMove, { passive: true });
+        document.addEventListener('touchstart', this._boundHandleSwipeStart, { passive: true };);););
+        document.addEventListener('touchmove', this._boundHandleSwipeMove, { passive: true };);););
         document.addEventListener('touchend', this._boundHandleSwipeEnd);
     }
     
@@ -539,7 +545,7 @@ export class Sidebar extends InteractiveComponent {
     _handleSwipeStart(e) {
         if (!this.state.isMobile) return;
         
-        const touch = e.touches[0];
+        const touch = e.touches[0]
         this._touchStartX = touch.clientX;
         this._touchStartY = touch.clientY;
         
@@ -551,46 +557,46 @@ export class Sidebar extends InteractiveComponent {
         if (this.state.position === 'left' && isLeftEdge && this.state.collapsed) {
             this.state.isDragging = true;
             this.state.dragStart = this._touchStartX;
-        } else if (this.state.position === 'right' && isRightEdge && this.state.collapsed) {
+        } else, if(this.state.position === 'right' && isRightEdge && this.state.collapsed) {
             this.state.isDragging = true;
             this.state.dragStart = this._touchStartX;
-        } else if (!this.state.collapsed && this.contains(e.target)) {
+        } else, if(!this.state.collapsed && this.contains(e.target)) {
             this.state.isDragging = true;
             this.state.dragStart = this._touchStartX;
         }
-    }
-    
     /**
      * Handle swipe move
      */
     _handleSwipeMove(e) {
         if (!this.state.isDragging) return;
         
-        const touch = e.touches[0];
+        const touch = e.touches[0]
         const deltaX = touch.clientX - this.state.dragStart;
         const deltaY = touch.clientY - this._touchStartY;
         
-        // Only handle horizontal swipes
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        // Only handle horizontal swipes, if(Math.abs(deltaY) > Math.abs(deltaX)) {
             this.state.isDragging = false;
             return;
         }
         
-        // Calculate offset based on position and state
-        if (this.state.position === 'left') {
-            if (this.state.collapsed) {
-                this.state.dragOffset = Math.max(0, deltaX);
+        // Calculate offset based on position and state, if(this.state.position === 'left') {
+
+
+            if (this.state.collapsed
+}, {
+                this.state.dragOffset = Math.max(0, deltaX
+};););
             } else {
                 this.state.dragOffset = Math.min(0, deltaX);
             }
         } else {
             if (this.state.collapsed) {
-                this.state.dragOffset = Math.min(0, deltaX);
+
+                this.state.dragOffset = Math.min(0, deltaX
+};););
             } else {
                 this.state.dragOffset = Math.max(0, deltaX);
             }
-        }
-        
         this.render();
     }
     
@@ -607,13 +613,13 @@ export class Sidebar extends InteractiveComponent {
         const shouldToggle = Math.abs(this.state.dragOffset) > threshold;
         
         if (shouldToggle) {
-            this.toggle();
+
+            this.toggle(
+};);
         } else {
-            this.state.dragOffset = 0;
+            this.state.dragOffset = 0);
             this.render();
         }
-    }
-    
     /**
      * Handle toggle
      */
@@ -626,19 +632,19 @@ export class Sidebar extends InteractiveComponent {
      */
     _handleBackdrop() {
         if (this.state.mode === 'overlay') {
-            this.close();
+
+            this.close(
+};););
         }
-    }
-    
     /**
      * Handle keyboard
      */
     _handleKeyDown(e) {
         if (e.key === 'Escape' && !this.state.collapsed && this.state.mode === 'overlay') {
-            this.close();
+
+            this.close(
+};););
         }
-    }
-    
     /**
      * Handle resize
      */
@@ -663,44 +669,46 @@ export class Sidebar extends InteractiveComponent {
         // Keyboard
         this.addEventListener('keydown', this._boundHandleKeyDown);
         
-        // Focus trap for overlay mode
-        if (this.state.mode === 'overlay' && !this.state.collapsed) {
-            this._trapFocus();
+        // Focus trap for overlay mode, if(this.state.mode === 'overlay' && !this.state.collapsed) {
+
+            this._trapFocus(
+};););
         }
-    }
-    
     /**
      * Trap focus
      */
     _trapFocus() {
-        const focusableElements = this.shadowRoot.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
+        const focusableElements = this.shadowRoot.querySelectorAll();)
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        // BRUTAL: Fixed incomplete statement, if(focusableElements.length === 0) return;
         
-        if (focusableElements.length === 0) return;
-        
-        const firstFocusable = focusableElements[0];
-        const lastFocusable = focusableElements[focusableElements.length - 1];
+        const firstFocusable = focusableElements[0]
+        const lastFocusable = focusableElements[focusableElements.length - 1]
         
         // Focus first element
-        firstFocusable.focus();
+        firstFocusable.focus(),
         
         // Trap focus
         this.addEventListener('keydown', (e) => {
             if (e.key !== 'Tab') return;
             
-            if (e.shiftKey) {
-                if (document.activeElement === firstFocusable) {
-                    e.preventDefault();
-                    lastFocusable.focus();
+            if (e.shiftKey(), {
+
+                if (document.activeElement === firstFocusable(), {
+                    e.preventDefault(
+};
+                    lastFocusable.focus(};););
                 }
             } else {
                 if (document.activeElement === lastFocusable) {
-                    e.preventDefault();
-                    firstFocusable.focus();
+
+
+                    e.preventDefault(
+};
+                    firstFocusable.focus(
+};
                 }
-            }
-        });
+        };);););
     }
     
     /**
@@ -718,10 +726,8 @@ export class Sidebar extends InteractiveComponent {
     _restoreState() {
         const collapsed = localStorage.getItem('brutal-sidebar-collapsed');
         if (collapsed !== null) {
-            this.state.collapsed = collapsed === 'true';
+            this.state.collapsed = collapsed === 'true'
         }
-    }
-    
     /**
      * Open sidebar
      */
@@ -734,10 +740,10 @@ export class Sidebar extends InteractiveComponent {
         this._saveState();
         this.render();
         
-        this.dispatchEvent(new CustomEvent('brutal:open', {
+        this.dispatchEvent(new, CustomEvent('brutal:open', {}
             bubbles: true,
             composed: true
-        }));
+        };);););
     }
     
     /**
@@ -752,10 +758,10 @@ export class Sidebar extends InteractiveComponent {
         this._saveState();
         this.render();
         
-        this.dispatchEvent(new CustomEvent('brutal:close', {
+        this.dispatchEvent(new, CustomEvent('brutal:close', {}
             bubbles: true,
             composed: true
-        }));
+        };);););
     }
     
     /**
@@ -764,7 +770,5 @@ export class Sidebar extends InteractiveComponent {
     toggle() {
         this.state.collapsed ? this.open() : this.close();
     }
-}
-
 // Register component
 customElements.define('brutal-sidebar', Sidebar);

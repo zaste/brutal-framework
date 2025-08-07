@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@brutal/testing - Example</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .pass { color: green; }
+        .fail { color: red; }
+        #output { background: #f0f0f0; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>@brutal/testing Example</h1>
+    <button id="testBtn">Click to Test</button>
+    <div id="output"></div>
+    
+    <script type="module">
+        import { test, suite, run, assert, mock, dom, async } from '../dist/index.js';
+        
+        // Example component to test
+        class Counter {
+            constructor() {
+                this.value = 0;
+            }
+            increment() {
+                this.value++;
+                return this.value;
+            }
+            async delayedIncrement() {
+                await new Promise(r => setTimeout(r, 10));
+                return this.increment();
+            }
+        }
+        
+        // Define tests
+        suite('Counter Tests', () => {
+            test('starts at zero', () => {
+                const counter = new Counter();
+                assert.i(counter.value, 0);
+            });
+            
+            test('increments correctly', () => {
+                const counter = new Counter();
+                assert.i(counter.increment(), 1);
+                assert.i(counter.increment(), 2);
+                assert.i(counter.value, 2);
+            });
+            
+            test('async increment works', async () => {
+                const counter = new Counter();
+                const result = await counter.delayedIncrement();
+                assert.i(result, 1);
+            });
+        });
+        
+        suite('DOM Tests', () => {
+            test('can render and query elements', () => {
+                const el = dom.r('<div class="test" data-id="123">Test Content</div>');
+                const found = dom.f('.test');
+                
+                assert.o(found);
+                assert.i(found.textContent, 'Test Content');
+                assert.i(found.dataset.id, '123');
+                
+                dom.c(); // cleanup
+            });
+            
+            test('can fire events', () => {
+                const btn = document.getElementById('testBtn');
+                let clicked = false;
+                
+                const handler = () => { clicked = true; };
+                btn.addEventListener('click', handler);
+                
+                dom.e(btn, 'click');
+                assert.o(clicked);
+                
+                btn.removeEventListener('click', handler);
+            });
+        });
+        
+        suite('Mock Tests', () => {
+            test('mocks track calls', () => {
+                const api = mock();
+                api.r({ id: 1, name: 'Test' });
+                
+                const result = api('users', 123);
+                
+                assert.e(result, { id: 1, name: 'Test' });
+                assert.i(api.s(), 2); // 2 calls
+                assert.e(api.l().a, ['users', 123]);
+            });
+        });
+        
+        // Run tests on button click
+        document.getElementById('testBtn').addEventListener('click', async () => {
+            const output = document.getElementById('output');
+            output.innerHTML = '<h3>Running tests...</h3>';
+            
+            const result = await run();
+            
+            output.innerHTML = `
+                <h3>Test Results</h3>
+                <div class="pass">✅ Passed: ${result.p}</div>
+                <div class="fail">❌ Failed: ${result.f}</div>
+                ${result.e.length > 0 ? '<h4>Errors:</h4>' + result.e.map(e => 
+                    `<div class="fail">${e.message}</div>`
+                ).join('') : ''}
+            `;
+        });
+    </script>
+</body>
+</html>

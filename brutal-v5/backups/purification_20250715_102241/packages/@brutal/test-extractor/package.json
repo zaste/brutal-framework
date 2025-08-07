@@ -1,0 +1,37 @@
+{
+  "name": "@brutal/test-extractor",
+  "version": "0.0.1",
+  "description": "Extract and run co-located test files for BRUTAL framework",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --experimental-vm-modules tests/test-runner.js",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "brutal",
+    "testing",
+    "test-runner",
+    "co-located-tests"
+  ],
+  "author": "BRUTAL Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

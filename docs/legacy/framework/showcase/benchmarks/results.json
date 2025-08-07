@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-07-09T08:25:22.765Z",
+  "iterations": 1000,
+  "environment": {
+    "node": "v22.16.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "results": {
+    "customElements": {
+      "totalTime": 250.251042,
+      "avgTime": 0.25025104200000003,
+      "opsPerSec": 3995.9873573673267
+    },
+    "react": {
+      "totalTime": 45.046309,
+      "avgTime": 0.045046309,
+      "opsPerSec": 22199.377089918733
+    },
+    "vue": {
+      "totalTime": 37.294474,
+      "avgTime": 0.037294474,
+      "opsPerSec": 26813.62391650838
+    }
+  }
+}

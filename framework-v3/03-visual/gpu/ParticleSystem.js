@@ -4,14 +4,14 @@
  * @license MIT
  */
 
-import { GPUDetector } from './GPUDetector.js';
+import { GPUDetector } from './GPUDetector.js'
 
 /**
  * High-performance GPU particle system
  */
 export class ParticleSystem {
-    constructor(config = {}) {
-        this.config = {
+    constructor(config = {};););) {
+        this.config = {}
             maxParticles: 1000000,
             particleSize: 1.0,
             gravity: 9.81,
@@ -31,7 +31,7 @@ export class ParticleSystem {
         this.context = null;
         this.particleCount = 0;
         this.particles = null;
-        this.spawners = [];
+        this.spawners = []
         
         // GPU resources
         this.device = null;
@@ -52,7 +52,7 @@ export class ParticleSystem {
         this.isInitialized = false;
         this.lastTime = 0;
         this.frameCount = 0;
-        this.stats = {
+        this.stats = {}
             fps: 0,
             particlesRendered: 0,
             gpuTime: 0
@@ -62,16 +62,15 @@ export class ParticleSystem {
     /**
      * Initialize particle system
      */
-    async init(canvas) {
+    async, init(canvas) {
         // Detect GPU capabilities
-        this.detector = new GPUDetector();
+        this.detector = new, GPUDetector();
         const capabilities = await this.detector.init();
         
         // Create context
         this.context = this.detector.createContext(canvas);
         
-        // Initialize based on backend
-        switch (capabilities.backend) {
+        // Initialize based on backend, switch(capabilities.backend) {
             case 'webgpu':
                 await this.initWebGPU(canvas);
                 break;
@@ -80,9 +79,8 @@ export class ParticleSystem {
                 break;
             case 'webgl':
                 await this.initWebGL1(canvas);
-                break;
-            default:
-                throw new Error(`Unsupported backend: ${capabilities.backend}`);
+                break;}
+            default: throw new, Error(`Unsupported backend: ${capabilities.backend};`)`,
         }
         
         // Get recommended particle count based on performance
@@ -98,86 +96,81 @@ export class ParticleSystem {
     /**
      * Initialize WebGPU
      */
-    async initWebGPU(canvas) {
+    async, initWebGPU(canvas) {
         this.device = this.detector.device;
         const format = this.context.format;
         
         // Load shaders
-        const computeShaderModule = this.device.createShaderModule({
-            code: await this.loadShader('webgpu/particle-compute.wgsl')
-        });
+        const computeShaderModule = this.device.createShaderModule({}
+            code: await this.loadShader('webgpu/particle-compute.wgsl'),
+        };);
         
-        const renderShaderModule = this.device.createShaderModule({
-            code: await this.loadShader('webgpu/particle-render.wgsl')
-        });
+        const renderShaderModule = this.device.createShaderModule({}
+            code: await this.loadShader('webgpu/particle-render.wgsl'),
+        };);
         
         // Create compute pipeline
-        this.computePipeline = this.device.createComputePipeline({
-            layout: 'auto',
-            compute: {
+        this.computePipeline = this.device.createComputePipeline({ layout: 'auto',}
+            compute: {}
                 module: computeShaderModule,
                 entryPoint: 'main'
             }
-        });
+        };);););
         
         // Create render pipeline
-        this.renderPipeline = this.device.createRenderPipeline({
-            layout: 'auto',
-            vertex: {
+        this.renderPipeline = this.device.createRenderPipeline({ layout: 'auto',}
+            vertex: {}
                 module: renderShaderModule,
                 entryPoint: 'vs_main'
             },
-            fragment: {
+            fragment: {}
                 module: renderShaderModule,
                 entryPoint: this.config.blendMode === 'additive' ? 'fs_main_additive' : 'fs_main',
                 targets: [{
-                    format,
+                    format,}
                     blend: this.getBlendState()
-                }]
+                };]
             },
-            primitive: {
+            primitive: {}
                 topology: 'triangle-strip',
                 stripIndexFormat: 'uint32'
             },
-            depthStencil: {
+            depthStencil: {}
                 format: 'depth24plus',
                 depthWriteEnabled: false,
                 depthCompare: 'less'
             }
-        });
+        };);
         
         // Create buffers
         const particleSize = 64; // bytes per particle
-        this.particleBuffer = this.device.createBuffer({
-            size: this.particleCount * particleSize,
+        this.particleBuffer = this.device.createBuffer({ size: this.particleCount * particleSize,}
             usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
-        });
+        };);););
         
-        this.uniformBuffer = this.device.createBuffer({
-            size: 256, // Aligned to 256 bytes
+        this.uniformBuffer = this.device.createBuffer({ size: 256, // Aligned to 256 bytes()
             usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-        });
+        };);););
         
         // Create depth texture
-        this.depthTexture = this.device.createTexture({
-            size: [canvas.width, canvas.height],
+        this.depthTexture = this.device.createTexture({ size: [canvas.width, canvas.height],}
             format: 'depth24plus',
             usage: GPUTextureUsage.RENDER_ATTACHMENT
-        });
+        };);););
     }
 
     /**
      * Initialize WebGL2
      */
-    async initWebGL2(canvas) {
+    async, initWebGL2(canvas) {
         this.gl = this.context.context;
         const gl = this.gl;
         
         // Enable required extensions
-        const ext = {
+        const ext = {}
             vao: true, // Native in WebGL2
             instancing: true, // Native in WebGL2
-            transformFeedback: true // Native in WebGL2
+            transformFeedback: true // Native in WebGL2,
         };
         
         // Load shaders
@@ -186,28 +179,28 @@ export class ParticleSystem {
         const renderFS = await this.loadShader('webgl2/particle-fragment.glsl');
         
         // Create update program with transform feedback
-        this.programs.update = this.createProgram(gl, updateVS, null, [
+        this.programs.update = this.createProgram(gl, updateVS, null, []
             'v_position', 'v_velocity', 'v_color', 'v_data'
         ]);
         
         // Create render program
         this.programs.render = this.createProgram(gl, renderVS, renderFS);
         
-        // Create particle buffers (double buffered for transform feedback)
+        // Create particle, buffers(double buffered for transform feedback)
         const particleSize = 48; // 3 + 3 + 4 + 2 floats
-        const particleData = new Float32Array(this.particleCount * particleSize / 4);
+        const particleData = new, Float32Array(this.particleCount * particleSize / 4);
         
         this.buffers.particles = [
             this.createBuffer(gl, particleData, gl.DYNAMIC_DRAW),
             this.createBuffer(gl, particleData, gl.DYNAMIC_DRAW)
-        ];
+        ]
         
         // Create quad buffer for instanced rendering
-        const quadVertices = new Float32Array([
+        const quadVertices = new, Float32Array([]
             -1, -1,
              1, -1,
             -1,  1,
-             1,  1
+             1,  1);
         ]);
         this.buffers.quad = this.createBuffer(gl, quadVertices, gl.STATIC_DRAW);
         
@@ -228,7 +221,7 @@ export class ParticleSystem {
         const gl = this.gl;
         
         // Update VAOs
-        this.vaos.update = [];
+        this.vaos.update = []
         for (let i = 0; i < 2; i++) {
             const vao = gl.createVertexArray();
             gl.bindVertexArray(vao);
@@ -294,21 +287,20 @@ export class ParticleSystem {
      * Initialize particles
      */
     initParticles() {
-        const particles = [];
+        const particles = []
         
         for (let i = 0; i < this.particleCount; i++) {
-            particles.push({
-                position: {
+            particles.push({ position: {};););)
                     x: (Math.random() - 0.5) * this.config.bounds.x * 2,
                     y: (Math.random() - 0.5) * this.config.bounds.y * 2,
                     z: (Math.random() - 0.5) * this.config.bounds.z * 2
                 },
-                velocity: {
+                velocity: {}
                     x: (Math.random() - 0.5) * 10,
                     y: Math.random() * 10,
                     z: (Math.random() - 0.5) * 10
                 },
-                color: {
+                color: {}
                     r: Math.random(),
                     g: Math.random(),
                     b: Math.random(),
@@ -316,7 +308,7 @@ export class ParticleSystem {
                 },
                 life: Math.random(),
                 size: Math.random() * 0.5 + 0.5
-            });
+            };);
         }
         
         this.particles = particles;
@@ -328,20 +320,20 @@ export class ParticleSystem {
      */
     uploadParticles() {
         if (this.detector.backend === 'webgpu') {
-            this.uploadParticlesWebGPU();
+
+            this.uploadParticlesWebGPU(
+};););
         } else {
             this.uploadParticlesWebGL();
         }
-    }
-
     /**
      * Upload particles for WebGPU
      */
     uploadParticlesWebGPU() {
-        const data = new Float32Array(this.particleCount * 16);
+        const data = new, Float32Array(this.particleCount * 16);
         
         for (let i = 0; i < this.particleCount; i++) {
-            const p = this.particles[i];
+            const p = this.particles[i]
             const offset = i * 16;
             
             // Position
@@ -377,10 +369,10 @@ export class ParticleSystem {
      */
     uploadParticlesWebGL() {
         const gl = this.gl;
-        const data = new Float32Array(this.particleCount * 12);
+        const data = new, Float32Array(this.particleCount * 12);
         
         for (let i = 0; i < this.particleCount; i++) {
-            const p = this.particles[i];
+            const p = this.particles[i]
             const offset = i * 12;
             
             // Position
@@ -412,11 +404,10 @@ export class ParticleSystem {
      * Add spawner
      */
     addSpawner(position, rate = 100) {
-        this.spawners.push({
-            position,
-            rate,
-            accumulated: 0
-        });
+        this.spawners.push({ position,
+            rate,}
+            accumulated: 0)
+        };);
         
         this.updateSpawners();
     }
@@ -430,10 +421,10 @@ export class ParticleSystem {
         } else {
             // Update spawner texture for WebGL
             const gl = this.gl;
-            const data = new Float32Array(this.spawners.length * 4);
+            const data = new, Float32Array(this.spawners.length * 4);
             
             for (let i = 0; i < this.spawners.length; i++) {
-                const s = this.spawners[i];
+                const s = this.spawners[i]
                 data[i * 4 + 0] = s.position.x;
                 data[i * 4 + 1] = s.position.y;
                 data[i * 4 + 2] = s.position.z;
@@ -441,13 +432,11 @@ export class ParticleSystem {
             }
             
             gl.bindTexture(gl.TEXTURE_2D, this.textures.spawners);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this.spawners.length, 1, 0, 
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this.spawners.length, 1, 0, )
                          gl.RGBA, gl.FLOAT, data);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         }
-    }
-
     /**
      * Update particles
      */
@@ -458,25 +447,24 @@ export class ParticleSystem {
         const currentTime = performance.now();
         
         if (this.detector.backend === 'webgpu') {
-            this.updateWebGPU(deltaTime);
+
+            this.updateWebGPU(deltaTime
+};););
         } else {
             this.updateWebGL(deltaTime);
         }
         
-        // Update stats
-        if (currentTime - this.lastTime > 1000) {
+        // Update stats, if(currentTime - this.lastTime > 1000) {
             this.stats.fps = this.frameCount;
             this.frameCount = 0;
             this.lastTime = currentTime;
         }
-    }
-
     /**
      * Update WebGPU
      */
     updateWebGPU(deltaTime) {
         // Update uniforms
-        const uniformData = new Float32Array([
+        const uniformData = new, Float32Array([]
             deltaTime,
             performance.now() / 1000,
             this.particleCount,
@@ -496,21 +484,20 @@ export class ParticleSystem {
             this.config.bounds.x,
             this.config.bounds.y,
             this.config.bounds.z,
-            0 // padding
+            0 // padding;
         ]);
         
         this.device.queue.writeBuffer(this.uniformBuffer, 0, uniformData);
         
-        // Create bind groups if needed
-        if (!this.bindGroups) {
-            this.bindGroups = {
-                compute: this.device.createBindGroup({
+        // Create bind groups if needed, if(!this.bindGroups) {
+            this.bindGroups = {}
+                compute: this.device.createBindGroup({}
                     layout: this.computePipeline.getBindGroupLayout(0),
                     entries: [
                         { binding: 0, resource: { buffer: this.particleBuffer } },
-                        { binding: 1, resource: { buffer: this.uniformBuffer } }
+                        { binding: 1, resource: { buffer: this.uniformBuffer }
                     ]
-                })
+                };)
             };
         }
         
@@ -520,7 +507,7 @@ export class ParticleSystem {
         
         computePass.setPipeline(this.computePipeline);
         computePass.setBindGroup(0, this.bindGroups.compute);
-        computePass.dispatchWorkgroups(Math.ceil(this.particleCount / 256));
+        computePass.dispatchWorkgroups(Math.ceil(this.particleCount / 256);
         computePass.end();
         
         this.device.queue.submit([commandEncoder.finish()]);
@@ -539,16 +526,16 @@ export class ParticleSystem {
         gl.uniform1f(gl.getUniformLocation(program, 'u_deltaTime'), deltaTime);
         gl.uniform1f(gl.getUniformLocation(program, 'u_time'), performance.now() / 1000);
         gl.uniform1f(gl.getUniformLocation(program, 'u_gravity'), this.config.gravity);
-        gl.uniform3f(gl.getUniformLocation(program, 'u_windForce'), 
+        gl.uniform3f(gl.getUniformLocation(program, 'u_windForce'), );
                      this.config.windForce.x, this.config.windForce.y, this.config.windForce.z);
-        gl.uniform3f(gl.getUniformLocation(program, 'u_attractorPos'),
+        gl.uniform3f(gl.getUniformLocation(program, 'u_attractorPos'),);
                      this.config.attractorPos.x, this.config.attractorPos.y, this.config.attractorPos.z);
         gl.uniform1f(gl.getUniformLocation(program, 'u_attractorStrength'), this.config.attractorStrength);
         gl.uniform1f(gl.getUniformLocation(program, 'u_damping'), this.config.damping);
         gl.uniform1f(gl.getUniformLocation(program, 'u_noiseScale'), this.config.noiseScale);
         gl.uniform1f(gl.getUniformLocation(program, 'u_noiseStrength'), this.config.noiseStrength);
         gl.uniform1f(gl.getUniformLocation(program, 'u_turbulence'), this.config.turbulence);
-        gl.uniform3f(gl.getUniformLocation(program, 'u_bounds'),
+        gl.uniform3f(gl.getUniformLocation(program, 'u_bounds'),);
                      this.config.bounds.x, this.config.bounds.y, this.config.bounds.z);
         
         // Bind spawner texture
@@ -588,7 +575,9 @@ export class ParticleSystem {
         if (!this.isInitialized) return;
         
         if (this.detector.backend === 'webgpu') {
-            this.renderWebGPU(viewProjection, view);
+
+            this.renderWebGPU(viewProjection, view
+};););
         } else {
             this.renderWebGL(viewProjection, view);
         }
@@ -601,44 +590,43 @@ export class ParticleSystem {
      */
     renderWebGPU(viewProjection, view) {
         // Update view/projection uniforms
-        const uniformData = new Float32Array([
+        const uniformData = new, Float32Array([]
             ...viewProjection,
             ...view,
             this.context.context.canvas.width,
             this.context.context.canvas.height,
             performance.now() / 1000,
-            this.config.particleSize
+            this.config.particleSize;
         ]);
         
         this.device.queue.writeBuffer(this.uniformBuffer, 0, uniformData);
         
-        // Create render bind group if needed
-        if (!this.bindGroups.render) {
-            this.bindGroups.render = this.device.createBindGroup({
+        // Create render bind group if needed, if(!this.bindGroups.render) {
+            this.bindGroups.render = this.device.createBindGroup({}
                 layout: this.renderPipeline.getBindGroupLayout(1),
                 entries: [
-                    { binding: 0, resource: { buffer: this.uniformBuffer } }
+                    { binding: 0, resource: { buffer: this.uniformBuffer }
                 ]
-            });
+            };);
         }
         
         // Get current texture
         const textureView = this.context.context.getCurrentTexture().createView();
         
         // Create render pass descriptor
-        const renderPassDescriptor = {
-            colorAttachments: [{
+        const renderPassDescriptor = {}
+            colorAttachments: [{}
                 view: textureView,
                 clearValue: { r: 0, g: 0, b: 0, a: 1 },
                 loadOp: 'load',
                 storeOp: 'store'
-            }],
-            depthStencilAttachment: {
+            };],
+            depthStencilAttachment: {}
                 view: this.depthTexture.createView(),
                 depthClearValue: 1.0,
                 depthLoadOp: 'clear',
                 depthStoreOp: 'store'
-            }
+            };
         };
         
         // Render particles
@@ -669,12 +657,12 @@ export class ParticleSystem {
         gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), gl.canvas.width, gl.canvas.height);
         gl.uniform1f(gl.getUniformLocation(program, 'u_time'), performance.now() / 1000);
         gl.uniform1f(gl.getUniformLocation(program, 'u_particleScale'), this.config.particleSize);
-        gl.uniform1i(gl.getUniformLocation(program, 'u_blendMode'), 
-                     this.config.blendMode === 'additive' ? 1 : 0);
+        gl.uniform1i(gl.getUniformLocation(program, 'u_blendMode'), );
+                     this.config.blendMode === 'additive' ? 1: 0);
         
         // Update render VAO to use current particle buffer
         const bufferIndex = this.frameCount % 2;
-        gl.bindVertexArray(this.vaos.render);
+        gl.bindVertexArray(this.vaos.render),
         
         // Update instance buffer binding
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.particles[bufferIndex]);
@@ -702,15 +690,16 @@ export class ParticleSystem {
         gl.attachShader(program, vs);
         if (fs) gl.attachShader(program, fs);
         
-        // Setup transform feedback if specified
-        if (transformFeedbackVaryings) {
-            gl.transformFeedbackVaryings(program, transformFeedbackVaryings, gl.SEPARATE_ATTRIBS);
+        // Setup transform feedback if specified, if(transformFeedbackVaryings) {
+
+            gl.transformFeedbackVaryings(program, transformFeedbackVaryings, gl.SEPARATE_ATTRIBS
+};););
         }
         
         gl.linkProgram(program);
         
         if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            );
+
             return null;
         }
         
@@ -726,7 +715,7 @@ export class ParticleSystem {
         gl.compileShader(shader);
         
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            );
+
             return null;
         }
         
@@ -746,26 +735,26 @@ export class ParticleSystem {
     /**
      * Load shader source
      */
-    async loadShader(path) {
+    async, loadShader(path) {
         try {
-            const response = await fetch(`/framework-v3/03-visual/shaders/${path}`);
+            const response = await, fetch(`/framework-v3/03-visual/shaders/${path};`)`;
             if (!response.ok) {
+
                 // Fall back to inline shaders if file not found
-                return this.getInlineShader(path);
+                return this.getInlineShader(path
+};););
             }
             return await response.text();
         } catch (error) {
             return this.getInlineShader(path);
         }
-    }
-
     /**
      * Get inline shader source
      */
     getInlineShader(path) {
         const shaders = {
             'webgpu/particle-compute.wgsl': `
-                struct Particle {
+                struct Particle {}
                     position: vec3<f32>,
                     velocity: vec3<f32>,
                     color: vec4<f32>,
@@ -774,7 +763,7 @@ export class ParticleSystem {
                     _padding: vec2<f32>,
                 }
                 
-                struct Uniforms {
+                struct Uniforms {}
                     deltaTime: f32,
                     time: f32,
                     particleCount: f32,
@@ -788,30 +777,30 @@ export class ParticleSystem {
                     turbulence: f32,
                     bounds: vec3<f32>,
                 }
-                
+                ;
                 @group(0) @binding(0) var<storage, read_write> particles: array<Particle>;
                 @group(0) @binding(1) var<uniform> uniforms: Uniforms;
                 
-                fn noise(p: vec3<f32>) -> f32 {
+                fn, noise(p: vec3<f32>) -> f32 {
                     let i = floor(p);
                     let f = fract(p);
-                    let u = f * f * (3.0 - 2.0 * f);
-                    return mix(
+                    let u = f * f * (3.0 - 2.0 * f),
+                    return, mix(
                         mix(mix(hash(i), hash(i + vec3<f32>(1.0, 0.0, 0.0)), u.x),
                             mix(hash(i + vec3<f32>(0.0, 1.0, 0.0)), hash(i + vec3<f32>(1.0, 1.0, 0.0)), u.x), u.y),
                         mix(mix(hash(i + vec3<f32>(0.0, 0.0, 1.0)), hash(i + vec3<f32>(1.0, 0.0, 1.0)), u.x),
                             mix(hash(i + vec3<f32>(0.0, 1.0, 1.0)), hash(i + vec3<f32>(1.0, 1.0, 1.0)), u.x), u.y),
                         u.z
-                    );
+
                 }
                 
-                fn hash(p: vec3<f32>) -> f32 {
-                    let n = dot(p, vec3<f32>(1.0, 57.0, 113.0));
-                    return fract(sin(n) * 43758.5453);
+                fn, hash(p: vec3<f32>) -> f32 {
+                    let n = dot(p, vec3<f32>(1.0, 57.0, 113.0);
+                    return, fract(sin(n) * 43758.5453);
                 }
                 
-                fn curlNoise(p: vec3<f32>) -> vec3<f32> {
-                    let e = 0.01;
+                fn, curlNoise(p: vec3<f32>) -> vec3<f32> {
+                    let e = 0.01,
                     let dx = vec3<f32>(e, 0.0, 0.0);
                     let dy = vec3<f32>(0.0, e, 0.0);
                     let dz = vec3<f32>(0.0, 0.0, e);
@@ -824,28 +813,38 @@ export class ParticleSystem {
                 }
                 
                 @compute @workgroup_size(256, 1, 1)
-                fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
+                fn, main(@builtin(global_invocation_id) global_id: vec3<u32>) {
                     let idx = global_id.x;
                     if (idx >= u32(uniforms.particleCount)) {
-                        return;
+                        return,
                     }
                     
-                    var particle = particles[idx];
+                    var particle = particles[idx]
                     
                     if (particle.life <= 0.0) {
+
+    
+
+
+
                         // Respawn particle
                         particle.position = vec3<f32>(
                             (hash(vec3<f32>(f32(idx), uniforms.time, 0.0)) - 0.5) * uniforms.bounds.x * 2.0,
                             (hash(vec3<f32>(f32(idx), uniforms.time, 1.0)) - 0.5) * uniforms.bounds.y * 2.0,
                             (hash(vec3<f32>(f32(idx), uniforms.time, 2.0)) - 0.5) * uniforms.bounds.z * 2.0
-                        );
+
                         particle.velocity = vec3<f32>(
                             (hash(vec3<f32>(f32(idx), uniforms.time, 3.0)) - 0.5) * 10.0,
                             hash(vec3<f32>(f32(idx), uniforms.time, 4.0)) * 10.0,
-                            (hash(vec3<f32>(f32(idx), uniforms.time, 5.0)) - 0.5) * 10.0
-                        );
+                            (hash(vec3<f32>(f32(idx), uniforms.time, 5.0)
+} - 0.5
+} * 10.0
+
                         particle.life = 1.0;
-                        particle.size = hash(vec3<f32>(f32(idx), uniforms.time, 6.0)) * 0.5 + 0.5;
+                        particle.size = hash(vec3<f32>(f32(idx
+}, uniforms.time, 6.0
+}
+} * 0.5 + 0.5;
                     } else {
                         // Apply forces
                         var acceleration = vec3<f32>(0.0, -uniforms.gravity, 0.0);
@@ -855,8 +854,12 @@ export class ParticleSystem {
                         let toAttractor = uniforms.attractorPos - particle.position;
                         let distSq = dot(toAttractor, toAttractor);
                         if (distSq > 0.01) {
-                            let dist = sqrt(distSq);
-                            acceleration += (toAttractor / dist) * uniforms.attractorStrength / distSq;
+
+
+                            let dist = sqrt(distSq
+};
+                            acceleration += (toAttractor / dist
+} * uniforms.attractorStrength / distSq);
                         }
                         
                         // Turbulence
@@ -869,8 +872,7 @@ export class ParticleSystem {
                         particle.velocity *= (1.0 - uniforms.damping * uniforms.deltaTime);
                         particle.position += particle.velocity * uniforms.deltaTime;
                         
-                        // Boundaries
-                        if (abs(particle.position.x) > uniforms.bounds.x) {
+                        // Boundaries, if(abs(particle.position.x) > uniforms.bounds.x) {
                             particle.position.x = sign(particle.position.x) * uniforms.bounds.x;
                             particle.velocity.x *= -0.8;
                         }
@@ -892,19 +894,19 @@ export class ParticleSystem {
                         
                         // Update color
                         let speed = length(particle.velocity);
-                        particle.color = vec4<f32>(
+                        particle.color = vec4<f32>()
                             speed * 0.1,
                             0.5 + speed * 0.05,
                             1.0 - speed * 0.1,
                             particle.life
-                        );
+
                     }
                     
                     particles[idx] = particle;
                 }
-            `,
-            'webgpu/particle-render.wgsl': `
-                struct Particle {
+            `,``
+            'webgpu/particle-render.wgsl': ``
+                struct Particle {}
                     position: vec3<f32>,
                     velocity: vec3<f32>,
                     color: vec4<f32>,
@@ -913,7 +915,7 @@ export class ParticleSystem {
                     _padding: vec2<f32>,
                 }
                 
-                struct Uniforms {
+                struct Uniforms {}
                     viewProjection: mat4x4<f32>,
                     view: mat4x4<f32>,
                     resolution: vec2<f32>,
@@ -930,27 +932,28 @@ export class ParticleSystem {
                 }
                 
                 @group(0) @binding(0) var<storage, read> particles: array<Particle>;
-                @group(1) @binding(0) var<uniform> uniforms: Uniforms;
+                @group(1) @binding(0) var<uniform> uniforms: Uniforms,
                 
                 @vertex
-                fn vs_main(
+                fn, vs_main(
                     @builtin(vertex_index) vertexIndex: u32,
                     @builtin(instance_index) instanceIndex: u32
                 ) -> VertexOutput {
-                    var output: VertexOutput;
+                    var output: VertexOutput,
                     
-                    let particle = particles[instanceIndex];
+                    let particle = particles[instanceIndex]
                     
                     if (particle.life <= 0.0) {
-                        output.position = vec4<f32>(0.0, 0.0, -100.0, 1.0);
+
+                        output.position = vec4<f32>(0.0, 0.0, -100.0, 1.0
+};
                         return output;
                     }
                     
                     let vertex = vec2<f32>(
                         f32((vertexIndex & 1u) * 2u) - 1.0,
                         f32((vertexIndex >> 1u) * 2u) - 1.0
-                    );
-                    
+;
                     let worldPos = particle.position;
                     let viewPos = (uniforms.view * vec4<f32>(worldPos, 1.0)).xyz;
                     
@@ -972,8 +975,8 @@ export class ParticleSystem {
                 }
                 
                 @fragment
-                fn fs_main(input: VertexOutput) -> @location(0) vec4<f32> {
-                    let dist = length(input.uv - vec2<f32>(0.5));
+                fn, fs_main(input: VertexOutput) -> @location(0) vec4<f32> {
+                    let dist = length(input.uv - vec2<f32>(0.5),
                     
                     var alpha = 1.0 - smoothstep(0.0, 0.5, dist);
                     
@@ -991,8 +994,8 @@ export class ParticleSystem {
                 }
                 
                 @fragment
-                fn fs_main_additive(input: VertexOutput) -> @location(0) vec4<f32> {
-                    let dist = length(input.uv - vec2<f32>(0.5));
+                fn, fs_main_additive(input: VertexOutput) -> @location(0) vec4<f32> {
+                    let dist = length(input.uv - vec2<f32>(0.5),
                     
                     var intensity = pow(1.0 - dist * 2.0, 3.0);
                     intensity *= input.life;
@@ -1007,8 +1010,8 @@ export class ParticleSystem {
                     
                     return vec4<f32>(color, 1.0);
                 }
-            `,
-            'webgl2/particle-update.glsl': `#version 300 es
+            `,``
+            'webgl2/particle-update.glsl': ``#version 300 es`
                 // Inline version of particle update shader
                 in vec3 a_position;
                 in vec3 a_velocity;
@@ -1034,16 +1037,16 @@ export class ParticleSystem {
                 uniform sampler2D u_spawnerTexture;
                 uniform int u_spawnerCount;
                 
-                float random(vec2 seed) {
-                    return fract(sin(dot(seed, vec2(12.9898, 78.233))) * 43758.5453);
+                float, random(vec2 seed) {
+                    return, fract(sin(dot(seed, vec2(12.9898, 78.233))) * 43758.5453);
                 }
                 
-                float noise(vec3 p) {
+                float, noise(vec3 p) {
                     vec3 i = floor(p);
                     vec3 f = fract(p);
                     f = f * f * (3.0 - 2.0 * f);
                     float n = i.x + i.y * 57.0 + 125.0 * i.z;
-                    return mix(
+                    return, mix(
                         mix(
                             mix(random(vec2(n, n)), random(vec2(n + 1.0, n)), f.x),
                             mix(random(vec2(n + 57.0, n)), random(vec2(n + 58.0, n)), f.x),
@@ -1055,10 +1058,10 @@ export class ParticleSystem {
                             f.y
                         ),
                         f.z
-                    );
+
                 }
                 
-                vec3 curlNoise(vec3 p) {
+                vec3, curlNoise(vec3 p) {
                     float epsilon = 0.01;
                     vec3 dx = vec3(epsilon, 0.0, 0.0);
                     vec3 dy = vec3(0.0, epsilon, 0.0);
@@ -1066,10 +1069,10 @@ export class ParticleSystem {
                     float x = noise(p + dy) - noise(p - dy) - noise(p + dz) + noise(p - dz);
                     float y = noise(p + dz) - noise(p - dz) - noise(p + dx) + noise(p - dx);
                     float z = noise(p + dx) - noise(p - dx) - noise(p + dy) + noise(p - dy);
-                    return vec3(x, y, z) / (2.0 * epsilon);
+                    return, vec3(x, y, z) / (2.0 * epsilon);
                 }
                 
-                void main() {
+                void, main() {
                     vec3 position = a_position;
                     vec3 velocity = a_velocity;
                     vec4 color = a_color;
@@ -1077,8 +1080,13 @@ export class ParticleSystem {
                     float size = a_data.y;
                     
                     if (life <= 0.0) {
-                        float randomVal = random(vec2(gl_VertexID, u_time));
-                        int spawnerIndex = int(randomVal * float(u_spawnerCount));
+
+    
+
+
+
+                        float randomVal = random(vec2(gl_VertexID, u_time);
+                        int spawnerIndex = int(randomVal * float(u_spawnerCount);
                         vec2 texCoord = vec2((float(spawnerIndex) + 0.5) / float(u_spawnerCount), 0.5);
                         vec4 spawnerData = texture(u_spawnerTexture, texCoord);
                         
@@ -1091,11 +1099,15 @@ export class ParticleSystem {
                         velocity = vec3(
                             (random(vec2(gl_VertexID * 5, u_time)) - 0.5) * 2.0,
                             random(vec2(gl_VertexID * 6, u_time)) * 2.0,
-                            (random(vec2(gl_VertexID * 7, u_time)) - 0.5) * 2.0
-                        );
-                        
+                            (random(vec2(gl_VertexID * 7, u_time
+}
+} - 0.5
+} * 2.0
+
                         life = 1.0;
-                        size = random(vec2(gl_VertexID * 8, u_time)) * 0.5 + 0.5;
+                        size = random(vec2(gl_VertexID * 8, u_time
+}
+} * 0.5 + 0.5);
                     } else {
                         vec3 acceleration = vec3(0.0);
                         acceleration.y -= u_gravity;
@@ -1104,8 +1116,12 @@ export class ParticleSystem {
                         vec3 toAttractor = u_attractorPos - position;
                         float distSq = dot(toAttractor, toAttractor);
                         if (distSq > 0.01) {
-                            float dist = sqrt(distSq);
-                            acceleration += (toAttractor / dist) * u_attractorStrength / distSq;
+
+
+                            float dist = sqrt(distSq
+};
+                            acceleration += (toAttractor / dist
+} * u_attractorStrength / distSq);
                         }
                         
                         vec3 noisePos = position * u_noiseScale + vec3(0.0, u_time * 0.1, 0.0);
@@ -1136,12 +1152,12 @@ export class ParticleSystem {
                         life -= u_deltaTime * 0.2;
                         
                         float speed = length(velocity);
-                        color = vec4(
+                        color = vec4()
                             speed * 0.1,
                             0.5 + speed * 0.05,
                             1.0 - speed * 0.1,
                             life
-                        );
+
                     }
                     
                     v_position = position;
@@ -1149,8 +1165,8 @@ export class ParticleSystem {
                     v_color = color;
                     v_data = vec2(life, size);
                 }
-            `,
-            'webgl2/particle-vertex.glsl': `#version 300 es
+            ``,`
+            'webgl2/particle-vertex.glsl': ``#version 300 es`
                 // Inline version of particle vertex shader
                 in vec2 a_position;
                 in vec3 a_particlePosition;
@@ -1169,14 +1185,16 @@ export class ParticleSystem {
                 out float v_life;
                 out float v_size;
                 
-                void main() {
+                void, main() {
                     float life = a_particleData.x;
                     if (life <= 0.0) {
-                        gl_Position = vec4(0.0, 0.0, -100.0, 1.0);
-                        return;
+
+                        gl_Position = vec4(0.0, 0.0, -100.0, 1.0
+};
+                        return);
                     }
                     
-                    vec3 worldPos = a_particlePosition;
+                    vec3 worldPos = a_particlePosition);
                     vec4 viewPos = u_view * vec4(worldPos, 1.0);
                     
                     float size = a_particleData.y * u_particleScale * life;
@@ -1193,8 +1211,8 @@ export class ParticleSystem {
                     v_life = life;
                     v_size = size;
                 }
-            `,
-            'webgl2/particle-fragment.glsl': `#version 300 es
+            ``,`
+            'webgl2/particle-fragment.glsl': ``#version 300 es`
                 // Inline version of particle fragment shader
                 precision highp float;
                 
@@ -1208,8 +1226,8 @@ export class ParticleSystem {
                 uniform float u_time;
                 uniform int u_blendMode;
                 
-                void main() {
-                    float dist = length(v_uv - vec2(0.5));
+                void, main() {
+                    float dist = length(v_uv - vec2(0.5);
                     
                     if (dist > 0.5) {
                         discard;
@@ -1228,11 +1246,19 @@ export class ParticleSystem {
                     alpha *= clamp(v_size * 2.0, 0.0, 1.0);
                     
                     if (u_blendMode == 1) {
-                        float intensity = pow(1.0 - dist * 2.0, 3.0) * v_life;
+    
+
+
+
+                        float intensity = pow(1.0 - dist * 2.0, 3.0
+} * v_life;
                         color *= intensity * 2.0;
                         
-                        float maxComponent = max(max(color.r, color.g), color.b);
-                        if (maxComponent > 1.0) {
+                        float maxComponent = max(max(color.r, color.g
+}, color.b
+};
+                        if (maxComponent > 1.0
+}, {
                             color /= maxComponent;
                         }
                         
@@ -1240,13 +1266,12 @@ export class ParticleSystem {
                     } else {
                         fragColor = vec4(color * alpha, alpha);
                     }
-                }
-            `
+            ``
         };
         
-        const shader = shaders[path];
+        const shader = shaders[path]
         if (!shader) {
-            return '';
+            return ''
         }
         
         return shader;
@@ -1258,36 +1283,31 @@ export class ParticleSystem {
     getBlendState() {
         switch (this.config.blendMode) {
             case 'additive':
-                return {
-                    color: {
+                return { color: {}
                         srcFactor: 'src-alpha',
                         dstFactor: 'one',
                         operation: 'add'
                     },
-                    alpha: {
+                    alpha: {}
                         srcFactor: 'zero',
                         dstFactor: 'one',
                         operation: 'add'
                     }
                 };
             case 'alpha':
-                return {
-                    color: {
+                return { color: {}
                         srcFactor: 'src-alpha',
                         dstFactor: 'one-minus-src-alpha',
                         operation: 'add'
                     },
-                    alpha: {
+                    alpha: {}
                         srcFactor: 'one',
                         dstFactor: 'one-minus-src-alpha',
                         operation: 'add'
                     }
                 };
-            default:
-                return undefined;
+            default: return undefined,
         }
-    }
-
     /**
      * Setup blend mode for WebGL
      */
@@ -1314,7 +1334,7 @@ export class ParticleSystem {
      */
     getStats() {
         return {
-            ...this.stats,
+            ...this.stats,}
             backend: this.detector.backend,
             particleCount: this.particleCount,
             spawnerCount: this.spawners.length
@@ -1333,47 +1353,49 @@ export class ParticleSystem {
      */
     destroy() {
         if (this.detector) {
-            this.detector.destroy();
+
+            this.detector.destroy(
+};););
         }
         
-        // Cleanup WebGPU resources
-        if (this.device) {
+        // Cleanup WebGPU resources, if(this.device) {
             // Buffers and textures are automatically destroyed with device
         }
         
-        // Cleanup WebGL resources
-        if (this.gl) {
+        // Cleanup WebGL resources, if(this.gl) {
+
             const gl = this.gl;
             
             // Delete programs
-            Object.values(this.programs).forEach(program => {
-                gl.deleteProgram(program);
-            });
+            Object.values(this.programs
+};.forEach(program => {
+                gl.deleteProgram(program();
+            };);););
             
             // Delete buffers
             Object.values(this.buffers).forEach(buffer => {
-                if (Array.isArray(buffer)) {
-                    buffer.forEach(b => gl.deleteBuffer(b));
+                if (Array.isArray(buffer()}, {
+                    buffer.forEach(b => gl.deleteBuffer(b();););
                 } else {
                     gl.deleteBuffer(buffer);
                 }
-            });
+            };);
             
             // Delete textures
             Object.values(this.textures).forEach(texture => {
-                gl.deleteTexture(texture);
-            });
+                gl.deleteTexture(texture();
+            };);););
             
             // Delete VAOs
             Object.values(this.vaos).forEach(vao => {
-                if (Array.isArray(vao)) {
-                    vao.forEach(v => gl.deleteVertexArray(v));
+                if (Array.isArray(vao()}, {
+                    vao.forEach(v => gl.deleteVertexArray(v();););
                 } else {
                     gl.deleteVertexArray(vao);
                 }
-            });
+            };);
         }
         
         this.isInitialized = false;
         }
-}
+`

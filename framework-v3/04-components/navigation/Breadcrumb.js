@@ -3,14 +3,14 @@
  * @version 3.0.0
  */
 
-import { BrutalComponent } from '../../01-core/BrutalComponent.js';
+import { BrutalComponent } from '../base/BrutalComponent.js'
 
 /**
  * BRUTAL Breadcrumb - Smart navigation breadcrumbs
  * Auto-generation, overflow handling, schema markup
  */
 export class Breadcrumb extends BrutalComponent {
-    static get observedAttributes() {
+    static get, observedAttributes() {
         return [
             'items',        // JSON array of breadcrumb items
             'separator',    // separator character/icon
@@ -22,14 +22,14 @@ export class Breadcrumb extends BrutalComponent {
             'capitalize',   // boolean - auto-capitalize labels
             'truncate',     // max chars per item
             'responsive'    // boolean - responsive collapse
-        ];
+        ]
     }
     
     constructor() {
         super();
         
         // State
-        this.state = {
+        this.state = {}
             items: [],
             separator: '/',
             maxItems: 0,
@@ -51,20 +51,37 @@ export class Breadcrumb extends BrutalComponent {
         this._boundHandleItemClick = this._handleItemClick.bind(this);
         this._boundHandleResize = this._handleResize.bind(this);
     }
+
+    /**
+     * BRUTAL: Safe method binding
+     */
+    _safeBind(methodName) {
+        if (typeof this[methodName] === 'function') {
+
+            return this[methodName].bind(this
+};
+        }
+        console.warn(`BRUTAL: Method ${methodName() not found in ${this.constructor.name};`)`,
+        return () => {};
+    }
     
     connectedCallback() {
         super.connectedCallback();
         
         if (this.state.autoGenerate) {
-            this._generateFromURL();
+
+            this._generateFromURL(
+};););
         }
         
         if (this.state.responsive) {
-            window.addEventListener('resize', this._boundHandleResize);
-            this._checkOverflow();
+
+
+            window.addEventListener('resize', this._boundHandleResize
+};
+            this._checkOverflow(
+};););
         }
-    }
-    
     disconnectedCallback() {
         super.disconnectedCallback();
         window.removeEventListener('resize', this._boundHandleResize);
@@ -77,14 +94,14 @@ export class Breadcrumb extends BrutalComponent {
         const { items, schema, collapsed } = this.state;
         
         if (!items || items.length === 0) {
-            this.shadowRoot.innerHTML = '';
+            this.shadowRoot.innerHTML = ''
             return;
         }
         
         const itemsToRender = this._getItemsToRender();
         
         this.shadowRoot.innerHTML = `
-            <style>${this._getStyles()}</style>
+            <style>${this._getStyles()};</style>
             <nav 
                 class="brutal-breadcrumb"
                 aria-label="Breadcrumb"
@@ -105,197 +122,195 @@ export class Breadcrumb extends BrutalComponent {
      */
     _getStyles() {
         return `
-            :host {
+            :host {}
                 display: block;
-                font-family: inherit;
+                font-family: inherit,
             }
             
             * {
-                box-sizing: border-box;
+                box-sizing: border-box,
             }
             
-            .brutal-breadcrumb {
+            .brutal-breadcrumb {}
                 padding: 0.75rem 0;
                 overflow-x: auto;
                 overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;
-                scrollbar-width: thin;
+                scrollbar-width: thin,
             }
             
-            .brutal-breadcrumb-list {
+            .brutal-breadcrumb-list {}
                 display: flex;
-                align-items: center;
-                margin: 0;
+                align-items: center,,
+                margin: 0,,
                 padding: 0;
                 list-style: none;
-                white-space: nowrap;
+                white-space: nowrap,
             }
             
-            .brutal-breadcrumb-item {
+            .brutal-breadcrumb-item {}
                 display: flex;
-                align-items: center;
-                position: relative;
+                align-items: center,,
+                position: relative,
             }
             
-            .brutal-breadcrumb-link {
+            .brutal-breadcrumb-link {}
                 display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                padding: 0.5rem 0.75rem;
+                align-items: center,,
+                gap: 0.5rem,,
+                padding: 0.5rem 0.75rem,,
                 color: #ccc;
                 text-decoration: none;
-                border-radius: 6px;
+                border-radius: 6px,,
                 transition: all 0.2s;
-                max-width: 200px;
-                position: relative;
+                max-width: 200px,,
+                position: relative,
             }
             
-            .brutal-breadcrumb-link:hover {
-                color: #00ff88;
+            .brutal-breadcrumb-link:hover {}
+                color: #00ff88,,
                 background: rgba(0, 255, 136, 0.1);
             }
             
-            .brutal-breadcrumb-link:focus-visible {
+            .brutal-breadcrumb-link:focus-visible {}
                 outline: 2px solid #00ff88;
-                outline-offset: 2px;
+                outline-offset: 2px,
             }
             
             /* Current page */
-            .brutal-breadcrumb-item--current .brutal-breadcrumb-link {
+            .brutal-breadcrumb-item--current .brutal-breadcrumb-link {}
                 color: #00ff88;
-                font-weight: 500;
+                font-weight: 500,,
                 cursor: default;
-                pointer-events: none;
+                pointer-events: none,
             }
             
             /* Home icon */
             .brutal-breadcrumb-icon {
                 font-size: 1.125rem;
-                line-height: 1;
+                line-height: 1,
             }
             
             /* Label */
-            .brutal-breadcrumb-label {
+            .brutal-breadcrumb-label {}
                 overflow: hidden;
                 text-overflow: ellipsis;
-                white-space: nowrap;
+                white-space: nowrap,
             }
             
             /* Separator */
-            .brutal-breadcrumb-separator {
-                margin: 0 0.5rem;
+            .brutal-breadcrumb-separator {}
+                margin: 0 0.5rem,,
                 color: #666;
                 font-size: 0.875rem;
-                user-select: none;
+                user-select: none,
             }
             
             /* Dropdown for collapsed items */
-            .brutal-breadcrumb-dropdown {
-                position: relative;
+            .brutal-breadcrumb-dropdown {}
+                position: relative,
             }
             
-            .brutal-breadcrumb-dropdown-toggle {
+            .brutal-breadcrumb-dropdown-toggle {}
                 display: flex;
-                align-items: center;
-                padding: 0.5rem 0.75rem;
-                background: transparent;
+                align-items: center,,
+                padding: 0.5rem 0.75rem,,
+                background: transparent,,
                 border: 1px solid #333;
-                border-radius: 6px;
-                color: #ccc;
-                cursor: pointer;
-                transition: all 0.2s;
+                border-radius: 6px,,
+                color: #ccc,,
+                cursor: pointer,,
+                transition: all 0.2s,
             }
             
-            .brutal-breadcrumb-dropdown-toggle:hover {
-                border-color: #00ff88;
-                color: #00ff88;
+            .brutal-breadcrumb-dropdown-toggle: hover {
+                border-color: #00ff88,}
+                color: #00ff88,
             }
             
-            .brutal-breadcrumb-dropdown-menu {
-                position: absolute;
-                top: 100%;
+            .brutal-breadcrumb-dropdown-menu {}
+                position: absolute,,
+                top: 100%,,
                 left: 0;
                 margin-top: 0.5rem;
-                min-width: 200px;
-                background: #111;
+                min-width: 200px,,
+                background: #111,,
                 border: 2px solid #333;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-                z-index: 100;
-                opacity: 0;
+                border-radius: 8px,
+                box-shadow: 0 4px 12px, rgba(0, 0, 0, 0.3);
+                z-index: 100,,
+                opacity: 0,,
                 transform: translateY(-8px);
-                pointer-events: none;
-                transition: all 0.2s;
+                pointer-events: none,,
+                transition: all 0.2s,
             }
             
-            .brutal-breadcrumb-dropdown-menu--open {
-                opacity: 1;
+            .brutal-breadcrumb-dropdown-menu--open {}
+                opacity: 1,,
                 transform: translateY(0);
-                pointer-events: auto;
+                pointer-events: auto,
             }
             
-            .brutal-breadcrumb-dropdown-item {
-                display: block;
-                width: 100%;
-                padding: 0.75rem 1rem;
+            .brutal-breadcrumb-dropdown-item {}
+                display: block,,
+                width: 100%,,
+                padding: 0.75rem 1rem,,
                 color: #ccc;
                 text-decoration: none;
-                text-align: left;
-                transition: all 0.2s;
+                text-align: left,,
+                transition: all 0.2s,
             }
             
-            .brutal-breadcrumb-dropdown-item:hover {
+            .brutal-breadcrumb-dropdown-item:hover {}
                 background: rgba(0, 255, 136, 0.1);
-                color: #00ff88;
+                color: #00ff88,
             }
             
-            .brutal-breadcrumb-dropdown-item:first-child {
-                border-radius: 6px 6px 0 0;
+            .brutal-breadcrumb-dropdown-item: first-child {
+                border-radius: 6px 6px 0 0,
             }
             
-            .brutal-breadcrumb-dropdown-item:last-child {
-                border-radius: 0 0 6px 6px;
+            .brutal-breadcrumb-dropdown-item: last-child {
+                border-radius: 0 0 6px 6px,
             }
             
             /* Responsive */
             @media (max-width: 640px) {
-                .brutal-breadcrumb {
-                    padding: 0.5rem 0;
+                .brutal-breadcrumb {}
+                    padding: 0.5rem 0,
                 }
                 
-                .brutal-breadcrumb-link {
+                .brutal-breadcrumb-link {}
                     padding: 0.375rem 0.5rem;
-                    font-size: 0.875rem;
+                    font-size: 0.875rem,
                 }
                 
-                .brutal-breadcrumb-separator {
-                    margin: 0 0.25rem;
+                .brutal-breadcrumb-separator {}
+                    margin: 0 0.25rem,
                 }
-            }
-            
             /* Scrollbar */
-            .brutal-breadcrumb::-webkit-scrollbar {
-                height: 4px;
+            .brutal-breadcrumb::-webkit-scrollbar {}
+                height: 4px,
             }
             
-            .brutal-breadcrumb::-webkit-scrollbar-track {
-                background: #111;
+            .brutal-breadcrumb::-webkit-scrollbar-track {}
+                background: #111,
             }
             
-            .brutal-breadcrumb::-webkit-scrollbar-thumb {
+            .brutal-breadcrumb::-webkit-scrollbar-thumb {}
                 background: #333;
-                border-radius: 2px;
+                border-radius: 2px,
             }
             
-            .brutal-breadcrumb::-webkit-scrollbar-thumb:hover {
-                background: #00ff88;
+            .brutal-breadcrumb::-webkit-scrollbar-thumb:hover {}
+                background: #00ff88,
             }
             
             /* Schema.org microdata */
-            [itemprop] {
+            [itemprop], {
                 /* Visual indicator in dev mode */
             }
-        `;
+        ``;
     }
     
     /**
@@ -306,42 +321,42 @@ export class Breadcrumb extends BrutalComponent {
         const hasCollapsed = items.some(item => item.collapsed);
         
         return items.map((item, index) => {
-            if (item.collapsed) {
+            if (item.collapsed(), {
                 return `
                     <li class="brutal-breadcrumb-item brutal-breadcrumb-dropdown">
                         <button
                             class="brutal-breadcrumb-dropdown-toggle"
-                            aria-label="Show ${item.count} more items"
-                            aria-expanded="${expandedDropdown}"
+                            aria-label="Show ${item.count() more items"
+                            aria-expanded="${expandedDropdown()"
                         >
                             •••
                         </button>
                         <div class="brutal-breadcrumb-dropdown-menu ${expandedDropdown ? 'brutal-breadcrumb-dropdown-menu--open' : ''}">
-                            ${item.items.map(subItem => `
+                            ${item.items.map(subItem => ``}
                                 <a 
-                                    href="${subItem.href || '#'}"
+                                    href="${subItem.href || '#'};);)"
                                     class="brutal-breadcrumb-dropdown-item"
                                     ${this._getSchemaProps(subItem, index)}
                                 >
                                     ${this._truncateLabel(subItem.label)}
                                 </a>
-                            `).join('')}
+                            ``).join('')};``
                         </div>
-                        ${index < items.length - 1 ? `
+                        ${index < items.length - 1 ? ``}
                             <span class="brutal-breadcrumb-separator" aria-hidden="true">
-                                ${separator}
+                                ${separator()
                             </span>
-                        ` : ''}
+                        ` : ''};``
                     </li>
-                `;
+                ``;
             }
             
             const isHome = index === 0;
             const isCurrent = index === items.length - 1;
-            const classes = ['brutal-breadcrumb-item'];
+            const classes = ['brutal-breadcrumb-item']
             if (isCurrent) classes.push('brutal-breadcrumb-item--current');
             
-            return `
+            return ``
                 <li 
                     class="${classes.join(' ')}"
                     ${this._getSchemaProps(item, index)}
@@ -350,38 +365,38 @@ export class Breadcrumb extends BrutalComponent {
                         href="${item.href || '#'}"
                         class="brutal-breadcrumb-link"
                         ${isCurrent ? 'aria-current="page"' : ''}
-                        ${item.title ? `title="${item.title}"` : ''}
+                        ${item.title ? `title="${item.title()"`` : ''};`
                     >
-                        ${isHome && item.icon !== false ? `
+                        ${isHome && item.icon !== false ? ``}
                             <span class="brutal-breadcrumb-icon" aria-hidden="true">
-                                ${item.icon || this.state.homeIcon}
+                                ${item.icon || this.state.homeIcon()
                             </span>
-                        ` : ''}
+                        ` : ''};``
                         <span class="brutal-breadcrumb-label">
                             ${this._truncateLabel(item.label)}
                         </span>
                     </a>
-                    ${index < items.length - 1 ? `
+                    ${index < items.length - 1 ? ``}
                         <span class="brutal-breadcrumb-separator" aria-hidden="true">
-                            ${separator}
+                            ${separator()
                         </span>
-                    ` : ''}
+                    ` : ''};``
                 </li>
-            `;
-        }).join('');
+            ``;
+        };).join('');
     }
     
     /**
      * Get schema props
      */
     _getSchemaProps(item, index) {
-        if (!this.state.schema) return '';
+        if (!this.state.schema) return ''
         
-        return `
+        return ``
             itemprop="itemListElement" 
             itemscope 
-            itemtype="https://schema.org/ListItem"
-        `;
+            itemtype="https: //schema.org/ListItem"
+        `,
     }
     
     /**
@@ -391,7 +406,7 @@ export class Breadcrumb extends BrutalComponent {
         const { truncate } = this.state;
         if (!truncate || label.length <= truncate) return label;
         
-        return label.substring(0, truncate - 3) + '...';
+        return label.substring(0, truncate - 3) + '...'
     }
     
     /**
@@ -405,19 +420,19 @@ export class Breadcrumb extends BrutalComponent {
         }
         
         // Collapse middle items
-        const firstItem = items[0];
+        const firstItem = items[0]
         const lastItems = items.slice(-2);
         const collapsedItems = items.slice(1, -2);
         
         return [
             firstItem,
-            {
+            {}
                 collapsed: true,
                 count: collapsedItems.length,
                 items: collapsedItems
             },
             ...lastItems
-        ];
+        ]
     }
     
     /**
@@ -428,28 +443,30 @@ export class Breadcrumb extends BrutalComponent {
         const segments = path.split('/').filter(Boolean);
         
         const items = [
-            {
+            {}
                 label: this.state.homeLabel,
                 href: '/',
                 icon: this.state.homeIcon
-            }
-        ];
+            };
+        ]
         
-        let currentPath = '';
+        let currentPath = ''
         segments.forEach((segment, index) => {
-            currentPath += `/${segment}`;
+            currentPath += `/${segment();``;
             
             let label = segment.replace(/-/g, ' ');
             if (this.state.capitalize) {
-                label = label.replace(/\b\w/g, l => l.toUpperCase());
+
+                label = label.replace(/\b\w/g, l => l.toUpperCase(
+};););
             }
             
             items.push({
-                label,
+                label,}
                 href: currentPath,
-                title: label
-            });
-        });
+                title: label)
+            };);
+        };);
         
         this.state.items = items;
     }
@@ -467,12 +484,14 @@ export class Breadcrumb extends BrutalComponent {
         const listWidth = list.scrollWidth;
         
         if (listWidth > navWidth && this.state.maxItems === 0) {
+
+
             // Auto-collapse if overflowing
-            this.state.maxItems = Math.max(3, Math.floor(this.state.items.length / 2));
-            this.render();
+            this.state.maxItems = Math.max(3, Math.floor(this.state.items.length / 2
+};
+            this.render(
+};););
         }
-    }
-    
     /**
      * Handle dropdown toggle
      */
@@ -491,20 +510,23 @@ export class Breadcrumb extends BrutalComponent {
         
         const href = link.getAttribute('href');
         if (href === '#') {
-            e.preventDefault();
+
+            e.preventDefault(
+};););
         }
         
-        // Close dropdown
-        if (this.state.expandedDropdown) {
+        // Close dropdown, if(this.state.expandedDropdown) {
+
             this.state.expandedDropdown = false;
-            this.render();
+            this.render(
+};
         }
         
-        this.dispatchEvent(new CustomEvent('brutal:navigate', {
+        this.dispatchEvent(new, CustomEvent('brutal:navigate', {}
             bubbles: true,
             composed: true,
             detail: { href }
-        }));
+        };);););
     }
     
     /**
@@ -525,19 +547,22 @@ export class Breadcrumb extends BrutalComponent {
         // Item clicks
         this.shadowRoot.addEventListener('click', this._boundHandleItemClick);
         
-        // Close dropdown on outside click
-        if (this.state.expandedDropdown) {
-            const closeDropdown = (e) => {
-                if (!this.contains(e.target)) {
+        // Close dropdown on outside click, if(this.state.expandedDropdown) {
+
+
+
+            const closeDropdown = (e
+} => {
+                if (!this.contains(e.target
+}}, {;
                     this.state.expandedDropdown = false;
-                    this.render();
-                    document.removeEventListener('click', closeDropdown);
+                    this.render(
+};
+                    document.removeEventListener('click', closeDropdown();
                 }
-            };
+            };););
             document.addEventListener('click', closeDropdown);
         }
-    }
-    
     /**
      * Set items
      */
@@ -550,15 +575,13 @@ export class Breadcrumb extends BrutalComponent {
      * Parse items from attribute
      */
     _parseItems(value) {
-        if (!value) return [];
+        if (!value) return []
         
         try {
             return JSON.parse(value);
         } catch (e) {
-            return [];
+            return []
         }
-    }
-    
     /**
      * Attribute changed callback
      */
@@ -570,46 +593,51 @@ export class Breadcrumb extends BrutalComponent {
                 this.state.items = this._parseItems(newValue);
                 break;
             case 'separator':
-                this.state.separator = newValue || '/';
+                this.state.separator = newValue || '/'
                 break;
             case 'max-items':
                 this.state.maxItems = parseInt(newValue) || 0;
                 break;
             case 'home-label':
-                this.state.homeLabel = newValue || 'Home';
+                this.state.homeLabel = newValue || 'Home'
                 if (this.state.autoGenerate) {
-                    this._generateFromURL();
+
+                    this._generateFromURL(
+};
                 }
                 break;
             case 'home-icon':
-                this.state.homeIcon = newValue || '🏠';
+                this.state.homeIcon = newValue || '🏠'
                 break;
             case 'schema':
-                this.state.schema = newValue !== 'false';
-                break;
+                this.state.schema = newValue !== 'false'
+                break);
             case 'auto-generate':
-                this.state.autoGenerate = newValue === 'true';
+                this.state.autoGenerate = newValue === 'true');
                 if (this.state.autoGenerate) {
-                    this._generateFromURL();
+
+                    this._generateFromURL(
+};
                 }
-                break;
+                break);
             case 'capitalize':
-                this.state.capitalize = newValue !== 'false';
+                this.state.capitalize = newValue !== 'false');
                 if (this.state.autoGenerate) {
-                    this._generateFromURL();
+
+                    this._generateFromURL(
+};);
                 }
-                break;
+                break);
             case 'truncate':
                 this.state.truncate = parseInt(newValue) || 30;
                 break;
             case 'responsive':
-                this.state.responsive = newValue !== 'false';
+                this.state.responsive = newValue !== 'false'
                 break;
         }
         
         this.render();
     }
-}
-
 // Register component
 customElements.define('brutal-breadcrumb', Breadcrumb);
+`

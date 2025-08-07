@@ -1,0 +1,52 @@
+{
+  "name": "@brutal/security-tools",
+  "version": "1.0.0",
+  "description": "Security sandbox and plugin certification tools for BRUTAL V5",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "build": "tsc",
+    "clean": "rm -rf dist coverage",
+    "audit": "node dist/audit-cli.js",
+    "certify": "node dist/certify-cli.js"
+  },
+  "exports": {
+    "./sandbox": "./security-sandbox.js",
+    "./permissions": "./permission-system.js",
+    "./certification": "./plugin-certifier.js",
+    "./validator": "./doc-validator.js"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0"
+  },
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "extensionsToTreatAsEsm": [".ts"],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
+    },
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.ts"
+    ],
+    "collectCoverageFrom": [
+      "*.ts",
+      "!*.test.ts",
+      "!*-cli.ts"
+    ]
+  }
+}

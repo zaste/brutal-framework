@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>@brutal/dom - Minimal Example</title>
+  <style>
+    body { font-family: system-ui; padding: 2rem; }
+    button { padding: 0.5rem 1rem; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  
+  <script type="module">
+    import { html, render, query } from '../dist/brutal-dom.min.js';
+    
+    // Simple counter in <10 lines
+    function Counter() {
+      let count = 0;
+      const update = () => render(html`
+        <div>
+          <h1>Count: ${count}</h1>
+          <button onclick=${() => { count++; update(); }}>+</button>
+          <button onclick=${() => { count--; update(); }}>-</button>
+        </div>
+      `, query('#app'));
+      
+      update();
+    }
+    
+    Counter();
+    
+    // TODO list
+    const todos = ['Learn BRUTAL', 'Build fast'];
+    
+    function TodoApp() {
+      const update = () => render(html`
+        <div>
+          <h2>TODOs</h2>
+          ${todos.map((t, i) => html`
+            <div>
+              ${t} 
+              <button onclick=${() => { todos.splice(i, 1); update(); }}>✓</button>
+            </div>
+          `)}
+          <input id="new" placeholder="Add todo..." />
+          <button onclick=${() => {
+            const input = query('#new');
+            if (input.value) {
+              todos.push(input.value);
+              input.value = '';
+              update();
+            }
+          }}>Add</button>
+        </div>
+      `, query('#todo'));
+      
+      update();
+    }
+    
+    // Add todo container and run
+    document.body.appendChild(Object.assign(document.createElement('div'), { id: 'todo' }));
+    TodoApp();
+    
+    console.log('@brutal/dom loaded - 1KB!');
+  </script>
+</body>
+</html>

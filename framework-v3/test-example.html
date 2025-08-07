@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRUTAL Test Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-passed { color: green; }
+        .test-failed { color: red; }
+        .test-item { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>BRUTAL Framework Test Example</h1>
+    
+    <div class="test-results" id="test-results">
+        <h2>Test Results</h2>
+        <div id="results-container">Running tests...</div>
+    </div>
+
+    <script>
+        // Simple test framework
+        const tests = [];
+        const results = {
+            total: 0,
+            passed: 0,
+            failed: 0,
+            errors: []
+        };
+
+        function test(name, fn) {
+            tests.push({ name, fn });
+        }
+
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message || 'Assertion failed');
+            }
+        }
+
+        // Define tests
+        test('SharedArrayBuffer available', () => {
+            assert(typeof SharedArrayBuffer !== 'undefined', 'SharedArrayBuffer is not available');
+        });
+
+        test('BRUTAL framework loaded', () => {
+            assert(typeof window.__BRUTAL__ !== 'undefined', 'BRUTAL framework not loaded');
+        });
+
+        test('Basic math operations', () => {
+            assert(2 + 2 === 4, 'Math is broken!');
+            assert(10 * 10 === 100, 'Multiplication failed');
+        });
+
+        test('DOM manipulation', () => {
+            const div = document.createElement('div');
+            div.id = 'test-div';
+            document.body.appendChild(div);
+            assert(document.getElementById('test-div') !== null, 'DOM element not found');
+            document.body.removeChild(div);
+        });
+
+        test('Async operations', async () => {
+            const promise = new Promise(resolve => setTimeout(() => resolve('done'), 100));
+            const result = await promise;
+            assert(result === 'done', 'Async operation failed');
+        });
+
+        // Run tests
+        async function runTests() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+
+            for (const test of tests) {
+                const testDiv = document.createElement('div');
+                testDiv.className = 'test-item';
+                
+                try {
+                    await test.fn();
+                    testDiv.className += ' test-passed';
+                    testDiv.textContent = `✓ ${test.name}`;
+                    results.passed++;
+                } catch (error) {
+                    testDiv.className += ' test-failed';
+                    testDiv.textContent = `✗ ${test.name}: ${error.message}`;
+                    results.failed++;
+                    results.errors.push({
+                        test: test.name,
+                        error: error.message
+                    });
+                }
+                
+                results.total++;
+                container.appendChild(testDiv);
+            }
+
+            // Summary
+            const summary = document.createElement('div');
+            summary.style.marginTop = '20px';
+            summary.style.fontWeight = 'bold';
+            summary.innerHTML = `
+                <hr>
+                Total: ${results.total} | 
+                Passed: <span style="color: green">${results.passed}</span> | 
+                Failed: <span style="color: red">${results.failed}</span>
+            `;
+            container.appendChild(summary);
+
+            // Store results for BRUTAL Test System
+            window.__TEST_RESULTS__ = {
+                status: results.failed === 0 ? 'passed' : 'failed',
+                total: results.total,
+                passed: results.passed,
+                failed: results.failed,
+                errors: results.errors
+            };
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+
+        // Also run if BRUTAL framework loads later
+        if (typeof window.__BRUTAL__ === 'undefined') {
+            console.warn('BRUTAL framework not loaded yet, some tests may fail');
+        }
+    </script>
+</body>
+</html>

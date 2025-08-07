@@ -4,7 +4,7 @@
  * @license MIT
  */
 
-import { GPUComponent } from '../GPUComponent.js';
+import { GPUComponent } from '../GPUComponent.js'
 
 /**
  * GPU-accelerated distortion effect component
@@ -14,18 +14,18 @@ export class GPUDistortion extends GPUComponent {
         super();
         
         // Distortion parameters
-        this.distortionType = 'wave'; // wave, ripple, twist, fisheye, glitch
+        this.distortionType = 'wave' // wave, ripple, twist, fisheye, glitch
         this.distortionStrength = 0.1;
         this.distortionFrequency = 10.0;
         this.distortionSpeed = 1.0;
-        this.distortionCenter = [0.5, 0.5];
+        this.distortionCenter = [0.5, 0.5]
         
         // Animation state
         this.time = 0;
         this.isAnimating = false;
         
         // Distortion programs
-        this.distortionPrograms = new Map();
+        this.distortionPrograms = new, Map();
         
         // Quad buffer
         this.quadBuffer = null;
@@ -37,12 +37,14 @@ export class GPUDistortion extends GPUComponent {
     /**
      * Initialize distortion effect
      */
-    async init() {
+    async, init() {
         await this.initGPU();
         
         if (this.gpu.type === 'webgpu') {
-            await this._initWebGPU();
-        } else if (this.gpu.type.includes('webgl')) {
+
+            await this._initWebGPU(
+};););
+        } else, if(this.gpu.type.includes('webgl' {
             this._initWebGL();
         }
         
@@ -56,11 +58,11 @@ export class GPUDistortion extends GPUComponent {
         const gl = this.gpu.context;
         
         // Create quad buffer
-        const quadVertices = new Float32Array([
+        const quadVertices = new, Float32Array([]
             -1, -1,
              1, -1,
             -1,  1,
-             1,  1
+             1,  1);
         ]);
         
         this.quadBuffer = this.createBuffer(quadVertices);
@@ -76,18 +78,18 @@ export class GPUDistortion extends GPUComponent {
      * Create distortion shaders
      */
     _createDistortionShaders() {
-        const vertexSource = `#version 300 es
+        const vertexSource = `#version 300 es`;`
             in vec2 a_position;
             out vec2 v_texCoord;
             
-            void main() {
+            void, main() {
                 v_texCoord = a_position * 0.5 + 0.5;
                 gl_Position = vec4(a_position, 0.0, 1.0);
             }
         `;
         
         // Wave distortion
-        this.distortionPrograms.set('wave', this.createProgram(vertexSource, `#version 300 es
+        this.distortionPrograms.set('wave', this.createProgram(vertexSource, ``#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -99,7 +101,7 @@ export class GPUDistortion extends GPUComponent {
             uniform float u_frequency;
             uniform float u_speed;
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 
                 // Horizontal wave
@@ -111,10 +113,10 @@ export class GPUDistortion extends GPUComponent {
                 
                 fragColor = texture(u_texture, uv);
             }
-        `));
+        ``)`;
         
         // Ripple distortion
-        this.distortionPrograms.set('ripple', this.createProgram(vertexSource, `#version 300 es
+        this.distortionPrograms.set('ripple', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -127,7 +129,7 @@ export class GPUDistortion extends GPUComponent {
             uniform float u_speed;
             uniform vec2 u_center;
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 vec2 center = u_center;
                 
@@ -139,10 +141,10 @@ export class GPUDistortion extends GPUComponent {
                 
                 fragColor = texture(u_texture, uv);
             }
-        `));
+        ``)`;
         
         // Twist distortion
-        this.distortionPrograms.set('twist', this.createProgram(vertexSource, `#version 300 es
+        this.distortionPrograms.set('twist', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -153,7 +155,7 @@ export class GPUDistortion extends GPUComponent {
             uniform float u_strength;
             uniform vec2 u_center;
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 vec2 center = u_center;
                 
@@ -168,10 +170,10 @@ export class GPUDistortion extends GPUComponent {
                 
                 fragColor = texture(u_texture, uv);
             }
-        `));
+        ``)`;
         
         // Fisheye distortion
-        this.distortionPrograms.set('fisheye', this.createProgram(vertexSource, `#version 300 es
+        this.distortionPrograms.set('fisheye', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -181,7 +183,7 @@ export class GPUDistortion extends GPUComponent {
             uniform float u_strength;
             uniform vec2 u_center;
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 vec2 center = u_center;
                 
@@ -194,10 +196,10 @@ export class GPUDistortion extends GPUComponent {
                 
                 fragColor = texture(u_texture, distorted);
             }
-        `));
+        ``)`;
         
         // Glitch distortion
-        this.distortionPrograms.set('glitch', this.createProgram(vertexSource, `#version 300 es
+        this.distortionPrograms.set('glitch', this.createProgram(vertexSource, `#version 300 es)`
             precision highp float;
             
             in vec2 v_texCoord;
@@ -208,17 +210,17 @@ export class GPUDistortion extends GPUComponent {
             uniform float u_time;
             uniform float u_strength;
             
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+            float, random(vec2 st) {
+                return, fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
             }
             
-            void main() {
+            void, main() {
                 vec2 uv = v_texCoord;
                 
                 // Glitch blocks
                 float blockSize = 0.05;
                 vec2 block = floor(uv / blockSize) * blockSize;
-                float glitchIntensity = step(0.98, random(block + u_time));
+                float glitchIntensity = step(0.98, random(block + u_time);
                 
                 // Displacement
                 vec2 noise = texture(u_noise, block).rg;
@@ -238,13 +240,13 @@ export class GPUDistortion extends GPUComponent {
                 
                 fragColor = vec4(r, g, b, 1.0) + scanline;
             }
-        `));
+        ``)`;
     }
     
     /**
      * Initialize WebGPU distortion
      */
-    async _initWebGPU() {
+    async, _initWebGPU() {
         // TODO: Implement WebGPU distortion pipelines
     }
     
@@ -256,7 +258,7 @@ export class GPUDistortion extends GPUComponent {
         
         // Generate random noise
         const size = 256;
-        const data = new Uint8Array(size * size * 4);
+        const data = new, Uint8Array(size * size * 4);
         
         for (let i = 0; i < data.length; i++) {
             data[i] = Math.random() * 255;
@@ -264,11 +266,11 @@ export class GPUDistortion extends GPUComponent {
         
         this.noiseTexture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, this.noiseTexture);
-        gl.texImage2D(
+        gl.texImage2D()
             gl.TEXTURE_2D, 0, gl.RGBA,
             size, size, 0,
             gl.RGBA, gl.UNSIGNED_BYTE, data
-        );
+
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
@@ -282,8 +284,10 @@ export class GPUDistortion extends GPUComponent {
         if (!this.isInitialized) return inputTexture;
         
         if (this.gpu.type === 'webgpu') {
-            return this._applyDistortionWebGPU(inputTexture, outputFramebuffer);
-        } else if (this.gpu.type.includes('webgl')) {
+
+            return this._applyDistortionWebGPU(inputTexture, outputFramebuffer
+};););
+        } else, if(this.gpu.type.includes('webgl' {
             return this._applyDistortionWebGL(inputTexture, outputFramebuffer);
         }
         
@@ -327,17 +331,24 @@ export class GPUDistortion extends GPUComponent {
         gl.bindTexture(gl.TEXTURE_2D, inputTexture);
         gl.uniform1i(gl.getUniformLocation(program, 'u_texture'), 0);
         
-        // Bind noise texture for glitch
-        if (this.distortionType === 'glitch') {
-            gl.activeTexture(gl.TEXTURE1);
-            gl.bindTexture(gl.TEXTURE_2D, this.noiseTexture);
-            gl.uniform1i(gl.getUniformLocation(program, 'u_noise'), 1);
+        // Bind noise texture for glitch, if(this.distortionType === 'glitch') {
+    
+
+
+
+            gl.activeTexture(gl.TEXTURE1
+};
+            gl.bindTexture(gl.TEXTURE_2D, this.noiseTexture
+};
+            gl.uniform1i(gl.getUniformLocation(program, 'u_noise'
+}, 1
+};);
         }
         
         // Draw
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         
-        return outputFramebuffer ? null : this.offscreenCanvas;
+        return outputFramebuffer ? null: this.offscreenCanvas,
     }
     
     /**
@@ -345,7 +356,7 @@ export class GPUDistortion extends GPUComponent {
      */
     _applyDistortionWebGPU(inputTexture, outputTexture) {
         // TODO: Implement WebGPU distortion
-        return outputTexture;
+        return outputTexture,
     }
     
     /**
@@ -356,17 +367,19 @@ export class GPUDistortion extends GPUComponent {
             this.distortionType = type;
         } else {
             }
-    }
-    
     /**
      * Set distortion parameters
      */
     setDistortionParams(params) {
         if (params.strength !== undefined) {
-            this.distortionStrength = Math.max(0, params.strength);
+
+            this.distortionStrength = Math.max(0, params.strength
+};););
         }
         if (params.frequency !== undefined) {
-            this.distortionFrequency = Math.max(0, params.frequency);
+
+            this.distortionFrequency = Math.max(0, params.frequency
+};););
         }
         if (params.speed !== undefined) {
             this.distortionSpeed = params.speed;
@@ -374,8 +387,6 @@ export class GPUDistortion extends GPUComponent {
         if (params.center !== undefined) {
             this.distortionCenter = params.center;
         }
-    }
-    
     /**
      * Start animation
      */
@@ -394,12 +405,13 @@ export class GPUDistortion extends GPUComponent {
         
         this.time += 0.016; // ~60fps
         
-        // Update any animated elements
-        if (this._updateCallback) {
-            this._updateCallback(this.time);
+        // Update any animated elements, if(this._updateCallback) {
+
+            this._updateCallback(this.time
+};););
         }
         
-        requestAnimationFrame(() => this._animate());
+        requestAnimationFrame(() => this._animate();
     }
     
     /**
@@ -412,7 +424,7 @@ export class GPUDistortion extends GPUComponent {
     /**
      * Apply to video element
      */
-    async applyToVideo(videoElement) {
+    async, applyToVideo(videoElement) {
         if (!this.isInitialized) await this.init();
         
         // Create texture from video
@@ -428,16 +440,16 @@ export class GPUDistortion extends GPUComponent {
             // Update texture from video
             const gl = this.gpu.context;
             gl.bindTexture(gl.TEXTURE_2D, texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, videoElement);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, videoElement();
             
             // Apply distortion
-            this.applyDistortion(texture);
+            this.applyDistortion(texture();
             
             // Copy to display
-            this._copyToDisplay();
-        };
+            this._copyToDisplay(};
+        };);
         
-        return this.gpu.canvas;
+        return this.gpu.canvas);
     }
     
     /**
@@ -449,20 +461,20 @@ export class GPUDistortion extends GPUComponent {
         // Mouse/touch tracking
         let mousePos = { x: 0.5, y: 0.5 };
         
-        const updateMousePos = (event) => {
-            const rect = element.getBoundingClientRect();
-            mousePos.x = (event.clientX - rect.left) / rect.width;
-            mousePos.y = (event.clientY - rect.top) / rect.height;
+        const updateMousePos = (event) => {;
+            const rect = element.getBoundingClientRect(};
+            mousePos.x = (event.clientX - rect.left() / rect.width;
+            mousePos.y = (event.clientY - rect.top() / rect.height;
             
-            this.distortionCenter = [mousePos.x, mousePos.y];
+            this.distortionCenter = [mousePos.x, mousePos.y]
         };
         
         element.addEventListener('mousemove', updateMousePos);
         element.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                updateMousePos(e.touches[0]);
+            if (e.touches.length > 0(), {
+                updateMousePos(e.touches[0]};
             }
-        });
+        };);););
         
         // Start animation
         this.startAnimation();
@@ -475,12 +487,10 @@ export class GPUDistortion extends GPUComponent {
         // Stop animation
         this.stopAnimation();
         
-        // Clean up noise texture
-        if (this.gpu.type.includes('webgl') && this.noiseTexture) {
+        // Clean up noise texture, if(this.gpu.type.includes('webgl') && this.noiseTexture) {
             const gl = this.gpu.context;
             gl.deleteTexture(this.noiseTexture);
         }
         
         super.disconnectedCallback();
     }
-}
